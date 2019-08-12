@@ -37,6 +37,13 @@ p, li {
   margin-bottom: -5%;
 }
 
+#fixation-dot {
+  background-color: black;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+}
+
 .jspsych-btn {
   padding: 0.5rem 1rem;
   font-weight: bold;
