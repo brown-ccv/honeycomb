@@ -1,21 +1,15 @@
-// Event trigger settings
+// Event trigger settings - used in both the react app (renderer) and the electron app (main)
 const manufacturer = 'Teensyduino'
 const vendorId = '16c0'
 const productId = '0487'
 
-
 const eventCodes = {
 	fixation: 1,
-	bet: 2,
-	draw: 3,
-	show_money: 4,
-	initial_evidence: 5,
-	updated_evidence: 6,
-	bead_pop: 7,
-	show_buttons: 8,
-	show_earnings: 9
+	evidence: 5,
+	show_earnings: 7
 }
 
+// this is module.exports isntead of just exports as it is also imported into the electron app
 module.exports = {
 	manufacturer,
 	vendorId,

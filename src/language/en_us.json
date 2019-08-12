@@ -1,30 +1,7 @@
 {
   "task": {
-    "name": "Beads Task",
+    "name": "Neuro Task",
     "end": "This experiment has ended."
-  },
-  "color": {
-    "blue": "blue",
-    "orange": "orange"
-  },
-  "quiz": {
-    "ask": {
-      "age": "What's your age?",
-      "how_much_money_if_correct": "How much money do you make if you correctly bet that the jar is mostly",
-      "how_much_money_if_incorrect": "How much money do you lose if you bet incorrectly?",
-      "how_much_draw": "How much money does it cost to draw a bead?"
-    },
-    "answer": {
-      "age": "Answer 12 no metter what.",
-      "incorrect": "You have answered incorrectly!"
-    },
-    "direction": {
-      "slider": {
-        "right": "Move the slider to the right.",
-        "left": "Move the slider to the left."
-      },
-      "retake": "Please retake the quiz to continue."
-    }
   },
   "prompt": {
     "continue": {
@@ -34,50 +11,15 @@
     "fullscreen": "Press 'cmd + ctrl + F' to toggle Fullscreen.",
     "zoom": "Zoom in to enlarge the screen."
   },
-  "beadMarkup" : {
-    "practice": "This is a practice game.",
-    "earnings": "Earnings",
-    "choices": {
-      "mostly": "Mostly",
-      "draw": "Draw Bead"
-    },
-    "tooFast": {
-      "header": "You are pressing buttons too fast!",
-      "instruction": "Please wait at least 200ms between button presses."
-    }
-  },
   "welcome": {
     "large_window": "Please make this window as large as possible.",
     "message": "Instructions"
   },
-  "countdown": {
-    "practice1": "Practice block 1/2 will now begin."
-  },
   "userid": {
-    "ask": "Please enter patient ID.",
-    "setting": "Setting up user ID."
-  },
-  "blockEnd": {
-    "block_finished": "This block is now finished.",
-    "earned": "You earned ",
-    "out_of": " out of a total possible ",
-    "in_block": " in this block."
+    "set": "Please enter patient ID."
   },
   "eventMarker" : {
     "found": "Hold the USB event marker in front of the camera.",
     "not_found": "Note: no USB event marker found."
-  },
-  "instructions": {
-    "welcome": "Welcome!",
-    "p1": "In this experiment, you will play a series of games.",
-    "p2": "Each game asks you to bet on whether a (virtual) jar of beads <br> contains more (60%) <span class='text-orange'><b>orange</b></span> or more (60%) <span class='text-blue'><b>blue</b></span> beads.",
-    "fixation": "Throughout the experiment, you'll see this fixation point at the center of the screen. <br> Fixate your eyes on this black fixation point.",
-    "money": "Before each game starts, you will see 2 money bags indicating the amount of money you earn for <span class='text-success'><b>correctly betting</b></span> <br> on whether the jar contains <span class='text-blue'><b>mostly blue</b></span> or <span class='text-orange'><b>mostly orange</b></span> beads.",
-    "money2": "In this example, you will win <span class='text-success'><b>$100</b></span> if you <span class='text-success'><b>corectly bet</b></span> that the jar contains <span class='text-blue'><b>more blue</b></span> beads, <br> and <span class='text-success'><b>$20</b></span> if you <span class='text-success'><b>correctly</b></span> bet if the jar contains <span class='text-orange'><b>more orange</b></span> beads.",
-    "wrongBet": "If you <span class='text-danger'><b>bet incorrectly</b></span>, you will <span class='text-danger'><b>lose $10</b></span>.",
-    "draw": "You can draw a bead from the virtual jar. <br> Each time you draw a bead, it <span class='text-danger'><b>costs $0.10 (10 cents)</b></span>.",
-    "showBeads": "Some beads will already be drawn for you, but you may draw more beads if you like. <br> There are trials where it may make sense to draw more, to draw less, or to bet right away.",
-    "buttons": "After you see the beads that have already been drawn from the jar, <br> you will be given the option to bet or to draw another bead.",
-    "earnings": "After you bet, you will see your earnings for that game on the screen in <span class='text-success'><b>green</b></span> if you <span class='text-success'><b>win</b></span> money and in <span class='text-danger'><b>red</b></span> if you <span class='text-danger'><b>lose</b></span> money."
   }
 }

@@ -1,15 +1,12 @@
-import { ageCheck, sliderCheck, quiz, quizCheck } from '../trials/quizTrials'
-
 import buildCountdown from '../trials/countdown'
-import beadStart from '../trials/beadStart'
-import showBeads from '../trials/showBeads'
-import action from '../trials/action'
 import preamble from './preamble'
 import experimentEnd from '../trials/experimentEnd'
-import beadsBlock from './beadsBlock'
+import taskBlock from './taskBlock'
 import userId from '../trials/userId'
 
-import { lang, MTURK } from '../config/main'
+import { MTURK } from '../config/main'
+import { practiceBlock } from '../config/practice'
+import { tutorialBlock } from '../config/tutorial'
 import { exptBlock1, exptBlock2 } from '../config/experiment'
 
 
@@ -17,12 +14,21 @@ import { exptBlock1, exptBlock2 } from '../config/experiment'
 const primaryTimeline = [
         userId(exptBlock1),
         preamble,
-        beadsBlock(exptBlock1)
+        buildCountdown("The practice block starts in:", 3),
+        taskBlock(practiceBlock),
+        buildCountdown("The main block starts in:", 3),
+        taskBlock(exptBlock1),
+        experimentEnd(5000)
         ]
 
 const mturkTimeline = [
         userId(exptBlock1),
         preamble,
-        beadsBlock(exptBlock1)]
+        buildCountdown("The tutorial block starts in:", 3),
+        taskBlock(tutorialBlock),
+        buildCountdown("The main block starts in:", 3),
+        taskBlock(exptBlock2),
+        experimentEnd(3000)
+        ]
 
 export const tl = (MTURK) ? mturkTimeline : primaryTimeline

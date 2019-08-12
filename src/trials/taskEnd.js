@@ -12,7 +12,7 @@ const beadEnd = (trialDetails, duration) => {
       trial_duration: duration,
       on_load: () => pdSpotEncode(code),
       on_start: (trial) => {
-        let earnings = trialDetails.trial_earnings
+        let earnings = Math.random()
         trial.stimulus = earningsDisplay(earnings)
         if (!MTURK) trial.stimulus += photodiodeGhostBox()
       },

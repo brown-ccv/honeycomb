@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import { lang } from '../config/main'
 import { jsPsych } from 'jspsych-react'
-import { MTURK } from '../config/main'
 
 // add a random number between 0 and offset to the base number
 const jitter = (base, offset) => (

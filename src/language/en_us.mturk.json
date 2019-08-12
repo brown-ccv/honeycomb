@@ -1,5 +1,8 @@
 {
   "welcome": {
-    "message": "Welcome to the BEADS experiment."
+    "message": "Welcome to the NEURO experiment."
+  },
+  "userid": {
+    "set": "Setting up user ID."
   }
 }
