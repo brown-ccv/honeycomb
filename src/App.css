@@ -1,0 +1,145 @@
+p, li {
+  font-size: 1.5rem;
+}
+.App {
+  text-align: center;
+}
+
+.photodiode-box {
+  position: fixed;
+  bottom: 3px;
+  right: 3px;
+  display: flex;
+  outline: 3px solid rgb(80,80,80);
+  margin: auto;
+  height: 50px;
+  width: 50px;
+}
+
+.photodiode-spot {
+  width: 50px;
+  height: 50px;
+  background-color: black;
+  border-radius: 50%;
+  position: absolute;
+}
+
+
+.money_bag img {
+  height: 150px;
+}
+
+.main-prompt, .beads_container {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center !important;
+}
+
+.main-prompt {
+  margin-top: -10%;
+}
+
+.main-prompt {
+  margin-bottom: -5%;
+}
+
+.beads_inner_container {
+  height: 40vh;
+  margin-top: 20%;
+  padding: 10px;
+  display: flex;
+  flex-basis: 180px;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  /* background-color: #efefef; */
+}
+
+#left_beads {
+  justify-content: flex-start;
+  margin-left: 10rem;
+}
+
+#right_beads {
+  justify-content: flex-end;
+  margin-right: 10rem;
+}
+
+#fixation-dot {
+  background-color: black;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+}
+
+.jspsych-btn {
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  box-shadow: 5px 5px 5px #efefef;
+  background-color: #d3d3d3;
+  margin: 1rem;
+  width: 10rem !important;
+}
+
+.bet-btn, .draw-btn {
+  height: 50px;
+  width: 120px;
+  font-weight: bold;
+  font-size: 1rem;
+  color: white;
+}
+
+.bg-black {
+  background-color: black;
+}
+
+.text-blue {
+  color: blue;
+}
+
+.text-orange {
+  color: orange;
+}
+
+.bg-blue {
+  background-color: blue;
+}
+
+.bg-orange {
+  background-color: orange;
+}
+
+.instructions {
+  padding: 0 10rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.instructions #fixation-dot {
+  margin-top: 5rem;
+}
+.instructions .money_bag {
+  margin: 2rem;
+}
+.instructions .money_bag img {
+  height: 90px;
+}
+.instructions ul {
+  text-align: left;
+}
+.jar {
+  margin: 2rem;
+  height: 120px;
+}
+.beads, .earnings {
+  padding-top: 4rem;
+}
+.earnings h1 {
+  font-size: 3rem;
+  font-weight: bold;
+}
+.beads .left {
+  margin-right: 10rem;
+}
