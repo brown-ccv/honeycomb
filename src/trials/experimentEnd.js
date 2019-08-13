@@ -8,7 +8,7 @@ const experimentEnd = (duration) => {
    return {
     type: 'html_keyboard_response',
     stimulus: stimulus,
-    duration: duration
+    trial_duration: duration
   }
 }
 
