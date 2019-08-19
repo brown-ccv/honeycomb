@@ -96,6 +96,8 @@ While this set up is optimized for Electron, we added functionalities that will 
 - Use the Turk specific timeline if different than the primary timeline.  
 
 To set up your PsiTurk project, we provide a script that makes the conversion.
+PsiTurk is a Python package used to manage HITs in Mechanical Turk. Before using the provided script, install [Poetry](https://poetry.eustace.io/), a python dependency manager. This is used to manage the version of PsiTurk and it's dependencies used in your project.
+
 You'll need to follow these steps:
 - Build the application: `npm run build`  
 - Move to the `psiturkit` directory: `cd psiturkit`
