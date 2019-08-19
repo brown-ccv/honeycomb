@@ -89,7 +89,31 @@ The `lib/` directory contains utility functions and markup that is used in the t
 
 ## Usage with PsiTurk
 
-FERNANDO PLEASE FILL THIS IN
+While this set up is optimized for Electron, we added functionalities that will make use with PsiTurk easy. The application will detect if it's being used in a Turk environment and will:  
+
+- Save the data to the default PsiTurk SQLite database.  
+- Switch the language to Turk specific, if `src/language/<locale>.mturk.json` exists.  
+- Use the Turk specific timeline if different than the primary timeline.  
+
+To set up your PsiTurk project, we provide a script that makes the conversion.
+You'll need to follow these steps:
+- Build the application: `npm run build`  
+- Move to the `psiturkit` directory: `cd psiturkit`
+- If it's the first time you're running the script:  
+  `./psiturkit -i -p <PATH_TO_NEW_PSITURK_PROJECT>`  
+
+- To update an existing PsiTurk project:  
+  `./psiturkit -u -p <PATH_TO_NEW_PSITURK_PROJECT>`
+
+After that, just navigate to your newly created PsiTurk project directory.
+```shell
+shell> psiturk #start psiturk
+psiturk> server on #start server
+psiturk> debug #debug mode
+```
+
+For more PsiTurk information, refer to their [documentation](https://psiturk.org/docs/).
+
 
 ## Best Practices
 
