@@ -89,22 +89,22 @@ The `lib/` directory contains utility functions and markup that is used in the t
 
 ## Usage with PsiTurk
 
-While this set up is optimized for Electron, we added functionalities that will make use with PsiTurk easy. The application will detect if it's being used in a Turk environment and will:  
+While this set up is optimized for Electron, we added functionality that will make use with PsiTurk easy. The application will detect if it's being used in a Turk environment and will:  
 
 - Save the data to the default PsiTurk SQLite database.  
 - Switch the language to Turk specific, if `src/language/<locale>.mturk.json` exists.  
 - Use the Turk specific timeline if different than the primary timeline.  
 
-To set up your PsiTurk project, we provide a script that makes the conversion.
+To set up your PsiTurk project, we provide a script that does the conversion.
 PsiTurk is a Python package used to manage HITs in Mechanical Turk. Before using the provided script, install [Poetry](https://poetry.eustace.io/), a python dependency manager. This is used to manage the version of PsiTurk and it's dependencies used in your project.
 
-You'll need to follow these steps:
+You'll need to follow these steps (the path to the PsiTurk project should be a directory you wish to be created):
 - Build the application: `npm run build`  
 - Move to the `psiturkit` directory: `cd psiturkit`
 - If it's the first time you're running the script:  
   `./psiturkit -i -p <PATH_TO_NEW_PSITURK_PROJECT>`  
 
-- To update an existing PsiTurk project:  
+- To update an existing PsiTurk project (the path to the PsiTurk project should already exist from the previous steps):  
   `./psiturkit -u -p <PATH_TO_NEW_PSITURK_PROJECT>`
 
 After that, just navigate to your newly created PsiTurk project directory.
@@ -115,7 +115,6 @@ psiturk> debug #debug mode
 ```
 
 For more PsiTurk information, refer to their [documentation](https://psiturk.org/docs/).
-
 
 ## Best Practices
 
