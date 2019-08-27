@@ -21,5 +21,9 @@
   "eventMarker" : {
     "found": "Hold the USB event marker in front of the camera.",
     "not_found": "Note: no USB event marker found."
+  },
+  "countdown": {
+    "message1": "Countdown for the first block",
+    "message2": "Countdown for the second block"
   }
 }

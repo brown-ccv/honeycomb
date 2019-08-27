@@ -1,7 +1,6 @@
 // utilities specific to this app/task
 
 import _ from 'lodash'
-import { shuffleArray } from './utils'
 
 // initialize starting conditions for each trial within a block
 const generateStartingOpts = (blockSettings) => {
@@ -10,7 +9,7 @@ const generateStartingOpts = (blockSettings) => {
 		return _.range(blockSettings.repeats_per_condition).map( () => c )
 	})
 
-	return shuffleArray(_.flatten(startingOptions))
+	return _.shuffle(_.flatten(startingOptions))
 }
 
 

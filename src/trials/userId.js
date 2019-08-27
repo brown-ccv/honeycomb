@@ -2,7 +2,7 @@ import { lang, MTURK } from '../config/main'
 import { getUserId, getTurkUniqueId } from '../lib/utils'
 import { baseStimulus } from '../lib/markup/stimuli'
 
-const userId = (blockSettings) => {
+const userId = () => {
   if (MTURK) {
     return {
       type: 'html_keyboard_response',
@@ -20,7 +20,7 @@ const userId = (blockSettings) => {
       type: 'survey_text',
       questions: [{ prompt: baseStimulus(`<h1>${lang.userid.set}</h1>`, true) }],
       on_finish: (data) => {
-        getUserId(data, blockSettings)
+        getUserId(data)
       }
     }
   }
