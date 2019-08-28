@@ -11,9 +11,12 @@ const fs = require('fs')
 const { eventCodes, manufacturer, vendorId, productId } = require('./config/trigger')
 const { isPort, getPort, sendToPort } = require('event-marker')
 
-
 const triggerPort = getPort(vendorId, productId)
 const port_ = isPort(vendorId, productId)
+
+
+// Data Saving
+const { dataDir } = require('./config/saveData')
 
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -52,37 +55,30 @@ function createWindow () {
 
 // EVENT TRIGGER
 ipc.on('trigger', (event, args) => {
-  let code
-  try {
-    code = args.value.code
-  }
-  catch {
-    code = args.code
-  }
+  let code = args
   if (code != undefined) {
     console.log(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`)
     sendToPort(triggerPort, code)
   }
 })
+
 // INCREMENTAL FILE SAVING
-var stream = false
+let stream = false
+let fileName = ''
+let filePath = ''
+let patientID = ''
 
 // listener for new data
 ipc.on('data', (event, args) => {
-  // experiment ended, add closing bracket to array
-  if (args === "end") {
-    stream.write(']')
-    stream.end()
-    stream = false
-    return
-  }
 
   // initialize file
   if (args.trial_index === 0) {
     const dir = app.getPath('userData')
-    const fileName = path.resolve(dir, `pid_${args.patient_id}_${Date.now()}.json`)
-    console.log(fileName)
-    stream = fs.createWriteStream(fileName, {flags:'ax+'});
+    patientID = args.patient_id
+    fileName = `pid_${patientID}_${Date.now()}.json`
+    filePath = path.resolve(dir, fileName)
+    console.log(filePath)
+    stream = fs.createWriteStream(filePath, {flags:'ax+'});
     stream.write('[')
   }
 
@@ -93,6 +89,28 @@ ipc.on('data', (event, args) => {
 
   //write the data
   stream.write(JSON.stringify(args))
+})
+
+// EXPERIMENT END
+ipc.on('end', (event, args) => {
+  // finish writing file
+  stream.write(']')
+  stream.end()
+  stream = false
+
+  // copy file to config location
+  const desktop = app.getPath('desktop')
+  const name = app.getName()
+  const today = new Date(Date.now())
+  const date = today.toISOString().slice(0,10)
+  const copyPath = path.join(desktop, dataDir, `${patientID}`, date, name)
+  fs.mkdir(copyPath, { recursive: true }, (err) => {
+    console.log(err)
+    fs.copyFileSync(filePath, path.join(copyPath, fileName))
+  })
+
+  // quit app
+  app.quit()
 })
 
 // This method will be called when Electron has finished
