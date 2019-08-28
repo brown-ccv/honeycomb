@@ -1,20 +1,15 @@
 #!/bin/bash
 set -e
 
-usage () { echo "Usage: [-h] [-i] [-p] [-u]"
+usage () { echo "Usage: [-h] [-p] [-u]"
            echo "     -h – help"
-           echo "     -i – Install Psiturk"
            echo "     -p – Psiturk directory path"
            echo "     -u – Update existing Psiturk Task"; }
 
 
- while getopts p:ui option
+ while getopts p:u option
  do
    case "${option}" in
-     i)
-        poetry install
-        ;;
-     # t) TASK_PATH=${OPTARG};;
      p) PSI_PATH=${OPTARG};;
      u)
         echo "Cleaning up old directory"
@@ -27,12 +22,13 @@ usage () { echo "Usage: [-h] [-i] [-p] [-u]"
 
 if [ -z ${PSI_PATH+x} ]; then
    echo "Please set the task input and output directories. Use -t for
-jsPsych task path and -p for the psiturk output directory."
+jsPsych task path and -p for the psiturk output directory. Make sure you have PsiTurk installed."
 else
    echo "Setting up ${PSI_PATH} PsiTurk project"
-   poetry run psiturk-setup-example
+   psiturk-setup-example
    cp -r ../build/static/ psiturk-example/static/
    cp ../build/*.js* psiturk-example/static
+   cp ../build/lib/*.js psiturk-example/static/lib
    cp ../build/index.html psiturk-example/templates/exp.html
    mv psiturk-example ${PSI_PATH}_turk
 fi
