@@ -1,6 +1,7 @@
 import _ from 'lodash'
-import { lang } from '../config/main'
 import { jsPsych } from 'jspsych-react'
+import registerRequireContextHook from 'babel-plugin-require-context-hook/register';
+registerRequireContextHook();
 
 // add a random number between 0 and offset to the base number
 const jitter = (base, offset) => (
@@ -53,7 +54,7 @@ const importAll = (r) => {
   return r.keys().map(r);
 }
 
-const images = importAll(require.context('../assets/images', false, /\.(png|jpe?g|svg)$/));
+const images = importAll(global.__requireContext(__dirname, '../assets/images', false, /\.(png|jpe?g|svg)$/));
 
 const getTurkUniqueId = () => {
   const turkInfo = jsPsych.turk.turkInfo()
