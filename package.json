@@ -51,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "babel-plugin-macros": "^2.6.1",
     "chai": "^4.2.0",
     "concurrently": "^4.1.1",
     "electron": "^5.0.5",
