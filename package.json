@@ -52,9 +52,6 @@
     "chai": "^4.2.0",
     "concurrently": "^4.1.1",
     "electron": "^5.0.5",
-    "electron-installer-debian": "^2.0.0",
-    "electron-installer-dmg": "^3.0.0",
-    "electron-installer-windows": "^2.0.0",
     "electron-packager": "^14.0.0",
     "electron-rebuild": "^1.8.5",
     "eslint": "^5.16.0",
@@ -71,5 +68,10 @@
     "plugin": [
       "macros"
     ]
+  },
+  "optionalDependencies": {
+    "electron-installer-debian": "^2.0.0",
+    "electron-installer-dmg": "^3.0.0",
+    "electron-installer-windows": "^2.0.0"
   }
 }
