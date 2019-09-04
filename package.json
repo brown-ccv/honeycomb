@@ -1,5 +1,6 @@
 {
   "name": "neuro-task",
+  "description": "Starter app for jsPsych + react + electron neuro tasks",
   "version": "0.1.0",
   "private": true,
   "main": "src/electron-starter.js",
