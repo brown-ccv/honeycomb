@@ -1,11 +1,16 @@
 {
   "name": "neuro-task",
   "description": "Starter app for jsPsych + react + electron neuro tasks",
-  "author": "Brown CCV",
+  "author": {
+    "name": "Brown CCV",
+    "email": "ccv-bot@brown.edu",
+    "url": "ccv.brown.edu"
+  },
   "version": "0.1.0",
   "private": true,
   "main": "src/electron-starter.js",
   "homepage": "./",
+  "repository": "https://github.com/brown-ccv/neuro-task-starter",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.10.2",
     "bootstrap": "^4.3.1",
