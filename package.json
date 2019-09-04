@@ -26,7 +26,7 @@
     "postpackage:windows": "electron-installer-windows --src dist/neuro-task-win32-x64/ --dest dist/installers/ --overwrite",
     "postpackage:mac": "electron-installer-dmg dist/neuro-task-darwin-x64/neuro-task.app neuro-task --out dist/installers/ --overwrite",
     "postpackage:linux": "electron-installer-debian --src dist/neuro-task-linux-x86_64/ --dest dist/installers/ --arch x86_64 --overwrite",
-    "postinstall": "$(npm bin)/electron-rebuild",
+    "postinstall": "electron-rebuild",
     "eject": "react-scripts eject",
     "electron": "electron .",
     "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
