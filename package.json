@@ -1,6 +1,7 @@
 {
   "name": "neuro-task",
   "description": "Starter app for jsPsych + react + electron neuro tasks",
+  "author": "Brown CCV",
   "version": "0.1.0",
   "private": true,
   "main": "src/electron-starter.js",
@@ -26,7 +27,7 @@
     "package:linux": "electron-packager . --platform linux --arch x64 --out dist/ --overwrite",
     "postpackage:windows": "electron-installer-windows --src dist/neuro-task-win32-x64/ --dest dist/installers/ --overwrite",
     "postpackage:mac": "electron-installer-dmg dist/neuro-task-darwin-x64/neuro-task.app neuro-task --out dist/installers/ --overwrite",
-    "postpackage:linux": "electron-installer-debian --src dist/neuro-task-linux-x86_64/ --dest dist/installers/ --arch x86_64 --overwrite",
+    "postpackage:linux": "electron-installer-debian --src dist/neuro-task-linux-x64/ --dest dist/installers/ --arch x64 --overwrite",
     "postinstall": "electron-rebuild",
     "eject": "react-scripts eject",
     "electron": "electron .",
