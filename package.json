@@ -7,9 +7,10 @@
     "url": "ccv.brown.edu"
   },
   "version": "0.1.0",
+  "license": "MIT",
   "private": true,
   "main": "src/electron-starter.js",
-  "homepage": "./",
+  "homepage": "https://github.com/brown-ccv/neuro-task-starter",
   "repository": "https://github.com/brown-ccv/neuro-task-starter",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.10.2",
