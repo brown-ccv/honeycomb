@@ -1,0 +1,41 @@
+name: CI Tests
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: npm install, build, and test
+      run: |
+        npm install
+        npm run build --if-present
+        npm test
+      env:
+        CI: true
+    - name: package electron - windows
+      if: startsWith(matrix.os, 'windows')
+      run: npm run package:windows
+    - name: package electron - linux
+      if: startsWith(matrix.os, 'ubuntu')
+      run: npm run package:linux
+    - name: package electron - mac
+      if: startsWith(matrix.os, 'mac')
+      run: npm run package:mac

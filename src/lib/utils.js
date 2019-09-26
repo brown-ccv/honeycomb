@@ -1,6 +1,5 @@
-import _ from 'lodash'
-import { lang } from '../config/main'
 import { jsPsych } from 'jspsych-react'
+import requireContext from 'require-context.macro'
 
 // add a random number between 0 and offset to the base number
 const jitter = (base, offset) => (
@@ -19,22 +18,6 @@ const deepCopy = (obj) => JSON.parse(JSON.stringify(obj))
 // format a number as a dollar amount
 const formatDollars = (amount) => '$' + parseFloat(amount).toFixed(2)
 
-// shuffle the items in an array randomly
-const shuffleArray = (array) => {
-  let currentIndex = array.length
-  let temporaryValue, randomIndex
-  // While there remain elements to shuffle
-  while (0 !== currentIndex) {
-    // Pick a remaining element
-    randomIndex = Math.floor(Math.random() * currentIndex)
-    currentIndex -= 1
-    // And swap it with the current element
-    temporaryValue = array[currentIndex]
-    array[currentIndex] = array[randomIndex]
-    array[randomIndex] = temporaryValue
-  }
-  return array
-}
 
 // create a pre-trial wait period
 const generateWaitSet = (trial, waitTime) => {
@@ -69,12 +52,7 @@ const importAll = (r) => {
   return r.keys().map(r);
 }
 
-const images = importAll(require.context('../assets/images', false, /\.(png|jpe?g|svg)$/));
-
-const oppositeColor = (colour) => {
-  const colours = _.values(lang.color)
-  return _.pull(colours, colour)[0]
-}
+const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
 
 const getTurkUniqueId = () => {
   const turkInfo = jsPsych.turk.turkInfo()
@@ -82,10 +60,10 @@ const getTurkUniqueId = () => {
   return uniqueId
 }
 
-const getUserId = (data, blockSettings) => {
-  blockSettings.patiendId = JSON.parse(data.responses)['Q0']
-  jsPsych.data.addProperties({patient_id: blockSettings.patiendId, timestamp: Date.now()})
-  console.log("ID", blockSettings.patiendId)
+const getUserId = (data) => {
+  const patientId = JSON.parse(data.responses)['Q0']
+  jsPsych.data.addProperties({patient_id: patientId, timestamp: Date.now()})
+  console.log("ID", patientId)
 }
 
 export {
@@ -94,11 +72,9 @@ export {
   randomTrue,
   deepCopy,
   formatDollars,
-  shuffleArray,
   generateWaitSet,
   images,
   startKeypressListener,
-  oppositeColor,
   getUserId,
   getTurkUniqueId
 }
