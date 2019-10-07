@@ -1,0 +1,9 @@
+repo:             neuro-task-starter   
+project_name:     Neuro Task Starter
+authors:      
+  - name: Fernando Gelin  
+    github_user: fernandogelin
+  - name: Mary McGrath
+    github_user: mcmcgrath13
+site_description: A simple neuro task to use as a starter for building jspsych tasks with React and Electron
+type: software    # required. choose one of [software, tutorial, workshop, documentation]
