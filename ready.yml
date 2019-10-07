@@ -5,5 +5,6 @@ authors:
     github_user: fernandogelin
   - name: Mary McGrath
     github_user: mcmcgrath13
-site_description: A simple neuro task to use as a starter for building jspsych tasks with React and Electron
+site_description: "A simple neuro task to use as a starter for building jspsych tasks with React and Electron."
+docs_url: https://github.com/brown-ccv/neuro-task-starter/blob/master/README.md
 type: software    # required. choose one of [software, tutorial, workshop, documentation]
