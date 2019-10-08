@@ -105,10 +105,9 @@ You'll need to follow these steps (the path to the PsiTurk project should be a d
 - Build the application: `npm run build`  
 - Move to the `psiturkit` directory: `cd psiturkit`
 - If it's the first time you're running the script:  
-  `./psiturkit -p <PATH_TO_NEW_PSITURK_PROJECT>`  
-
+  `./psiturk-it -p <PATH_TO_NEW_PSITURK_PROJECT>`  
 - To update an existing PsiTurk project (the path to the PsiTurk project should already exist from the previous steps):  
-  `./psiturkit -u -p <PATH_TO_NEW_PSITURK_PROJECT>`
+  `./psiturk-it -u -p <PATH_TO_NEW_PSITURK_PROJECT>`
 
 After that, just navigate to your newly created PsiTurk project directory.
 ```shell
