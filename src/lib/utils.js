@@ -1,4 +1,5 @@
 import { jsPsych } from 'jspsych-react'
+import requireContext from 'require-context.macro'
 
 // add a random number between 0 and offset to the base number
 const jitter = (base, offset) => (
@@ -51,7 +52,7 @@ const importAll = (r) => {
   return r.keys().map(r);
 }
 
-const images = importAll(require.context('../assets/images', false, /\.(png|jpe?g|svg)$/));
+const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
 
 const getTurkUniqueId = () => {
   const turkInfo = jsPsych.turk.turkInfo()
