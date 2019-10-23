@@ -1,0 +1,77 @@
+name: Add App Installers to Release
+
+on: release
+
+jobs:
+
+  env:
+    GITHUB_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
+
+  build-mac:
+    needs: create-release
+    runs-on: macOS-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: npm install, build, and test
+      run: |
+        npm install
+        npm run build --if-present
+        npm test
+      env:
+        CI: true
+    - name: add app to release
+      uses: JasonEtco/upload-to-release@master
+      with:
+        args: dist/installers/neuro-task.dmg
+
+
+  build-linux:
+    needs: create-release
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: npm install, build, test, package
+      run: |
+        npm install
+        npm run build --if-present
+        npm test
+        npm run package:mac
+      env:
+        CI: true
+    - name: add app to release
+      uses: JasonEtco/upload-to-release@master
+      with:
+        args: dist/installers/neuro-task_0.0.1_amd64.deb
+
+  build-windows:
+    needs: create-release
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: npm install, build, test, package
+      run: |
+        npm install
+        npm run build --if-present
+        npm test
+        npm run package:windows
+      env:
+        CI: true
+    - name: add app to release
+      uses: JasonEtco/upload-to-release@master
+      with:
+        args: dist/installers/neuro-task-0.0.1-setup.exe
