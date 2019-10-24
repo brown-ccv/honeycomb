@@ -26,7 +26,7 @@
   "scripts": {
     "start": "BROWSER=none NODE_PATH=./src react-scripts start",
     "test": "react-scripts test",
-    "prebuild": "electron-rebuild"
+    "prebuild": "electron-rebuild",
     "build": "react-scripts build",
     "package:windows": "electron-packager . --platform win32 --arch x64 --out dist/ --overwrite --asar",
     "package:mac": "electron-packager . --platform darwin --arch x64 --out dist/ --overwrite",
