@@ -1,11 +1,9 @@
 name: Add App Installers to Release
 
 on:
-  release:
-    type: created
-
-env:
-  GITHUB_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
+  push:
+    tags:
+      - '*'
 
 jobs:
 
@@ -25,9 +23,11 @@ jobs:
       env:
         CI: true
     - name: add app to release
-      uses: JasonEtco/upload-to-release@master
+      uses: softprops/action-gh-release@v1
       with:
-        args: dist/installers/neuro-task.dmg
+        files: dist/installers/neuro-task.dmg
+      env:
+        GITHUB_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
 
 
   build-linux:
@@ -47,9 +47,11 @@ jobs:
       env:
         CI: true
     - name: add app to release
-      uses: JasonEtco/upload-to-release@master
+      uses: softprops/action-gh-release@v1
       with:
-        args: dist/installers/neuro-task_0.0.1_amd64.deb
+        files: dist/installers/neuro-task_0.0.1_amd64.deb
+      env:
+        GITHUB_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
 
   build-windows:
     runs-on: windows-latest
@@ -68,6 +70,8 @@ jobs:
       env:
         CI: true
     - name: add app to release
-      uses: JasonEtco/upload-to-release@master
+      uses: softprops/action-gh-release@v1
       with:
-        args: dist/installers/neuro-task-0.0.1-setup.exe
+        files: dist/installers/neuro-task-0.0.1-setup.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
