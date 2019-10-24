@@ -27,7 +27,7 @@ jobs:
       with:
         files: dist/installers/neuro-task.dmg
       env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
   build-linux:
@@ -51,7 +51,7 @@ jobs:
       with:
         files: dist/installers/neuro-task_0.0.1_amd64.deb
       env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-windows:
     runs-on: windows-latest
@@ -74,4 +74,4 @@ jobs:
       with:
         files: dist/installers/neuro-task-0.0.1-setup.exe
       env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
