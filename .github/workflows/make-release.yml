@@ -15,11 +15,12 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: npm install, build, and test
+    - name: npm install, build, test, package
       run: |
         npm install
         npm run build --if-present
         npm test
+        npm run package:mac
       env:
         CI: true
     - name: what is in dist/installers
@@ -47,7 +48,7 @@ jobs:
         npm install
         npm run build --if-present
         npm test
-        npm run package:mac
+        npm run package:linux
       env:
         CI: true
     - name: what is in dist/installers
