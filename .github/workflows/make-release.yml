@@ -1,11 +1,13 @@
 name: Add App Installers to Release
 
-on: release
+on:
+  release:
+    type: created
+
+env:
+  GITHUB_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
 
 jobs:
-
-  env:
-    GITHUB_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
 
   build-mac:
     needs: create-release
