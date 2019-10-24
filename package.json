@@ -1,19 +1,27 @@
 {
   "name": "neuro-task",
+  "description": "Starter app for jsPsych + react + electron neuro tasks",
+  "author": {
+    "name": "Brown CCV",
+    "email": "ccv-bot@brown.edu",
+    "url": "ccv.brown.edu"
+  },
   "version": "0.1.0",
+  "license": "MIT",
   "private": true,
   "main": "src/electron-starter.js",
-  "homepage": "./",
+  "homepage": "https://github.com/brown-ccv/neuro-task-starter",
+  "repository": "https://github.com/brown-ccv/neuro-task-starter",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.9.0",
+    "@fortawesome/fontawesome-free": "^5.10.2",
     "bootstrap": "^4.3.1",
     "event-marker": "git+https://github.com/brown-ccv/event-marker.git",
     "jquery": "^3.4.1",
-    "jspsych-react": "^0.2.2",
-    "lodash": "^4.17.11",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
+    "jspsych-react": "^0.3",
+    "lodash": "^4.17.15",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-scripts": "^3"
   },
   "scripts": {
     "start": "BROWSER=none NODE_PATH=./src react-scripts start",
@@ -48,20 +56,30 @@
     ]
   },
   "devDependencies": {
-    "concurrently": "^4.1.1",
-    "electron": "^5.0.5",
+    "babel-plugin-macros": "^2.6.1",
+    "chai": "^4.2.0",
+    "concurrently": "^4.1.2",
+    "electron": "^6",
+    "electron-packager": "^14.0.5",
+    "electron-rebuild": "^1.8.6",
+    "eslint": "*",
+    "eslint-config-standard": "^14",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.2.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-standard": "^4.0.1",
+    "npm-run-all": "^4.1.5",
+    "require-context.macro": "^1.1.1"
+  },
+  "babel": {
+    "plugin": [
+      "macros"
+    ]
+  },
+  "optionalDependencies": {
     "electron-installer-debian": "^2.0.0",
     "electron-installer-dmg": "^3.0.0",
-    "electron-installer-windows": "^2.0.0",
-    "electron-packager": "^14.0.0",
-    "electron-rebuild": "^1.8.5",
-    "eslint": "^5.16.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.18.0",
-    "eslint-plugin-node": "^9.1.0",
-    "eslint-plugin-promise": "^4.1.1",
-    "eslint-plugin-react": "^7.14.2",
-    "eslint-plugin-standard": "^4.0.0",
-    "npm-run-all": "^4.1.5"
+    "electron-installer-windows": "^2.0.0"
   }
 }

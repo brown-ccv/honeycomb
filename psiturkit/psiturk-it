@@ -30,5 +30,5 @@ else
    cp ../build/*.js* psiturk-example/static/
    cp ../build/lib/*.js psiturk-example/static/lib
    cp ../build/index.html psiturk-example/templates/exp.html
-   mv psiturk-example ${PSI_PATH}_turk
+   mv psiturk-example ${PSI_PATH}
 fi
