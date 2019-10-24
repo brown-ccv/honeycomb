@@ -47,9 +47,6 @@ jobs:
         npm run package:linux
       env:
         CI: true
-    - name: what is in dist/installers
-      run: |
-        ls -l dist/installers
     - name: add app to release
       uses: softprops/action-gh-release@v1
       with:

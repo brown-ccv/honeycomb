@@ -26,9 +26,9 @@
   "scripts": {
     "start": "BROWSER=none NODE_PATH=./src react-scripts start",
     "test": "react-scripts test",
-    "prebuild": "electron-rebuild",
+    "prebuild": "electron-rebuild -f",
     "build": "react-scripts build",
-    "package:windows": "electron-packager . --platform win32 --arch x64 --out dist/ --overwrite --asar",
+    "package:windows": "electron-packager . --platform win32 --arch x64 --out dist/ --overwrite",
     "package:mac": "electron-packager . --platform darwin --arch x64 --out dist/ --overwrite",
     "package:linux": "electron-packager . --platform linux --arch x64 --out dist/ --overwrite",
     "postpackage:windows": "electron-installer-windows --src dist/neuro-task-win32-x64/ --dest dist/installers/ --overwrite",
