@@ -10,9 +10,7 @@ env:
 jobs:
 
   build-mac:
-    needs: create-release
     runs-on: macOS-latest
-
     steps:
     - uses: actions/checkout@v1
     - name: Use Node.js
@@ -33,9 +31,7 @@ jobs:
 
 
   build-linux:
-    needs: create-release
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
     - name: Use Node.js
@@ -56,9 +52,7 @@ jobs:
         args: dist/installers/neuro-task_0.0.1_amd64.deb
 
   build-windows:
-    needs: create-release
     runs-on: windows-latest
-
     steps:
     - uses: actions/checkout@v1
     - name: Use Node.js
