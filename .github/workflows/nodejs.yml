@@ -6,6 +6,9 @@ on:
       - master
       - develop
   pull_request:
+    paths:
+      - 'src/**'
+      - '.github/workflows/nodejs.yml'
 
 jobs:
   build:

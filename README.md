@@ -45,6 +45,9 @@ The `public` directory contains files that are used as assets in the built app. 
 
 This folder contains the code for the app, the vast majority of changes and code should go here.
 
+#### `__tests__`
+This folder contains the tests for the app. They can be run with `npm test`.
+
 #### `App.js`
 
 This is the starting point for the app. The `<Experiment>` component initializes a `jspsych` experiment. This is also where communication is set up with the `electron` and `psiturk` processes.
@@ -103,7 +106,6 @@ You'll need to follow these steps (the path to the PsiTurk project should be a d
 - Move to the `psiturkit` directory: `cd psiturkit`
 - If it's the first time you're running the script:  
   `./psiturk-it -p <PATH_TO_NEW_PSITURK_PROJECT>`  
-
 - To update an existing PsiTurk project (the path to the PsiTurk project should already exist from the previous steps):  
   `./psiturk-it -u -p <PATH_TO_NEW_PSITURK_PROJECT>`
 
