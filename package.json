@@ -28,7 +28,7 @@
     "test": "react-scripts test",
     "build": "react-scripts build",
     "prepackage:mac": "npm rebuild",
-    "prepackage:windows": "npm rebuild",
+    "prepackage:windows": "electron-rebuild",
     "package:windows": "electron-packager . --platform win32 --arch x64 --out dist/ --overwrite --asar",
     "package:mac": "electron-packager . --platform darwin --arch x64 --out dist/ --overwrite",
     "package:linux": "electron-packager . --platform linux --arch x64 --out dist/ --overwrite",
