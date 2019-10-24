@@ -86,6 +86,6 @@ jobs:
     - name: add app to release
       uses: softprops/action-gh-release@v1
       with:
-        files: dist/installers/neuro-task-0.0.1-setup.exe
+        files: dist/installers/neuro_task-0.1.0-setup.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
