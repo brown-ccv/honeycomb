@@ -43,6 +43,7 @@ class App extends React.Component {
             }
             else if (psiturk) {
                 psiturk.saveData()
+                psiturk.completeHIT()
             }
           },
         }}
