@@ -82,7 +82,8 @@ jobs:
       env:
         CI: true
     - name: what is in dist/installers
-      run: dir *
+      shell: powershell
+      run: Get-ChildItem -Recurse -Path dir
     - name: add app to release
       uses: softprops/action-gh-release@v1
       with:
