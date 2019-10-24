@@ -82,7 +82,7 @@ jobs:
       env:
         CI: true
     - name: what is in dist/installers
-      run: dir dist
+      run: dir *
     - name: add app to release
       uses: softprops/action-gh-release@v1
       with:
