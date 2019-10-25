@@ -15,12 +15,15 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.4
-    - name: npm install, build, test, package
+    - name: npm install, build, test
       run: |
         npm install
         npm run build --if-present
         npm test
-        npm run package:mac
+      env:
+        CI: true
+    - name: npm package
+      run: npm run package:mac
     - name: add app to release
       uses: softprops/action-gh-release@v1
       with:
@@ -37,12 +40,15 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.4
-    - name: npm install, build, test, package
+    - name: npm install, build, test
       run: |
         npm install
         npm run build --if-present
         npm test
-        npm run package:linux
+      env:
+        CI: true
+    -name: npm package
+      run: npm run package:linux
     - name: add app to release
       uses: softprops/action-gh-release@v1
       with:
@@ -64,6 +70,8 @@ jobs:
       run: npm run build
     - name: npm test
       run: npm test
+      env:
+        CI: true
     - name: npm package
       run: npm run package:windows
     - name: add app to release
