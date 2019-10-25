@@ -10,7 +10,6 @@
   "license": "MIT",
   "private": true,
   "main": "src/electron-starter.js",
-  "homepage": "./",
   "repository": "https://github.com/brown-ccv/neuro-task-starter",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.10.2",
