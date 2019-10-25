@@ -1,11 +1,9 @@
 name: Add App Installers to Release
 
 on:
-  release:
-    type: created
-
-env:
-  GITHUB_TOKEN: ${{ secrets.RELEASE_GH_TOKEN }}
+  push:
+    tags:
+      - '*'
 
 jobs:
 
@@ -16,18 +14,22 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: 12.x
-    - name: npm install, build, and test
+        node-version: 12.4
+    - name: npm install, build, test
       run: |
         npm install
         npm run build --if-present
         npm test
       env:
         CI: true
+    - name: npm package
+      run: npm run package:mac
     - name: add app to release
-      uses: JasonEtco/upload-to-release@master
+      uses: softprops/action-gh-release@v1
       with:
-        args: dist/installers/neuro-task.dmg
+        files: dist/neuro-task-0.1.0.dmg
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
   build-linux:
@@ -37,19 +39,22 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: 12.x
-    - name: npm install, build, test, package
+        node-version: 12.4
+    - name: npm install, build, test
       run: |
         npm install
         npm run build --if-present
         npm test
-        npm run package:mac
       env:
         CI: true
+    - name: npm package
+      run: npm run package:linux
     - name: add app to release
-      uses: JasonEtco/upload-to-release@master
+      uses: softprops/action-gh-release@v1
       with:
-        args: dist/installers/neuro-task_0.0.1_amd64.deb
+        files: dist/installers/neuro-task_0.1.0_x64.deb
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-windows:
     runs-on: windows-latest
@@ -58,16 +63,20 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: 12.x
-    - name: npm install, build, test, package
-      run: |
-        npm install
-        npm run build --if-present
-        npm test
-        npm run package:windows
+        node-version: 12.4
+    - name: npm install
+      run: npm install
+    - name: npm build
+      run: npm run build
+    - name: npm test
+      run: npm test
       env:
         CI: true
+    - name: npm package
+      run: npm run package:windows
     - name: add app to release
-      uses: JasonEtco/upload-to-release@master
+      uses: softprops/action-gh-release@v1
       with:
-        args: dist/installers/neuro-task-0.0.1-setup.exe
+        files: dist/installers/neuro_task-0.1.0-setup.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

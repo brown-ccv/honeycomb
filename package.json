@@ -9,8 +9,8 @@
   "version": "0.1.0",
   "license": "MIT",
   "private": true,
-  "main": "src/electron-starter.js",
-  "homepage": "https://github.com/brown-ccv/neuro-task-starter",
+  "main": "public/electron.js",
+  "homepage": ".",
   "repository": "https://github.com/brown-ccv/neuro-task-starter",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.10.2",
@@ -26,13 +26,12 @@
   "scripts": {
     "start": "BROWSER=none NODE_PATH=./src react-scripts start",
     "test": "react-scripts test",
+    "prebuild": "electron-rebuild",
     "build": "react-scripts build",
-    "prepackage:mac": "npm rebuild",
-    "package:windows": "electron-packager . --platform win32 --arch x64 --out dist/ --overwrite",
-    "package:mac": "electron-packager . --platform darwin --arch x64 --out dist/ --overwrite",
+    "package:windows": "electron-packager . --platform win32 --arch x64 --out dist/ --overwrite --asar ",
+    "package:mac": "electron-builder",
     "package:linux": "electron-packager . --platform linux --arch x64 --out dist/ --overwrite",
-    "postpackage:windows": "electron-installer-windows --src dist/neuro-task-win32-x64/ --dest dist/installers/ --overwrite",
-    "postpackage:mac": "electron-installer-dmg dist/neuro-task-darwin-x64/neuro-task.app neuro-task --out dist/installers/ --overwrite",
+    "postpackage:windows": "electron-installer-windows --src dist/neuro-task-win32-x64/ --dest dist/installers/ --overwrite --homepage https://ccv.brown.edu/",
     "postpackage:linux": "electron-installer-debian --src dist/neuro-task-linux-x64/ --dest dist/installers/ --arch x64 --overwrite",
     "rebuild": "electron-rebuild",
     "eject": "react-scripts eject",
@@ -59,8 +58,9 @@
     "babel-plugin-macros": "^2.6.1",
     "chai": "^4.2.0",
     "concurrently": "^4.1.2",
-    "electron": "^6",
-    "electron-packager": "^14.0.5",
+    "electron": "6.1.1",
+    "electron-builder": "^21.2.0",
+    "electron-packager": "^14.0.6",
     "electron-rebuild": "^1.8.6",
     "eslint": "*",
     "eslint-config-standard": "^14",
@@ -78,7 +78,6 @@
   },
   "optionalDependencies": {
     "electron-installer-debian": "^2.0.0",
-    "electron-installer-dmg": "^3.0.0",
     "electron-installer-windows": "^2.0.0"
   }
 }
