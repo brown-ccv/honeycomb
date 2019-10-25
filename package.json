@@ -31,7 +31,7 @@
     "package:windows": "electron-packager . --platform win32 --arch x64 --out dist/ --overwrite",
     "package:mac": "electron-packager . --platform darwin --arch x64 --out dist/ --overwrite",
     "package:linux": "electron-packager . --platform linux --arch x64 --out dist/ --overwrite",
-    "postpackage:windows": "electron-windows-store --input-directory dist/neuro-task-win32-x64/ --output-directory dist/installers/ --overwrite",
+    "postpackage:windows": "electron-windows-store --input-directory dist/neuro-task-win32-x64/ --output-directory dist/installers/",
     "postpackage:mac": "electron-installer-dmg dist/neuro-task-darwin-x64/neuro-task.app neuro-task --out dist/installers/ --overwrite",
     "postpackage:linux": "electron-installer-debian --src dist/neuro-task-linux-x64/ --dest dist/installers/ --arch x64 --overwrite",
     "rebuild": "electron-rebuild",
