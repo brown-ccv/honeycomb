@@ -47,7 +47,7 @@ jobs:
         npm test
       env:
         CI: true
-    -name: npm package
+    - name: npm package
       run: npm run package:linux
     - name: add app to release
       uses: softprops/action-gh-release@v1
