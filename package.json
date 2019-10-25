@@ -10,6 +10,7 @@
   "license": "MIT",
   "private": true,
   "main": "src/electron-starter.js",
+  "homepage": "https://github.com/brown-ccv/neuro-task-starter",
   "repository": "https://github.com/brown-ccv/neuro-task-starter",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.10.2",
@@ -30,7 +31,7 @@
     "package:windows": "electron-packager . --platform win32 --arch x64 --out dist/ --overwrite",
     "package:mac": "electron-packager . --platform darwin --arch x64 --out dist/ --overwrite",
     "package:linux": "electron-packager . --platform linux --arch x64 --out dist/ --overwrite",
-    "postpackage:windows": "electron-installer-windows --src dist/neuro-task-win32-x64/ --dest dist/installers/ --overwrite",
+    "postpackage:windows": "electron-winstaller --src dist/neuro-task-win32-x64/ --dest dist/installers/ --overwrite",
     "postpackage:mac": "electron-installer-dmg dist/neuro-task-darwin-x64/neuro-task.app neuro-task --out dist/installers/ --overwrite",
     "postpackage:linux": "electron-installer-debian --src dist/neuro-task-linux-x64/ --dest dist/installers/ --arch x64 --overwrite",
     "rebuild": "electron-rebuild",
@@ -78,6 +79,6 @@
   "optionalDependencies": {
     "electron-installer-debian": "^2.0.0",
     "electron-installer-dmg": "^3.0.0",
-    "electron-installer-windows": "^2.0.0"
+    "electron-winstaller": "^4.0.0"
   }
 }
