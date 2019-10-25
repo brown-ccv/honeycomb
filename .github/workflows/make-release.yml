@@ -21,8 +21,6 @@ jobs:
         npm run build --if-present
         npm test
         npm run package:mac
-      env:
-        CI: true
     - name: add app to release
       uses: softprops/action-gh-release@v1
       with:
@@ -45,8 +43,6 @@ jobs:
         npm run build --if-present
         npm test
         npm run package:linux
-      env:
-        CI: true
     - name: add app to release
       uses: softprops/action-gh-release@v1
       with:
@@ -64,20 +60,12 @@ jobs:
         node-version: 12.4
     - name: npm install
       run: npm install
-      env:
-        CI: true
     - name: npm build
       run: npm run build
-      env:
-        CI: true
     - name: npm test
       run: npm test
-      env:
-        CI: true
     - name: npm package
       run: npm run package:windows
-      env:
-        CI: true
     - name: add app to release
       uses: softprops/action-gh-release@v1
       with:
