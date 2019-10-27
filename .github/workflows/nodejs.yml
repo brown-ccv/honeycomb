@@ -47,3 +47,18 @@ jobs:
     - name: package electron - mac
       if: startsWith(matrix.os, 'mac')
       run: npm run package:mac
+    - uses: actions/upload-artifact@master
+      if: startsWith(matrix.os, 'mac')
+      with:
+        name: mac-installer
+        path: dist/neuro-task-0.1.0.dmg
+    - uses: actions/upload-artifact@master
+      if: startsWith(matrix.os, 'ubuntu')
+      with:
+        name: linux-installer
+        path: dist/installers/neuro-task_0.1.0_x64.deb
+    - uses: actions/upload-artifact@master
+      if: startsWith(matrix.os, 'windows')
+      with:
+        name: win-installer
+        path: dist/installers/neuro_task-0.1.0-setup.exe
