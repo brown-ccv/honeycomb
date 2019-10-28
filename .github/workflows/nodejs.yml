@@ -44,6 +44,24 @@ jobs:
     - name: package electron - linux
       if: startsWith(matrix.os, 'ubuntu')
       run: npm run package:linux
+    - name: Set up Python 3.7
+      if: startsWith(matrix.os, 'ubuntu')
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install PsiTurk
+      if: startsWith(matrix.os, 'ubuntu')
+      run: pip install psiturk
+    - name: Create Psiturk Build
+      if: startsWith(matrix.os, 'ubuntu')
+      run: |
+        cd psiturkit
+        ./psiturk-it -p neuro-task-psiturk
+    - uses: actions/upload-artifact@master
+      if: startsWith(matrix.os, 'ubuntu')
+      with:
+        name: psiturk-build
+        path: psiturkit/neuro-task-psiturk
     - name: package electron - mac
       if: startsWith(matrix.os, 'mac')
       run: npm run package:mac
