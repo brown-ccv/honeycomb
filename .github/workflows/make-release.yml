@@ -47,6 +47,23 @@ jobs:
         npm test
       env:
         CI: true
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install PsiTurk
+      run: pip install psiturk
+    - name: Create Psiturk Build
+      run: |
+        cd psiturkit
+        ./psiturk-it -p neuro-task-psiturk
+        tar -czvf neuro-task-psiturk-0.1.0.tar.gz ./neuro-task-psiturk
+    - name: add app to release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: psiturk/neuro-task-psiturk-0.1.0.tar.gz
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: npm package
       run: npm run package:linux
     - name: add app to release
