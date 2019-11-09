@@ -70,7 +70,7 @@ jobs:
       if: startsWith(matrix.os, 'ubuntu')
       with:
         name: linux-installer
-        path: dist/installers/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_x64.deb
+        path: dist/installers/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
 
     # Build PsiTurk - linux only
     - name: Set up Python 3.7
