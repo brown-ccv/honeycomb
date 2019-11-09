@@ -1,5 +1,5 @@
 {
-  "name": "neuro-task-starter",
+  "name": "task-starter",
   "description": "all-in-one starter app with jsPsych + React + Electron + psiturk ",
   "author": {
     "name": "Brown CCV",
@@ -36,8 +36,8 @@
     "package:windows": "electron-packager . --platform win32 --arch x64 --out dist/ --overwrite --asar ",
     "package:mac": "electron-builder",
     "package:linux": "electron-packager . --platform linux --arch x64 --out dist/ --overwrite",
-    "postpackage:windows": "electron-installer-windows --src dist/neuro-task-starter-win32-x64/ --dest dist/installers/ --overwrite --homepage https://ccv.brown.edu/",
-    "postpackage:linux": "electron-installer-debian --src dist/neuro-task-starter-linux-x64/ --dest dist/installers/ --arch amd64 --overwrite",
+    "postpackage:windows": "electron-installer-windows --src dist/task-starter-win32-x64/ --dest dist/installers/ --overwrite --homepage https://ccv.brown.edu/",
+    "postpackage:linux": "electron-installer-debian --src dist/task-starter-linux-x64/ --dest dist/installers/ --arch amd64 --overwrite",
     "rebuild": "electron-rebuild",
     "eject": "react-scripts eject",
     "electron": "electron .",
