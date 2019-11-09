@@ -18,6 +18,7 @@ const keys = {
 
 // is this mechanical turk?
 const MTURK = (!jsPsych.turk.turkInfo().outsideTurk)
+const AT_HOME = (process.env.REACT_APP_AT_HOME === 'true')
 
 // get language file
 const lang = require('../language/en_us.json')
@@ -39,5 +40,6 @@ export {
 	defaultBlockSettings,
 	lang,
 	eventCodes,
-	MTURK
+	MTURK,
+	AT_HOME
 }

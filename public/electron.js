@@ -1,36 +1,52 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, dialog } = require('electron')
 const path = require('path')
 const url = require('url')
 const ipc = require('electron').ipcMain
 const _ = require('lodash')
 const fs = require('fs')
+const log = require('electron-log');
 
-
+const AT_HOME = (process.env.REACT_APP_AT_HOME === 'true')
 // Event Trigger
 const { eventCodes, manufacturer, vendorId, productId } = require('./config/trigger')
 const { isPort, getPort, sendToPort } = require('event-marker')
 
-const triggerPort = getPort(vendorId, productId)
-const port_ = isPort(vendorId, productId)
-
-
 // Data Saving
 const { dataDir } = require('./config/saveData')
-
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
 function createWindow () {
-
+  if (AT_HOME) {
+    log.info('Develop "at home" version.')
+  }
+  else {
+    log.info('Develop "clinic" version.')
+  }
   // Create the browser window.
-  mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    webPreferences: { nodeIntegration: true }
-  })
+  if (process.env.ELECTRON_START_URL) { // in dev mode, disable web security to allow local file loading
+    mainWindow = new BrowserWindow({
+      width: 1500,
+      height: 900,
+      icon: './favicon.ico',
+      webPreferences: {
+        nodeIntegration: true,
+        webSecurity: false
+      }
+    })
+  } else {
+    mainWindow = new BrowserWindow({
+      fullscreen: true,
+      icon: './favicon.ico',
+      webPreferences: {
+        nodeIntegration: true,
+        webSecurity: true
+      }
+    })
+  }
 
   // and load the index.html of the app.
   const startUrl = process.env.ELECTRON_START_URL || url.format({
@@ -38,7 +54,7 @@ function createWindow () {
             protocol: 'file:',
             slashes: true
         });
-  console.log(startUrl);
+  log.info(startUrl);
   mainWindow.loadURL(startUrl);
 
   // Open the DevTools.
@@ -53,12 +69,76 @@ function createWindow () {
   })
 }
 
+// TRIGGER PORT HELPERS
+let triggerPort
+let portAvailable
+let SKIP_SENDING_DEV = false
+
+const setUpPort = async () => {
+  p = await getPort(vendorId, productId)
+  if (p) {
+    triggerPort = p
+    portAvailable = true
+
+    triggerPort.on('error', (err) => {
+      log.error(err)
+      let buttons = ["OK"]
+      if (process.env.ELECTRON_START_URL) {
+        buttons.push("Continue Anyway")
+      }
+      dialog.showMessageBox(mainWindow, {type: "error", message: "Error communicating with event marker.", title: "Task Error", buttons: buttons, defaultId: 0})
+        .then((opt) => {
+          if (opt.response == 0) {
+            app.exit()
+          } else {
+            SKIP_SENDING_DEV = true
+            portAvailable = false
+            triggerPort = false
+          }
+        })
+    })
+  } else {
+    triggerPort = false
+    portAvailable = false
+  }
+}
+
+const handleEventSend = (code) => {
+  if (!portAvailable && !SKIP_SENDING_DEV) {
+    let message = "Event Marker not connected"
+    log.warn(message)
+
+    let buttons = ["Quit", "Retry"]
+    if (process.env.ELECTRON_START_URL) {
+      buttons.push("Continue Anyway")
+    }
+    dialog.showMessageBox(mainWindow, {type: "error", message: message, title: "Task Error", buttons: buttons, defaultId: 0})
+      .then((resp) => {
+        let opt = resp.response
+        if (opt == 0) { // quit
+          app.exit()
+        } else if (opt == 1) { // retry
+          setUpPort()
+          .then(() => handleEventSend(code))
+        } else if (opt == 2) {
+          SKIP_SENDING_DEV = true
+        }
+      })
+
+  } else if (!SKIP_SENDING_DEV) {
+    sendToPort(triggerPort, code)
+  }
+}
+
 // EVENT TRIGGER
+
 ipc.on('trigger', (event, args) => {
   let code = args
   if (code != undefined) {
-    console.log(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`)
-    sendToPort(triggerPort, code)
+    log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`)
+     if (!AT_HOME) {
+       handleEventSend(code)
+     }
   }
 })
 
@@ -67,28 +147,35 @@ let stream = false
 let fileName = ''
 let filePath = ''
 let patientID = ''
+let images = []
 
 // listener for new data
 ipc.on('data', (event, args) => {
 
-  // initialize file
-  if (args.trial_index === 0) {
+  // initialize file - we got a patinet_id to save the data to
+  if (args.patient_id && fileName === '') {
     const dir = app.getPath('userData')
     patientID = args.patient_id
     fileName = `pid_${patientID}_${Date.now()}.json`
     filePath = path.resolve(dir, fileName)
-    console.log(filePath)
+    log.warn(filePath)
     stream = fs.createWriteStream(filePath, {flags:'ax+'});
     stream.write('[')
   }
 
-  // write intermediate commas
-  if (args.trial_index > 0) {
-    stream.write(',')
-  }
+  // we have a set up stream to write to, write to it!
+  if (stream) {
+    // write intermediate commas
+    if (args.trial_index > 0) {
+      stream.write(',')
+    }
 
-  //write the data
-  stream.write(JSON.stringify(args))
+    //write the data
+    stream.write(JSON.stringify(args))
+
+    // Copy provocation images to patient's data folder
+    if (args.trial_type === 'image_keyboard_response') images.push(args.stimulus.slice(7))
+  }
 })
 
 // EXPERIMENT END
@@ -105,19 +192,50 @@ ipc.on('end', (event, args) => {
   const date = today.toISOString().slice(0,10)
   const copyPath = path.join(desktop, dataDir, `${patientID}`, date, name)
   fs.mkdir(copyPath, { recursive: true }, (err) => {
-    console.log(err)
+    log.error(err)
     fs.copyFileSync(filePath, path.join(copyPath, fileName))
+
   })
 
   // quit app
   app.quit()
 })
 
+// Error state sent from front end to back end (e.g. wrong number of images)
+ipc.on('error', (event, args) => {
+  log.error(args)
+  let buttons = ["OK"]
+  if (process.env.ELECTRON_START_URL) {
+    buttons.push("Continue Anyway")
+  }
+  const opt = dialog.showMessageBoxSync(mainWindow, {type: "error", message: args, title: "Task Error", buttons: buttons})
+
+  if (opt == 0) app.quit()
+})
+
+
+// log uncaught exceptions
+process.on('uncaughtException', (error) => {
+    // Handle the error
+    log.error(error)
+
+    // this isn't dev, throw up a dialog
+    if (!process.env.ELECTRON_START_URL) {
+      dialog.showMessageBoxSync(mainWindow, {type: "error", message: error, title: "Task Error"})
+    }
+})
+
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
-
+app.on('ready', () => {
+  createWindow()
+  if (!AT_HOME) {
+    setUpPort()
+    .then(() => handleEventSend(eventCodes.test_connect))
+  }
+})
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   // On macOS it is common for applications and their menu bar

@@ -8,8 +8,7 @@ const experimentStart = () => {
    return {
     type: 'html_button_response',
     stimulus: stimulus,
-    choices: [lang.prompt.continue.button],
-    prompt: [ `<h3>${lang.prompt.fullscreen}</h3>`]
+    choices: [lang.prompt.continue.button]
   }
 }
 
