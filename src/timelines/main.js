@@ -9,10 +9,10 @@ import { practiceBlock } from '../config/practice'
 import { tutorialBlock } from '../config/tutorial'
 import { exptBlock1, exptBlock2 } from '../config/experiment'
 
+import startCode from '../trials/startCode'
 
 
 const primaryTimeline = [
-        userId(),
         preamble,
         buildCountdown(lang.countdown.message1, 3),
         taskBlock(practiceBlock),
@@ -22,7 +22,6 @@ const primaryTimeline = [
         ]
 
 const mturkTimeline = [
-        userId(),
         preamble,
         buildCountdown(lang.countdown.message1, 3),
         taskBlock(tutorialBlock),

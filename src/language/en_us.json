@@ -9,7 +9,8 @@
       "button": "Continue"
     },
     "fullscreen": "Press 'cmd + ctrl + F' to toggle Fullscreen.",
-    "zoom": "Zoom in to enlarge the screen."
+    "zoom": "Zoom in to enlarge the screen.",
+    "setting_up": "Setting up task..."
   },
   "welcome": {
     "large_window": "Please make this window as large as possible.",

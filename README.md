@@ -6,11 +6,10 @@ This repo contains a simple neuro task to use as a starter for building [jspsych
 
 1. Clone this repo onto your computer
 ```
-git clone https://github.com/brown-ccv/neuro-task-starter.git
+git clone https://github.com/brown-ccv/neuro-task-starter.git project_name --depth 1
 ```
-2. Change the folder name and change directory into the new folder
+2. Change directory into the new folder
 ```
-mv neuro-task-starter task-<TASK_NAME>
 cd task-<TASK NAME>
 ```
 3. Set the remote url to your tasks' repo (create a github repo if not yet created)
@@ -44,6 +43,9 @@ The `public` directory contains files that are used as assets in the built app. 
 ### `src/`
 
 This folder contains the code for the app, the vast majority of changes and code should go here.
+
+#### `__tests__`
+This folder contains the tests for the app. They can be run with `npm test`.
 
 #### `App.js`
 
@@ -89,7 +91,30 @@ The `lib/` directory contains utility functions and markup that is used in the t
 
 ## Usage with PsiTurk
 
-FERNANDO PLEASE FILL THIS IN
+While this set up is optimized for Electron, we added functionality that will make use with PsiTurk easy. The application will detect if it's being used in a Turk environment and will:  
+
+- Save the data to the default PsiTurk SQLite database.  
+- Switch the language to Turk specific, if `src/language/<locale>.mturk.json` exists.  
+- Use the Turk specific timeline if different than the primary timeline.  
+
+To set up your PsiTurk project, we provide a script that does the conversion.
+PsiTurk is a Python package used to manage HITs in Mechanical Turk. Before using the provided script, install [PsiTurk](https://psiturk.org/).
+
+You'll need to follow these steps (the path to the PsiTurk project should be a directory you wish to be created):
+- Build the application: `npm run build`  
+- Move to the `psiturkit` directory: `cd psiturkit`
+- If it's the first time you're running the script:  
+  `./psiturk-it -p <PATH_TO_NEW_PSITURK_PROJECT>`  
+- To update an existing PsiTurk project (the path to the PsiTurk project should already exist from the previous steps):  
+  `./psiturk-it -u -p <PATH_TO_NEW_PSITURK_PROJECT>`
+
+After that, just navigate to your newly created PsiTurk project directory.
+```shell
+shell> psiturk #start psiturk
+psiturk> server on #start server
+psiturk> debug #debug mode
+```
+
 
 ## Best Practices
 

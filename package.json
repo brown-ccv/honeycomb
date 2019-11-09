@@ -1,39 +1,53 @@
 {
-  "name": "neuro-task",
+  "name": "task-starter",
+  "description": "all-in-one starter app with jsPsych + React + Electron + psiturk ",
+  "author": {
+    "name": "Brown CCV",
+    "email": "ccv-bot@brown.edu",
+    "url": "ccv.brown.edu"
+  },
   "version": "0.1.0",
+  "license": "MIT",
   "private": true,
-  "main": "src/electron-starter.js",
-  "homepage": "./",
+  "main": "public/electron.js",
+  "homepage": ".",
+  "repository": "https://github.com/brown-ccv/neuro-task-starter",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.9.0",
     "bootstrap": "^4.3.1",
-    "event-marker": "git+https://github.com/brown-ccv/event-marker.git",
+    "cross-env": "^6.0.3",
+    "electron-devtools-installer": "^2.2.4",
+    "electron-log": "^3.0.9",
+    "event-marker": "git+https://github.com/brown-ccv/event-marker.git#bump-version",
     "jquery": "^3.4.1",
     "jspsych-react": "^0.2.2",
     "lodash": "^4.17.11",
+    "popper.js": "^1.16.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "typescript": "^3.6.4"
   },
   "scripts": {
     "start": "BROWSER=none NODE_PATH=./src react-scripts start",
     "test": "react-scripts test",
-    "firefox": "BROWSER=firefox npm start",
-    "prebuild:mac": "react-scripts build",
-    "prebuild:linux": "react-scripts build",
-    "prebuild:windows": "react-scripts build",
-    "build": "npm-run-all --parallel build:*",
-    "build:windows": "electron-packager . --platform win32 --arch x64 --out dist/ --overwrite",
-    "build:mac": "electron-packager . --platform darwin --arch x64 --out dist/ --overwrite",
-    "build:linux": "electron-packager . --platform win32 --arch x64 --out dist/ --overwrite",
-    "postbuild:windows": "electron-installer-windows --src dist/neuro-task-win32-x64/ --dest dist/installers/ --overwrite",
-    "postbuild:mac": "electron-installer-dmg dist/neuro-task-darwin-x64/neuro-task.app neuro-task --out dist/installers/ --overwrite",
-    "postbuild:linux": "electron-installer-debian --src dist/neuro-task-linux-x86_64/ --dest dist/installers/ --arch x86_64 --overwrite",
-    "postinstall": "$(npm bin)/electron-rebuild",
+    "prebuild": "electron-rebuild",
+    "build": "react-scripts build",
+    "package:windows": "electron-packager . --platform win32 --arch x64 --out dist/ --overwrite --asar ",
+    "package:mac": "electron-builder",
+    "package:linux": "electron-packager . --platform linux --arch x64 --out dist/ --overwrite",
+    "postpackage:windows": "electron-installer-windows --src dist/task-starter-win32-x64/ --dest dist/installers/ --overwrite --homepage https://ccv.brown.edu/",
+    "postpackage:linux": "electron-installer-debian --src dist/task-starter-linux-x64/ --dest dist/installers/ --arch amd64 --overwrite",
+    "rebuild": "electron-rebuild",
     "eject": "react-scripts eject",
     "electron": "electron .",
     "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
-    "dev": "concurrently --kill-others \"npm:start\" \"sleep 5 && npm run electron-dev\""
+    "dev": "concurrently --kill-others \"npm:start\" \"sleep 5 && npm run electron-dev\"",
+    "dev:home": "REACT_APP_AT_HOME=\"true\" npm run dev",
+    "dev:clinic": "REACT_APP_AT_HOME=\"false\" npm run dev",
+    "build:win:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run build",
+    "build:win:clinic": "cross-env REACT_APP_AT_HOME=\"false\" npm run build",
+    "build:home": "REACT_APP_AT_HOME=\"true\" npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -51,24 +65,30 @@
     ]
   },
   "devDependencies": {
+    "babel-plugin-macros": "^2.6.1",
     "chai": "^4.2.0",
-    "concurrently": "^4.1.1",
-    "electron": "^5.0.5",
-    "electron-installer-debian": "^2.0.0",
-    "electron-installer-dmg": "^3.0.0",
-    "electron-installer-windows": "^2.0.0",
-    "electron-packager": "^14.0.0",
-    "electron-rebuild": "^1.8.5",
-    "eslint": "^5.16.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.18.0",
-    "eslint-plugin-node": "^9.1.0",
-    "eslint-plugin-promise": "^4.1.1",
-    "eslint-plugin-react": "^7.14.2",
-    "eslint-plugin-standard": "^4.0.0",
-    "npm-run-all": "^4.1.5"
+    "concurrently": "^4.1.2",
+    "electron": "6.1.1",
+    "electron-builder": "^21.2.0",
+    "electron-packager": "^14.0.6",
+    "electron-rebuild": "^1.8.6",
+    "eslint": "*",
+    "eslint-config-standard": "^14",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.2.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-standard": "^4.0.1",
+    "require-context.macro": "^1.1.1"
   },
   "babel": {
-    "plugin": ["require-context-hook"]
+    "plugin": [
+      "macros"
+    ]
+  },
+  "optionalDependencies": {
+    "electron-installer-debian": "^2.0.0",
+    "electron-installer-windows": "^2.0.0",
+    "macos-alias": "^0.2.11"
   }
 }

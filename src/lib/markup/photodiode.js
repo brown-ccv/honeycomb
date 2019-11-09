@@ -1,4 +1,5 @@
-import { MTURK } from  '../../config/main'
+import { MTURK, AT_HOME } from  '../../config/main'
+import { eventCodes } from '../../config/trigger'
 import $ from 'jquery'
 
 // conditionally load electron and psiturk based on MTURK config variable
@@ -11,7 +12,7 @@ if (isElectron) {
 
 // Relies on styling in App.css, generate PD spot
 const photodiodeGhostBox = () => {
-	const class_ = (MTURK) ? 'invisible' : 'visible'
+	const class_ = (AT_HOME) ? 'invisible' : 'visible'
 
   const markup = `<div class="photodiode-box ${class_}" id="photodiode-box">
 									<span id="photodiode-spot" class="photodiode-spot"></span>
@@ -20,14 +21,32 @@ const photodiodeGhostBox = () => {
 }
 
 const pdSpotEncode = (taskCode) => {
-	if (!MTURK) {
-		const blinkTime = 20
-		for (var i = 0; i < taskCode; i++) {
-			$('#photodiode-spot').delay(blinkTime).hide(0).delay(blinkTime).show(0)
+  function pulse_for(ms, callback) {
+      $('.photodiode-spot').css({"background-color": "black"})
+      setTimeout(() => {
+        $('.photodiode-spot').css({"background-color": "white"})
+        callback()
+      }, ms)
+    }
+
+    function repeat_pulse_for(ms, i) {
+      if (i > 0) {
+        pulse_for(ms, () => {
+          setTimeout(() => {
+            repeat_pulse_for(ms, i-1)
+          }, ms)
+        })
+      }
+    }
+
+		if (!AT_HOME) {
+				const blinkTime = 40
+				let numBlinks = taskCode
+		    if (taskCode < eventCodes.open_task) numBlinks = 1;
+				repeat_pulse_for(blinkTime, numBlinks)
+				if ( ipcRenderer ) ipcRenderer.send('trigger', taskCode)
+			}
 		}
-		if ( ipcRenderer ) ipcRenderer.send('trigger', taskCode)
-	}
-}
 
 export {
 	photodiodeGhostBox,
