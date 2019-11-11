@@ -73,7 +73,7 @@
     "electron": "6.1.1",
     "electron-packager": "^14.0.6",
     "electron-rebuild": "^1.8.6",
-    "eslint": "*",
+    "eslint": "^5.16.0",
     "eslint-config-standard": "^14",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^9.2.0",
