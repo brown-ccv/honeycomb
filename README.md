@@ -62,6 +62,8 @@ This file contains all of the code relating to the electron app. This includes t
 
 The `config` directory contains the config files needed for the electron app.  This includes the event-marker details and event codes.
 
+Note: the productId can be overwritten by the environment variable EVENT_MARKER_PRODUCT_ID
+
 ### `src/`
 
 This folder contains the code for the app, the vast majority of changes and code should go here.
