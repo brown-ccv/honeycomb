@@ -5,7 +5,7 @@ import { MTURK } from './config/main'
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import '@fortawesome/fontawesome-free/css/all.css'
-import { getTurkUniqueId } from './lib/utils'
+import { getTurkUniqueId, sleep } from './lib/utils'
 
 const isElectron = !MTURK
 let ipcRenderer = false;
@@ -42,8 +42,12 @@ class App extends React.Component {
               ipcRenderer.send('end', 'true')
             }
             else if (psiturk) {
+              const completePsiturk = async () => {
                 psiturk.saveData()
+                await sleep(5000)
                 psiturk.completeHIT()
+              }
+              completePsiturk()
             }
           },
         }}

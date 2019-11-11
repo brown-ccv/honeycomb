@@ -18,6 +18,7 @@
     "cross-env": "^6.0.3",
     "electron-devtools-installer": "^2.2.4",
     "electron-log": "^3.0.9",
+    "electron-squirrel-startup": "^1.0.0",
     "event-marker": "git+https://github.com/brown-ccv/event-marker.git#bump-version",
     "jquery": "^3.4.1",
     "jspsych-react": "^0.2.2",
@@ -33,11 +34,12 @@
     "test": "react-scripts test",
     "prebuild": "electron-rebuild",
     "build": "react-scripts build",
-    "package:windows": "electron-packager . --platform win32 --arch x64 --out dist/ --overwrite --asar ",
-    "package:mac": "electron-builder",
-    "package:linux": "electron-packager . --platform linux --arch x64 --out dist/ --overwrite",
-    "postpackage:windows": "electron-installer-windows --src dist/task-starter-win32-x64/ --dest dist/installers/ --overwrite --homepage https://ccv.brown.edu/",
-    "postpackage:linux": "electron-installer-debian --src dist/task-starter-linux-x64/ --dest dist/installers/ --arch amd64 --overwrite",
+    "package:windows": "electron-packager . --platform win32 --arch x64 --icon ./assets/icons/win/icon.ico --out dist/ --overwrite --asar ",
+    "package:mac": "electron-packager . --platform darwin --arch x64 --out dist/ --icon ./assets/icons/mac/icon.icns --overwrite",
+    "package:linux": "electron-packager . --platform linux --arch x64 --icon ./assets/icons/mac/icon.icns --out dist/ --overwrite",
+    "postpackage:windows": "electron-installer-windows --src dist/%npm_package_name%-win32-x64/ --dest dist/installers/ --overwrite --homepage https://ccv.brown.edu/",
+    "postpackage:linux": "electron-installer-debian --src dist/${npm_package_name}-linux-x64/ --dest dist/installers/ --arch x64 --overwrite",
+    "installer:mac": "electron-installer-dmg ./dist/${npm_package_name}-darwin-x64/${npm_package_name}.app ${npm_package_name}-${npm_package_version} --out ./dist/installers/ --icon ./assets/icons/mac/icon.icns --overwrite",
     "rebuild": "electron-rebuild",
     "eject": "react-scripts eject",
     "electron": "electron .",
@@ -69,7 +71,6 @@
     "chai": "^4.2.0",
     "concurrently": "^4.1.2",
     "electron": "6.1.1",
-    "electron-builder": "^21.2.0",
     "electron-packager": "^14.0.6",
     "electron-rebuild": "^1.8.6",
     "eslint": "*",
@@ -88,7 +89,6 @@
   },
   "optionalDependencies": {
     "electron-installer-debian": "^2.0.0",
-    "electron-installer-windows": "^2.0.0",
-    "macos-alias": "^0.2.11"
+    "electron-installer-windows": "^2.0.0"
   }
 }
