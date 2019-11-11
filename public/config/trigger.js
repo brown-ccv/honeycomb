@@ -3,6 +3,7 @@ const manufacturer = 'Teensyduino'
 const vendorId = '16c0'
 const productId = '0487'
 
+// NOTE - these event codes must match what is in public/config/trigger.js
 const eventCodes = {
 	fixation: 1,
 	evidence: 5,

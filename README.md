@@ -16,15 +16,29 @@ cd task-<TASK NAME>
 ```
 git remote set-url origin <PATH_TO_YOUR_REPO>
 ```
-4. Install the dependencies (the -D flag installs the dev dependencies as well as the production ones)
+4. Update the `package.json` fields to reflect your app name and description (e.g. `name`, `author`, `repository`)
+5. Install the dependencies
 ```
-npm install -D
+npm install
 ```
-5. Run the task in dev mode - this should launch an electron window with the task with the inspector open to the console and will hot-reload when changes are made to the app
+6. Run the task in dev mode - this should launch an electron window with the task with the inspector open to the console and will hot-reload when changes are made to the app
 ```
 npm run dev
 ```
-6. Check out the data - the data is saved throughout the task to the users's app directory.  This is logged at the beginning of the task wherever you ran `npm run dev`
+7. Check out the data - the data is saved throughout the task to the users's app directory.  This is logged at the beginning of the task wherever you ran `npm run dev` (note: this will not work on windows, instead in two different terminals run `npm start` and `npm run electron-dev`)
+
+
+## Contributing
+
+1. Clone the repo and create a new feature branch off `develop`.
+
+```shell
+git clone https://github.com/brown-ccv/task-provocation.git
+git checkout -b your-feature-branch
+```
+
+2. Make your changes and commit using [commitizen](https://pypi.org/project/commitizen/)
+3. Submit a [pull request](https://help.github.com/en/articles/creating-a-pull-request) to the `develop` branch. Add @mcmcgrath13 or @fernandogelin as a reviewer.
 
 ## Project Organization
 
@@ -40,20 +54,21 @@ The `package-lock.json` contains metadata about the package installation. It sho
 
 The `public` directory contains files that are used as assets in the built app. The `favicon.ico` is the small icon you can see in the browser tab (on Chrome) - it is set to Brown's logo in the project. The `index.html` contains the shell of your website - the name displayed on the tab can be changed here, otherwise it shouldn't need to be edited. The scripts included in the file are for `psiturk` as are the files in the `lib/` directory.
 
+#### `electron.js`
+
+This file contains all of the code relating to the electron app. This includes the event-marker, throwing errors via dialog windows, saving data, and reading files.
+
+#### `config/`
+
+The `config` directory contains the config files needed for the electron app.  This includes the event-marker details and event codes.
+
 ### `src/`
 
 This folder contains the code for the app, the vast majority of changes and code should go here.
 
-#### `__tests__`
-This folder contains the tests for the app. They can be run with `npm test`.
-
 #### `App.js`
 
 This is the starting point for the app. The `<Experiment>` component initializes a `jspsych` experiment. This is also where communication is set up with the `electron` and `psiturk` processes.
-
-#### `electron-starter.js`
-
-This file controls the main electron process. This is where any code that needs to interact with the system (ports, file system, etc.) should go. To communicate between electron and the task, use `ipc`.
 
 #### `App.css`
 
@@ -97,6 +112,10 @@ While this set up is optimized for Electron, we added functionality that will ma
 - Switch the language to Turk specific, if `src/language/<locale>.mturk.json` exists.  
 - Use the Turk specific timeline if different than the primary timeline.  
 
+**Prebuilt version**
+When GitHub Actions is run, a psiturk build will be created automatically, and can be downloaded from its artifacts (skip next step if using).
+
+**Build instructions**
 To set up your PsiTurk project, we provide a script that does the conversion.
 PsiTurk is a Python package used to manage HITs in Mechanical Turk. Before using the provided script, install [PsiTurk](https://psiturk.org/).
 
@@ -105,16 +124,17 @@ You'll need to follow these steps (the path to the PsiTurk project should be a d
 - Move to the `psiturkit` directory: `cd psiturkit`
 - If it's the first time you're running the script:  
   `./psiturk-it -p <PATH_TO_NEW_PSITURK_PROJECT>`  
+
 - To update an existing PsiTurk project (the path to the PsiTurk project should already exist from the previous steps):  
   `./psiturk-it -u -p <PATH_TO_NEW_PSITURK_PROJECT>`
 
+**Running psiturk**
 After that, just navigate to your newly created PsiTurk project directory.
 ```shell
 shell> psiturk #start psiturk
 psiturk> server on #start server
 psiturk> debug #debug mode
 ```
-
 
 ## Best Practices
 
@@ -144,11 +164,8 @@ When developing electron apps there are two processes: `main`, and `renderer`.  
 
 #### Package not found or other error related to `npm`
 
-Try deleting your `node_modules` folder and the `package-lock.json` then running `npm install -D`.
+Try deleting your `node_modules` folder and the `package-lock.json` then running `npm install` then `npm run rebuild`.
 
-#### `(node:79877) UnhandledPromiseRejectionWarning: TypeError: p.write is not a function`
-
-If this is showing in the electron console, this means the event marker is not connected - otherwise everything will run fine.
 
 ## Available Scripts
 
@@ -171,24 +188,15 @@ You will also see any lint errors in the console.
 Launches the test runner in the interactive watch mode.<br>
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build:platform`
+### `npm build`
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-platform: windows, mac, linux.
+Creates a production build of the app (renderer).  This must be done before running `package:platform` or the psiturk build instructions.
 
-#### Prerequisites:windows
+### `npm run package:platform`
 
-If not running this command on a windows machine, must have `mono` and `wine` installed.
+It correctly bundles creates electron packages for the given platform.  It then creates an installer for that platform.  The output can be found in `/dist`
+platforms: windows, mac, linux.
 
-#### To build all:
-
-### `npm run build`
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 #### Prerequisites
 
