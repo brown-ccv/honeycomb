@@ -72,7 +72,7 @@ jobs:
       if: startsWith(matrix.os, 'mac')
       uses: softprops/action-gh-release@v1
       with:
-        files: dist/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
+        files: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
