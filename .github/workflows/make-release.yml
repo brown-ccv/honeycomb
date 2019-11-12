@@ -46,6 +46,12 @@ jobs:
     - name: package electron - mac
       if: startsWith(matrix.os, 'mac')
       run: npm run package:mac
+    - name: npm rebuild - mac
+      if: startsWith(matrix.os, 'mac')
+      run: npm rebuild
+    - name: Mac installer
+      if: startsWith(matrix.os, 'mac')
+      run: npm run installer:mac
 
     # Upload installers to github release
     - name: Upload app to release - windows
