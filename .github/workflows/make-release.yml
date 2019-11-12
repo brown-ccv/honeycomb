@@ -91,10 +91,11 @@ jobs:
         cd psiturkit
         ./psiturk-it -p ${{ steps.package_info.outputs.package_name }}-psiturk
         cd ..
+        tar -cvzf ${{ steps.package_info.outputs.package_name }}-psiturk.tar.gz psiturkit/${{ steps.package_info.outputs.package_name }}-psiturk
     - name: Upload PsiTurk build to release
       if: startsWith(matrix.os, 'ubuntu')
       uses: softprops/action-gh-release@v1
       with:
-        files: psiturkit/${{ steps.package_info.outputs.package_name }}-psiturk
+        files: ${{ steps.package_info.outputs.package_name }}-psiturk.tar.gz
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
