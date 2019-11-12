@@ -90,6 +90,7 @@ jobs:
       run: |
         cd psiturkit
         ./psiturk-it -p ${{ steps.package_info.outputs.package_name }}-psiturk
+        cd ..
     - name: Upload PsiTurk build to release
       if: startsWith(matrix.os, 'ubuntu')
       uses: softprops/action-gh-release@v1
