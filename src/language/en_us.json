@@ -8,6 +8,7 @@
       "press": "Press any key to continue.",
       "button": "Continue"
     },
+    "focus": "Make sure the photodiode is aligned and the EEG recording has begun before continuing.",
     "fullscreen": "Press 'cmd + ctrl + F' to toggle Fullscreen.",
     "zoom": "Zoom in to enlarge the screen.",
     "setting_up": "Setting up task..."
