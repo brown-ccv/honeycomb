@@ -18,7 +18,7 @@ const userId = () => {
   else {
     return {
       type: 'survey_text',
-      questions: [{ prompt: baseStimulus(`<h1>${lang.userid.set}</h1>`, true) }],
+      questions: [{ prompt: baseStimulus(`<h1>${lang.userid.set}</h1>`, true), value: process.env.REACT_APP_PATIENT_ID }],
       on_finish: (data) => {
         getUserId(data)
       }

@@ -8,6 +8,7 @@ on:
   pull_request:
     paths:
       - 'src/**'
+      - 'public/**'
       - '.github/workflows/main.yml'
 
 jobs:
