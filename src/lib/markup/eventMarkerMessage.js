@@ -1,7 +1,7 @@
-import { IS_ELECTRON, lang } from '../../config/main'
+import { MTURK, lang } from '../../config/main'
 
 const eventMarkerMessage = async () => {
-	if (IS_ELECTRON) {
+	if (!MTURK) {
 		return `<span style="color: green;">${lang.eventMarker.found}</span>`
 	}
 	else {

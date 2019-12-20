@@ -1,18 +1,19 @@
 import React from 'react'
 import { Experiment, jsPsych } from 'jspsych-react'
 import { tl } from './timelines/main'
-import { MTURK, IS_ELECTRON, AT_HOME } from './config/main'
+import { MTURK } from './config/main'
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import '@fortawesome/fontawesome-free/css/all.css'
 import { getTurkUniqueId, sleep } from './lib/utils'
 
+const isElectron = !MTURK
 let ipcRenderer = false;
 let psiturk = false
-if (IS_ELECTRON) {
+if (isElectron) {
   const electron = window.require('electron');
   ipcRenderer  = electron.ipcRenderer;
-} else if (MTURK) {
+} else {
   /* eslint-disable */
   window.lodash = _.noConflict()
   psiturk = new PsiTurk(getTurkUniqueId(), '/complete')
@@ -21,9 +22,8 @@ if (IS_ELECTRON) {
 
 class App extends React.Component {
   render() {
-    console.log("Electron:", IS_ELECTRON)
+    console.log("Outside Turk:", jsPsych.turk.turkInfo().outsideTurk)
     console.log("Turk:", MTURK)
-    console.log("At home:", AT_HOME)
 
     return (
       <div className="App">
@@ -34,7 +34,7 @@ class App extends React.Component {
               ipcRenderer.send('data', data)
             }
             else if (psiturk) {
-              psiturk.recordTrialData(data)
+                psiturk.recordTrialData(data)
             }
           },
           on_finish: (data) => {
@@ -48,8 +48,6 @@ class App extends React.Component {
                 psiturk.completeHIT()
               }
               completePsiturk()
-            } else {
-              jsPsych.data.get().localSave('csv','neuro-task.csv');
             }
           },
         }}

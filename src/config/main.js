@@ -19,14 +19,6 @@ const keys = {
 // is this mechanical turk?
 const MTURK = (!jsPsych.turk.turkInfo().outsideTurk)
 const AT_HOME = (process.env.REACT_APP_AT_HOME === 'true')
-let IS_ELECTRON = true
-
-// if not electron, update value
-try {
-	window.require('electron')
-} catch {
-	IS_ELECTRON = false
-}
 
 // get language file
 const lang = require('../language/en_us.json')
@@ -49,6 +41,5 @@ export {
 	lang,
 	eventCodes,
 	MTURK,
-	AT_HOME,
-	IS_ELECTRON
+	AT_HOME
 }

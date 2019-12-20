@@ -2,11 +2,14 @@ import buildCountdown from '../trials/countdown'
 import preamble from './preamble'
 import experimentEnd from '../trials/experimentEnd'
 import taskBlock from './taskBlock'
+import userId from '../trials/userId'
 
 import { MTURK, lang } from '../config/main'
 import { practiceBlock } from '../config/practice'
 import { tutorialBlock } from '../config/tutorial'
 import { exptBlock1, exptBlock2 } from '../config/experiment'
+
+import startCode from '../trials/startCode'
 
 
 const primaryTimeline = [
