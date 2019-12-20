@@ -1,4 +1,4 @@
-import { eventCodes, MTURK } from '../config/main'
+import { eventCodes, IS_ELECTRON, AT_HOME } from '../config/main'
 import { earningsDisplay } from '../lib/markup/earnings'
 import { photodiodeGhostBox, pdSpotEncode } from '../lib/markup/photodiode'
 
@@ -14,7 +14,7 @@ const beadEnd = (trialDetails, duration) => {
       on_start: (trial) => {
         let earnings = Math.random()
         trial.stimulus = earningsDisplay(earnings)
-        if (!MTURK) trial.stimulus += photodiodeGhostBox()
+        if (IS_ELECTRON && !AT_HOME) trial.stimulus += photodiodeGhostBox()
       },
       on_finish: (data) => data.code = code
     }
