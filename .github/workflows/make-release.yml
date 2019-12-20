@@ -2,10 +2,8 @@ name: Add App Installers to Release
 
 on:
   push:
-    # tags:
-    #   - '*'
-    branches:
-      - feat-browser
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -39,68 +37,68 @@ jobs:
         CI: true
 
     # Build electron app package installers
-    # - name: package electron - windows
-    #   if: startsWith(matrix.os, 'windows')
-    #   run: npm run package:windows
-    # - name: package electron - linux
-    #   if: startsWith(matrix.os, 'ubuntu')
-    #   run: npm run package:linux
-    # - name: package electron - mac
-    #   if: startsWith(matrix.os, 'mac')
-    #   run: npm run package:mac
-    # - name: npm rebuild - mac
-    #   if: startsWith(matrix.os, 'mac')
-    #   run: npm rebuild
-    # - name: Mac installer
-    #   if: startsWith(matrix.os, 'mac')
-    #   run: npm run installer:mac
+    - name: package electron - windows
+      if: startsWith(matrix.os, 'windows')
+      run: npm run package:windows
+    - name: package electron - linux
+      if: startsWith(matrix.os, 'ubuntu')
+      run: npm run package:linux
+    - name: package electron - mac
+      if: startsWith(matrix.os, 'mac')
+      run: npm run package:mac
+    - name: npm rebuild - mac
+      if: startsWith(matrix.os, 'mac')
+      run: npm rebuild
+    - name: Mac installer
+      if: startsWith(matrix.os, 'mac')
+      run: npm run installer:mac
 
     # Upload installers to github release
-    # - name: Upload app to release - windows
-    #   if: startsWith(matrix.os, 'windows')
-    #   uses: softprops/action-gh-release@v1
-    #   with:
-    #     files: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-setup.exe
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    # - name: Upload app to release - linux
-    #   if: startsWith(matrix.os, 'ubuntu')
-    #   uses: softprops/action-gh-release@v1
-    #   with:
-    #     files: dist/installers/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_x64.deb
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    # - name: Upload app to release - mac
-    #   if: startsWith(matrix.os, 'mac')
-    #   uses: softprops/action-gh-release@v1
-    #   with:
-    #     files: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload app to release - windows
+      if: startsWith(matrix.os, 'windows')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-setup.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload app to release - linux
+      if: startsWith(matrix.os, 'ubuntu')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/installers/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_x64.deb
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload app to release - mac
+      if: startsWith(matrix.os, 'mac')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     # Build PsiTurk - linux only
-    # - name: Set up Python 3.7
-    #   if: startsWith(matrix.os, 'ubuntu')
-    #   uses: actions/setup-python@v1
-    #   with:
-    #     python-version: 3.7
-    # - name: Install PsiTurk
-    #   if: startsWith(matrix.os, 'ubuntu')
-    #   run: pip install psiturk
-    # - name: Create Psiturk Build
-    #   if: startsWith(matrix.os, 'ubuntu')
-    #   run: |
-    #     cd psiturkit
-    #     ./psiturk-it -p ${{ steps.package_info.outputs.package_name }}-psiturk
-    #     cd ..
-    #     tar -cvzf ${{ steps.package_info.outputs.package_name }}-psiturk.tar.gz psiturkit/${{ steps.package_info.outputs.package_name }}-psiturk
-    # - name: Upload PsiTurk build to release
-    #   if: startsWith(matrix.os, 'ubuntu')
-    #   uses: softprops/action-gh-release@v1
-    #   with:
-    #     files: ${{ steps.package_info.outputs.package_name }}-psiturk.tar.gz
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Set up Python 3.7
+      if: startsWith(matrix.os, 'ubuntu')
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install PsiTurk
+      if: startsWith(matrix.os, 'ubuntu')
+      run: pip install psiturk
+    - name: Create Psiturk Build
+      if: startsWith(matrix.os, 'ubuntu')
+      run: |
+        cd psiturkit
+        ./psiturk-it -p ${{ steps.package_info.outputs.package_name }}-psiturk
+        cd ..
+        tar -cvzf ${{ steps.package_info.outputs.package_name }}-psiturk.tar.gz psiturkit/${{ steps.package_info.outputs.package_name }}-psiturk
+    - name: Upload PsiTurk build to release
+      if: startsWith(matrix.os, 'ubuntu')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ${{ steps.package_info.outputs.package_name }}-psiturk.tar.gz
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     # Update github pages - linux only
     - name: Deploy to GH Pages
