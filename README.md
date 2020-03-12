@@ -33,7 +33,7 @@ npm run dev
 1. Clone the repo and create a new feature branch off `develop`.
 
 ```shell
-git clone https://github.com/brown-ccv/task-provocation.git
+git clone https://github.com/brown-ccv/neuro-task-starter.git
 git checkout -b your-feature-branch
 ```
 
