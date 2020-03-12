@@ -2,6 +2,8 @@
 
 This repo contains a simple neuro task to use as a starter for building [jspsych](https://www.jspsych.org/) tasks with React and Electron.
 
+[![DOI](https://zenodo.org/badge/201963539.svg)](https://zenodo.org/badge/latestdoi/201963539)
+
 ## Getting Started
 
 1. Clone this repo onto your computer
