@@ -19,7 +19,7 @@ if (IS_ELECTRON) {
   psiturk = new PsiTurk(getTurkUniqueId(), '/complete')
   /* eslint-enable */
 }
-const firebase = true;
+const firebase = process.env.FIREBASE;
 
 class App extends React.Component {
   render() {
