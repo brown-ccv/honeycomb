@@ -1,19 +1,18 @@
 import React from 'react'
 import { Experiment, jsPsych } from 'jspsych-react'
 import { tl } from './timelines/main'
-import { MTURK } from './config/main'
+import { MTURK, IS_ELECTRON } from './config/main'
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import '@fortawesome/fontawesome-free/css/all.css'
 import { getTurkUniqueId, sleep } from './lib/utils'
 
-const isElectron = !MTURK
 let ipcRenderer = false;
 let psiturk = false
-if (isElectron) {
+if (IS_ELECTRON) {
   const electron = window.require('electron');
   ipcRenderer  = electron.ipcRenderer;
-} else {
+} else if (MTURK) {
   /* eslint-disable */
   window.lodash = _.noConflict()
   psiturk = new PsiTurk(getTurkUniqueId(), '/complete')
@@ -48,6 +47,8 @@ class App extends React.Component {
                 psiturk.completeHIT()
               }
               completePsiturk()
+            } else {
+              jsPsych.data.get().localSave('csv','neuro-task.csv');
             }
           },
         }}
