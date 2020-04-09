@@ -6,9 +6,10 @@ import './App.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import '@fortawesome/fontawesome-free/css/all.css'
 import { getTurkUniqueId, sleep } from './lib/utils'
+import { addToFirebase, createFirebaseDocument } from './firebase.js'
 
 let ipcRenderer = false;
-let psiturk = false
+let psiturk = false;
 if (IS_ELECTRON) {
   const electron = window.require('electron');
   ipcRenderer  = electron.ipcRenderer;
@@ -18,6 +19,7 @@ if (IS_ELECTRON) {
   psiturk = new PsiTurk(getTurkUniqueId(), '/complete')
   /* eslint-enable */
 }
+const firebase = true;
 
 class App extends React.Component {
   render() {
@@ -29,6 +31,16 @@ class App extends React.Component {
         <Experiment settings={{
           timeline: tl,
           on_data_update: (data) => {
+            if (firebase) {
+              if (data.trial_index === 1 ) {
+                console.log(data.patient_id)
+                createFirebaseDocument(data.patient_id)
+                addToFirebase(data)
+              }
+              if ((data.trial_index > 1 )) {
+                addToFirebase(data)
+              }
+            }
             if ( ipcRenderer ) {
               ipcRenderer.send('data', data)
             }
@@ -48,7 +60,8 @@ class App extends React.Component {
               }
               completePsiturk()
             } else {
-              jsPsych.data.get().localSave('csv','neuro-task.csv');
+              
+              // jsPsych.data.get().localSave('csv','neuro-task.csv');
             }
           },
         }}
