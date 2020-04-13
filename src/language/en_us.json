@@ -27,5 +27,8 @@
   "countdown": {
     "message1": "Countdown for the first block",
     "message2": "Countdown for the second block"
+  },
+  "instructions": {
+    "adjust_volume": "Set tablet volume to 50/100."
   }
 }
