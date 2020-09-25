@@ -6,11 +6,11 @@ This repo contains a simple neuro task to use as a starter for building [jspsych
 
 ## Getting Started
 
-1. Clone this repo onto your computer using git
+1. Clone this repo onto your computer using git (note: task-<TASK NAME> is a placeholder.)
 ```
-git clone https://github.com/brown-ccv/neuro-task-starter.git project_name --depth 1
+git clone https://github.com/brown-ccv/neuro-task-starter.git task-<TASK NAME> --depth 1
 ```
-2. Change directory into the new folder (task-<TASK NAME>). Navigate to the task-<TASK NAME> directory.
+2. Navigate to the task-<TASK NAME> directory.
 ```
 cd task-<TASK NAME>
 ```
