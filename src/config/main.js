@@ -17,6 +17,12 @@ const keys = {
 	"space": 32
 }
 
+// audio codes
+const audioCodes = {
+	frequency: 100*(eventCodes.open_task - 9),
+	type: 'sine'
+}
+
 // is this mechanical turk?
 const MTURK = (!jsPsych.turk.turkInfo().outsideTurk)
 const AT_HOME = (process.env.REACT_APP_AT_HOME === 'true')
@@ -52,5 +58,6 @@ export {
 	lang,
 	eventCodes,
 	config,
-	AT_HOME
+	AT_HOME,
+	audioCodes
 }

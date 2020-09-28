@@ -70,6 +70,20 @@ const getUserId = (data) => {
   console.log("ID", patientId)
 }
 
+const beep = (audioCodes) => {
+  const context = new AudioContext()
+  const o = context.createOscillator()
+  const g = context.createGain()
+  o.type = audioCodes.type
+  o.connect(g)
+  o.frequency.setValueAtTime(audioCodes.frequency, 0)
+  console.log(context.currentTime)
+  g.connect(context.destination)
+  o.start()
+  o.stop(context.currentTime + 0.4)
+}
+
+
 export {
   sleep,
   jitter,
@@ -81,5 +95,6 @@ export {
   images,
   startKeypressListener,
   getUserId,
-  getTurkUniqueId
+  getTurkUniqueId,
+  beep
 }
