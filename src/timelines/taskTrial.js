@@ -9,10 +9,10 @@ const taskTrial = (blockSettings, blockDetails, condition) => {
   // timeline
   let timeline = [
     // show condition
-    showMessage('html_keyboard_response', 1000, config, condition, false, eventCodes.evidence),
-    fixation('html_keyboard_response', 650, config, false, eventCodes.fixation),
+    showMessage('html_keyboard_response', 1000, config, condition, false, eventCodes.evidence, eventCodes.evidence),
+    fixation('html_keyboard_response', 650, config, false, eventCodes.fixation, eventCodes.fixation),
     // end the trial
-    showMessage('html_keyboard_response', 1000, config, earningsDisplay(Math.random()), false, eventCodes.show_earnings),
+    showMessage('html_keyboard_response', 1000, config, earningsDisplay(Math.random()), false, eventCodes.show_earnings, eventCodes.show_earnings),
   ]
 
     return {
