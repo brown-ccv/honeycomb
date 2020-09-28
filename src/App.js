@@ -1,7 +1,7 @@
 import React from 'react'
 import { Experiment, jsPsych } from 'jspsych-react'
 import { tl } from './timelines/main'
-import { MTURK, IS_ELECTRON } from './config/main'
+import { config } from './config/main'
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import '@fortawesome/fontawesome-free/css/all.css'
@@ -9,10 +9,10 @@ import { getTurkUniqueId, sleep } from './lib/utils'
 
 let ipcRenderer = false;
 let psiturk = false
-if (IS_ELECTRON) {
+if (config.IS_ELECTRON) {
   const electron = window.require('electron');
   ipcRenderer  = electron.ipcRenderer;
-} else if (MTURK) {
+} else if (config.USE_MTURK) {
   /* eslint-disable */
   window.lodash = _.noConflict()
   psiturk = new PsiTurk(getTurkUniqueId(), '/complete')
@@ -22,7 +22,7 @@ if (IS_ELECTRON) {
 class App extends React.Component {
   render() {
     console.log("Outside Turk:", jsPsych.turk.turkInfo().outsideTurk)
-    console.log("Turk:", MTURK)
+    console.log("Turk:", config.USE_MTURK)
 
     return (
       <div className="App">

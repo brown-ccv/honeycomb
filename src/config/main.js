@@ -5,6 +5,7 @@
 import { jsPsych } from 'jspsych-react'
 import _ from 'lodash'
 import { eventCodes } from './trigger'
+import {init} from '@brown-ccv/behavioral-task-trials'
 
 // mapping of letters to key codes
 const keys = {
@@ -42,12 +43,14 @@ const defaultBlockSettings = {
 	photodiode_active: false
 }
 
+// setting config for trials
+const config = init({USE_PHOTODIODE: !AT_HOME && IS_ELECTRON,  USE_EEG: false, IS_ELECTRON: IS_ELECTRON, USE_MTURK: MTURK})
+
 export {
 	keys,
 	defaultBlockSettings,
 	lang,
 	eventCodes,
-	MTURK,
-	AT_HOME,
-	IS_ELECTRON
+	config,
+	AT_HOME
 }

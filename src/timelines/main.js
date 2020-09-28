@@ -1,30 +1,29 @@
-import buildCountdown from '../trials/countdown'
 import preamble from './preamble'
-import experimentEnd from '../trials/experimentEnd'
+import {showMessage, countdown} from '@brown-ccv/behavioral-task-trials'
 import taskBlock from './taskBlock'
 
-import { MTURK, lang } from '../config/main'
+import { lang, config } from '../config/main'
 import { practiceBlock } from '../config/practice'
 import { tutorialBlock } from '../config/tutorial'
 import { exptBlock1, exptBlock2 } from '../config/experiment'
 
-
+console.log(config)
 const primaryTimeline = [
         preamble,
-        buildCountdown(lang.countdown.message1, 3),
+        countdown(1000, lang.countdown.message1, 3),
         taskBlock(practiceBlock),
-        buildCountdown(lang.countdown.message2, 3),
+        countdown(1000, lang.countdown.message2, 3),
         taskBlock(exptBlock1),
-        experimentEnd(5000)
+        showMessage('html_keyboard_response',5000, config,lang.task.end)
         ]
 
 const mturkTimeline = [
         preamble,
-        buildCountdown(lang.countdown.message1, 3),
+        countdown(1000, lang.countdown.message1, 3),
         taskBlock(tutorialBlock),
-        buildCountdown(lang.countdown.message2, 3),
+        countdown(1000, lang.countdown.message2, 3),
         taskBlock(exptBlock2),
-        experimentEnd(3000)
+        showMessage('html_keyboard_response',5000, config,lang.task.end)
         ]
 
-export const tl = (MTURK) ? mturkTimeline : primaryTimeline
+export const tl = (config.USE_MTURK) ? mturkTimeline : primaryTimeline

@@ -1,24 +1,18 @@
 // import trials
-import fixation from '../trials/fixation'
-import showCondition from '../trials/showCondition'
-import taskEnd from '../trials/taskEnd'
-
+import {showMessage, fixation} from '@brown-ccv/behavioral-task-trials'
+import { config } from '../config/main'
+import { eventCodes } from '../config/main'
+import { earningsDisplay } from '../lib/markup/earnings'
 
 const taskTrial = (blockSettings, blockDetails, condition) => {
-  // initialize trial details
-  let trialDetails = {
-    condition: condition,
-    trial_earnings: 0,
-    start_time: Date.now()
-  }
 
   // timeline
   let timeline = [
     // show condition
-    showCondition(condition, 1000, 500),
-    fixation(650),
+    showMessage('html_keyboard_response', 1000, config, condition, false, eventCodes.evidence),
+    fixation('html_keyboard_response', 650, config, false, eventCodes.fixation),
     // end the trial
-    taskEnd(trialDetails, 500)
+    showMessage('html_keyboard_response', 1000, config, earningsDisplay(Math.random()), false, eventCodes.show_earnings),
   ]
 
     return {
