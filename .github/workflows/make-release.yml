@@ -29,8 +29,8 @@ jobs:
     # install, test, build package
     - name: npm install
       run: |
-      npm config set "//npm.pkg.github.com/:_authToken" ${{ secrets.GH_TOKEN }}
-      npm install
+        npm config set "//npm.pkg.github.com/:_authToken" ${{ secrets.GH_TOKEN }}
+        npm install
     - name: npm build
       run: npm run build
     - name: npm test
