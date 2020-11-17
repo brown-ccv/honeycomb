@@ -7,9 +7,9 @@ on:
       - develop
   pull_request:
     paths:
-      - 'src/**'
-      - 'public/**'
-      - '.github/workflows/main.yml'
+      - "src/**"
+      - "public/**"
+      - ".github/workflows/main.yml"
 
 jobs:
   build:
@@ -18,34 +18,34 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-    # Set up js package
-    - uses: actions/checkout@v1
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12.x
-    - name: Set package version and name
-      uses: brown-ccv/gh-actions/get-package-info@master
-      id: package_info
+      # Set up js package
+      - uses: actions/checkout@v1
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Set package version and name
+        uses: brown-ccv/gh-actions/get-package-info@main
+        id: package_info
 
-    # install, test, build package
-    - name: npm install
-      run: npm install
-    - name: npm build:win:home
-      run: npm run build
-    - name: npm test
-      run: npm test
-      env:
-        CI: true
-        REACT_APP_AT_HOME: true
+      # install, test, build package
+      - name: npm install
+        run: npm install
+      - name: npm build:win:home
+        run: npm run build
+      - name: npm test
+        run: npm test
+        env:
+          CI: true
+          REACT_APP_AT_HOME: true
 
-    # Build electron app package installers
-    - name: package electron - windows
-      run: npm run package:windows
+      # Build electron app package installers
+      - name: package electron - windows
+        run: npm run package:windows
 
-    # Upload installers to github action
-    - name: upload win-installer-home
-      uses: actions/upload-artifact@master
-      with:
-        name: win-installer-home
-        path: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-setup.exe
+      # Upload installers to github action
+      - name: upload win-installer-home
+        uses: actions/upload-artifact@master
+        with:
+          name: win-installer-home
+          path: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-setup.exe
