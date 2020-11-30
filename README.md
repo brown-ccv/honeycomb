@@ -1,6 +1,6 @@
 # Honeycomb
 
-*Note: previously named Neuro Task Started, some references may still refer to it as such*
+*Note: previously named Neuro Task Starter, some references may still refer to it as such*
 
 This repo contains a simple task to use as a starter/template for building [jspsych](https://www.jspsych.org/) tasks with React and Electron.  See [Neuro Task Starter Workshop Slides](https://docs.google.com/presentation/d/1l3wLc2JQ9kPKxTCRBcc6_w7P27p2LkluD-yGHYnoOgA/edit?usp=sharing) for an overview of the project.
 
