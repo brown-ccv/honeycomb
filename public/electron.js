@@ -158,6 +158,9 @@ let patientID = ''
 let images = []
 let startTrial = -1
 
+// Read version file (git sha and branch)
+var git = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'config/version.json')));
+
 // listener for new data
 ipc.on('data', (event, args) => {
 
@@ -181,7 +184,7 @@ ipc.on('data', (event, args) => {
     }
 
     //write the data
-    stream.write(JSON.stringify(args))
+    stream.write(JSON.stringify({...args, git}))
 
     // Copy provocation images to patient's data folder
     if (args.trial_type === 'image_keyboard_response') images.push(args.stimulus.slice(7))
