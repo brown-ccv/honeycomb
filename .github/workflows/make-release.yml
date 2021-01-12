@@ -24,7 +24,6 @@ jobs:
       - name: Set package version and name
         uses: brown-ccv/gh-actions/get-package-info@main
         id: package_info
-
       # install, test, build package
       - name: npm install
         run: npm install
