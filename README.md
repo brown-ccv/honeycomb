@@ -4,28 +4,26 @@ This repo contains a simple neuro task to use as a starter for building [jspsych
 
 ## Getting Started
 
-1. Clone this repo onto your computer
+1. The simplest way to get started is creating a new repository using Honeycomb as a template.
+
+Go to https://github.com/brown-ccv/honeycomb and click on `Use this template` on the top right. Then select the organization and the name of your repository and cick on `create repository from template`
+
+Alternatively, you can use GitHub CLI to create a new project based on the Honeycomb template repository. First, install GitHub CLI (https://cli.github.com/), then simply run on your terminal: 
 ```
-git clone https://github.com/brown-ccv/neuro-task-starter.git project_name --depth 1
-```
-2. Change directory into the new folder
-```
-cd task-<TASK NAME>
-```
-3. Set the remote url to your tasks' repo (create a github repo if not yet created)
-```
-git remote set-url origin <PATH_TO_YOUR_REPO>
-```
-4. Update the `package.json` fields to reflect your app name and description (e.g. `name`, `author`, `repository`)
-5. Install the dependencies
+gh repo create your-new-task-name --template brown-ccv/honeycomb
+``` 
+
+2. Update the `package.json` fields to reflect your app name and description (e.g. `name`, `author`, `repository`)
+
+3. Install the dependencies
 ```
 npm install
 ```
-6. Run the task in dev mode - this should launch an electron window with the task with the inspector open to the console and will hot-reload when changes are made to the app
+4. Run the task in dev mode - this should launch an electron window with the task with the inspector open to the console and will hot-reload when changes are made to the app
 ```
 npm run dev
 ```
-7. Check out the data - the data is saved throughout the task to the users's app directory.  This is logged at the beginning of the task wherever you ran `npm run dev` (note: this will not work on windows, instead in two different terminals run `npm start` and `npm run electron-dev`)
+5. Check out the data - the data is saved throughout the task to the users's app directory.  This is logged at the beginning of the task wherever you ran `npm run dev` (note: this will not work on windows, instead in two different terminals run `npm start` and `npm run electron-dev`)
 
 
 ## Contributing

@@ -30,6 +30,7 @@
     "typescript": "^3.6.4"
   },
   "scripts": {
+    "postinstall": "node version.js && npm run rebuild",
     "start": "BROWSER=none NODE_PATH=./src react-scripts start",
     "test": "react-scripts test",
     "prebuild": "electron-rebuild",
