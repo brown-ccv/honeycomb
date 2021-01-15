@@ -60,8 +60,7 @@ class App extends React.Component {
               }
               completePsiturk()
             } else {
-              
-              // jsPsych.data.get().localSave('csv','neuro-task.csv');
+              jsPsych.data.get().localSave('csv','neuro-task.csv');
             }
           },
         }}
