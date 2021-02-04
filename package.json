@@ -30,7 +30,9 @@
     "typescript": "^3.6.4"
   },
   "scripts": {
+    "postinstall": "node version.js && npm run rebuild",
     "start": "BROWSER=none NODE_PATH=./src react-scripts start",
+    "start:browser": "react-scripts start",
     "test": "react-scripts test",
     "prebuild": "electron-rebuild",
     "build": "react-scripts build",
@@ -70,6 +72,7 @@
     "babel-plugin-macros": "^2.6.1",
     "chai": "^4.2.0",
     "concurrently": "^4.1.2",
+    "dotenv": "^8.2.0",
     "electron": "6.1.1",
     "electron-packager": "^14.0.6",
     "electron-rebuild": "^1.8.6",
@@ -80,6 +83,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-standard": "^4.0.1",
+    "firebase": "^7.13.2",
     "require-context.macro": "^1.1.1"
   },
   "babel": {
