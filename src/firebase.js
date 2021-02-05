@@ -13,9 +13,11 @@ const config = {
 };
 // Get a Firestore instance
 let db;
+let isFirebase = true;
 try {
     db = firebase.initializeApp(config).firestore()
 } catch {
+    isFirebase = false;
     console.log("WARNING: Firease not connected");
 }
 
@@ -43,7 +45,7 @@ const addToFirebase = (data) => {
 // Export types that exists in Firestore
 // This is not always necessary, but it's used in other examples
 const { TimeStamp, GeoPoint } = firebase.firestore
-export { db, TimeStamp, GeoPoint, createFirebaseDocument, addToFirebase, createFirebaseDocumentRandom }
+export { db, TimeStamp, GeoPoint, createFirebaseDocument, addToFirebase, createFirebaseDocumentRandom, isFirebase }
 
 
 export default firebase;
