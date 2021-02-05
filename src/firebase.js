@@ -12,7 +12,12 @@ const config = {
     appId: process.env.REACT_APP_appId
 };
 // Get a Firestore instance
-const db = firebase.initializeApp(config).firestore()
+let db;
+try {
+    db = firebase.initializeApp(config).firestore()
+} catch {
+    console.log("WARNING: Firease not connected");
+}
 
 // Add data to db
 const createFirebaseDocument = (patientId) => {
