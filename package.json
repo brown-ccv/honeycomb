@@ -74,7 +74,7 @@
     "chai": "^4.2.0",
     "concurrently": "^4.1.2",
     "dotenv": "^8.2.0",
-    "electron": "6.1.1",
+    "electron": "9.4.0",
     "electron-packager": "^14.0.6",
     "electron-rebuild": "^1.8.6",
     "eslint": "^5.16.0",
