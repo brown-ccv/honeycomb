@@ -32,7 +32,7 @@
   },
   "scripts": {
     "postinstall": "node version.js && npm run rebuild",
-    "start": "BROWSER=none NODE_PATH=./src react-scripts start",
+    "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" react-scripts start",
     "start:browser": "react-scripts start",
     "test": "react-scripts test",
     "prebuild": "electron-rebuild",
@@ -46,10 +46,10 @@
     "rebuild": "electron-rebuild",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
+    "electron-dev": "cross-env ELECTRON_START_URL=\"http://localhost:3000\" electron .",
     "dev": "concurrently --kill-others \"npm:start\" \"sleep 5 && npm run electron-dev\"",
-    "dev:home": "REACT_APP_AT_HOME=\"true\" npm run dev",
-    "dev:clinic": "REACT_APP_AT_HOME=\"false\" npm run dev",
+    "dev:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run dev",
+    "dev:clinic": "cross-env REACT_APP_AT_HOME=\"false\" npm run dev",
     "build:win:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run build",
     "build:win:clinic": "cross-env REACT_APP_AT_HOME=\"false\" npm run build",
     "build:home": "REACT_APP_AT_HOME=\"true\" npm run build"
