@@ -21,9 +21,10 @@
     "electron-log": "^3.0.9",
     "electron-squirrel-startup": "^1.0.0",
     "event-marker": "git+https://github.com/brown-ccv/event-marker.git",
+    "execa": "^5.0.0",
     "jquery": "^3.4.1",
     "jspsych-react": "^0.2.2",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "popper.js": "^1.16.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -31,8 +32,9 @@
     "typescript": "^3.6.4"
   },
   "scripts": {
-    "commit": "git-cz",
-    "start": "BROWSER=none NODE_PATH=./src react-scripts start",
+    "postinstall": "node version.js && npm run rebuild",
+    "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" react-scripts start",
+    "start:browser": "react-scripts start",
     "test": "react-scripts test",
     "prebuild": "electron-rebuild",
     "build": "react-scripts build",
@@ -45,10 +47,10 @@
     "rebuild": "electron-rebuild",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
+    "electron-dev": "cross-env ELECTRON_START_URL=\"http://localhost:3000\" electron .",
     "dev": "concurrently --kill-others \"npm:start\" \"sleep 5 && npm run electron-dev\"",
-    "dev:home": "REACT_APP_AT_HOME=\"true\" npm run dev",
-    "dev:clinic": "REACT_APP_AT_HOME=\"false\" npm run dev",
+    "dev:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run dev",
+    "dev:clinic": "cross-env REACT_APP_AT_HOME=\"false\" npm run dev",
     "build:win:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run build",
     "build:win:clinic": "cross-env REACT_APP_AT_HOME=\"false\" npm run build",
     "build:home": "REACT_APP_AT_HOME=\"true\" npm run build"
@@ -77,6 +79,7 @@
     "babel-plugin-macros": "^2.6.1",
     "chai": "^4.2.0",
     "concurrently": "^4.1.2",
+    "dotenv": "^8.2.0",
     "electron": "6.1.1",
     "electron-packager": "^14.0.6",
     "electron-rebuild": "^1.8.6",
@@ -87,6 +90,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-standard": "^4.0.1",
+    "firebase": "^7.13.2",
     "require-context.macro": "^1.1.1"
   },
   "babel": {
