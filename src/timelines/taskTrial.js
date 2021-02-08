@@ -15,17 +15,9 @@ const taskTrial = (blockSettings, blockDetails, condition) => {
       condition,
       true,
       false,
-      eventCodes.evidence,
       eventCodes.evidence
     ),
-    fixation(
-      "html_keyboard_response",
-      650,
-      config,
-      false,
-      eventCodes.fixation,
-      eventCodes.fixation
-    ),
+    fixation("html_keyboard_response", 650, config, false, eventCodes.fixation),
     // end the trial
     showMessage(
       "html_keyboard_response",
@@ -34,7 +26,6 @@ const taskTrial = (blockSettings, blockDetails, condition) => {
       earningsDisplay(Math.random()),
       true,
       false,
-      eventCodes.show_earnings,
       eventCodes.show_earnings
     ),
   ];
