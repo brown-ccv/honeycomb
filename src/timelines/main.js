@@ -14,7 +14,7 @@ const primaryTimeline = [
         taskBlock(practiceBlock),
         countdown(1000, lang.countdown.message2, 3),
         taskBlock(exptBlock1),
-        showMessage('html_keyboard_response',5000, config,lang.task.end)
+        showMessage('html_keyboard_response',5000, config,`<h1>${lang.task.end}</h1>`)
         ]
 
 const mturkTimeline = [
@@ -23,7 +23,7 @@ const mturkTimeline = [
         taskBlock(tutorialBlock),
         countdown(1000, lang.countdown.message2, 3),
         taskBlock(exptBlock2),
-        showMessage('html_keyboard_response',5000, config,lang.task.end)
+        showMessage('html_keyboard_response',5000, config,`<h1>${lang.task.end}</h1>`)
         ]
 
 export const tl = (config.USE_MTURK) ? mturkTimeline : primaryTimeline
