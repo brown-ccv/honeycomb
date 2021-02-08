@@ -7,7 +7,6 @@ import { practiceBlock } from '../config/practice'
 import { tutorialBlock } from '../config/tutorial'
 import { exptBlock1, exptBlock2 } from '../config/experiment'
 
-console.log(config)
 const primaryTimeline = [
         preamble,
         countdown(1000, lang.countdown.message1, 3),

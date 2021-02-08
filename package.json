@@ -55,11 +55,6 @@
     "build:win:clinic": "cross-env REACT_APP_AT_HOME=\"false\" npm run build",
     "build:home": "REACT_APP_AT_HOME=\"true\" npm run build"
   },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
   "eslintConfig": {
     "extends": "react-app"
   },
