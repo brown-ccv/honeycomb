@@ -48,12 +48,11 @@
     "eject": "react-scripts eject",
     "electron": "electron .",
     "electron-dev": "cross-env ELECTRON_START_URL=\"http://localhost:3000\" electron .",
-    "dev": "concurrently --kill-others \"npm:start\" \"sleep 5 && npm run electron-dev\"",
+    "dev": "concurrently --kill-others \"npm:start\" \"sleep 10 && npm run electron-dev\"",
     "dev:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run dev",
     "dev:clinic": "cross-env REACT_APP_AT_HOME=\"false\" npm run dev",
-    "build:win:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run build",
-    "build:win:clinic": "cross-env REACT_APP_AT_HOME=\"false\" npm run build",
-    "build:home": "REACT_APP_AT_HOME=\"true\" npm run build"
+    "build:clinic": "cross-env REACT_APP_AT_HOME=\"false\" npm run build",
+    "build:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -85,7 +84,6 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-standard": "^4.0.1",
-    "firebase": "^7.13.2",
     "require-context.macro": "^1.1.1"
   },
   "babel": {

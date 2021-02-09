@@ -14,8 +14,11 @@ const taskTrial = (blockSettings, blockDetails, condition) => {
 
   // timeline
   let timeline = [
+    // fixation
+    fixation(650),
     // show condition
     showCondition(condition, 1000, 500),
+    // fixation
     fixation(650),
     // end the trial
     taskEnd(trialDetails, 500)
