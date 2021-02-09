@@ -1,14 +1,6 @@
-name: CI Tests
+name: package-clinic-all
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    paths:
-      - 'src/**'
-      - 'public/**'
-      - '.github/workflows/main.yml'
+on: [workflow_dispatch]
 
 jobs:
   build:

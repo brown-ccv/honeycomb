@@ -1,0 +1,38 @@
+name: build-clinic-windows
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - '.github/workflows/main.yml'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+    steps:
+    # Set up js package
+    - uses: actions/checkout@v1
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: Set package version and name
+      uses: brown-ccv/gh-actions/get-package-info@main
+      id: package_info
+
+    # install, test, build package
+    - name: npm install
+      run: npm install
+    - name: npm build
+      run: npm run build:win:clinic
+    - name: npm test
+      run: npm test
+      env:
+        CI: true

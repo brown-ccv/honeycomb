@@ -1,4 +1,4 @@
-name: Build at home version (Windows)
+name: build-home-windows
 
 on:
   push:
@@ -30,21 +30,12 @@ jobs:
     # install, test, build package
     - name: npm install
       run: npm install
-    - name: npm build:win:home
-      run: npm run build
+    - name: npm build
+      run: npm run build:win:home
     - name: npm test
       run: npm test
       env:
         CI: true
         REACT_APP_AT_HOME: true
 
-    # Build electron app package installers
-    - name: package electron - windows
-      run: npm run package:windows
-
-    # Upload installers to github action
-    - name: upload win-installer-home
-      uses: actions/upload-artifact@master
-      with:
-        name: win-installer-home
-        path: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-setup.exe
+   
