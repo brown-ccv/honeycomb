@@ -7,6 +7,12 @@ import { earningsDisplay } from "../lib/markup/earnings";
 const taskTrial = (blockSettings, blockDetails, condition) => {
   // timeline
   let timeline = [
+    // fixation
+    fixation(config, {
+      responseType: "html_keyboard_response",
+      duration: 650,
+      taskCode: eventCodes.fixation,
+    }),
     // show condition
     showMessage(config, {
       responseType: "html_keyboard_response",

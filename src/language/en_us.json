@@ -1,6 +1,6 @@
 {
   "task": {
-    "name": "Neuro Task",
+    "name": "Honeycomb Task",
     "end": "This experiment has ended."
   },
   "prompt": {
@@ -8,7 +8,7 @@
       "press": "Press any key to continue.",
       "button": "Continue"
     },
-    "focus": "Make sure the photodiode is aligned and the EEG recording has begun before continuing.",
+    "focus": "Make sure the photodiode is covering the spot and any external recordings have begun before continuing.",
     "fullscreen": "Press 'cmd + ctrl + F' to toggle Fullscreen.",
     "zoom": "Zoom in to enlarge the screen.",
     "setting_up": "Setting up task..."
@@ -18,11 +18,11 @@
     "message": "Instructions"
   },
   "userid": {
-    "set": "Please enter patient ID."
+    "set": "Please enter participant ID."
   },
   "eventMarker" : {
-    "found": "Hold the USB event marker in front of the camera.",
-    "not_found": "Note: no USB event marker found."
+    "found": "Note: event marker found.",
+    "not_found": "Note: no event marker found."
   },
   "countdown": {
     "message1": "Countdown for the first block",

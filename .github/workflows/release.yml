@@ -1,0 +1,82 @@
+name: release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    env:
+      REACT_APP_AT_HOME: ${{ matrix.setting === 'home' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        setting: ['home', 'clinic' ]
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+
+
+    steps:
+    # Set up js package
+    - uses: actions/checkout@v1
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: Set package version and name
+      uses: brown-ccv/gh-actions/get-package-info@main
+      id: package_info
+
+    # install, test, build package
+    - name: npm install
+      run: npm install
+    - name: npm build
+      run: npm run build
+    - name: npm test
+      run: npm test
+      env:
+        CI: true
+
+    # Build electron app package installers
+    - name: package electron - windows
+      if: startsWith(matrix.os, 'windows')
+      run: npm run package:windows
+    - name: package electron - linux
+      if: startsWith(matrix.os, 'ubuntu')
+      run: npm run package:linux
+    - name: package electron - mac
+      if: startsWith(matrix.os, 'mac')
+      run: npm run package:mac
+    - name: npm rebuild - mac
+      if: startsWith(matrix.os, 'mac')
+      run: npm rebuild
+    - name: Mac installer
+      if: startsWith(matrix.os, 'mac')
+      run: npm run installer:mac
+
+    # Upload installers to github release
+
+    - name: Upload app to release - windows
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-setup.exe
+        asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.setting }}-setup.exe
+        tag: ${{ github.ref }}
+    - name: Upload app to release - linux
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/installers/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_x64.deb
+        asset_name: ${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_${{ matrix.setting }}_x64.deb
+        tag: ${{ github.ref }}
+    - name: Upload app to release - mac
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
+        asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.setting }}.dmg
+        tag: ${{ github.ref }}
