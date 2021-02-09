@@ -18,16 +18,16 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      REACT_APP_AT_HOME: ${{ github.event.inputs.setting === 'home' }}
+      REACT_APP_AT_HOME: ${{ github.event.inputs.setting == 'home' }}
 
     strategy:
       fail-fast: false
       matrix:
         os: ${{
-          (github.event.inputs.os === 'all' && [ubuntu-latest, macOS-latest, windows-latest] ) ||
-           (github.event.inputs.os ==='win' && [windows-latest]) ||
-           (github.event.inputs.os === 'mac' && [macOS-latest]) ||
-           (github.event.inpus.os === 'linux' && 'ubuntu-latest') }}
+          (github.event.inputs.os == 'all' && [ubuntu-latest, macOS-latest, windows-latest] ) ||
+           (github.event.inputs.os =='win' && [windows-latest]) ||
+           (github.event.inputs.os == 'mac' && [macOS-latest]) ||
+           (github.event.inpus.os == 'linux' && [ubuntu-latest]) }}
 
     steps:
     # Set up js package
