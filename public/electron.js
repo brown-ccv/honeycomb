@@ -21,7 +21,7 @@ const activeComName = process.env.EVENT_MARKER_COM_NAME || comName
 if (activeProductId) {
   log.info("Active product ID", activeProductId)
 } else {
-  log.info("COM Name", activeCommName)
+  log.info("COM Name", activeComName)
 }
 
 // Data Saving
