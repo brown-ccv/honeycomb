@@ -1,4 +1,4 @@
-name: release-clinic-all
+name: release
 
 on:
   push:
@@ -7,13 +7,17 @@ on:
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
+
+    env:
+      REACT_APP_AT_HOME: ${{ matrix.setting === 'home' }}
 
     strategy:
       fail-fast: false
       matrix:
+        setting: ['home', 'clinic' ]
         os: [ubuntu-latest, macOS-latest, windows-latest]
+
 
     steps:
     # Set up js package
@@ -54,26 +58,25 @@ jobs:
       run: npm run installer:mac
 
     # Upload installers to github release
+
     - name: Upload app to release - windows
-      if: startsWith(matrix.os, 'windows')
-      uses: softprops/action-gh-release@v1
+      uses: svenstaro/upload-release-action@v2
       with:
-        files: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-setup.exe
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-setup.exe
+        asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.setting }}-setup.exe
+        tag: ${{ github.ref }}
     - name: Upload app to release - linux
-      if: startsWith(matrix.os, 'ubuntu')
-      uses: softprops/action-gh-release@v1
+      uses: svenstaro/upload-release-action@v2
       with:
-        files: dist/installers/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_x64.deb
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/installers/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_x64.deb
+        asset_name: ${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_${{ matrix.setting }}_x64.deb
+        tag: ${{ github.ref }}
     - name: Upload app to release - mac
-      if: startsWith(matrix.os, 'mac')
-      uses: softprops/action-gh-release@v1
+      uses: svenstaro/upload-release-action@v2
       with:
-        files: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
+        asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.setting }}.dmg
+        tag: ${{ github.ref }}

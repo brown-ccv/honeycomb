@@ -1,4 +1,4 @@
-name: build-home-windows
+name: build
 
 on:
   push:
@@ -8,14 +8,19 @@ on:
     paths:
       - 'src/**'
       - 'public/**'
-      - '.github/workflows/main.yml'
+      - '.github/workflows/build.yml'
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
 
-    strategy:
-      fail-fast: false
+    env:
+      REACT_APP_AT_HOME: ${{ matrix.home }}
+
+    matrix:
+      home: [true, false]
+      os: [ubuntu-latest, macOS-latest, windows-latest]
+
     steps:
     # Set up js package
     - uses: actions/checkout@v1
@@ -23,19 +28,13 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: Set package version and name
-      uses: brown-ccv/gh-actions/get-package-info@main
-      id: package_info
 
     # install, test, build package
     - name: npm install
       run: npm install
     - name: npm build
-      run: npm run build:win:home
+      run: npm run build
     - name: npm test
       run: npm test
       env:
         CI: true
-        REACT_APP_AT_HOME: true
-
-   
