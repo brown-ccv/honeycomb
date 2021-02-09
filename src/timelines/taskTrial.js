@@ -8,26 +8,25 @@ const taskTrial = (blockSettings, blockDetails, condition) => {
   // timeline
   let timeline = [
     // show condition
-    showMessage(
-      "html_keyboard_response",
-      1000,
-      config,
-      condition,
-      true,
-      false,
-      eventCodes.evidence
-    ),
-    fixation("html_keyboard_response", 650, config, false, eventCodes.fixation),
+    showMessage(config, {
+      responseType: "html_keyboard_response",
+      duration: 1000,
+      message: condition,
+      onstart: true,
+      taskCode: eventCodes.evidence,
+    }),
+    fixation(config, {
+      responseType: "html_keyboard_response",
+      duration: 650,
+      taskCode: eventCodes.fixation,
+    }),
     // end the trial
-    showMessage(
-      "html_keyboard_response",
-      1000,
-      config,
-      earningsDisplay(Math.random()),
-      true,
-      false,
-      eventCodes.show_earnings
-    ),
+    showMessage(config, {
+      responseType: "html_keyboard_response",
+      duration: 1000,
+      message: earningsDisplay(Math.random()),
+      taskCode: eventCodes.show_earnings,
+    }),
   ];
 
   return {

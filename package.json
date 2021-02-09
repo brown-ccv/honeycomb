@@ -11,9 +11,9 @@
   "private": true,
   "main": "public/electron.js",
   "homepage": ".",
-  "repository": "https://github.com/brown-ccv/neuro-task-starter",
+  "repository": "https://github.com/brown-ccv/honeycomb",
   "dependencies": {
-    "@brown-ccv/behavioral-task-trials": "^1.18.1",
+    "@brown-ccv/behavioral-task-trials": "^1.20.0",
     "@fortawesome/fontawesome-free": "^5.9.0",
     "bootstrap": "^4.3.1",
     "cross-env": "^6.0.3",
