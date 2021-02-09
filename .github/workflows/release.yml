@@ -82,6 +82,7 @@ jobs:
         tag: ${{ github.ref }}
 
     # Update github pages - linux only
+    # if your deployment fails try https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-first-deployment-with-github_token
     - name: Deploy to GH Pages
       if: startsWith(matrix.os, 'ubuntu')
       uses: peaceiris/actions-gh-pages@v3
