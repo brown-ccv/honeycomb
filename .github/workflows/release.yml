@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      REACT_APP_AT_HOME: ${{ matrix.setting === 'home' }}
+      REACT_APP_AT_HOME: ${{ matrix.setting == 'home' }}
 
     strategy:
       fail-fast: false
