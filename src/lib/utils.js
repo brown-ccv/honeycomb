@@ -56,7 +56,8 @@ const importAll = (r) => {
   return r.keys().map(r);
 }
 
-const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
+// uncomment if importing images
+// const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
 
 const getTurkUniqueId = () => {
   const turkInfo = jsPsych.turk.turkInfo()
