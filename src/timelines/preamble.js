@@ -12,12 +12,12 @@ const preamble = {
     ? [
         showMessage(
           "html_button_response",
-          ...[,],
+          ...Array(1),
           config,
           `<h1>${lang.task.name}</h1>`,
           false,
           true,
-          ...[,,],
+          ...Array(2),
           [lang.prompt.continue.button]
         ),
         userId(
@@ -26,19 +26,19 @@ const preamble = {
           800,
           config,
           lang.userid.set,
-          ...[,],
+          ...Array(1),
           process.env.REACT_APP_PATIENT_ID
         ),
       ]
     : [
         showMessage(
           "html_button_response",
-          ...[,],
+          ...Array(1),
           config,
           `<h1>${lang.task.name}</h1>`,
           false,
           true,
-          ...[,,],
+          ...Array(2),
           [lang.prompt.continue.button]
         ),
         userId(
@@ -47,7 +47,7 @@ const preamble = {
           800,
           config,
           lang.userid.set,
-          ...[,],
+          ...Array(1),
           process.env.REACT_APP_PATIENT_ID
         ),
         holdUpMarker(),
@@ -57,7 +57,7 @@ const preamble = {
           config,
           `<h1>${lang.prompt.setting_up}</h1>`,
           false,
-          ...[,],
+          ...Array(1),
           eventCodes.open_task,
           eventCodes.open_task
         ),
