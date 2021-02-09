@@ -1,7 +1,11 @@
 // Event trigger settings - used in both the react app (renderer) and the electron app (main)
-const manufacturer = 'Teensyduino'
+// teensyduino
 const vendorId = '16c0'
-const productId = '0487'
+const productId = ''
+
+// brainvision - will be used if product Id (line 4) or process.env.EVENT_MARKER_PRODUCT_ID are not set
+// commName can be changed with environment variable process.env.EVENT_MARKER_COM_NAME
+const comName = 'COM3'
 
 // NOTE - these event codes must match what is in public/config/trigger.js
 const eventCodes = {
@@ -14,8 +18,8 @@ const eventCodes = {
 
 // this is module.exports isntead of just exports as it is also imported into the electron app
 module.exports = {
-	manufacturer,
 	vendorId,
 	productId,
-	eventCodes
+	eventCodes,
+	comName
 }
