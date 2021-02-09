@@ -17,9 +17,10 @@ jobs:
     env:
       REACT_APP_AT_HOME: ${{ matrix.home }}
 
-    matrix:
-      home: [true, false]
-      os: [ubuntu-latest, macOS-latest, windows-latest]
+    strategy:
+      matrix:
+        home: [true, false]
+        os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:
     # Set up js package
