@@ -1,5 +1,5 @@
 import { jsPsych } from 'jspsych-react'
-import requireContext from 'require-context.macro'
+//import requireContext from 'require-context.macro'
 
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -52,9 +52,9 @@ const startKeypressListener = () => {
 }
 
 // import images
-const importAll = (r) => {
-  return r.keys().map(r);
-}
+//const importAll = (r) => {
+//  return r.keys().map(r);
+//}
 
 // uncomment if importing images
 // const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
