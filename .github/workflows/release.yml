@@ -80,3 +80,12 @@ jobs:
         file: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
         asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.setting }}.dmg
         tag: ${{ github.ref }}
+
+    # Update github pages - linux only
+    # if your deployment fails try https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-first-deployment-with-github_token
+    - name: Deploy to GH Pages
+      if: startsWith(matrix.os, 'ubuntu')
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build
