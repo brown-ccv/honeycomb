@@ -15,11 +15,11 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      REACT_APP_AT_HOME: ${{ matrix.home }}
+      REACT_APP_AT_HOME: ${{ matrix.setting == 'home' }}
 
     strategy:
       matrix:
-        home: [true, false]
+        setting: [home, clinic]
         os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:
