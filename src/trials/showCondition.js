@@ -1,22 +1,23 @@
-import { eventCodes } from '../config/main'
-import { baseStimulus } from '../lib/markup/stimuli'
-import { photodiodeGhostBox, pdSpotEncode } from '../lib/markup/photodiode'
+import { eventCodes } from "../config/main";
+import { baseStimulus } from "../lib/markup/stimuli";
+import { photodiodeGhostBox, pdSpotEncode } from "../lib/markup/photodiode";
 
 const showCondition = (condition, duration, timeBeforeUpdate) => {
-  const code = eventCodes.evidence
+  const code = eventCodes.evidence;
 
   return {
-    type: 'html_keyboard_response',
-    stimulus: '',
+    type: "html_keyboard_response",
+    stimulus: "",
     response_ends_trial: false,
     trial_duration: duration,
     on_start: (trial) => {
-      trial.stimulus = baseStimulus(condition)
-                      + photodiodeGhostBox()
+      trial.stimulus =
+        baseStimulus(`<h1>${condition}</h1>`, true, true) +
+        photodiodeGhostBox();
     },
     on_load: () => pdSpotEncode(code),
-    on_finish: (data) => data.code = code
-  }
-}
+    on_finish: (data) => (data.code = code),
+  };
+};
 
-export default showCondition
+export default showCondition;
