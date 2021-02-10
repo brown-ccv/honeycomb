@@ -24,7 +24,7 @@ p, li {
   position: absolute;
 }
 
-.main-prompt, .beads_container {
+.main-prompt, .center_container {
   height: 100vh;
   display: flex;
   flex-direction: row;
