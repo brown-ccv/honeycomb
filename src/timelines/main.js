@@ -16,7 +16,7 @@ const primaryTimeline = [
   showMessage(config, {
     responseType: "html_keyboard_response",
     duration: 5000,
-    message: `<h1>${lang.task.end}</h1>`,
+    message: lang.task.end,
   }),
 ];
 
@@ -29,7 +29,7 @@ const mturkTimeline = [
   showMessage(config, {
     responseType: "html_keyboard_response",
     duration: 5000,
-    message: `<h1>${lang.task.end}</h1>`,
+    message: lang.task.end,
   }),
 ];
 
