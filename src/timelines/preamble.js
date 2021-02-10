@@ -5,14 +5,7 @@ import { showMessage, userId } from "@brown-ccv/behavioral-task-trials";
 import { config, AT_HOME } from "../config/main";
 console.log("at_home", AT_HOME);
 console.log("env at home", process.env.REACT_APP_AT_HOME);
-console.log(
-  showMessage(config, {
-    responseType: "html_button_response",
-    message: `<h1>${lang.task.name}</h1>`,
-    responseEndsTrial: true,
-    buttons: [lang.prompt.continue.button],
-  })
-);
+
 const preamble = {
   type: "html_keyboard_response",
   stimulus: "",

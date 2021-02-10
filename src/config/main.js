@@ -50,7 +50,7 @@ const defaultBlockSettings = {
 }
 
 // setting config for trials
-const config = init({USE_PHOTODIODE: !AT_HOME && IS_ELECTRON,  USE_EEG: false, IS_ELECTRON: IS_ELECTRON, USE_MTURK: MTURK})
+const config = init({USE_PHOTODIODE: !AT_HOME && IS_ELECTRON,  USE_EEG: false, USE_ELECTRON: IS_ELECTRON, USE_MTURK: MTURK})
 
 export {
 	keys,
