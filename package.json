@@ -13,7 +13,7 @@
   "homepage": ".",
   "repository": "https://github.com/brown-ccv/honeycomb",
   "dependencies": {
-    "@brown-ccv/behavioral-task-trials": "^1.20.0",
+    "@brown-ccv/behavioral-task-trials": "^1.21.2",
     "@fortawesome/fontawesome-free": "^5.9.0",
     "bootstrap": "^4.3.1",
     "cross-env": "^6.0.3",

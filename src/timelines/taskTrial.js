@@ -9,7 +9,6 @@ const taskTrial = (blockSettings, blockDetails, condition) => {
   let timeline = [
     // fixation
     fixation(config, {
-      responseType: "html_keyboard_response",
       duration: 650,
       taskCode: eventCodes.fixation,
     }),
@@ -22,7 +21,6 @@ const taskTrial = (blockSettings, blockDetails, condition) => {
       taskCode: eventCodes.evidence,
     }),
     fixation(config, {
-      responseType: "html_keyboard_response",
       duration: 650,
       taskCode: eventCodes.fixation,
     }),
@@ -30,7 +28,7 @@ const taskTrial = (blockSettings, blockDetails, condition) => {
     showMessage(config, {
       responseType: "html_keyboard_response",
       duration: 1000,
-      message: earningsDisplay(Math.random()),
+      stimulus: earningsDisplay(Math.random()),
       taskCode: eventCodes.show_earnings,
     }),
   ];
