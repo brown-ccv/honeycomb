@@ -25,7 +25,6 @@ const preamble = {
           buttons: [lang.prompt.continue.button],
         }),
         userId(jsPsych, config, {
-          responseType: "html_keyboard_response",
           duration: 800,
           setIdMessage: lang.userid.set,
           defaultPatientId: process.env.REACT_APP_PATIENT_ID,
@@ -39,7 +38,6 @@ const preamble = {
           buttons: [lang.prompt.continue.button],
         }),
         userId(jsPsych, config, {
-          responseType: "html_keyboard_response",
           duration: 800,
           setIdMessage: lang.userid.set,
           defaultPatientId: process.env.REACT_APP_PATIENT_ID,
