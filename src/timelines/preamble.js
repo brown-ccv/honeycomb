@@ -20,7 +20,7 @@ const preamble = {
         userId(jsPsych, config, {
           duration: 800,
           setIdMessage: lang.userid.set,
-          defaultPatientId: process.env.REACT_APP_PATIENT_ID,
+          defaultId: process.env.REACT_APP_PATIENT_ID,
         }),
       ]
     : [
@@ -33,11 +33,10 @@ const preamble = {
         userId(jsPsych, config, {
           duration: 800,
           setIdMessage: lang.userid.set,
-          defaultPatientId: process.env.REACT_APP_PATIENT_ID,
+          defaultId: process.env.REACT_APP_PATIENT_ID,
         }),
         holdUpMarker(),
         showMessage(config, {
-          responseType: "html_keyboard_response",
           duration: 2000,
           message: lang.prompt.setting_up,
           taskCode: eventCodes.open_task,

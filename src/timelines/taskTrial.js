@@ -10,24 +10,18 @@ const taskTrial = (blockSettings, blockDetails, condition) => {
     // fixation
     fixation(config, {
       duration: 650,
-      taskCode: eventCodes.fixation,
     }),
     // show condition
     showMessage(config, {
-      responseType: "html_keyboard_response",
-      duration: 1000,
       message: condition,
       onstart: true,
       taskCode: eventCodes.evidence,
     }),
     fixation(config, {
       duration: 650,
-      taskCode: eventCodes.fixation,
     }),
     // end the trial
     showMessage(config, {
-      responseType: "html_keyboard_response",
-      duration: 1000,
       stimulus: earningsDisplay(Math.random()),
       taskCode: eventCodes.show_earnings,
     }),
