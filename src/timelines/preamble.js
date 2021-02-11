@@ -20,7 +20,6 @@ const preamble = {
         userId(jsPsych, config, {
           duration: 800,
           setIdMessage: lang.userid.set,
-          defaultId: process.env.REACT_APP_PATIENT_ID,
         }),
       ]
     : [
@@ -31,7 +30,6 @@ const preamble = {
           buttons: [lang.prompt.continue.button],
         }),
         userId(jsPsych, config, {
-          duration: 800,
           setIdMessage: lang.userid.set,
           defaultId: process.env.REACT_APP_PATIENT_ID,
         }),
