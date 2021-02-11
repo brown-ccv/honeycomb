@@ -11,8 +11,9 @@
   "private": true,
   "main": "public/electron.js",
   "homepage": ".",
-  "repository": "https://github.com/brown-ccv/neuro-task-starter",
+  "repository": "https://github.com/brown-ccv/honeycomb",
   "dependencies": {
+    "@brown-ccv/behavioral-task-trials": "^1.24.0",
     "@fortawesome/fontawesome-free": "^5.9.0",
     "bootstrap": "^4.3.1",
     "cross-env": "^6.0.3",
@@ -32,6 +33,7 @@
     "typescript": "^3.6.4"
   },
   "scripts": {
+    "commit": "git-cz",
     "postinstall": "node version.js && npm run rebuild",
     "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" react-scripts start",
     "start:browser": "react-scripts start",
@@ -54,6 +56,11 @@
     "build:clinic": "cross-env REACT_APP_AT_HOME=\"false\" npm run build",
     "build:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run build"
   },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -73,6 +80,7 @@
     "babel-plugin-macros": "^2.6.1",
     "chai": "^4.2.0",
     "concurrently": "^4.1.2",
+    "cz-conventional-changelog": "^3.2.0",
     "dotenv": "^8.2.0",
     "electron": "6.1.1",
     "electron-packager": "^14.0.6",

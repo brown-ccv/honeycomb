@@ -1,17 +1,17 @@
-import { AT_HOME, IS_ELECTRON } from  '../../config/main'
+import { config } from  '../../config/main'
 import { eventCodes } from '../../config/trigger'
 import $ from 'jquery'
 
 // conditionally load electron and psiturk based on MTURK config variable
 let ipcRenderer = false;
-if (IS_ELECTRON) {
+if (config.IS_ELECTRON) {
   const electron = window.require('electron');
   ipcRenderer  = electron.ipcRenderer;
 }
 
 // Relies on styling in App.css, generate PD spot
 const photodiodeGhostBox = () => {
-	const class_ = (AT_HOME || !IS_ELECTRON) ? 'invisible' : 'visible'
+	const class_ = (!config.USE_PHOTODIODE) ? 'invisible' : 'visible'
 
   const markup = `<div class="photodiode-box ${class_}" id="photodiode-box">
 									<span id="photodiode-spot" class="photodiode-spot"></span>
@@ -38,7 +38,7 @@ const pdSpotEncode = (taskCode) => {
       }
     }
 
-		if (!AT_HOME && IS_ELECTRON) {
+		if (config.USE_PHOTODIODE) {
 				const blinkTime = 40
 				let numBlinks = taskCode
 		    if (taskCode < eventCodes.open_task) numBlinks = 1;
