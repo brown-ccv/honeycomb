@@ -1,30 +1,34 @@
-import buildCountdown from '../trials/countdown'
-import preamble from './preamble'
-import experimentEnd from '../trials/experimentEnd'
-import taskBlock from './taskBlock'
+import preamble from "./preamble";
+import { showMessage, countdown } from "@brown-ccv/behavioral-task-trials";
+import taskBlock from "./taskBlock";
 
-import { MTURK, lang } from '../config/main'
-import { practiceBlock } from '../config/practice'
-import { tutorialBlock } from '../config/tutorial'
-import { exptBlock1, exptBlock2 } from '../config/experiment'
-
+import { lang, config } from "../config/main";
+import { practiceBlock } from "../config/practice";
+import { tutorialBlock } from "../config/tutorial";
+import { exptBlock1, exptBlock2 } from "../config/experiment";
 
 const primaryTimeline = [
-        preamble,
-        buildCountdown(lang.countdown.message1, 3),
-        taskBlock(practiceBlock),
-        buildCountdown(lang.countdown.message2, 3),
-        taskBlock(exptBlock1),
-        experimentEnd(5000)
-        ]
+  preamble,
+  countdown({ message: lang.countdown.message1 }),
+  taskBlock(practiceBlock),
+  countdown({ message: lang.countdown.message2 }),
+  taskBlock(exptBlock1),
+  showMessage(config, {
+    duration: 5000,
+    message: lang.task.end,
+  }),
+];
 
 const mturkTimeline = [
-        preamble,
-        buildCountdown(lang.countdown.message1, 3),
-        taskBlock(tutorialBlock),
-        buildCountdown(lang.countdown.message2, 3),
-        taskBlock(exptBlock2),
-        experimentEnd(3000)
-        ]
+  preamble,
+  countdown({ message: lang.countdown.message1 }),
+  taskBlock(tutorialBlock),
+  countdown({ message: lang.countdown.message2 }),
+  taskBlock(exptBlock2),
+  showMessage(config, {
+    duration: 5000,
+    message: lang.task.end,
+  }),
+];
 
-export const tl = (MTURK) ? mturkTimeline : primaryTimeline
+export const tl = config.USE_MTURK ? mturkTimeline : primaryTimeline;
