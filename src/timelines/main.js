@@ -6,13 +6,25 @@ import { lang, config } from "../config/main";
 import { practiceBlock } from "../config/practice";
 import { tutorialBlock } from "../config/tutorial";
 import { exptBlock1, exptBlock2 } from "../config/experiment";
+import {
+  ageCheck,
+  sliderCheck,
+  demographics,
+  iusSurvey,
+  debrief,
+} from "../trials/quizTrials";
 
 const primaryTimeline = [
   preamble,
+  ageCheck,
+  sliderCheck,
   countdown({ message: lang.countdown.message1 }),
   taskBlock(practiceBlock),
   countdown({ message: lang.countdown.message2 }),
   taskBlock(exptBlock1),
+  demographics,
+  iusSurvey,
+  debrief,
   showMessage(config, {
     duration: 5000,
     message: lang.task.end,
