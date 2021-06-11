@@ -31,7 +31,6 @@ const MTURK = (!jsPsych.turk.turkInfo().outsideTurk)
 let PROLIFIC = getProlificId() && !MTURK;
 let IS_ELECTRON = true;
 let FIREBASE = process.env.REACT_APP_FIREBASE === "true";
-const INSTRUCTIONS_QUIZ = process.env.REACT_APP_INSTRUCTIONS_QUIZ === "true"
 
 try {
 	window.require('electron')
@@ -84,6 +83,5 @@ export {
 	USE_EVENT_MARKER,
 	USE_PHOTODIODE,
 	IS_ELECTRON,
-	INSTRUCTIONS_QUIZ,
 	audioCodes
 }

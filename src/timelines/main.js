@@ -1,8 +1,9 @@
 import preamble from "./preamble";
-import { showMessage, countdown } from "@brown-ccv/behavioral-task-trials";
+import { countdown } from "@brown-ccv/behavioral-task-trials";
 import taskBlock from "./taskBlock";
-
-import { lang, config, MTURK } from "../config/main";
+import experimentStart from "../trials/experimentStart"
+import experimentEnd from "../trials/experimentEnd"
+import { lang, MTURK } from "../config/main";
 import { practiceBlock } from "../config/practice";
 import { tutorialBlock } from "../config/tutorial";
 import { exptBlock1, exptBlock2 } from "../config/experiment";
@@ -15,6 +16,7 @@ import {
 } from "../trials/quizTrials";
 
 const primaryTimeline = [
+  experimentStart(),
   preamble,
   ageCheck,
   sliderCheck,
@@ -25,10 +27,7 @@ const primaryTimeline = [
   demographics,
   iusSurvey,
   debrief,
-  showMessage(config, {
-    duration: 5000,
-    message: lang.task.end,
-  }),
+  experimentEnd(3000)
 ];
 
 const mturkTimeline = [
@@ -37,10 +36,7 @@ const mturkTimeline = [
   taskBlock(tutorialBlock),
   countdown({ message: lang.countdown.message2 }),
   taskBlock(exptBlock2),
-  showMessage(config, {
-    duration: 5000,
-    message: lang.task.end,
-  }),
+  experimentEnd(3000)
 ];
 
 export const tl = MTURK ? mturkTimeline : primaryTimeline;
