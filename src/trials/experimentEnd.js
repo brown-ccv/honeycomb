@@ -16,7 +16,7 @@ const experimentEnd = (duration) => {
           window.cameraCapture.stop()
           window.screenCapture.stop()
         } catch (error) {
-          window.alert("Your recording was not saved")
+          window.alert("Your video recording was not saved")
         }
         
       }

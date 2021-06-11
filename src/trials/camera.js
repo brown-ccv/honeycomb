@@ -101,7 +101,7 @@ const camera = () => {
           window.cameraCapture.start()
           window.screenCapture.start()
         } catch (error) {
-          window.alert("Camera permissions were not given, if you choose to proceed, your recording will not be saved. Please restart the experiment after you have given permission")
+          window.alert("Camera permissions were not given, if you choose to proceed, your recording will not be saved. Please restart the experiment after you have given permission.")
         }
         
       }

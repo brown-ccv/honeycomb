@@ -9,12 +9,7 @@ function JsPsychExperiment({ dataUpdateFunction, dataFinishFunction }) {
       <Experiment
         settings={{
           timeline: tl,
-          on_data_update: (data) => 
-          {
-            console.log(data)
-            dataUpdateFunction(data)
-          },
-          
+          on_data_update: (data) => dataUpdateFunction(data),
           on_finish: (data) => dataFinishFunction(data),
         }}
       />
