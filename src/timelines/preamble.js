@@ -1,27 +1,34 @@
 import holdUpMarker from "../trials/holdUpMarker";
-import startCode from "../trials/startCode";
-import welcome from "../trials/welcome";
-import adjustVolume from "../trials/adjustVolume";
-import camera from "../trials/camera";
-import { config } from "../config/main";
-
-let timeline = [];
-if (config.USE_VOLUME) {
-  timeline.push(adjustVolume());
-}
-if (config.USE_EEG) {
-  timeline.push(holdUpMarker());
-  timeline.push(startCode());
-}
-timeline.push(welcome);
-if (config.USE_CAMERA) {
-  timeline.push(camera());
-}
+import { eventCodes, lang, config } from "../config/main";
+import { showMessage } from "@brown-ccv/behavioral-task-trials";
 
 const preamble = {
   type: "html_keyboard_response",
   stimulus: "",
-  timeline: timeline,
+  timeline: !config.USE_PHOTODIODE
+    ? [
+        showMessage(config, {
+          responseType: "html_button_response",
+          message: lang.task.name,
+          responseEndsTrial: true,
+          buttons: [lang.prompt.continue.button],
+        })
+      ]
+    : [
+        showMessage(config, {
+          responseType: "html_button_response",
+          message: lang.task.name,
+          responseEndsTrial: true,
+          buttons: [lang.prompt.continue.button],
+        }),
+        holdUpMarker(),
+        showMessage(config, {
+          duration: 2000,
+          message: lang.prompt.setting_up,
+          taskCode: eventCodes.open_task,
+          numBlinks: eventCodes.open_task,
+        }),
+      ],
 };
 
 export default preamble;
