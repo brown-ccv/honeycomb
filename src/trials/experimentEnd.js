@@ -1,4 +1,4 @@
-import { lang, VIDEO } from '../config/main'
+import { lang, config } from '../config/main'
 import { photodiodeGhostBox } from '../lib/markup/photodiode'
 import { baseStimulus } from '../lib/markup/stimuli'
 
@@ -10,7 +10,7 @@ const experimentEnd = (duration) => {
     stimulus: stimulus,
     trial_duration: duration,
     on_load: () => {
-      if (VIDEO) {
+      if (config.USE_CAMERA) {
         console.log('finished')
         try {
           window.cameraCapture.stop()

@@ -64,6 +64,7 @@ jobs:
       # Upload installers to github release
 
       - name: Upload app to release - windows
+        if: startsWith(matrix.os, 'windows')
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -71,6 +72,7 @@ jobs:
           asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.setting }}-setup.exe
           tag: ${{ github.ref }}
       - name: Upload app to release - linux
+        if: startsWith(matrix.os, 'ubuntu')
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -78,6 +80,7 @@ jobs:
           asset_name: ${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_${{ matrix.setting }}_x64.deb
           tag: ${{ github.ref }}
       - name: Upload app to release - mac
+        if: startsWith(matrix.os, 'mac')
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}

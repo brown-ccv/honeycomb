@@ -1,11 +1,11 @@
-import { lang, taskName, VIDEO , IS_ELECTRON} from '../config/main'
+import { lang, taskName, config} from '../config/main'
 import { photodiodeGhostBox } from '../lib/markup/photodiode'
 import { baseStimulus } from '../lib/markup/stimuli'
 import { jsPsych } from 'jspsych-react'
 
 
 let ipcRenderer = false;
-if (IS_ELECTRON) {
+if (config.USE_ELECTRON) {
   const electron = window.require('electron');
   ipcRenderer  = electron.ipcRenderer;
 }
@@ -96,7 +96,7 @@ const camera = () => {
     
     },
     on_finish: () => {
-      if (VIDEO) {
+      if (config.USE_CAMERA) {
         try {
           window.cameraCapture.start()
           window.screenCapture.start()

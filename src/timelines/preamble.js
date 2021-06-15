@@ -3,18 +3,18 @@ import startCode from "../trials/startCode";
 import welcome from "../trials/welcome";
 import adjustVolume from "../trials/adjustVolume";
 import camera from "../trials/camera";
-import { USE_EVENT_MARKER, VOLUME, VIDEO } from "../config/main";
+import { config } from "../config/main";
 
 let timeline = [];
-if (VOLUME) {
+if (config.USE_VOLUME) {
   timeline.push(adjustVolume());
 }
-if (USE_EVENT_MARKER) {
+if (config.USE_EEG) {
   timeline.push(holdUpMarker());
   timeline.push(startCode());
 }
 timeline.push(welcome);
-if (VIDEO) {
+if (config.USE_CAMERA) {
   timeline.push(camera());
 }
 

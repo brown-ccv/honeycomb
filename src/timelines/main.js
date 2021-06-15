@@ -3,7 +3,7 @@ import { countdown } from "@brown-ccv/behavioral-task-trials";
 import taskBlock from "./taskBlock";
 import experimentStart from "../trials/experimentStart"
 import experimentEnd from "../trials/experimentEnd"
-import { lang, MTURK } from "../config/main";
+import { lang, config } from "../config/main";
 import { practiceBlock } from "../config/practice";
 import { tutorialBlock } from "../config/tutorial";
 import { exptBlock1, exptBlock2 } from "../config/experiment";
@@ -39,4 +39,4 @@ const mturkTimeline = [
   experimentEnd(3000)
 ];
 
-export const tl = MTURK ? mturkTimeline : primaryTimeline;
+export const tl = config.USE_MTURK ? mturkTimeline : primaryTimeline;

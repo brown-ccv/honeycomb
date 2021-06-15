@@ -173,7 +173,7 @@ ipc.on('syncCredentials', (event) => {
 // listener for new data
 ipc.on('data', (event, args) => {
 
-  // initialize file - we got a patinet_id to save the data to
+  // initialize file - we got a participant_id to save the data to
   if (args.participant_id && args.study_id && fileName === '') {
     const dir = app.getPath('userData')
     participantID = args.participant_id
