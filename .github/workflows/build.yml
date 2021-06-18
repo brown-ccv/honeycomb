@@ -14,30 +14,53 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
 
-    env:
-      REACT_APP_AT_HOME: ${{ matrix.setting == 'home' }}
-
     strategy:
       matrix:
         setting: [home, clinic]
+        video: [on, off]
         os: [ubuntu-latest, macOS-latest, windows-latest]
+        exclude: 
+          # exclude clinic video on ubuntu-latest 
+          - os: ubuntu-latest
+            setting: clinic
+            video: on 
+          - os: macOS-latest
+            setting: clinic
+            video: on 
+          - os: ubuntu-latest
+            setting: home
+            video: on
+          - os: macOS-latest
+            setting: home
+            video: on
 
     steps:
-    # Set up js package
-    - uses: actions/checkout@v1
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12.x
+      # Set up js package
+      - uses: actions/checkout@v1
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
 
-    # install, test, build package
-    - name: npm install
-      run: |
-        npm config set "//npm.pkg.github.com/:_authToken" ${{ secrets.GITHUB_TOKEN }}
-        npm install
-    - name: npm build
-      run: npm run build
-    - name: npm test
-      run: npm test
-      env:
-        CI: true
+      # install, test, build package
+      - name: npm install
+        run: |
+          npm config set "//npm.pkg.github.com/:_authToken" ${{ secrets.GITHUB_TOKEN }}
+          npm install
+      - name: Load .env file
+        uses: xom9ikk/dotenv@v1.0.2
+        with:
+          path: ./env
+          mode: ${{matrix.setting}}
+      - name: Load .env file for video
+        if: matrix.video=='on'
+        uses: xom9ikk/dotenv@v1.0.2
+        with:
+          path: ./env
+          mode: video
+      - name: npm build
+        run: npm run build
+      - name: npm test
+        run: npm test
+        env:
+          CI: true

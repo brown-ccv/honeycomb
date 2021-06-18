@@ -1,7 +1,8 @@
 {
   "task": {
     "name": "Honeycomb Task",
-    "end": "This experiment has ended."
+    "end": "This experiment has ended.",
+    "recording_end": "Your recording has ended."
   },
   "prompt": {
     "continue": {
@@ -29,7 +30,8 @@
     "message2": "Countdown for the second block"
   },
   "instructions": {
-    "adjust_volume": "Set tablet volume to 50/100."
+    "adjust_volume": "Set tablet volume to 50/100.",
+    "camera": "Make sure the camera is pointing to you and your face is within the camera area."
   },
   "quiz": {
     "ask": {

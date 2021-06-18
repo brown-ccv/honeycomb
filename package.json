@@ -6,7 +6,7 @@
     "email": "ccv-bot@brown.edu",
     "url": "ccv.brown.edu"
   },
-  "version": "1.1.0",
+  "version": "2.0.0",
   "license": "MIT",
   "private": true,
   "main": "public/electron.js",
@@ -16,8 +16,6 @@
     "@brown-ccv/behavioral-task-trials": "^1.0.0",
     "@fortawesome/fontawesome-free": "^5.9.0",
     "bootstrap": "^4.3.1",
-    "cross-env": "^6.0.3",
-    "electron-devtools-installer": "^2.2.4",
     "electron-log": "^3.0.9",
     "electron-squirrel-startup": "^1.0.0",
     "event-marker": "git+https://github.com/brown-ccv/event-marker.git",
@@ -28,6 +26,7 @@
     "lodash": "^4.17.19",
     "popper.js": "^1.16.0",
     "react": "^16.8.6",
+    "react-bootstrap": "^1.6.1",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
     "typescript": "^3.6.4"
@@ -50,11 +49,21 @@
     "eject": "react-scripts eject",
     "electron": "electron .",
     "electron-dev": "cross-env ELECTRON_START_URL=\"http://localhost:3000\" electron .",
+    "firebase:dev": "firebase emulators:start --import emulator_data",
+    "firebase:savedev": "firebase emulators:export emulator_data",
     "dev": "concurrently --kill-others \"npm:start\" \"sleep 10 && npm run electron-dev\"",
-    "dev:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run dev",
-    "dev:clinic": "cross-env REACT_APP_AT_HOME=\"false\" npm run dev",
-    "build:clinic": "cross-env REACT_APP_AT_HOME=\"false\" npm run build",
-    "build:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run build"
+    "dev:home": "dotenv -e env/.env.home npm run dev",
+    "dev:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run dev",
+    "dev:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run dev",
+    "dev:clinic": "dotenv -e env/.env.clinic npm run dev",
+    "dev:firebase": "dotenv -e env/.env.firebase npm run dev",
+    "dev:turk-prolific": "dotenv -e env/.env.turk-prolific npm run dev",
+    "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build",
+    "build:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run build",
+    "build:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run build",
+    "build:home": "dotenv -e env/.env.home npm run build",
+    "build:clinic": "dotenv -e env/.env.clinic npm run build",
+    "build:firebase": "dotenv -e env/.env.firebase npm run build"
   },
   "config": {
     "commitizen": {
@@ -80,9 +89,12 @@
     "babel-plugin-macros": "^2.6.1",
     "chai": "^4.2.0",
     "concurrently": "^4.1.2",
+    "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.2.0",
     "dotenv": "^8.2.0",
+    "dotenv-cli": "^4.0.0",
     "electron": "6.1.1",
+    "electron-devtools-installer": "^3.2.0",
     "electron-packager": "^14.0.6",
     "electron-rebuild": "^1.8.6",
     "eslint": "^5.16.0",
@@ -92,6 +104,8 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-standard": "^4.0.1",
+    "firebase-cli": "^1.2.0",
+    "firebase-tools": "^9.12.1",
     "require-context.macro": "^1.1.1"
   },
   "babel": {
