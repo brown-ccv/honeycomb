@@ -10,7 +10,7 @@ const _ = require('lodash')
 const fs = require('fs')
 const log = require('electron-log');
 
-const AT_HOME = (process.env.REACT_APP_AT_HOME === 'true')
+const USE_EVENT_MARKER = (process.env.REACT_APP_USE_EVENT_MARKER === 'true')
 // Event Trigger
 const { eventCodes, vendorId, productId, comName } = require('./config/trigger')
 const { isPort, getPort, sendToPort } = require('event-marker')
@@ -32,12 +32,6 @@ const { dataDir } = require('./config/saveData')
 let mainWindow
 
 function createWindow () {
-  if (AT_HOME) {
-    log.info('Task "at home" version.')
-  }
-  else {
-    log.info('Task "clinic" version.')
-  }
   // Create the browser window.
   if (process.env.ELECTRON_START_URL) { // in dev mode, disable web security to allow local file loading
     mainWindow = new BrowserWindow({
@@ -153,7 +147,7 @@ ipc.on('trigger', (event, args) => {
   let code = args
   if (code != undefined) {
     log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`)
-     if (!AT_HOME) {
+     if (USE_EVENT_MARKER) {
        handleEventSend(code)
      }
   }
@@ -163,21 +157,27 @@ ipc.on('trigger', (event, args) => {
 let stream = false
 let fileName = ''
 let filePath = ''
-let patientID = ''
+let participantID = ''
+let studyID = ''
 let images = []
 let startTrial = -1
 
 // Read version file (git sha and branch)
 var git = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'config/version.json')));
 
+// Get Participant Id and Study Id from environment
+ipc.on('syncCredentials', (event) => {
+  event.returnValue = {envParticipantId: process.env.REACT_APP_PARTICIPANT_ID, envStudyId: process.env.REACT_APP_STUDY_ID}
+})
+
 // listener for new data
 ipc.on('data', (event, args) => {
 
-  // initialize file - we got a patinet_id to save the data to
-  if (args.patient_id && fileName === '') {
+  // initialize file - we got a participant_id to save the data to
+  if (args.participant_id && args.study_id && fileName === '') {
     const dir = app.getPath('userData')
-    patientID = args.patient_id
-    fileName = `pid_${patientID}_${Date.now()}.json`
+    participantID = args.participant_id
+    fileName = `pid_${participantID}_${Date.now()}.json`
     filePath = path.resolve(dir, fileName)
     startTrial = args.trial_index
     log.warn(filePath)
@@ -195,10 +195,29 @@ ipc.on('data', (event, args) => {
     //write the data
     stream.write(JSON.stringify({...args, git}))
 
-    // Copy provocation images to patient's data folder
+    // Copy provocation images to participant's data folder
     if (args.trial_type === 'image_keyboard_response') images.push(args.stimulus.slice(7))
   }
 })
+
+// Save Video
+ipc.on('save_video', (event, fileName, buffer) => {
+  
+  const desktop = app.getPath('desktop')
+  const name = app.getName()
+  const today = new Date()
+  const date = today.toISOString().slice(0,10)
+  const fullPath = path.join(desktop, dataDir, studyID, participantID, date, name, fileName)
+  fs.outputFile(fullPath, buffer, err => {
+      if (err) {
+          event.sender.send(ERROR, err.message)
+      } else {
+        event.sender.send('SAVED_FILE', fullPath)
+        console.log(fullPath)
+      }
+  })
+})
+
 
 // EXPERIMENT END
 ipc.on('end', (event, args) => {
@@ -236,7 +255,7 @@ process.on('uncaughtException', (error) => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
-  if (!AT_HOME) {
+  if (USE_EVENT_MARKER) {
     setUpPort()
     .then(() => handleEventSend(eventCodes.test_connect))
   }
@@ -267,9 +286,9 @@ app.on('will-quit', () => {
   // copy file to config location
   const desktop = app.getPath('desktop')
   const name = app.getName()
-  const today = new Date(Date.now())
+  const today = new Date()
   const date = today.toISOString().slice(0,10)
-  const copyPath = path.join(desktop, dataDir, `${patientID}`, date, name)
+  const copyPath = path.join(desktop, dataDir, studyID, participantID, date, name)
   fs.mkdir(copyPath, { recursive: true }, (err) => {
     log.error(err)
     fs.copyFileSync(filePath, path.join(copyPath, fileName))
