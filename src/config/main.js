@@ -27,32 +27,33 @@ const audioCodes = {
 const taskName = "honeycomb template";
 
 // is this mechanical turk?
-const MTURK = !jsPsych.turk.turkInfo().outsideTurk;
-let PROLIFIC = getProlificId() && !MTURK;
-let IS_ELECTRON = true;
-let FIREBASE = process.env.REACT_APP_FIREBASE === "true";
+let USE_MTURK = !jsPsych.turk.turkInfo().outsideTurk;
+let USE_PROLIFIC = getProlificId() && !USE_MTURK;
+let USE_ELECTRON = true;
+let USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true";
 
 try {
   window.require("electron");
 } catch {
-  IS_ELECTRON = false;
+  USE_ELECTRON = false;
 }
 
-// these variables depend on IS_ELECTRON
+
 // whether or not to ask the participant to adjust the volume
-const VOLUME = process.env.REACT_APP_VOLUME === "true";
+const USE_VOLUME = process.env.REACT_APP_VOLUME === "true";
+// these variables depend on USE_ELECTRON
 // whether or not to enable video
-const VIDEO = process.env.REACT_APP_VIDEO === "true" && IS_ELECTRON;
+const USE_CAMERA = process.env.REACT_APP_VIDEO === "true" && USE_ELECTRON;
 // whether or not the EEG/event marker is available
-const USE_EVENT_MARKER =
-  process.env.REACT_APP_USE_EVENT_MARKER === "true" && IS_ELECTRON;
+const USE_EEG =
+  process.env.REACT_APP_USE_EVENT_MARKER === "true" && USE_ELECTRON;
 // whether or not the photodiode is in use
 const USE_PHOTODIODE =
-  process.env.REACT_APP_USE_PHOTODIODE === "true" && IS_ELECTRON;
+  process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON;
 
 // get language file
 const lang = require("../language/en_us.json");
-if (!IS_ELECTRON) {
+if (!USE_ELECTRON) {
   // if this is mturk, merge in the mturk specific language
   const mlang = require("../language/en_us.mturk.json");
   _.merge(lang, mlang);
@@ -69,13 +70,13 @@ const defaultBlockSettings = {
 // setting config for trials
 const config = init({
   USE_PHOTODIODE,
-  USE_EEG: USE_EVENT_MARKER,
-  USE_ELECTRON: IS_ELECTRON,
-  USE_MTURK: MTURK,
-  USE_VOLUME: VOLUME,
-  USE_CAMERA: VIDEO,
-  USE_PROLIFIC: PROLIFIC,
-  USE_FIREBASE: FIREBASE
+  USE_EEG,
+  USE_ELECTRON,
+  USE_MTURK,
+  USE_VOLUME,
+  USE_CAMERA,
+  USE_PROLIFIC,
+  USE_FIREBASE
 });
 
 export {
