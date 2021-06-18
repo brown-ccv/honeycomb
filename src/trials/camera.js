@@ -23,7 +23,7 @@ function saveBlob(blob, media, participantId) {
   reader.readAsArrayBuffer(blob)
 }
 
-const camera = () => {
+const cameraStart = () => {
   document.title = taskName
   let markup = `
   <div class="d-flex flex-column align-items-center">
@@ -109,4 +109,30 @@ const camera = () => {
   }
 }
 
-export default camera
+const cameraEnd = (duration) => {
+  let stimulus = baseStimulus(`<h1>${lang.task.recording_end}</h1>`, true) + photodiodeGhostBox()
+
+   return {
+    type: 'html_keyboard_response',
+    stimulus: stimulus,
+    trial_duration: duration,
+    on_load: () => {
+      if (config.USE_CAMERA) {
+        console.log('finished')
+        try {
+          window.cameraCapture.stop()
+          window.screenCapture.stop()
+        } catch (error) {
+          window.alert("Your video recording was not saved")
+        }
+        
+      }
+    }
+  }
+}
+
+
+export {
+  cameraStart,
+  cameraEnd
+}

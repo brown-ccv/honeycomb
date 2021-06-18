@@ -68,7 +68,7 @@ const defaultBlockSettings = {
 
 // setting config for trials
 const config = init({
-  USE_PHOTODIODE: USE_PHOTODIODE,
+  USE_PHOTODIODE,
   USE_EEG: USE_EVENT_MARKER,
   USE_ELECTRON: IS_ELECTRON,
   USE_MTURK: MTURK,

@@ -1,7 +1,8 @@
 {
   "task": {
     "name": "Honeycomb Task",
-    "end": "This experiment has ended."
+    "end": "This experiment has ended.",
+    "recording_end": "Your recording has ended."
   },
   "prompt": {
     "continue": {

@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
+
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "@fortawesome/fontawesome-free/css/all.css";
+
 import Login from "./components/Login";
+import JsPsychExperiment from "./components/JsPsychExperiment";
+
 import { jsPsych } from "jspsych-react";
 import { getTurkUniqueId, getProlificId, sleep } from "./lib/utils";
 import { initParticipant, addToFirebase } from "./firebase";
-import JsPsychExperiment from "./components/JsPsychExperiment";
+
 import { config } from "./config/main";
 
 function App() {

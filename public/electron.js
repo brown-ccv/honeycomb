@@ -177,7 +177,6 @@ ipc.on('data', (event, args) => {
   if (args.participant_id && args.study_id && fileName === '') {
     const dir = app.getPath('userData')
     participantID = args.participant_id
-    studyID = args.study_id
     fileName = `pid_${participantID}_${Date.now()}.json`
     filePath = path.resolve(dir, fileName)
     startTrial = args.trial_index
@@ -206,7 +205,7 @@ ipc.on('save_video', (event, fileName, buffer) => {
   
   const desktop = app.getPath('desktop')
   const name = app.getName()
-  const today = new Date(Date.now())
+  const today = new Date()
   const date = today.toISOString().slice(0,10)
   const fullPath = path.join(desktop, dataDir, studyID, participantID, date, name, fileName)
   fs.outputFile(fullPath, buffer, err => {
@@ -287,7 +286,7 @@ app.on('will-quit', () => {
   // copy file to config location
   const desktop = app.getPath('desktop')
   const name = app.getName()
-  const today = new Date(Date.now())
+  const today = new Date()
   const date = today.toISOString().slice(0,10)
   const copyPath = path.join(desktop, dataDir, studyID, participantID, date, name)
   fs.mkdir(copyPath, { recursive: true }, (err) => {
