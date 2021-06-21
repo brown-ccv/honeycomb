@@ -10,7 +10,9 @@ const _ = require('lodash')
 const fs = require('fs')
 const log = require('electron-log');
 
-const USE_EVENT_MARKER = (process.env.REACT_APP_USE_EVENT_MARKER === 'true')
+// Configurations for electron
+const electronConfig = require('../electron_config.json')
+
 // Event Trigger
 const { eventCodes, vendorId, productId, comName } = require('./config/trigger')
 const { isPort, getPort, sendToPort } = require('event-marker')
@@ -147,7 +149,7 @@ ipc.on('trigger', (event, args) => {
   let code = args
   if (code != undefined) {
     log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`)
-     if (USE_EVENT_MARKER) {
+     if (electronConfig.eventMarker) {
        handleEventSend(code)
      }
   }
@@ -255,7 +257,7 @@ process.on('uncaughtException', (error) => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
-  if (USE_EVENT_MARKER) {
+  if (electronConfig.eventMarker) {
     setUpPort()
     .then(() => handleEventSend(eventCodes.test_connect))
   }

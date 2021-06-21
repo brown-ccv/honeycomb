@@ -34,7 +34,7 @@ let primaryTimeline = [
 
 if (config.USE_CAMERA) {
   primaryTimeline.splice(1,0,cameraStart())
-  primaryTimeline.push(cameraEnd(3000))
+  primaryTimeline.push(cameraEnd(10000))
 }
 
 const mturkTimeline = [
