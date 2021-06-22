@@ -10,7 +10,6 @@ const _ = require('lodash')
 const fs = require('fs')
 const log = require('electron-log');
 
-const USE_EVENT_MARKER = (process.env.REACT_APP_USE_EVENT_MARKER === 'true')
 // Event Trigger
 const { eventCodes, vendorId, productId, comName } = require('./config/trigger')
 const { isPort, getPort, sendToPort } = require('event-marker')
@@ -141,13 +140,19 @@ const handleEventSend = (code) => {
   }
 }
 
+ipc.on('checkEventMarker', (event) => {
+  setUpPort()
+    .then(() => handleEventSend(eventCodes.test_connect))
+})
+
+
 // EVENT TRIGGER
 
 ipc.on('trigger', (event, args) => {
-  let code = args
+  let code = args.code
   if (code != undefined) {
     log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`)
-     if (USE_EVENT_MARKER) {
+     if (args.useEventMarker) {
        handleEventSend(code)
      }
   }
@@ -255,10 +260,6 @@ process.on('uncaughtException', (error) => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
-  if (USE_EVENT_MARKER) {
-    setUpPort()
-    .then(() => handleEventSend(eventCodes.test_connect))
-  }
 })
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {

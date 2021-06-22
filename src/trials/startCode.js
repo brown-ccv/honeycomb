@@ -14,6 +14,7 @@ const startCode = () => {
       pdSpotEncode(eventCodes.open_task)
       beep(audioCodes)
     }
+
   }
 }
 

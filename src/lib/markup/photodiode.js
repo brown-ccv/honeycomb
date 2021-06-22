@@ -39,11 +39,12 @@ const pdSpotEncode = (taskCode) => {
     }
 
 		if (config.USE_PHOTODIODE) {
-				const blinkTime = 40
-				let numBlinks = taskCode
-		    if (taskCode < eventCodes.open_task) numBlinks = 1;
-				repeat_pulse_for(blinkTime, numBlinks)
-				if ( ipcRenderer ) ipcRenderer.send('trigger', taskCode)
+      const useEventMarker = config.USE_EEG
+      const blinkTime = 40
+      let numBlinks = taskCode
+      if (taskCode < eventCodes.open_task) numBlinks = 1;
+      repeat_pulse_for(blinkTime, numBlinks)
+      if ( ipcRenderer ) ipcRenderer.send('trigger', { taskCode, useEventMarker})
 			}
 		}
 
