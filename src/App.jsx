@@ -88,7 +88,7 @@ function App() {
     console.log("Photodiode:", config.USE_PHOTODIODE);
     // If on desktop
     if (config.USE_ELECTRON) {
-      const ipcRenderer = window.require("electron").ipcRenderer;
+      const { ipcRenderer } = window.require("electron");
       setRenderer(ipcRenderer);
       ipcRenderer.send('updateEnvironmentVariables', config)
       // If at home, fill in fields based on environment variables

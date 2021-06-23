@@ -158,7 +158,7 @@ ipc.on('updateEnvironmentVariables', (event, args) => {
 // EVENT TRIGGER
 
 ipc.on('trigger', (event, args) => {
-  let code = args.code
+  let code = args
   if (code != undefined) {
     log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`)
      if (USE_EEG) {
