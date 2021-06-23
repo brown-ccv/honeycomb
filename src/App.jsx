@@ -141,6 +141,7 @@ function App() {
         setReject(true);
       }
     }
+  // eslint-disable-next-line 
   }, []);
 
   if (reject) {
