@@ -31,7 +31,8 @@
   },
   "instructions": {
     "adjust_volume": "Set tablet volume to 50/100.",
-    "camera": "Make sure the camera is pointing to you and your face is within the camera area."
+    "camera": "Make sure the camera is pointing to you and your face is within the camera area.",
+    "check_event_marker": "Make sure the event marker is connected and then continue."
   },
   "quiz": {
     "ask": {

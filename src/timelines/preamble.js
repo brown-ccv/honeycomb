@@ -1,5 +1,6 @@
 import holdUpMarker from "../trials/holdUpMarker";
-import { eventCodes, lang, config } from "../config/main";
+import startCode from "../trials/startCode";
+import { lang, config } from "../config/main";
 import { showMessage } from "@brown-ccv/behavioral-task-trials";
 
 let timeline = [showMessage(config, {
@@ -10,12 +11,7 @@ let timeline = [showMessage(config, {
 })]
 if (config.USE_PHOTODIODE) {
   timeline.push(holdUpMarker())
-  timeline.push(showMessage(config, {
-    duration: 2000,
-    message: lang.prompt.setting_up,
-    taskCode: eventCodes.open_task,
-    numBlinks: eventCodes.open_task,
-  }))
+  timeline.push(startCode())
 }
 
 const preamble = {

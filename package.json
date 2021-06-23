@@ -6,7 +6,7 @@
     "email": "ccv-bot@brown.edu",
     "url": "ccv.brown.edu"
   },
-  "version": "2.0.0",
+  "version": "2.1.0",
   "license": "MIT",
   "private": true,
   "main": "public/electron.js",
@@ -98,7 +98,6 @@
     "electron-packager": "^14.0.6",
     "electron-rebuild": "^1.8.6",
     "eslint": "^5.16.0",
-    "eslint-config-standard": "^14",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^9.2.0",
     "eslint-plugin-promise": "^4.2.1",

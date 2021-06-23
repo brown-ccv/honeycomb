@@ -88,11 +88,11 @@ function App() {
     console.log("Photodiode:", config.USE_PHOTODIODE);
     // If on desktop
     if (config.USE_ELECTRON) {
-      const electron = window.require("electron");
-      const renderer = electron.ipcRenderer;
-      setRenderer(renderer);
+      const { ipcRenderer } = window.require("electron");
+      setRenderer(ipcRenderer);
+      ipcRenderer.send('updateEnvironmentVariables', config)
       // If at home, fill in fields based on environment variables
-      const credentials = renderer.sendSync("syncCredentials");
+      const credentials = ipcRenderer.sendSync("syncCredentials");
       if (credentials.envParticipantId) {
         setEnvParticipantId(credentials.envParticipantId);
       }
@@ -141,7 +141,8 @@ function App() {
         setReject(true);
       }
     }
-  }, [setLoggedIn, query]);
+  // eslint-disable-next-line 
+  }, []);
 
   if (reject) {
     return (
