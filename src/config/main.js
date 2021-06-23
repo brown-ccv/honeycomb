@@ -46,7 +46,7 @@ const USE_VOLUME = process.env.REACT_APP_VOLUME === "true";
 const USE_CAMERA = process.env.REACT_APP_VIDEO === "true" && USE_ELECTRON;
 // whether or not the EEG/event marker is available
 const USE_EEG =
-  process.env.REACT_APP_USE_EVENT_MARKER === "true" && USE_ELECTRON;
+  process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON;
 // whether or not the photodiode is in use
 const USE_PHOTODIODE =
   process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON;

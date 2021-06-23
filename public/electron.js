@@ -1,5 +1,5 @@
 // handle windows installer set up
-if(require('electron-squirrel-startup')) return
+if(require('electron-squirrel-startup')) return 
 
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, dialog } = require('electron')
@@ -9,6 +9,10 @@ const ipc = require('electron').ipcMain
 const _ = require('lodash')
 const fs = require('fs')
 const log = require('electron-log');
+
+// Define default environment variables
+let USE_EEG = false
+let VIDEO = false
 
 // Event Trigger
 const { eventCodes, vendorId, productId, comName } = require('./config/trigger')
@@ -140,9 +144,14 @@ const handleEventSend = (code) => {
   }
 }
 
-ipc.on('checkEventMarker', (event) => {
-  setUpPort()
+// Update env variables with buildtime values from frontend
+ipc.on('updateEnvironmentVariables', (event, args) => {
+  USE_EEG = args.USE_EEG
+  VIDEO = args.USE_CAMERA
+  if(USE_EEG) {
+    setUpPort()
     .then(() => handleEventSend(eventCodes.test_connect))
+  }
 })
 
 
@@ -152,7 +161,7 @@ ipc.on('trigger', (event, args) => {
   let code = args.code
   if (code != undefined) {
     log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`)
-     if (args.useEventMarker) {
+     if (USE_EEG) {
        handleEventSend(code)
      }
   }
@@ -207,13 +216,13 @@ ipc.on('data', (event, args) => {
 
 // Save Video
 ipc.on('save_video', (event, fileName, buffer) => {
-  
-  const desktop = app.getPath('desktop')
-  const name = app.getName()
-  const today = new Date()
-  const date = today.toISOString().slice(0,10)
-  const fullPath = path.join(desktop, dataDir, studyID, participantID, date, name, fileName)
-  fs.outputFile(fullPath, buffer, err => {
+  if (VIDEO){
+    const desktop = app.getPath('desktop')
+    const name = app.getName()
+    const today = new Date()
+    const date = today.toISOString().slice(0,10)
+    const fullPath = path.join(desktop, dataDir, studyID, participantID, date, name, fileName)
+    fs.outputFile(fullPath, buffer, err => {
       if (err) {
           event.sender.send(ERROR, err.message)
       } else {
@@ -221,6 +230,8 @@ ipc.on('save_video', (event, fileName, buffer) => {
         console.log(fullPath)
       }
   })
+  }
+  
 })
 
 

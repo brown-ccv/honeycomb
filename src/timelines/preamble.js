@@ -1,6 +1,5 @@
 import holdUpMarker from "../trials/holdUpMarker";
 import startCode from "../trials/startCode";
-import checkEventMarker from "../trials/checkEventMarker"
 import { lang, config } from "../config/main";
 import { showMessage } from "@brown-ccv/behavioral-task-trials";
 
@@ -10,9 +9,6 @@ let timeline = [showMessage(config, {
   responseEndsTrial: true,
   buttons: [lang.prompt.continue.button],
 })]
-if (config.USE_EEG){
-  timeline.push(checkEventMarker())
-}
 if (config.USE_PHOTODIODE) {
   timeline.push(holdUpMarker())
   timeline.push(startCode())
