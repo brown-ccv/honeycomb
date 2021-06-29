@@ -23,19 +23,20 @@ let primaryTimeline = [
   taskBlock(practiceBlock),
   countdown({ message: lang.countdown.message2 }),
   taskBlock(exptBlock1),
-  demographics,
-  iusSurvey,
-  debrief,
-  showMessage(config, {
-    duration: 5000,
-    message: lang.task.end,
-  })
+  //demographics,
+  //iusSurvey,
+  //debrief,
 ];
 
 if (config.USE_CAMERA) {
   primaryTimeline.splice(1,0,cameraStart())
-  primaryTimeline.push(cameraEnd(3000))
+  primaryTimeline.push(cameraEnd(5000))
 }
+
+primaryTimeline.push(showMessage(config, {
+  duration: 5000,
+  message: lang.task.end,
+}))
 
 const mturkTimeline = [
   preamble,
