@@ -23,9 +23,9 @@ let primaryTimeline = [
   taskBlock(practiceBlock),
   countdown({ message: lang.countdown.message2 }),
   taskBlock(exptBlock1),
-  //demographics,
-  //iusSurvey,
-  //debrief,
+  demographics,
+  iusSurvey,
+  debrief,
 ];
 
 if (config.USE_CAMERA) {
