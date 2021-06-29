@@ -6,7 +6,7 @@
     "email": "ccv-bot@brown.edu",
     "url": "ccv.brown.edu"
   },
-  "version": "2.1.0",
+  "version": "2.2.0",
   "license": "MIT",
   "private": true,
   "main": "public/electron.js",
@@ -21,6 +21,7 @@
     "event-marker": "git+https://github.com/brown-ccv/event-marker.git",
     "execa": "^5.0.0",
     "firebase": "^8.2.6",
+    "fs-extra": "^8.1.0",
     "jquery": "^3.4.1",
     "jspsych-react": "^0.2.2",
     "lodash": "^4.17.19",
