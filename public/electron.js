@@ -223,9 +223,9 @@ ipc.on('data', (event, args) => {
 })
 
 // Save Video
-ipc.on('save_video', (event, fileName, buffer) => {
+ipc.on('save_video', (event, videoFileName, buffer) => {
   if (VIDEO){
-    const fullPath = path.join(directoryPath, fileName)
+    const fullPath = path.join(directoryPath, videoFileName)
     fs.outputFile(fullPath, buffer, err => {
       if (err) {
           event.sender.send(ERROR, err.message)
