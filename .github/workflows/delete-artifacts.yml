@@ -2,15 +2,14 @@ name: 'artifacts cleanup'
 on:
   workflow_dispatch:
     inputs:
-      nHours:
-        description: 'Delete artifacts older than n hours'
-        default: 240
+      nDays:
+        description: 'Delete artifacts older than n days'
+        default: 5
 
 jobs:
   delete-artifacts:
     runs-on: ubuntu-latest
     steps:
-      - uses: jimschubert/delete-artifacts-action@v1
+      - uses: c-hive/gha-remove-artifacts@v1
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          active_duration: ${{ format('{0}h', github.event.inputs.nHours) }}
+          age: ${{ format('{0} days', github.event.inputs.nDays) }}
