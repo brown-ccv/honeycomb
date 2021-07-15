@@ -11,8 +11,8 @@ import { jsPsych } from 'jspsych-react'
 import { getTurkUniqueId, getProlificId, sleep } from './lib/utils'
 import { initParticipant, addToFirebase } from './firebase'
 
-import { config } from "./config/main";
-import { version } from "../package.json"
+import { config } from './config/main'
+import { version } from '../package.json'
 
 function App () {
   // Variables for time
@@ -24,6 +24,7 @@ function App () {
   const [envParticipantId, setEnvParticipantId] = useState('')
   const [envStudyId, setEnvStudyId] = useState('')
   const [currentMethod, setMethod] = useState('default')
+  const [reject, setReject] = useState(false)
 
   const query = new URLSearchParams(window.location.search)
 
@@ -72,7 +73,7 @@ function App () {
           study_id: studyId,
           start_date: startDate,
           task_version: version
-        });
+        })
       }
       setLogin(loggedIn)
     },
@@ -120,7 +121,7 @@ function App () {
           setMethod('firebase')
           setLoggedIn(true, 'prolific', pID)
         } else {
-          setMethod('online')
+          setReject(true)
         }
       } else if (config.USE_FIREBASE) {
         setMethod('firebase')
@@ -140,43 +141,53 @@ function App () {
     // eslint-disable-next-line
   }, [])
 
-  return (
-    <>
-      {loggedIn ? (
-        <JsPsychExperiment
-          dataUpdateFunction={
-            {
-              desktop: desktopUpdateFunction,
-              firebase: firebaseUpdateFunction,
-              mturk: psiturkUpdateFunction,
-              default: defaultFunction,
-            }[currentMethod]
-          }
-          dataFinishFunction={
-            {
-              desktop: desktopFinishFunction,
-              mturk: psiturkFinishFunction,
-              firebase: defaultFunction,
-              default: defaultFinishFunction
-            }[currentMethod]
-          }
-        />
-      ) : (
-        <Login
-          validationFunction={
-            {
-              desktop: defaultValidation,
-              default: defaultValidation,
-              firebase: firebaseValidation,
-            }[currentMethod]
-          }
-          envParticipantId={envParticipantId}
-          envStudyId={envStudyId}
-          onLogin={setLoggedIn}
-        />
-      )}
-    </>
-  )
+  if (reject) {
+    return (
+      <div className="centered-h-v">
+        <div className="width-50 alert alert-danger">
+          Please ask your task provider to enable firebase.
+        </div>
+      </div>
+    )
+  } else {
+    return (
+      <>
+        {loggedIn ? (
+          <JsPsychExperiment
+            dataUpdateFunction={
+              {
+                desktop: desktopUpdateFunction,
+                firebase: firebaseUpdateFunction,
+                mturk: psiturkUpdateFunction,
+                default: defaultFunction,
+              }[currentMethod]
+            }
+            dataFinishFunction={
+              {
+                desktop: desktopFinishFunction,
+                mturk: psiturkFinishFunction,
+                firebase: defaultFunction,
+                default: defaultFinishFunction
+              }[currentMethod]
+            }
+          />
+        ) : (
+          <Login
+            validationFunction={
+              {
+                desktop: defaultValidation,
+                default: defaultValidation,
+                firebase: firebaseValidation,
+              }[currentMethod]
+            }
+            envParticipantId={envParticipantId}
+            envStudyId={envStudyId}
+            onLogin={setLoggedIn}
+          />
+        )}
+      </>
+    )
+  }
 }
 
 export default App
