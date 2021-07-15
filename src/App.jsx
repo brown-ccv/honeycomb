@@ -36,9 +36,7 @@ function App () {
   }
 
   // Adding data functions for firebase, electron adn Mturk
-  const defaultFunction = () => {
-    jsPsych.data.get().localSave('csv', 'neuro-task.csv')
-  }
+  const defaultFunction = () => {}
   const firebaseUpdateFunction = (data) => {
     addToFirebase(data)
   }
@@ -50,6 +48,9 @@ function App () {
   }
 
   // On finish functions for electron, Mturk
+  const defaultFinishFunction = () => {
+    jsPsych.data.get().localSave('csv', 'neuro-task.csv')
+  }
   const desktopFinishFunction = () => {
     ipcRenderer.send('end', 'true')
   }
@@ -156,7 +157,7 @@ function App () {
               desktop: desktopFinishFunction,
               mturk: psiturkFinishFunction,
               firebase: defaultFunction,
-              default: defaultFunction
+              default: defaultFinishFunction
             }[currentMethod]
           }
         />
