@@ -38,7 +38,6 @@ try {
   USE_ELECTRON = false;
 }
 
-
 // whether or not to ask the participant to adjust the volume
 const USE_VOLUME = process.env.REACT_APP_VOLUME === "true";
 // these variables depend on USE_ELECTRON
