@@ -180,16 +180,18 @@ let today = new Date()
  * @returns {string} The filepath.
  */
 const getSavePath = (participantID, studyID) => {
-  const desktop = app.getPath('desktop')
-  const name = app.getName()
-  const date = today.toISOString().slice(0, 10)
-  return path.join(
-    desktop,
-    studyID,
-    participantID,
-    date,
-    name
-  )
+  if (participantID !== "" && studyID !== "") {
+    const desktop = app.getPath('desktop')
+    const name = app.getName()
+    const date = today.toISOString().slice(0, 10)
+    return path.join(
+      desktop,
+      studyID,
+      participantID,
+      date,
+      name
+    )
+  }
 }
 
 const getFullPath = (fileName) => {
@@ -220,7 +222,7 @@ ipc.on('data', (event, args) => {
     fileCreated = true
   }
 
-  if (savePath === "" && participantID !== "" && studyID !== "") {
+  if (savePath === "") {
     savePath = getSavePath(participantID, studyID)
   }
 
@@ -241,6 +243,10 @@ ipc.on('data', (event, args) => {
 
 // Save Video
 ipc.on('save_video', (event, videoFileName, buffer) => {
+  if (savePath === "") {
+    savePath = getSavePath(participantID, studyID)
+  }
+
   if (VIDEO){
     const fullPath = getFullPath(videoFileName)
     fs.outputFile(fullPath, buffer, err => {
