@@ -1,5 +1,5 @@
-import { jsPsych } from 'jspsych-react'
-import requireContext from 'require-context.macro'
+import { jsPsych } from "jspsych-react"
+import requireContext from "require-context.macro"
 
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -22,17 +22,6 @@ const deepCopy = (obj) => JSON.parse(JSON.stringify(obj))
 // format a number as a dollar amount
 const formatDollars = (amount) => '$' + parseFloat(amount).toFixed(2)
 
-
-// create a pre-trial wait period
-const generateWaitSet = (trial, waitTime) => {
-  let waitTrial = Object.assign({}, trial)
-  waitTrial.trial_duration = waitTime
-  waitTrial.response_ends_trial = false
-  waitTrial.prompt = '-'
-
-  return [waitTrial, trial]
-}
-
 const keypressResponse = (info) => {
   const data = {
     key_press: info.key
@@ -42,13 +31,11 @@ const keypressResponse = (info) => {
 }
 
 const startKeypressListener = () => {
-  let keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+  return jsPsych.pluginAPI.getKeyboardResponse({
     callback_function: keypressResponse,
     valid_responses: jsPsych.ALL_KEYS,
     persist: false
   })
-
-  return keyboardListener
 }
 
 // import images
@@ -60,8 +47,7 @@ const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g
 
 const getTurkUniqueId = () => {
   const turkInfo = jsPsych.turk.turkInfo()
-  const uniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`
-  return uniqueId
+  return `${turkInfo.workerId}:${turkInfo.assignmentId}`
 }
 
 const getQueryVariable = (variable) => {
@@ -76,8 +62,7 @@ const getQueryVariable = (variable) => {
 };
 
 const getProlificId = () => {
-  const prolificId = getQueryVariable("PROLIFIC_PID");
-  return prolificId
+  return getQueryVariable("PROLIFIC_PID")
 };
 
 const beep = (audioCodes) => {
@@ -101,7 +86,6 @@ export {
   randomTrue,
   deepCopy,
   formatDollars,
-  generateWaitSet,
   images,
   startKeypressListener,
   getProlificId,

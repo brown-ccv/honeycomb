@@ -11,7 +11,7 @@ import { jsPsych } from 'jspsych-react'
 import { getTurkUniqueId, getProlificId, sleep } from './lib/utils'
 import { initParticipant, addToFirebase } from './firebase'
 
-import { config } from './config/main'
+import { envConfig } from './config/main'
 import { version } from '../package.json'
 
 function App () {
@@ -23,6 +23,8 @@ function App () {
   const [psiturk, setPsiturk] = useState(false)
   const [envParticipantId, setEnvParticipantId] = useState('')
   const [envStudyId, setEnvStudyId] = useState('')
+  const [participantID, setParticipantID] = useState("")
+  const [studyID, setStudyID] = useState("")
   const [currentMethod, setMethod] = useState('default')
   const [reject, setReject] = useState(false)
 
@@ -66,15 +68,17 @@ function App () {
 
   // Function to add jspsych data on login
   const setLoggedIn = useCallback(
-    (loggedIn, studyId, participantId) => {
+    (loggedIn, newStudyID, newParticipantID) => {
       if (loggedIn) {
         jsPsych.data.addProperties({
-          participant_id: participantId,
-          study_id: studyId,
+          participant_id: newParticipantID,
+          study_id: newStudyID,
           start_date: startDate,
           task_version: version
         })
       }
+      setParticipantID(newParticipantID)
+      setStudyID(newStudyID)
       setLogin(loggedIn)
     },
     [startDate]
@@ -83,19 +87,12 @@ function App () {
   // Login logic
   useEffect(() => {
     // For testing and debugging purposes
-    console.log('Turk:', config.USE_MTURK)
-    console.log('Firebase:', config.USE_FIREBASE)
-    console.log('Prolific:', config.USE_PROLIFIC)
-    console.log('Electron:', config.USE_ELECTRON)
-    console.log('Video:', config.USE_CAMERA)
-    console.log('Volume:', config.USE_VOLUME)
-    console.log('Event Marker:', config.USE_EEG)
-    console.log('Photodiode:', config.USE_PHOTODIODE)
+    console.log("Environment variable configuration:", envConfig)
     // If on desktop
-    if (config.USE_ELECTRON) {
+    if (envConfig.USE_ELECTRON) {
       const { ipcRenderer } = window.require('electron')
       setRenderer(ipcRenderer)
-      ipcRenderer.send('updateEnvironmentVariables', config)
+      ipcRenderer.send('updateEnvironmentVariables', envConfig)
       // If at home, fill in fields based on environment variables
       const credentials = ipcRenderer.sendSync('syncCredentials')
       if (credentials.envParticipantId) {
@@ -107,7 +104,7 @@ function App () {
       setMethod('desktop')
     } else {
       // If MTURK
-      if (config.USE_MTURK) {
+      if (envConfig.USE_MTURK) {
         /* eslint-disable */
         window.lodash = _.noConflict()
         const turkId = getTurkUniqueId()
@@ -115,15 +112,15 @@ function App () {
         setMethod('mturk')
         setLoggedIn(true, 'mturk', turkId)
         /* eslint-enable */
-      } else if (config.USE_PROLIFIC) {
+      } else if (envConfig.USE_PROLIFIC) {
         const pID = getProlificId()
-        if (config.USE_FIREBASE && pID) {
+        if (envConfig.USE_FIREBASE && pID) {
           setMethod('firebase')
           setLoggedIn(true, 'prolific', pID)
         } else {
           setReject(true)
         }
-      } else if (config.USE_FIREBASE) {
+      } else if (envConfig.USE_FIREBASE) {
         setMethod('firebase')
         // Autologin with query parameters
         const participantId = query.get('participantID')
@@ -170,6 +167,8 @@ function App () {
                 default: defaultFinishFunction
               }[currentMethod]
             }
+            participantID={participantID}
+            studyID={studyID}
           />
         ) : (
           <Login

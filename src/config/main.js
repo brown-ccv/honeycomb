@@ -58,16 +58,8 @@ if (!USE_ELECTRON) {
   _.merge(lang, mlang);
 }
 
-const defaultBlockSettings = {
-  conditions: ["a", "b", "c"],
-  repeats_per_condition: 1, // number of times every condition is repeated
-  is_practice: false,
-  is_tutorial: false,
-  photodiode_active: false,
-};
-
 // setting config for trials
-const config = init({
+const envConfig = init({
   USE_PHOTODIODE,
   USE_EEG,
   USE_ELECTRON,
@@ -81,9 +73,8 @@ const config = init({
 export {
   taskName,
   keys,
-  defaultBlockSettings,
   lang,
   eventCodes,
-  config,
+  envConfig,
   audioCodes,
 };

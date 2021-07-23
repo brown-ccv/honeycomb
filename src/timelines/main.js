@@ -1,53 +1,43 @@
-import preamble from "./preamble";
-import taskBlock from "./taskBlock";
-import { countdown } from "@brown-ccv/behavioral-task-trials";
+import preamble from "./preamble"
+import taskBlock from "./taskBlock"
+import { countdown } from "@brown-ccv/behavioral-task-trials"
 import { cameraStart, cameraEnd } from "../trials/camera"
-import { lang, config } from "../config/main";
-import { practiceBlock } from "../config/practice";
-import { tutorialBlock } from "../config/tutorial";
-import { exptBlock1, exptBlock2 } from "../config/experiment";
-import { showMessage } from "@brown-ccv/behavioral-task-trials";
+import { lang, envConfig } from "../config/main"
+import { showMessage } from "@brown-ccv/behavioral-task-trials"
 import {
   ageCheck,
   sliderCheck,
   demographics,
   iusSurvey,
   debrief,
-} from "../trials/quizTrials";
+} from "../trials/quizTrials"
 
-let primaryTimeline = [
-  preamble,
-  ageCheck,
-  sliderCheck,
-  countdown({ message: lang.countdown.message1 }),
-  taskBlock(practiceBlock),
-  countdown({ message: lang.countdown.message2 }),
-  taskBlock(exptBlock1),
-  demographics,
-  iusSurvey,
-  debrief,
-];
+const tl = (experimentConfig) => {
+  let timeline = [preamble]
 
-if (config.USE_CAMERA) {
-  primaryTimeline.splice(1,0,cameraStart())
-  primaryTimeline.push(cameraEnd(5000))
-}
+  if (!envConfig.USE_MTURK) timeline.push(ageCheck, sliderCheck)
 
-primaryTimeline.push(showMessage(config, {
-  duration: 5000,
-  message: lang.task.end,
-}))
+  timeline.push(countdown({ message: lang.countdown.message1 }))
 
-const mturkTimeline = [
-  preamble,
-  countdown({ message: lang.countdown.message1 }),
-  taskBlock(tutorialBlock),
-  countdown({ message: lang.countdown.message2 }),
-  taskBlock(exptBlock2),
-  showMessage(config, {
+  const block = envConfig.USE_MTURK ? experimentConfig.tutorialBlock : experimentConfig.practiceBlock
+  const block2 = envConfig.USE_MTURK ? experimentConfig.exptBlock2 : experimentConfig.exptBlock1
+
+  timeline.push(taskBlock(block), countdown({ message: lang.countdown.message2 }), taskBlock(block2))
+
+  if (!envConfig.USE_MTURK) {
+    timeline.push(demographics, iusSurvey, debrief)
+    if (envConfig.USE_CAMERA) {
+      timeline.splice(1, 0, cameraStart())
+      timeline.push(cameraEnd(5000))
+    }
+  }
+
+  timeline.push(showMessage(envConfig, {
     duration: 5000,
     message: lang.task.end,
-  }),
-];
+  }))
 
-export const tl = config.USE_MTURK ? mturkTimeline : primaryTimeline;
+  return timeline
+}
+
+export default tl

@@ -1,15 +1,15 @@
 import holdUpMarker from "../trials/holdUpMarker";
 import startCode from "../trials/startCode";
-import { lang, config } from "../config/main";
+import { lang, envConfig } from "../config/main";
 import { showMessage } from "@brown-ccv/behavioral-task-trials";
 
-let timeline = [showMessage(config, {
+let timeline = [showMessage(envConfig, {
   responseType: "html_button_response",
   message: lang.task.name,
   responseEndsTrial: true,
   buttons: [lang.prompt.continue.button],
 })]
-if (config.USE_PHOTODIODE) {
+if (envConfig.USE_PHOTODIODE) {
   timeline.push(holdUpMarker())
   timeline.push(startCode())
 }
