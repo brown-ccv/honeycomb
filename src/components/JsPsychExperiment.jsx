@@ -4,12 +4,14 @@ import tl from "../timelines/main"
 import { getConfig } from "../config/experiment"
 
 function JsPsychExperiment ({ dataUpdateFunction, dataFinishFunction, participantID, studyID }) {
+  const [sourceConfig, setSourceConfig] = useState({})
   const [timeline, setTimeline] = useState([])
 
   useEffect(() => {
-    getConfig(participantID, studyID).then((config) => {
-      const newTimeline = tl(config)
+    getConfig(participantID, studyID).then(({ sourceConfig, blockConfigs }) => {
+      const newTimeline = tl(blockConfigs)
       setTimeline(newTimeline)
+      setSourceConfig(sourceConfig)
     })
   }, [participantID, studyID])
 
@@ -26,7 +28,10 @@ function JsPsychExperiment ({ dataUpdateFunction, dataFinishFunction, participan
           settings={{
             timeline: timeline,
             on_data_update: (data) => dataUpdateFunction(data),
-            on_finish: (data) => dataFinishFunction(data),
+            on_finish: (data) => {
+              data.config = sourceConfig
+              dataFinishFunction(data)
+            },
           }}
         />
       </div>

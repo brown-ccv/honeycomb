@@ -1,30 +1,37 @@
-import { deepCopy } from '../lib/utils'
-import localConfig from './config.json'
+import { deepCopy } from "../lib/utils"
+import localConfig from "./config.json"
 import { envConfig } from "./main"
 import path from "path"
+import { firestoreConfig } from "../firebase"
 
 const getConfig = async (participantID, studyID) => {
   let experimentConfig = localConfig
-  if (envConfig.USE_ELECTRON ) {
+  if (envConfig.USE_ELECTRON) {
     const app = window.require("electron").remote.app
-    const renderer = window.require("electron").ipcRenderer;
+    const renderer = window.require("electron").ipcRenderer
     const fs = window.require("fs")
     try {
       const overrideConfig = path.join(
         app.getPath("desktop"),
         `${app.getName()}-settings`,
         `${participantID}-config.json`
-      );
-      experimentConfig = Object.assign(experimentConfig, JSON.parse(fs.readFileSync(overrideConfig), "utf8"));
+      )
+      experimentConfig = Object.assign(experimentConfig, JSON.parse(fs.readFileSync(overrideConfig), "utf8"))
     } catch (error) {
       console.warn("Using default config")
     }
     renderer.send("save-config", experimentConfig, participantID, studyID)
+  } else if (envConfig.USE_FIREBASE) {
+    const newConfig = await firestoreConfig(studyID, participantID);
+    if (newConfig) {
+      experimentConfig = newConfig;
+    }
   } else {
     console.warn("Using default config")
   }
 
-  return generateExperiment(experimentConfig)
+  const blockConfigs = generateExperiment(experimentConfig)
+  return { sourceConfig: experimentConfig, blockConfigs }
 }
 
 /**
@@ -37,11 +44,11 @@ const getConfig = async (participantID, studyID) => {
 const overrideSettings = (override, defaultBlockSettings) => {
   console.log("Default block settings:", defaultBlockSettings)
   console.log("override:", override)
-  const newBlock = deepCopy(defaultBlockSettings);
-  Object.assign(newBlock, override);
+  const newBlock = deepCopy(defaultBlockSettings)
+  Object.assign(newBlock, override)
 
-  return newBlock;
-};
+  return newBlock
+}
 
 const generateExperiment = (config) => {
   let { defaultBlockSettings, tutorialBlock, practiceBlock, exptBlock1, exptBlock2 } = config
@@ -51,7 +58,7 @@ const generateExperiment = (config) => {
   exptBlock1 = overrideSettings(exptBlock1, defaultBlockSettings)
   exptBlock2 = overrideSettings(exptBlock2, defaultBlockSettings)
 
-  return { tutorialBlock, practiceBlock, exptBlock1, exptBlock2}
+  return { tutorialBlock, practiceBlock, exptBlock1, exptBlock2 }
 }
 
 export { getConfig }

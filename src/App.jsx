@@ -9,7 +9,7 @@ import JsPsychExperiment from './components/JsPsychExperiment'
 
 import { jsPsych } from 'jspsych-react'
 import { getTurkUniqueId, getProlificId, sleep } from './lib/utils'
-import { initParticipant, addToFirebase } from './firebase'
+import { initParticipant, addToFirebase, addConfigToFirebase } from "./firebase"
 
 import { envConfig } from './config/main'
 import { version } from '../package.json'
@@ -64,6 +64,13 @@ function App () {
       psiturk.completeHIT()
     }
     completePsiturk()
+  }
+  const firebaseFinishFunction = (data) => {
+    const participantID = data.values()[0].participant_id
+    const studyID = data.values()[0].study_id
+    const startDate = data.values()[0].start_date
+    const config = data.config
+    addConfigToFirebase(participantID, studyID, startDate, config)
   }
 
   // Function to add jspsych data on login
@@ -163,7 +170,7 @@ function App () {
               {
                 desktop: desktopFinishFunction,
                 mturk: psiturkFinishFunction,
-                firebase: defaultFunction,
+                firebase: firebaseFinishFunction,
                 default: defaultFinishFunction
               }[currentMethod]
             }

@@ -4,7 +4,8 @@ import 'firebase/firestore';
 require("dotenv").config();
 
 // Set collection name
-const collectionName = "participant_responses";
+const REGISTERED_COLLECTION_NAME = "registered_studies"
+const RESPONSE_COLLECTION_NAME = "participant_responses";
 
 // Firebase config
 let config = {
@@ -26,10 +27,59 @@ if (window.location.hostname === "localhost") {
   db.useEmulator("localhost", 8080);
 }
 
+const addConfigToFirebase = (participantID, studyID, startDate, config) => {
+  console.log("Adding config to Firebase")
+  db.collection(RESPONSE_COLLECTION_NAME)
+    .doc(studyID)
+    .collection("participants")
+    .doc(participantID)
+    .collection("data")
+    .doc(startDate)
+    .update({ config: config });
+};
+
+const getFirestoreConfig = (studyID, docName) => {
+  return db
+    .collection(REGISTERED_COLLECTION_NAME)
+    .doc(studyID)
+    .collection("config")
+    .doc(docName)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        console.log(`Doc ${docName} exists`)
+        return JSON.parse(doc.data().config);
+      } else {
+        console.log(`Document ${docName} does not exist`);
+        return false;
+      }
+    })
+    .catch((error) => console.log("Error in getting config:", error));
+};
+
+/**
+ * Gets the config object for the logged-in participant, or uses the default for the study. The config object
+ * is a string.
+ * @param {string} studyID The study ID specified at login.
+ * @param {string} participantID The logged in participant ID.
+ */
+const firestoreConfig = async (studyID, participantID) => {
+  const pConfig = await getFirestoreConfig(studyID, participantID);
+  const defaultConfig = await getFirestoreConfig(studyID, "default");
+  if (pConfig) {
+    console.log("Participant config:", pConfig)
+    return pConfig;
+  } else if (defaultConfig) {
+    return defaultConfig;
+  } else {
+    return false;
+  }
+};
+
 // Add participant data and trial data to db
 const initParticipant = (participantId, studyId, startDate) => {
   // return promise with value true if participant and study id match, false otherwise
-    return db.collection(collectionName)
+    return db.collection(RESPONSE_COLLECTION_NAME)
     .doc(studyId)
     .collection('participants')
     .doc(participantId)
@@ -39,7 +89,7 @@ const initParticipant = (participantId, studyId, startDate) => {
     .then(()=>{
       return true
     })
-    .catch((error) => {
+    .catch(() => {
       return false
     });
 };
@@ -51,7 +101,7 @@ const addToFirebase = (data) => {
   const studyId = data.study_id;
   const startDate = data.start_date
   
-  db.collection(collectionName)
+  db.collection(RESPONSE_COLLECTION_NAME)
     .doc(studyId)
     .collection('participants')
     .doc(participantId)
@@ -63,9 +113,11 @@ const addToFirebase = (data) => {
 // Export types that exists in Firestore
 export {
   db,
-  collectionName,
+  RESPONSE_COLLECTION_NAME,
   initParticipant,
-  addToFirebase
+  addToFirebase,
+  firestoreConfig,
+  addConfigToFirebase
 };
 
 export default firebase;
