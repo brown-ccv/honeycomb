@@ -26,4 +26,6 @@ yarn-debug.log*
 yarn-error.log*
 
 psiturkit/*_turk
-.firebase
+
+# IDE
+/.idea

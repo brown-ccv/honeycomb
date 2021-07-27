@@ -12,23 +12,15 @@ const taskTrial = (blockSettings, blockDetails, word) => {
   const colors = ["red", "blue", "yellow"]
   const color = colors[getRandomInt(3)]
 
-  // Initialize trial parameters.
-  let trialDetails = {
-    earnings: 0
-  }
-
   let timeline = [
     // Just show the fixation dot.
     fixation(envConfig, {
       duration: 650,
     }),
     // Display a word and wait for user input.
-    choice(trialDetails, word, color, 3000),
-    fixation(envConfig, {
-      duration: 650,
-    }),
+    choice(word, color),
     // End the trial by displaying the participant's earnings.
-    showEarnings(trialDetails, 1000)
+    showEarnings(1500)
   ];
 
   return {
