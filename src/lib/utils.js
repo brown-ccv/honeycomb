@@ -78,6 +78,29 @@ const beep = (audioCodes) => {
   o.stop(context.currentTime + 0.4)
 }
 
+// stolen from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * max);
+}
+
+/**
+ * Removes the cursor from the part of the screen covered by the specified element. When the user hovers over
+ * the element, the cursor will disappear.
+ * @param elementId The ID of the element to remove the cursor from.
+ */
+const removeCursor = (elementId) => {
+  let element = document.getElementById(elementId);
+  element.classList.add("nocursor");
+};
+
+/**
+ * The opposite of removeCursor. Adds a cursor over a specified element.
+ * @param elementId The element to add a cursor for.
+ */
+const addCursor = (elementId) => {
+  let element = document.getElementById(elementId);
+  element.classList.remove("nocursor");
+};
 
 export {
   sleep,
@@ -90,5 +113,8 @@ export {
   startKeypressListener,
   getProlificId,
   getTurkUniqueId,
-  beep
+  beep,
+  getRandomInt,
+  addCursor,
+  removeCursor
 }

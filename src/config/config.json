@@ -1,7 +1,7 @@
 {
   "defaultBlockSettings": {
-    "conditions": ["a", "b", "c"],
-    "repeats_per_condition": 1,
+    "conditions": ["BLUE", "RED", "YELLOW"],
+    "repeats_per_condition": 2,
     "is_practice": false,
     "is_tutorial": false,
     "photodiode_active": false
@@ -10,15 +10,6 @@
     "is_tutorial": true
   },
   "practiceBlock": {
-    "conditions": ["m", "n"],
-    "repeats_per_condition": 1,
     "is_practice": true
-  },
-  "exptBlock1": {
-    "repeats_per_condition": 2
-  },
-  "exptBlock2": {
-    "conditions": ["e", "f"],
-    "repeats_per_condition": 2
   }
 }

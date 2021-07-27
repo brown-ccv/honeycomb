@@ -20,6 +20,4 @@ const preamble = {
   timeline: timeline
 };
 
-
-
 export default preamble;

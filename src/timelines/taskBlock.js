@@ -12,7 +12,7 @@ const taskBlock = (blockSettings) => {
 	}
 
 	// timeline = loop through trials
-	let timeline = startingOpts.map( (condition) => taskTrial(blockSettings, blockDetails, condition))
+	let timeline = startingOpts.map( (word) => taskTrial(blockSettings, blockDetails, word))
 
 	let blockStart = {
 		type: 'html_keyboard_response',
