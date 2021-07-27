@@ -5,7 +5,6 @@
 import { jsPsych } from "jspsych-react";
 import _ from "lodash";
 import { eventCodes } from "./trigger";
-import { init } from "@brown-ccv/behavioral-task-trials";
 import { getProlificId } from "../lib/utils";
 
 // mapping of letters to key codes
@@ -59,7 +58,7 @@ if (!USE_ELECTRON) {
 }
 
 // setting config for trials
-const envConfig = init({
+const envConfig = {
   USE_PHOTODIODE,
   USE_EEG,
   USE_ELECTRON,
@@ -68,7 +67,7 @@ const envConfig = init({
   USE_CAMERA,
   USE_PROLIFIC,
   USE_FIREBASE
-});
+};
 
 export {
   taskName,

@@ -17,10 +17,8 @@ const tl = (experimentConfig) => {
     preamble,
     ageCheck,
     sliderCheck,
-    countdown({ message: lang.countdown.message1 }),
-    taskBlock(experimentConfig.practiceBlock),
     countdown({ message: lang.countdown.message2 }),
-    taskBlock(experimentConfig.exptBlock1),
+    taskBlock(experimentConfig),
     demographics,
     iusSurvey,
     debrief

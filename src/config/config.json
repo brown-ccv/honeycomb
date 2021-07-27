@@ -1,15 +1,13 @@
 {
-  "defaultBlockSettings": {
-    "conditions": ["BLUE", "RED", "YELLOW"],
-    "repeats_per_condition": 2,
-    "is_practice": false,
-    "is_tutorial": false,
-    "photodiode_active": false
-  },
-  "tutorialBlock": {
-    "is_tutorial": true
-  },
-  "practiceBlock": {
-    "is_practice": true
-  }
+  "conditions": [
+    "BLUE",
+    "RED",
+    "YELLOW"
+  ],
+  "colors": [
+    "blue",
+    "red",
+    "yellow"
+  ],
+  "repeats_per_condition": 2
 }

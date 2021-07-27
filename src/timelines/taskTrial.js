@@ -1,16 +1,14 @@
 // import trials
-import { showMessage, fixation } from "@brown-ccv/behavioral-task-trials";
+import { fixation } from "@brown-ccv/behavioral-task-trials";
 import { envConfig } from "../config/main";
-import { eventCodes } from "../config/main";
-import { earningsDisplay } from "../lib/markup/earnings";
 import choice from "../trials/choice"
 import { getRandomInt } from "../lib/utils"
 import showEarnings from "../trials/showEarnings"
 
-const taskTrial = (blockSettings, blockDetails, word) => {
+const taskTrial = (blockSettings, word) => {
   // Set a random font color for the trial.
-  const colors = ["red", "blue", "yellow"]
-  const color = colors[getRandomInt(3)]
+  const colors = blockSettings.colors
+  const color = colors[getRandomInt(colors.length)]
 
   let timeline = [
     // Just show the fixation dot.

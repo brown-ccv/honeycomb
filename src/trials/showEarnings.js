@@ -2,6 +2,7 @@ import { pdSpotEncode, photodiodeGhostBox } from "../lib/markup/photodiode"
 import { addCursor } from "../lib/utils"
 import { envConfig } from "../config/main"
 import { jsPsych } from "jspsych-react/dist/experiment"
+import { eventCodes } from "../config/trigger"
 const { earningsDisplay } = require("../lib/markup/earnings")
 
 /**
@@ -22,6 +23,9 @@ const showEarnings = (duration) => {
     stimulus: "",
     response_ends_trial: false,
     trial_duration: duration,
+    on_load: () => {
+      pdSpotEncode(eventCodes.show_earnings)
+    },
     on_start: (trial) => {
       // Get data from jsPsych to check the participant response.
       const data = jsPsych.data.get().values()
@@ -37,7 +41,8 @@ const showEarnings = (duration) => {
       }
       if (envConfig.USE_PHOTODIODE) trial.stimulus += photodiodeGhostBox();
     },
-    on_finish: () => {
+    on_finish: (data) => {
+      data.code = eventCodes.show_earnings
       addCursor("experiment");
     },
   }
