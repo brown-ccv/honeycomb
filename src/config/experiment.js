@@ -21,9 +21,9 @@ const getLocalConfig = async (participantID, studyID) => {
     }
     renderer.send("save-config", experimentConfig, participantID, studyID)
   } else if (envConfig.USE_FIREBASE) {
-    const newConfig = await firestoreConfig(studyID, participantID);
+    const newConfig = await firestoreConfig(studyID, participantID)
     if (newConfig) {
-      experimentConfig = newConfig;
+      experimentConfig = newConfig
     }
   } else {
     console.warn("Using default config")
@@ -33,35 +33,40 @@ const getLocalConfig = async (participantID, studyID) => {
 }
 
 /*
- * The following two functions are not used in this project, but may be useful in some experiments with different
- * settings for different experiment blocks.
+ * The following two functions are used to create separate sets of settings for each experiment section, when relevant.
+ * Since there is only one set of settings needed for this experiment, they are not used. They may be useful in more
+ * complex experiments, however, where different sections of the experiment require different versions of the same
+ * settings. For instance, if two different sections of this experiment needed different response_time settings, we
+ * would use the following functions.
  */
 
 /**
- * Creates config objects for each of the four types of blocks, using the default settings as a
- * baseline and overriding each one with the specific block settings from the config JSON file.
- * @param {JSON} override The custom config to merge with the default.
- * @param {any} defaultBlockSettings An object containing the default block settings.
- * @returns An object containing the block's config settings.
+ * Creates a new config object, using the default settings as a baseline and overriding each one with the specific block
+ * settings from the provided override object.
+ * @param override The custom config to merge with the default.
+ * @param defaultBlockSettings An object containing the default block settings.
+ * @returns newConfig An object containing the new config settings.
  */
 // const overrideSettings = (override, defaultBlockSettings) => {
-//   console.log("Default block settings:", defaultBlockSettings)
-//   console.log("override:", override)
 //   const newBlock = deepCopy(defaultBlockSettings)
 //   Object.assign(newBlock, override)
 //
 //   return newBlock
 // }
 
-// const generateExperiment = (config) => {
-//   let { defaultBlockSettings, tutorialBlock, practiceBlock, exptBlock1, exptBlock2 } = config
+/**
+ * Generates an array of blocks of settings for an experiment, using a default block and an array of overrides.
+ * @param defaultBlockSettings An object containing the default block settings.
+ * @param {array} blockOverrides An array containing the override setting for the different experiment blocks.
+ */
+// const generateExperiment = (defaultBlockSettings, blockOverrides) => {
+//   let newBlocks = []
 //
-//   tutorialBlock = overrideSettings(tutorialBlock, defaultBlockSettings)
-//   practiceBlock = overrideSettings(practiceBlock, defaultBlockSettings)
-//   exptBlock1 = overrideSettings(exptBlock1, defaultBlockSettings)
-//   exptBlock2 = overrideSettings(exptBlock2, defaultBlockSettings)
+//   for (let i = 0; i < blockOverrides.length; i++) {
+//     newBlocks.push(overrideSettings(blockOverrides[i], defaultBlockSettings))
+//   }
 //
-//   return { tutorialBlock, practiceBlock, exptBlock1, exptBlock2 }
+//   return newBlocks
 // }
 
 export { getLocalConfig }
