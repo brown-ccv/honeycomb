@@ -6,18 +6,20 @@ import { removeCursor } from "../lib/utils"
  * The function times out after the provided number of milliseconds.
  * @param {string} word The word to display.
  * @param {string} color The font color.
+ * @param {number} duration The maximum number of milliseconds the participant can take before entering a response.
  * @returns trial The jsPsych trial object.
  */
-const choice = (word, color) => {
+const choice = (word, color, duration) => {
 
   return {
     // A type of trial that calls a function rather than display a stimulus.
     type: "html_keyboard_response",
+    trial_duration: duration,
     // Allows the trial to be manually ended with the done() function.
     response_ends_trial: true,
     stimulus:
       `<div class="width-100-view height-100-view">
-            <p id="color-display" class="centered-h-v font-weight-bold font-size-large" style="color:${color}">${word}</p>
+            <p id="color-display" class="centered-h-v font-weight-bold font-size-extra-large" style="color:${color}">${word}</p>
         </div>`,
     on_start: () => {
       removeCursor("experiment")

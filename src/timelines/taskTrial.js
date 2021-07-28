@@ -7,7 +7,7 @@ import showEarnings from "../trials/showEarnings"
 
 const taskTrial = (blockSettings, word) => {
   // Set a random font color for the trial.
-  const colors = blockSettings.colors
+  const colors = blockSettings.conditions
   const color = colors[getRandomInt(colors.length)]
 
   let timeline = [
@@ -16,7 +16,7 @@ const taskTrial = (blockSettings, word) => {
       duration: 650,
     }),
     // Display a word and wait for user input.
-    choice(word, color),
+    choice(word, color, blockSettings.response_time),
     // End the trial by displaying the participant's earnings.
     showEarnings(1500)
   ];

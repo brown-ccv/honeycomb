@@ -4,10 +4,6 @@
     "RED",
     "YELLOW"
   ],
-  "colors": [
-    "blue",
-    "red",
-    "yellow"
-  ],
-  "repeats_per_condition": 2
+  "repeats_per_condition": 2,
+  "response_time": 2000
 }

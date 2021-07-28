@@ -14,7 +14,7 @@ import {
 
 const tl = (experimentConfig) => {
   let timeline = [
-    preamble,
+    preamble(experimentConfig),
     ageCheck,
     sliderCheck,
     countdown({ message: lang.countdown.message2 }),

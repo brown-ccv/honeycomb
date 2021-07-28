@@ -11,13 +11,6 @@ const { earningsDisplay } = require("../lib/markup/earnings")
  * @returns trial The jsPsych trial object.
  */
 const showEarnings = (duration) => {
-  // Maps colors to their corresponding key code.
-  const colorKeyMappings = {
-    red: 82,
-    blue: 66,
-    yellow: 89
-  }
-
   return {
     type: "html_keyboard_response",
     stimulus: "",
@@ -33,8 +26,11 @@ const showEarnings = (duration) => {
       const lastTrial = data[data.length - 1]
       const lastColor = lastTrial.color
       const response = lastTrial.key_press
+      const keyPressed = String.fromCharCode(response)
       // Show reward or punishment depending on participant response.
-      if (response === colorKeyMappings[lastColor]) {
+      if (response === null) {
+        trial.stimulus = earningsDisplay(-1, true);
+      } else if (keyPressed === lastColor[0].toUpperCase()) {
         trial.stimulus = earningsDisplay(1)
       } else {
         trial.stimulus = earningsDisplay(-1)
