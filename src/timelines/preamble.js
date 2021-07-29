@@ -7,16 +7,22 @@ const preamble = (experimentConfig) => {
   const colors = experimentConfig.conditions
   let colorList = ""
 
+  // Loop through the colors and create a list of font colors and their corresponding key
   for (let i = 0; i < colors.length; i++) {
-    colorList += `<li class="font-size-large"><span style="color: ${colors[i]}">WORD</span>: ${colors[i][0].toUpperCase()}</li>`
+    colorList +=
+      `<li class="font-size-large">
+        // First set the font color to the current color.
+        // Then select the first letter of the color word and put it in upper case.
+        <span style="color: ${colors[i]}">WORD</span>: ${colors[i][0].toUpperCase()}
+       </li>`
   }
-  
+
   const instructions =
     `In this game you will be shown words for various colors, for example "BLUE", "RED", or "YELLOW". 
      The letters will be highlighted in one of the colors as well, for instance <span class="red-font">BLUE</span> or 
      <span class="blue-font">BLUE</span>.<br><br>Your job will be to press the button corresponding to the font color 
      <u><strong>as quickly as possible</strong></u>. The colors and corresponding keys are as follows:<br><br>
-     <ul class="width-min-content margin-centered">
+     <ul class="width-max-content margin-centered">
         ${colorList}
      </ul>`
 

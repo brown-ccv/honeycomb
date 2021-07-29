@@ -42,7 +42,7 @@ html, body, #root, .App {
   width: 100vw;
 }
 
-.width-min-content {
+.width-max-content {
   width: max-content;
 }
 
