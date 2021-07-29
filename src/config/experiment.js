@@ -1,7 +1,7 @@
 import localConfig from "./config.json"
 import { envConfig } from "./main"
 import path from "path"
-import { firestoreConfig } from "../firebase"
+import { getFirestoreConfig } from "../firebase"
 
 const getLocalConfig = async (participantID, studyID) => {
   let experimentConfig = localConfig
@@ -21,9 +21,9 @@ const getLocalConfig = async (participantID, studyID) => {
     }
     renderer.send("save-config", experimentConfig, participantID, studyID)
   } else if (envConfig.USE_FIREBASE) {
-    const newConfig = await firestoreConfig(studyID, participantID)
-    if (newConfig) {
-      experimentConfig = newConfig
+    const firestoreConfig = await getFirestoreConfig(studyID, participantID)
+    if (firestoreConfig) {
+      experimentConfig = firestoreConfig
     }
   } else {
     console.warn("Using default config")
