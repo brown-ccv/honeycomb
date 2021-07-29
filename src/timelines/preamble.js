@@ -10,9 +10,9 @@ const preamble = (experimentConfig) => {
   // Loop through the colors and create a list of font colors and their corresponding key
   for (let i = 0; i < colors.length; i++) {
     colorList +=
+      // First set the font color to the current color.
+      // Then select the first letter of the color word and put it in upper case.
       `<li class="font-size-large">
-        // First set the font color to the current color.
-        // Then select the first letter of the color word and put it in upper case.
         <span style="color: ${colors[i]}">WORD</span>: ${colors[i][0].toUpperCase()}
        </li>`
   }

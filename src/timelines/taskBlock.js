@@ -18,7 +18,6 @@ const taskBlock = (blockSettings) => {
 	timeline.unshift(blockStart)
 
   return {
-		type: 'html_keyboard_response',
 		timeline: timeline
 	}
 }

@@ -27,19 +27,18 @@ const showEarnings = (duration) => {
       const lastColor = lastTrial.color
       const response = lastTrial.key_press
       const keyPressed = String.fromCharCode(response)
-      // Show reward or punishment depending on participant response.
-      if (response === null) {
-        trial.stimulus = earningsDisplay(-1, true);
-      } else if (keyPressed === lastColor[0].toUpperCase()) {
-        trial.stimulus = earningsDisplay(1)
-      } else {
-        trial.stimulus = earningsDisplay(-1)
+      let earnings = -1
+      if (keyPressed === lastColor[0].toUpperCase()) {
+        earnings = 1
       }
-      if (envConfig.USE_PHOTODIODE) trial.stimulus += photodiodeGhostBox();
+      const slow = response === null
+      trial.stimulus = earningsDisplay(earnings, slow)
+      if (envConfig.USE_PHOTODIODE) trial.stimulus += photodiodeGhostBox()
     },
     on_finish: (data) => {
       data.code = eventCodes.show_earnings
-      addCursor("experiment");
+      // Adding back; was removed in choice trial.
+      addCursor("experiment")
     },
   }
 }

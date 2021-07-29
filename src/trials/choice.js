@@ -15,13 +15,13 @@ const choice = (word, color, duration) => {
     // A type of trial that calls a function rather than display a stimulus.
     type: "html_keyboard_response",
     trial_duration: duration,
-    // Allows the trial to be manually ended with the done() function.
     response_ends_trial: true,
     stimulus:
       `<div class="width-100-view height-100-view">
             <p id="color-display" class="centered-h-v font-weight-bold font-size-extra-large" style="color:${color}">${word}</p>
         </div>`,
     on_start: () => {
+      // Remove the cursor from the experiment window.
       removeCursor("experiment")
     },
     on_finish: (data) => {
