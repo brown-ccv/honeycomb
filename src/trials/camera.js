@@ -3,7 +3,6 @@ import { photodiodeGhostBox } from '../lib/markup/photodiode'
 import { baseStimulus } from '../lib/markup/stimuli'
 import { jsPsych } from 'jspsych-react'
 
-
 let ipcRenderer = false;
 if (envConfig.USE_ELECTRON) {
   const electron = window.require('electron');

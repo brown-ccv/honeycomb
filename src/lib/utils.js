@@ -78,7 +78,7 @@ const beep = (audioCodes) => {
   o.stop(context.currentTime + 0.4)
 }
 
-// stolen from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+// Stolen from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 const getRandomInt = (max) => {
   return Math.floor(Math.random() * max);
 }
