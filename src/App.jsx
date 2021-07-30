@@ -9,7 +9,7 @@ import JsPsychExperiment from "./components/JsPsychExperiment"
 
 import { jsPsych } from "jspsych-react"
 import { getTurkUniqueId, getProlificId, sleep } from "./lib/utils"
-import { initParticipant, addToFirebase, addConfigToFirebase } from "./firebase"
+import { initParticipantFirestore, addToFirebase, addConfigToFirebase } from "./firebase"
 
 import { envConfig } from "./config/main"
 import { version } from "../package.json"
@@ -56,7 +56,7 @@ function App () {
   // Attempts to initialize the participant's data on Firebase; the Firebase rules check for a valid participant ID
   // and study ID combination, to validate login.
   const firebaseValidation = (participantId, studyId) => {
-    return initParticipant(participantId, studyId, startDate)
+    return initParticipantFirestore(participantId, studyId, startDate)
   }
 
   /* Functions for saving data. */
