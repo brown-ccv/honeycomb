@@ -20,7 +20,7 @@ const choice = (word, color, duration) => {
             <p id="color-display" class="centered-h-v font-weight-bold font-size-extra-large" style="color:${color}">${word}</p>
         </div>`,
     on_start: () => {
-      // Remove the cursor from the experiment window.
+      // The cursor is added back in showEarnings.
       removeCursor("experiment")
     },
     on_finish: (data) => {
