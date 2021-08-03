@@ -38,7 +38,7 @@ const addConfigToFirebase = (participantID, studyID, startDate, config) => {
     .update({ config: config });
 };
 
-const getFirestoreConfig = (studyID, docName) => {
+const handleFirestoreConfigFetch = (studyID, docName) => {
   return db
     .collection(REGISTERED_COLLECTION_NAME)
     .doc(studyID)
@@ -63,9 +63,9 @@ const getFirestoreConfig = (studyID, docName) => {
  * @param {string} studyID The study ID specified at login.
  * @param {string} participantID The logged in participant ID.
  */
-const firestoreConfig = async (studyID, participantID) => {
-  const pConfig = await getFirestoreConfig(studyID, participantID);
-  const defaultConfig = await getFirestoreConfig(studyID, "default");
+const getFirestoreConfig = async (studyID, participantID) => {
+  const pConfig = await handleFirestoreConfigFetch(studyID, participantID);
+  const defaultConfig = await handleFirestoreConfigFetch(studyID, "default");
   if (pConfig) {
     console.log("Participant config:", pConfig)
     return pConfig;
@@ -112,11 +112,9 @@ const addToFirebase = (data) => {
 
 // Export types that exists in Firestore
 export {
-  db,
-  RESPONSE_COLLECTION_NAME,
   initParticipant,
   addToFirebase,
-  firestoreConfig,
+  getFirestoreConfig,
   addConfigToFirebase
 };
 

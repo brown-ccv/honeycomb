@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react"
 import { Experiment } from "jspsych-react"
 import tl from "../timelines/main"
-import { getConfig } from "../config/experiment"
+import { getLocalConfig } from "../config/experiment"
 
 function JsPsychExperiment ({ dataUpdateFunction, dataFinishFunction, participantID, studyID }) {
   const [sourceConfig, setSourceConfig] = useState({})
   const [timeline, setTimeline] = useState([])
 
   useEffect(() => {
-    getConfig(participantID, studyID).then(({ sourceConfig, blockConfigs }) => {
-      const newTimeline = tl(blockConfigs)
+    getLocalConfig(participantID, studyID).then((experimentConfig) => {
+      const newTimeline = tl(experimentConfig)
       setTimeline(newTimeline)
-      setSourceConfig(sourceConfig)
+      setSourceConfig(experimentConfig)
     })
   }, [participantID, studyID])
 

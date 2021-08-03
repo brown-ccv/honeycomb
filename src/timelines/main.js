@@ -13,23 +13,20 @@ import {
 } from "../trials/quizTrials"
 
 const tl = (experimentConfig) => {
-  let timeline = [preamble]
+  let timeline = [
+    preamble(experimentConfig),
+    ageCheck,
+    sliderCheck,
+    countdown({ message: lang.countdown.message1 }),
+    taskBlock(experimentConfig),
+    demographics,
+    iusSurvey,
+    debrief
+  ]
 
-  if (!envConfig.USE_MTURK) timeline.push(ageCheck, sliderCheck)
-
-  timeline.push(countdown({ message: lang.countdown.message1 }))
-
-  const block = envConfig.USE_MTURK ? experimentConfig.tutorialBlock : experimentConfig.practiceBlock
-  const block2 = envConfig.USE_MTURK ? experimentConfig.exptBlock2 : experimentConfig.exptBlock1
-
-  timeline.push(taskBlock(block), countdown({ message: lang.countdown.message2 }), taskBlock(block2))
-
-  if (!envConfig.USE_MTURK) {
-    timeline.push(demographics, iusSurvey, debrief)
-    if (envConfig.USE_CAMERA) {
-      timeline.splice(1, 0, cameraStart())
-      timeline.push(cameraEnd(5000))
-    }
+  if (envConfig.USE_CAMERA) {
+    timeline.splice(1, 0, cameraStart())
+    timeline.push(cameraEnd(5000))
   }
 
   timeline.push(showMessage(envConfig, {

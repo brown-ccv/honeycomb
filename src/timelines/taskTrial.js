@@ -1,30 +1,24 @@
 // import trials
-import { showMessage, fixation } from "@brown-ccv/behavioral-task-trials";
+import { fixation } from "@brown-ccv/behavioral-task-trials";
 import { envConfig } from "../config/main";
-import { eventCodes } from "../config/main";
-import { earningsDisplay } from "../lib/markup/earnings";
+import choice from "../trials/choice"
+import { getRandomInt } from "../lib/utils"
+import showEarnings from "../trials/showEarnings"
 
-const taskTrial = (blockSettings, blockDetails, condition) => {
-  // timeline
+const taskTrial = (blockSettings, word) => {
+  // Set a random font color for the trial.
+  const colors = blockSettings.conditions
+  const color = colors[getRandomInt(colors.length)]
+
   let timeline = [
-    // fixation
+    // Just show the fixation dot.
     fixation(envConfig, {
       duration: 650,
     }),
-    // show condition
-    showMessage(envConfig, {
-      message: condition,
-      onstart: true,
-      taskCode: eventCodes.evidence,
-    }),
-    fixation(envConfig, {
-      duration: 650,
-    }),
-    // end the trial
-    showMessage(envConfig, {
-      stimulus: earningsDisplay(Math.random()),
-      taskCode: eventCodes.show_earnings,
-    }),
+    // Display a word and wait for user input.
+    choice(word, color, blockSettings.response_time),
+    // End the trial by displaying the participant's earnings.
+    showEarnings(1500)
   ];
 
   return {
