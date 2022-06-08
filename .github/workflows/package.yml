@@ -27,7 +27,11 @@ jobs:
            (github.event.inputs.os == 'linux' && fromJSON('["ubuntu-latest"]')) }}
 
     steps:
-    # Set up js package
+      # Rewrite "git:" repo urls to use "https:" instead, since GitHub Actions blocks port 9418 (as of Jan 2022).
+      - name: Rewrite "git:" repo urls to use "https:" instead.
+        run: git config --global url."https://github.com/".insteadOf "git://github.com/"
+
+      # Set up js package
       - uses: actions/checkout@v1
       - name: Use Node.js
         uses: actions/setup-node@v1
