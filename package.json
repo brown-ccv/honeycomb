@@ -44,7 +44,7 @@
     "package:mac": "electron-packager . --platform darwin --arch x64 --out dist/ --icon ./assets/icons/mac/icon.icns --overwrite",
     "package:linux": "electron-packager . --platform linux --arch x64 --icon ./assets/icons/mac/icon.icns --out dist/ --overwrite",
     "postpackage:windows": "electron-installer-windows --src dist/%npm_package_name%-win32-x64/ --dest dist/installers/ --overwrite --homepage https://ccv.brown.edu/",
-    "postpackage:linux": "electron-installer-debian --src dist/${npm_package_name}-linux-x64/ --dest dist/installers/ --arch x64 --overwrite",
+    "postpackage:linux": "electron-installer-debian --src dist/${npm_package_name}-linux-x64/ --dest dist/installers/ --arch amd64 --overwrite",
     "installer:mac": "electron-installer-dmg ./dist/${npm_package_name}-darwin-x64/${npm_package_name}.app ${npm_package_name}-${npm_package_version} --out ./dist/installers/ --icon ./assets/icons/mac/icon.icns --overwrite",
     "rebuild": "electron-rebuild",
     "eject": "react-scripts eject",

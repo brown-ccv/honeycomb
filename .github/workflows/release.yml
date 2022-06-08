@@ -80,8 +80,8 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/installers/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_x64.deb
-          asset_name: ${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_${{ matrix.setting }}_x64.deb
+          file: dist/installers/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
+          asset_name: ${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_${{ matrix.setting }}_amd64.deb
           tag: ${{ github.ref }}
       - name: Upload app to release - mac
         if: startsWith(matrix.os, 'mac')
