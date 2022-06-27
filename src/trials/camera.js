@@ -1,7 +1,6 @@
 import { lang, taskName, config} from '../config/main'
 import { photodiodeGhostBox } from '../lib/markup/photodiode'
 import { baseStimulus } from '../lib/markup/stimuli'
-import { jsPsych } from 'jspsych-react'
 
 
 let ipcRenderer = false;
@@ -23,7 +22,9 @@ function saveBlob(blob, media, participantId) {
   reader.readAsArrayBuffer(blob)
 }
 
-const cameraStart = () => {
+// As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
+// The jsPsych instance passed in here should be the same one used for the running task.
+const cameraStart = (jsPsych) => {
   document.title = taskName
   let markup = `
   <div class="d-flex flex-column align-items-center">
