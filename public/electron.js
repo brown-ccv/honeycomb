@@ -199,7 +199,7 @@ const getFullPath = (fileName) => {
 }
 
 // Read version file (git sha and branch)
-let git = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'config/version.json')));
+let git = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'config/git-version.json')));
 
 // Get Participant Id and Study Id from environment
 ipc.on('syncCredentials', (event) => {

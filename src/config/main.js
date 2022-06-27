@@ -7,6 +7,7 @@ import _ from "lodash";
 import { eventCodes } from "./trigger";
 import { init } from "@brown-ccv/behavioral-task-trials";
 import { getProlificId } from "../lib/utils";
+import app from './app-version'
 
 // mapping of letters to key codes
 const keys = {
@@ -24,7 +25,8 @@ const audioCodes = {
   type: "sine",
 };
 
-const taskName = "honeycomb template";
+const taskName = app.name;
+const taskVersion = app.version;
 
 // is this mechanical turk?
 let USE_MTURK = !jsPsych.turk.turkInfo().outsideTurk;
@@ -80,6 +82,7 @@ const config = init({
 
 export {
   taskName,
+  taskVersion,
   keys,
   defaultBlockSettings,
   lang,
