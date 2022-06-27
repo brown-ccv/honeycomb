@@ -28,17 +28,18 @@ if (window.location.hostname === "localhost") {
 // Add participant data and trial data to db
 const initParticipant = (participantId, studyId, startDate) => {
   // return promise with value true if participant and study id match, false otherwise
-    return db.collection(collectionName)
+  return db.collection(collectionName)
     .doc(studyId)
     .collection('participants')
     .doc(participantId)
     .collection('data')
     .doc(startDate)
-    .set({ start_time: startDate, app_version: window.navigator.appVersion, app_platform: window.navigator.platform, results: []})
-    .then(()=>{
+    .set({ start_time: startDate, app_version: window.navigator.appVersion, app_platform: window.navigator.platform, results: [] })
+    .then(() => {
       return true
     })
     .catch((error) => {
+      console.log(error)
       return false
     });
 };
@@ -49,7 +50,7 @@ const addToFirebase = (data) => {
   const participantId = data.participant_id;
   const studyId = data.study_id;
   const startDate = data.start_date
-  
+
   db.collection(collectionName)
     .doc(studyId)
     .collection('participants')

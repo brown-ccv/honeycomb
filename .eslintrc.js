@@ -4,7 +4,8 @@ module.exports = {
     'es6': true
   },
   'extends': [
-    'standard'
+    'eslint:recommended',
+    'plugin:react/recommended'
   ],
   'globals': {
     'Atomics': 'readonly',
@@ -21,5 +22,6 @@ module.exports = {
     'react'
   ],
   'rules': {
+    'react/prop-types': 'off'
   }
 }
