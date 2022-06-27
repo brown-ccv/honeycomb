@@ -1,7 +1,6 @@
 import firebase from "firebase";
 import 'firebase/firestore';
 
-require("dotenv").config();
 
 // Set collection name
 const collectionName = "participant_responses";
