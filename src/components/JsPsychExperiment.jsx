@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useMemo } from "react";
 import { initJsPsych } from 'jspsych'
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
-//import { tl } from "../timelines/main";
+import { buildTimeline } from "../timelines/main";
 
 function JsPsychExperiment({
   participantId,
@@ -24,8 +23,8 @@ function JsPsychExperiment({
     on_finish: (data) => dataFinishFunction(data),
   };
 
-  // Create the instance of jsPsych that we'll reuse throughout the experiment.
-  // As of jspsych 7, we create instances of jspsych as needed instead of importing globally.
+  // Create the instance of jsPsych that we'll reuse within the scoope of this JsPsychExperiment component.
+  // As of jspsych 7, we create our own jspsych instance(s) where needed instead of importing one global instance.
   const setUpJsPsych = () => {
     const jsPsych = initJsPsych(jsPsychOpts)
     jsPsych.data.addProperties({
@@ -38,16 +37,11 @@ function JsPsychExperiment({
   }
   const jsPsych = useMemo(setUpJsPsych, [participantId, studyId, startDate, taskVersion]);
 
-  // Build our experiment timeline (in this case a Honeycomb demo timeline, you could substitute your own here).
-  // const timeline = buildTimeline(jsPsych);
-  const timeline = [{
-    type: htmlKeyboardResponse,
-    stimulus: 'Hello world!',
-  }]
-  console.log(timeline[0])
+  // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
+  const timeline = buildTimeline(jsPsych)
 
-
-  // Set up even and lifecycle callbacks to start and stop jspsych.
+  // Set up event and lifecycle callbacks to start and stop jspsych.
+  // Inspration from jspsych-react: https://github.com/makebrainwaves/jspsych-react/blob/master/src/index.js
   const handleKeyEvent = e => {
     if (e.redispatched) {
       return;
@@ -57,7 +51,8 @@ function JsPsychExperiment({
     experimentDiv.current.dispatchEvent(new_event);
   };
 
-  // We might need to use useLayoutEffect instead of useEffect?
+  // These useEffect callbacks are similar to componentDidMount / componentWillUnmount.
+  // If necessary, useLayoutEffect callbacks might be even more similar.
   useEffect(() => {
     window.addEventListener("keyup", handleKeyEvent, true);
     window.addEventListener("keydown", handleKeyEvent, true);
@@ -69,20 +64,13 @@ function JsPsychExperiment({
       try {
         jsPsych.endExperiment("Ended Experiment");
       } catch (e) {
-        console.log("Experiment closed before unmount");
+        console.error("Experiment closed before unmount");
       }
     };
   });
 
-
-  //const tl = buildTimeline(jsPsych)
-
-  const message = `participantId ${participantId}, studyId ${studyId}, startDate ${startDate}, taskVersion ${taskVersion}`;
-  console.log(message)
-
   return (
     <div className="App">
-      Hello from Mars! {message}
       <div id={experimentDivId} style={{ height, width }} ref={experimentDiv} />
     </div>
   );

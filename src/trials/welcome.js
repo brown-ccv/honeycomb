@@ -1,3 +1,4 @@
+import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
 import { lang } from '../config/main'
 import { photodiodeGhostBox } from '../lib/markup/photodiode'
 import { baseStimulus } from '../lib/markup/stimuli'
@@ -7,7 +8,7 @@ const pleaseBiggen = () => {
                  photodiodeGhostBox()
 
   return {
-    type: 'html_keyboard_response',
+    type: htmlKeyboardResponse,
     stimulus: stimulus,
     prompt:  lang.prompt.continue.press,
     response_ends_trial: true
@@ -19,7 +20,7 @@ const welcomeMessage = () => {
                  photodiodeGhostBox()
 
   return {
-    type: 'html_keyboard_response',
+    type: htmlKeyboardResponse,
     stimulus: stimulus,
     prompt:  lang.prompt.continue.press,
     response_ends_trial: true
@@ -27,7 +28,7 @@ const welcomeMessage = () => {
 }
 
 const welcome = {
-  type: 'html_keyboard_response',
+  type: htmlKeyboardResponse,
   timeline: [
     pleaseBiggen(),
     welcomeMessage()

@@ -1,10 +1,12 @@
+import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
+import htmlButtonResponse from '@jspsych/plugin-html-button-response'
+import { showMessage } from "@brown-ccv/behavioral-task-trials";
 import holdUpMarker from "../trials/holdUpMarker";
 import startCode from "../trials/startCode";
 import { lang, config } from "../config/main";
-import { showMessage } from "@brown-ccv/behavioral-task-trials";
 
 let timeline = [showMessage(config, {
-  responseType: "html_button_response",
+  responseType: htmlButtonResponse,
   message: lang.task.name,
   responseEndsTrial: true,
   buttons: [lang.prompt.continue.button],
@@ -15,11 +17,10 @@ if (config.USE_PHOTODIODE) {
 }
 
 const preamble = {
-  type: "html_keyboard_response",
+  type: htmlKeyboardResponse,
   stimulus: "",
   timeline: timeline
 };
-
 
 
 export default preamble;
