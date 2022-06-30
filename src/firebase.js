@@ -39,7 +39,7 @@ const initParticipant = (participantId, studyId, startDate) => {
       return true
     })
     .catch((error) => {
-      console.log(error)
+      console.error(error)
       return false
     });
 };
