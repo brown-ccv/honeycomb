@@ -34,7 +34,7 @@
   },
   "scripts": {
     "commit": "git-cz",
-    "postinstall": "node git-version.js && node app-version.js && npm run rebuild",
+    "postinstall": "node version.js && npm run rebuild",
     "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" react-scripts start",
     "start:browser": "react-scripts start",
     "test": "react-scripts test",

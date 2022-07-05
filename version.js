@@ -17,9 +17,9 @@ else {
 }
 
 
-fs.writeFile('public/config/git-version.json', JSON.stringify(git))
+fs.writeFile('public/config/version.json', JSON.stringify(git))
   .then(() => {
-      console.log(`Saved git version file with rev: ${git.sha}, branch: ${git.ref}`);
+      console.log(`Saved version file with rev: ${git.sha}, branch: ${git.ref}`);
   })
   .catch((err) => {
       console.log(err);
