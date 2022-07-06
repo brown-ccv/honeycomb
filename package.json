@@ -15,12 +15,12 @@
   "dependencies": {
     "@brown-ccv/behavioral-task-trials": "^1.0.0",
     "@fortawesome/fontawesome-free": "^5.9.0",
-    "bootstrap": "^4.3.1",
+    "bootstrap": "^5.2.0-beta1",
     "electron-log": "^3.0.9",
     "electron-squirrel-startup": "^1.0.0",
     "event-marker": "git+https://github.com/brown-ccv/event-marker.git",
     "execa": "^5.0.0",
-    "firebase": "^8.2.6",
+    "firebase": "^9.8.4",
     "fs-extra": "^8.1.0",
     "jquery": "^3.4.1",
     "jspsych-react": "^0.2.2",
@@ -29,7 +29,7 @@
     "react": "^16.8.6",
     "react-bootstrap": "^1.6.1",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1",
+    "react-scripts": "5.0.1",
     "typescript": "^3.6.4"
   },
   "scripts": {
@@ -71,9 +71,6 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -98,17 +95,11 @@
     "electron-devtools-installer": "^3.2.0",
     "electron-packager": "^14.0.6",
     "electron-rebuild": "^3.2.7",
-    "eslint": "^5.16.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^9.2.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.14.3",
-    "eslint-plugin-standard": "^4.0.1",
     "firebase-tools": "^11.0.1",
     "require-context.macro": "^1.1.1"
   },
   "babel": {
-    "plugin": [
+    "plugins": [
       "macros"
     ]
   },
