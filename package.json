@@ -16,7 +16,7 @@
     "@brown-ccv/behavioral-task-trials": "^2.0.0",
     "@fortawesome/fontawesome-free": "^5.9.0",
     "bootstrap": "^5.2.0-beta1",
-    "electron-log": "^3.0.9",
+    "electron-log": "^4.4.8",
     "electron-squirrel-startup": "^1.0.0",
     "event-marker": "git+https://github.com/brown-ccv/event-marker.git",
     "execa": "^5.0.0",
@@ -73,6 +73,27 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
+    },
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-dmg",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "electron_test"
+          }
+        }
+      ]
     }
   },
   "browserslist": {
@@ -95,21 +116,17 @@
     "cz-conventional-changelog": "^3.2.0",
     "dotenv": "^8.2.0",
     "dotenv-cli": "^4.0.0",
-    "electron": "6.1.1",
-    "electron-devtools-installer": "^3.2.0",
-    "electron-packager": "^14.0.6",
-    "electron-rebuild": "^3.2.7",
     "firebase-tools": "^11.0.1",
-    "require-context.macro": "^1.1.1"
+    "require-context.macro": "^1.1.1",
+    "@electron-forge/cli": "^6.0.0-beta.64",
+    "@electron-forge/maker-deb": "^6.0.0-beta.64",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.64",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
+    "electron": "19.0.8"
   },
   "babel": {
     "plugins": [
       "macros"
     ]
-  },
-  "optionalDependencies": {
-    "electron-installer-debian": "^2.0.0",
-    "electron-installer-dmg": "^3.0.0",
-    "electron-installer-windows": "^2.0.0"
   }
 }
