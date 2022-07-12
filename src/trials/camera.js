@@ -1,7 +1,8 @@
+import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
+import htmlButtonResponse from '@jspsych/plugin-html-button-response'
 import { lang, taskName, config} from '../config/main'
 import { photodiodeGhostBox } from '../lib/markup/photodiode'
 import { baseStimulus } from '../lib/markup/stimuli'
-import { jsPsych } from 'jspsych-react'
 
 
 let ipcRenderer = false;
@@ -23,7 +24,9 @@ function saveBlob(blob, media, participantId) {
   reader.readAsArrayBuffer(blob)
 }
 
-const cameraStart = () => {
+// As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
+// The jsPsych instance passed in here should be the same one used for the running task.
+const cameraStart = (jsPsych) => {
   document.title = taskName
   let markup = `
   <div class="d-flex flex-column align-items-center">
@@ -35,7 +38,7 @@ const cameraStart = () => {
                  photodiodeGhostBox()
 
   return {
-    type: 'html_button_response',
+    type: htmlButtonResponse,
     stimulus: stimulus,
     choices: [ lang.prompt.continue.button],
     response_ends_trial: true,
@@ -113,7 +116,7 @@ const cameraEnd = (duration) => {
   let stimulus = baseStimulus(`<h1>${lang.task.recording_end}</h1>`, true) + photodiodeGhostBox()
 
    return {
-    type: 'html_keyboard_response',
+    type: htmlKeyboardResponse,
     stimulus: stimulus,
     trial_duration: duration,
     on_load: () => {

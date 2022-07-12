@@ -1,3 +1,5 @@
+import htmlButtonResponse from '@jspsych/plugin-html-button-response'
+import surveyMultiselect from '@jspsych/plugin-survey-multi-select'
 import { lang, config } from "../config/main";
 import {
   survey,
@@ -59,7 +61,7 @@ const iusSurvey = multiSurvey({
 // Debrief Page (non-mTurk)
 const debriefOptions = lang.quiz.answer.debriefing.confirm_completion;
 const debrief = showMessage(config, {
-  responseType: "html_button_response",
+  responseType: htmlButtonResponse,
   responseEndsTrial: true,
   buttons: [debriefOptions],
 });
@@ -127,7 +129,7 @@ const diagnosesOptions = {
 };
 
 const multiSelectQuestions = multiSurvey({
-  responseType: "survey_multi_select",
+  responseType: surveyMultiselect,
   preamble: demographicsPreamble3,
   prompts: [diagnosesQuestions],
   ansChoices: diagnosesOptions,

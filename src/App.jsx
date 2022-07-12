@@ -7,11 +7,9 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import Login from './components/Login'
 import JsPsychExperiment from './components/JsPsychExperiment'
 
-import { jsPsych } from 'jspsych-react'
-import { getTurkUniqueId, getProlificId, sleep } from './lib/utils'
+import { getProlificId, sleep } from './lib/utils'
 import { initParticipant, addToFirebase } from './firebase'
-
-import { config, taskVersion } from './config/main'
+import { config, taskVersion, turkUniqueId } from './config/main'
 
 function App () {
   // Variables for time
@@ -48,8 +46,8 @@ function App () {
   }
 
   // On finish functions for electron, Mturk
-  const defaultFinishFunction = () => {
-    jsPsych.data.get().localSave('csv', 'neuro-task.csv')
+  const defaultFinishFunction = (data) => {
+    data.localSave('csv', 'neuro-task.csv')
   }
   const desktopFinishFunction = () => {
     ipcRenderer.send('end', 'true')
@@ -63,16 +61,12 @@ function App () {
     completePsiturk()
   }
 
-  // Function to add jspsych data on login
+  // Function to capture login data, so we can pass it on to JsPsychExperiment.
   const setLoggedIn = useCallback(
     (loggedIn, studyId, participantId) => {
       if (loggedIn) {
-        jsPsych.data.addProperties({
-          participant_id: participantId,
-          study_id: studyId,
-          start_date: startDate,
-          task_version: taskVersion
-        })
+        setEnvParticipantId(participantId)
+        setEnvStudyId(studyId)
       }
       setLogin(loggedIn)
     },
@@ -109,10 +103,9 @@ function App () {
       if (config.USE_MTURK) {
         /* eslint-disable */
         window.lodash = _.noConflict()
-        const turkId = getTurkUniqueId()
-        setPsiturk(new PsiTurk(turkId, '/complete'))
+        setPsiturk(new PsiTurk(turkUniqueId, '/complete'))
         setMethod('mturk')
-        setLoggedIn(true, 'mturk', turkId)
+        setLoggedIn(true, 'mturk', turkUniqueId)
         /* eslint-enable */
       } else if (config.USE_PROLIFIC) {
         const pID = getProlificId()
@@ -153,6 +146,10 @@ function App () {
       <>
         {loggedIn ? (
           <JsPsychExperiment
+            participantId={envParticipantId}
+            studyId={envStudyId}
+            startDate={startDate}
+            taskVersion={taskVersion}
             dataUpdateFunction={
               {
                 desktop: desktopUpdateFunction,

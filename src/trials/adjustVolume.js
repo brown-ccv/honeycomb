@@ -1,3 +1,4 @@
+import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
 import { lang } from '../config/main'
 import { baseStimulus } from '../lib/markup/stimuli'
 
@@ -9,7 +10,7 @@ const adjustVolume = () => {
     `, true)
     
     return {
-        type: 'html_keyboard_response',
+        type: htmlKeyboardResponse,
         stimulus: stimulus,
         prompt:  lang.prompt.continue.press,
         response_ends_trial: true

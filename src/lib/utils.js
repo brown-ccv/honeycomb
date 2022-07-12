@@ -1,4 +1,3 @@
-import { jsPsych } from 'jspsych-react'
 import requireContext from 'require-context.macro'
 
 const sleep = (ms) => {
@@ -33,18 +32,20 @@ const generateWaitSet = (trial, waitTime) => {
   return [waitTrial, trial]
 }
 
-const keypressResponse = (info) => {
-  const data = {
-    key_press: info.key
+// As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
+// The jsPsych instance passed in here should be the same one used for the running task.
+const startKeypressListener = (jsPsych) => {
+  const keypressResponse = (info) => {
+    const data = {
+      key_press: info.key
+    }
+
+    jsPsych.finishTrial(data)
   }
 
-  jsPsych.finishTrial(data)
-}
-
-const startKeypressListener = () => {
   let keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
     callback_function: keypressResponse,
-    valid_responses: jsPsych.ALL_KEYS,
+    valid_responses: ['ALL_KEYS'],
     persist: false
   })
 
@@ -57,12 +58,6 @@ const importAll = (r) => {
 }
 
 const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
-
-const getTurkUniqueId = () => {
-  const turkInfo = jsPsych.turk.turkInfo()
-  const uniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`
-  return uniqueId
-}
 
 const getQueryVariable = (variable) => {
   let query = window.location.search.substring(1);
@@ -105,6 +100,5 @@ export {
   images,
   startKeypressListener,
   getProlificId,
-  getTurkUniqueId,
   beep
 }

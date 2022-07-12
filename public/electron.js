@@ -2,6 +2,7 @@
 if(require('electron-squirrel-startup')) return 
 
 // Modules to control application life and create native browser window
+const imageKeyboardResponse = require('@jspsych/plugin-html-keyboard-response')
 const { app, BrowserWindow, dialog } = require('electron')
 const path = require('path')
 const ipc = require('electron').ipcMain
@@ -237,7 +238,7 @@ ipc.on('data', (event, args) => {
     stream.write(JSON.stringify({...args, git}))
 
     // Copy provocation images to participant's data folder
-    if (args.trial_type === 'image_keyboard_response') images.push(args.stimulus.slice(7))
+    if (args.trial_type === imageKeyboardResponse) images.push(args.stimulus.slice(7))
   }
 })
 
