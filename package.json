@@ -44,12 +44,9 @@
     "test": "react-scripts test",
     "prebuild": "electron-rebuild",
     "build": "react-scripts build",
-    "package:windows": "electron-packager . --platform win32 --arch x64 --icon ./assets/icons/win/icon.ico --out dist/ --overwrite --asar ",
-    "package:mac": "electron-packager . --platform darwin --arch x64 --out dist/ --icon ./assets/icons/mac/icon.icns --overwrite",
-    "package:linux": "electron-packager . --platform linux --arch x64 --icon ./assets/icons/mac/icon.icns --out dist/ --overwrite",
-    "postpackage:windows": "electron-installer-windows --src dist/%npm_package_name%-win32-x64/ --dest dist/installers/ --overwrite --homepage https://ccv.brown.edu/",
-    "postpackage:linux": "electron-installer-debian --src dist/${npm_package_name}-linux-x64/ --dest dist/installers/ --arch amd64 --overwrite",
-    "installer:mac": "electron-installer-dmg ./dist/${npm_package_name}-darwin-x64/${npm_package_name}.app ${npm_package_name}-${npm_package_version} --out ./dist/installers/ --icon ./assets/icons/mac/icon.icns --overwrite",
+    "package:windows": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
+    "package:linux": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-deb",
+    "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg",
     "rebuild": "electron-rebuild",
     "eject": "react-scripts eject",
     "electron": "electron .",
@@ -75,14 +72,22 @@
       "path": "./node_modules/cz-conventional-changelog"
     },
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "asar": true
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-deb",
-          "config": {}
+          "config": {
+            "icon": "./assets/icons/mac/icon.icns"
+          }
         },
         {
           "name": "@electron-forge/maker-dmg",
+          "config": {
+            "icon": "./assets/icons/mac/icon.icns",
+            "overwrite": true
+          },
           "platforms": [
             "darwin"
           ]
@@ -90,7 +95,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "electron_test"
+            "iconUrl": "./assets/icons/win/icon.ico"
           }
         }
       ]

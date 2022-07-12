@@ -58,21 +58,14 @@ jobs:
       - name: package electron - mac
         if: startsWith(matrix.os, 'mac')
         run: npm run package:mac
-      - name: npm rebuild - mac
-        if: startsWith(matrix.os, 'mac')
-        run: npm rebuild
-      - name: Mac installer
-        if: startsWith(matrix.os, 'mac')
-        run: npm run installer:mac
 
       # Upload installers to github release
-
       - name: Upload app to release - windows
         if: startsWith(matrix.os, 'windows')
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-setup.exe
+          file: out/make/squirrel/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-setup.exe
           asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.setting }}-setup.exe
           tag: ${{ github.ref }}
       - name: Upload app to release - linux
@@ -80,7 +73,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/installers/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
+          file: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
           asset_name: ${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_${{ matrix.setting }}_amd64.deb
           tag: ${{ github.ref }}
       - name: Upload app to release - mac
@@ -88,7 +81,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
+          file: out/make/dmg/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
           asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.setting }}.dmg
           tag: ${{ github.ref }}
 

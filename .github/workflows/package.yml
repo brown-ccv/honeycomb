@@ -68,12 +68,6 @@ jobs:
       - name: package electron - mac
         if: startsWith(matrix.os, 'mac')
         run: npm run package:mac
-      - name: npm rebuild - mac
-        if: startsWith(matrix.os, 'mac')
-        run: npm rebuild
-      - name: Mac installer
-        if: startsWith(matrix.os, 'mac')
-        run: npm run installer:mac
 
       # Upload installers to github action
       - name: upload win-installer
@@ -81,19 +75,19 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         with:
           name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
-          path: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-setup.exe
+          path: out/make/squirrel/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-setup.exe
       - name: upload mac-installer
         uses: actions/upload-artifact@master
         if: startsWith(matrix.os, 'mac')
         with:
           name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
-          path: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
+          path: out/make/dmg/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
       - name: upload linux-installer
         uses: actions/upload-artifact@master
         if: startsWith(matrix.os, 'ubuntu')
         with:
           name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
-          path: dist/installers/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
+          path: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
 
       # Build PsiTurk - linux only
       - name: Set up Python 3.7
