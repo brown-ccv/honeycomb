@@ -81,8 +81,8 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: out/make/dmg/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
-          out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-x64.dmg
+          file: out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-x64.dmg
+          asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.setting }}.dmg
           tag: ${{ github.ref }}
 
       # Update github pages - linux only
