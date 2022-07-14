@@ -16,7 +16,7 @@
     "@brown-ccv/behavioral-task-trials": "^2.0.0",
     "@fortawesome/fontawesome-free": "^5.9.0",
     "bootstrap": "^5.2.0-beta1",
-    "electron-log": "^3.0.9",
+    "electron-log": "^4.4.8",
     "electron-squirrel-startup": "^1.0.0",
     "event-marker": "git+https://github.com/brown-ccv/event-marker.git",
     "execa": "^5.0.0",
@@ -44,12 +44,9 @@
     "test": "react-scripts test",
     "prebuild": "electron-rebuild",
     "build": "react-scripts build",
-    "package:windows": "electron-packager . --platform win32 --arch x64 --icon ./assets/icons/win/icon.ico --out dist/ --overwrite --asar ",
-    "package:mac": "electron-packager . --platform darwin --arch x64 --out dist/ --icon ./assets/icons/mac/icon.icns --overwrite",
-    "package:linux": "electron-packager . --platform linux --arch x64 --icon ./assets/icons/mac/icon.icns --out dist/ --overwrite",
-    "postpackage:windows": "electron-installer-windows --src dist/%npm_package_name%-win32-x64/ --dest dist/installers/ --overwrite --homepage https://ccv.brown.edu/",
-    "postpackage:linux": "electron-installer-debian --src dist/${npm_package_name}-linux-x64/ --dest dist/installers/ --arch amd64 --overwrite",
-    "installer:mac": "electron-installer-dmg ./dist/${npm_package_name}-darwin-x64/${npm_package_name}.app ${npm_package_name}-${npm_package_version} --out ./dist/installers/ --icon ./assets/icons/mac/icon.icns --overwrite",
+    "package:windows": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
+    "package:linux": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-deb",
+    "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg",
     "rebuild": "electron-rebuild",
     "eject": "react-scripts eject",
     "electron": "electron .",
@@ -73,6 +70,35 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
+    },
+    "forge": {
+      "packagerConfig": {
+        "asar": true
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {
+            "icon": "./assets/icons/mac/icon.icns"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-dmg",
+          "config": {
+            "icon": "./assets/icons/mac/icon.icns",
+            "overwrite": true
+          },
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "iconUrl": "https://raw.githubusercontent.com/brown-ccv/honeycomb/main/assets/icons/win/icon.ico"
+          }
+        }
+      ]
     }
   },
   "browserslist": {
@@ -95,21 +121,17 @@
     "cz-conventional-changelog": "^3.2.0",
     "dotenv": "^8.2.0",
     "dotenv-cli": "^4.0.0",
-    "electron": "6.1.1",
-    "electron-devtools-installer": "^3.2.0",
-    "electron-packager": "^14.0.6",
-    "electron-rebuild": "^3.2.7",
     "firebase-tools": "^11.0.1",
-    "require-context.macro": "^1.1.1"
+    "require-context.macro": "^1.1.1",
+    "@electron-forge/cli": "^6.0.0-beta.64",
+    "@electron-forge/maker-deb": "^6.0.0-beta.64",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.64",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
+    "electron": "19.0.8"
   },
   "babel": {
     "plugins": [
       "macros"
     ]
-  },
-  "optionalDependencies": {
-    "electron-installer-debian": "^2.0.0",
-    "electron-installer-dmg": "^3.0.0",
-    "electron-installer-windows": "^2.0.0"
   }
 }
