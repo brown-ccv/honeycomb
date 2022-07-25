@@ -12,8 +12,11 @@ import { initParticipant, addToFirebase } from './firebase'
 import { config, taskVersion, turkUniqueId } from './config/main'
 
 function App () {
-  // Variables for time
-  const startDate = new Date().toISOString()
+  // Remember startDate between renders.
+  // This is necessary to allow Firebase to create a timestamped document at Login time,
+  // and then to find and update the *same* timestamped document after each trial in JsPsychExperiment.
+  const [startDate] = useState(new Date().toISOString())
+
   // Variables for login
   const [loggedIn, setLogin] = useState(false)
   const [ipcRenderer, setRenderer] = useState(false)
