@@ -53,6 +53,7 @@
     "electron-dev": "cross-env ELECTRON_START_URL=\"http://localhost:3000\" electron .",
     "firebase:dev": "firebase emulators:start --import emulator_data",
     "firebase:savedev": "firebase emulators:export emulator_data",
+    "firebase:download": "dotenv -e env/.env.firebase-download node download-response-data.js",
     "dev": "concurrently --kill-others \"npm:start\" \"sleep 10 && npm run electron-dev\"",
     "dev:home": "dotenv -e env/.env.home npm run dev",
     "dev:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run dev",
