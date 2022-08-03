@@ -39,8 +39,8 @@
   "scripts": {
     "commit": "git-cz",
     "postinstall": "node version.js && npm run rebuild",
-    "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" react-scripts start",
-    "start:browser": "react-scripts start",
+    "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
+    "start:browser": "cross-env IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
     "test": "react-scripts test",
     "prebuild": "electron-rebuild",
     "build": "react-scripts build",
