@@ -19,7 +19,8 @@ import {
 // Honeycomb will combine these custom options with other options needed by Honyecomb.
 const jsPsychOptions = {
   on_trial_finish: function (data) {
-    console.log('A trial just ended.');
+    console.log('A trial just ended, here are the latest data:');
+    console.log(data);
   },
   default_iti: 250
 };
