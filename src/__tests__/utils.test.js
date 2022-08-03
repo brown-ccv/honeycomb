@@ -10,7 +10,7 @@ describe('generic utility functions', function() {
   })
 
   it('should load images', function() {
-    assert.lengthOf(util.images, 2, 'there are two images in the assets folder')
+    assert.hasAllKeys(util.images, ['blue_payout_correct_10.png', 'blue_payout_correct_100.png'])
   })
 
   it('should flip a coin', function() {
