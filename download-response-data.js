@@ -22,14 +22,15 @@
  *  - Click on "Users and permissions"
  *  - Click on the "Service accounts" tab
  *  - Near the bottom click "Generate new Private key"
- *  - Save the key on your local machine and remember where you put it
+ *  - Save the key on your local machine and remember where you put it (don't save it inside this repo)
  *
  * This Private key is a secret, so be careful with it!
+ * Do not save it inside this repo or commit it to git.
  * Do not share it.
  * You may wish to restrict the file permissions on it so only you can access it.
  * For example: "chmod 600 path/to/serviceAccountKey.json".
  * You may also wish to delete it when you're done.
- * Do not share it.
+ * Do not share it!
  *
  * In this repo:
  *  - Edit the file env/.env.firebase-download
