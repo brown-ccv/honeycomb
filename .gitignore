@@ -28,3 +28,5 @@ yarn-error.log*
 
 psiturkit/*_turk
 .firebase
+.npmrc
+env/.env.firebase
