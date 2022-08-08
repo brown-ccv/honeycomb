@@ -15,8 +15,21 @@ import {
   debrief,
 } from "../trials/quizTrials";
 
-// As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
-// The jsPsych instance passed in here should be the same one used for the running task.
+// Add your jsPsych options here.
+// Honeycomb will combine these custom options with other options needed by Honyecomb.
+const jsPsychOptions = {
+  on_trial_finish: function (data) {
+    console.log('A trial just ended, here are the latest data:');
+    console.log(data);
+  },
+  default_iti: 250
+};
+
+// Add your jsPsych timeline here.
+// Honeycomb will call this function for us after the subject logs in, and run the resulting timeline.
+// The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
+const buildTimeline = (jsPsych) => config.USE_MTURK ? mturkTimeline : buildPrimaryTimeline(jsPsych);
+
 const buildPrimaryTimeline = (jsPsych) => {
   let primaryTimeline = [
     preamble,
@@ -56,4 +69,5 @@ const mturkTimeline = [
   }),
 ];
 
-export const buildTimeline = (jsPsych) => config.USE_MTURK ? mturkTimeline : buildPrimaryTimeline(jsPsych);
+// Honeycomb, please include these options, and please get the timeline from this function.
+export { jsPsychOptions, buildTimeline };

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useMemo } from "react";
 import { initJsPsych } from 'jspsych'
-import { buildTimeline } from "../timelines/main";
+import { jsPsychOptions, buildTimeline } from "../timelines/main";
 
 function JsPsychExperiment({
   participantId,
@@ -17,7 +17,9 @@ function JsPsychExperiment({
   const experimentDivId = 'experimentWindow';
   const experimentDiv = useRef(null);
 
-  const jsPsychOpts = {
+  // Combine custom options imported from timelines/maine.js, with necessary Honeycomb options.
+  const combinedOptions = {
+    ...jsPsychOptions,
     display_element: experimentDivId,
     on_data_update: (data) => dataUpdateFunction(data),
     on_finish: (data) => dataFinishFunction(data),
@@ -26,7 +28,7 @@ function JsPsychExperiment({
   // Create the instance of jsPsych that we'll reuse within the scoope of this JsPsychExperiment component.
   // As of jspsych 7, we create our own jspsych instance(s) where needed instead of importing one global instance.
   const setUpJsPsych = () => {
-    const jsPsych = initJsPsych(jsPsychOpts)
+    const jsPsych = initJsPsych(combinedOptions)
     jsPsych.data.addProperties({
       participant_id: participantId,
       study_id: studyId,

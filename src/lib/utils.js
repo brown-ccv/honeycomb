@@ -52,9 +52,19 @@ const startKeypressListener = (jsPsych) => {
   return keyboardListener
 }
 
-// import images
+// Discover and import images in src/assets/images.
+// This produces an object that maps friendly image file names to obscure webpack path names.
+// For example:
+//   {
+//     image1.png: '/static/media/image1.5dca7a2a50fb8b633fd5.png',
+//     image2.png: '/static/media/image2.5dca7a2a50fb8b633fd5.png'
+//   }
 const importAll = (r) => {
-  return r.keys().map(r);
+  const importImageByName = (allImages, imageName) => {
+    const friendlyName = imageName.replace('./', '');
+    return { ...allImages, [friendlyName]: r(imageName) };
+  };
+  return r.keys().reduce(importImageByName, {});
 }
 
 const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
