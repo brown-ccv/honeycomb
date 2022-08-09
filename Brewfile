@@ -3,5 +3,5 @@
 
 brew "git"
 brew "node"
-brew "electron"
+cask "electron"
 brew "firebase-cli"
