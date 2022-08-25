@@ -15,6 +15,10 @@
   "dependencies": {
     "@brown-ccv/behavioral-task-trials": "^2.0.0",
     "@fortawesome/fontawesome-free": "^5.9.0",
+    "@jspsych/plugin-html-button-response": "^1.1.1",
+    "@jspsych/plugin-html-keyboard-response": "^1.1.1",
+    "@jspsych/plugin-image-keyboard-response": "^1.1.1",
+    "@jspsych/plugin-survey-multi-select": "^1.1.1",
     "bootstrap": "^5.2.0-beta1",
     "electron-log": "^4.4.8",
     "electron-squirrel-startup": "^1.0.0",
@@ -24,10 +28,6 @@
     "fs-extra": "^8.1.0",
     "jquery": "^3.4.1",
     "jspsych": "^7.2.3",
-    "@jspsych/plugin-html-keyboard-response": "^1.1.1",
-    "@jspsych/plugin-html-button-response": "^1.1.1",
-    "@jspsych/plugin-image-keyboard-response": "^1.1.1",
-    "@jspsych/plugin-survey-multi-select": "^1.1.1",
     "lodash": "^4.17.19",
     "popper.js": "^1.16.0",
     "react": "^16.8.6",
@@ -115,6 +115,10 @@
     ]
   },
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.64",
+    "@electron-forge/maker-deb": "^6.0.0-beta.64",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.64",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
     "babel-plugin-macros": "^2.6.1",
     "chai": "^4.2.0",
     "concurrently": "^4.1.2",
@@ -122,13 +126,10 @@
     "cz-conventional-changelog": "^3.2.0",
     "dotenv": "^8.2.0",
     "dotenv-cli": "^4.0.0",
+    "electron": "19.0.8",
+    "firebase-admin": "^11.0.1",
     "firebase-tools": "^11.0.1",
-    "require-context.macro": "^1.1.1",
-    "@electron-forge/cli": "^6.0.0-beta.64",
-    "@electron-forge/maker-deb": "^6.0.0-beta.64",
-    "@electron-forge/maker-dmg": "^6.0.0-beta.64",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
-    "electron": "19.0.8"
+    "require-context.macro": "^1.1.1"
   },
   "babel": {
     "plugins": [
