@@ -33,13 +33,14 @@ let mainWindow
 function createWindow () {
   // Create the browser window.
   if (process.env.ELECTRON_START_URL) { // in dev mode, disable web security to allow local file loading
+    console.log(process.env.ELECTRON_START_URL)
     mainWindow = new BrowserWindow({
       width: 1500,
       height: 900,
       icon: './favicon.ico',
       webPreferences: {
         nodeIntegration: true,
-        webSecurity: false
+        contextIsolation: false
       }
     })
   } else {
@@ -49,7 +50,8 @@ function createWindow () {
       frame: false,
       webPreferences: {
         nodeIntegration: true,
-        webSecurity: true
+        webSecurity: true,
+        contextIsolation: false
       }
     })
   }
