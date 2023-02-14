@@ -2,7 +2,6 @@ import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
 import taskTrial from './taskTrial'
 import { generateStartingOpts } from '../lib/taskUtils'
 
-
 const taskBlock = (blockSettings) => {
   // initialize block
   const startingOpts = generateStartingOpts(blockSettings)
@@ -14,9 +13,9 @@ const taskBlock = (blockSettings) => {
   }
 
   // timeline = loop through trials
-  let timeline = startingOpts.map((condition) => taskTrial(blockSettings, blockDetails, condition))
+  const timeline = startingOpts.map((condition) => taskTrial(blockSettings, blockDetails, condition))
 
-  let blockStart = {
+  const blockStart = {
     type: htmlKeyboardResponse,
     stimulus: '',
     trial_duration: 1,
@@ -27,7 +26,7 @@ const taskBlock = (blockSettings) => {
 
   return {
     type: htmlKeyboardResponse,
-    timeline: timeline
+    timeline
   }
 }
 

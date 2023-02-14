@@ -104,12 +104,10 @@ function App () {
     } else {
       // If MTURK
       if (config.USE_MTURK) {
-        /* eslint-disable */
         window.lodash = _.noConflict()
         setPsiturk(new PsiTurk(turkUniqueId, '/complete'))
         setMethod('mturk')
         setLoggedIn(true, 'mturk', turkUniqueId)
-        /* eslint-enable */
       } else if (config.USE_PROLIFIC) {
         const pID = getProlificId()
         if (config.USE_FIREBASE && pID) {
@@ -133,13 +131,12 @@ function App () {
         setMethod('default')
       }
     }
-    // eslint-disable-next-line
   }, [])
 
   if (reject) {
     return (
-      <div className="centered-h-v">
-        <div className="width-50 alert alert-danger">
+      <div className='centered-h-v'>
+        <div className='width-50 alert alert-danger'>
           Please ask your task provider to enable firebase.
         </div>
       </div>
@@ -147,21 +144,22 @@ function App () {
   } else {
     return (
       <>
-        {loggedIn ? (
-          <JsPsychExperiment
-            participantId={envParticipantId}
-            studyId={envStudyId}
-            startDate={startDate}
-            taskVersion={taskVersion}
-            dataUpdateFunction={
+        {loggedIn
+          ? (
+            <JsPsychExperiment
+              participantId={envParticipantId}
+              studyId={envStudyId}
+              startDate={startDate}
+              taskVersion={taskVersion}
+              dataUpdateFunction={
               {
                 desktop: desktopUpdateFunction,
                 firebase: firebaseUpdateFunction,
                 mturk: psiturkUpdateFunction,
-                default: defaultFunction,
+                default: defaultFunction
               }[currentMethod]
             }
-            dataFinishFunction={
+              dataFinishFunction={
               {
                 desktop: desktopFinishFunction,
                 mturk: psiturkFinishFunction,
@@ -169,21 +167,22 @@ function App () {
                 default: defaultFinishFunction
               }[currentMethod]
             }
-          />
-        ) : (
-          <Login
-            validationFunction={
+            />
+            )
+          : (
+            <Login
+              validationFunction={
               {
                 desktop: defaultValidation,
                 default: defaultValidation,
-                firebase: firebaseValidation,
+                firebase: firebaseValidation
               }[currentMethod]
             }
-            envParticipantId={envParticipantId}
-            envStudyId={envStudyId}
-            onLogin={setLoggedIn}
-          />
-        )}
+              envParticipantId={envParticipantId}
+              envStudyId={envStudyId}
+              onLogin={setLoggedIn}
+            />
+            )}
       </>
     )
   }

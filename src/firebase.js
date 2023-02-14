@@ -1,28 +1,26 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/firestore';
-
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/firestore'
 
 // Set collection name
-const collectionName = "participant_responses";
+const collectionName = 'participant_responses'
 
 // Firebase config
-let config = {
+const config = {
   apiKey: process.env.REACT_APP_apiKey,
   authDomain: process.env.REACT_APP_authDomain,
   databaseURL: process.env.REACT_APP_databaseURL,
-  projectId: process.env.REACT_APP_projectId || "no-firebase",
+  projectId: process.env.REACT_APP_projectId || 'no-firebase',
   storageBucket: process.env.REACT_APP_storageBucket,
   messagingSenderId: process.env.REACT_APP_messagingSenderId,
-  appId: process.env.REACT_APP_appId,
-};
-
+  appId: process.env.REACT_APP_appId
+}
 
 // Get a Firestore instance
-var db = firebase.initializeApp(config).firestore();
+const db = firebase.initializeApp(config).firestore()
 
 // Use emulator if on localhost
-if (window.location.hostname === "localhost") {
-  db.useEmulator("localhost", 8080);
+if (window.location.hostname === 'localhost') {
+  db.useEmulator('localhost', 8080)
 }
 
 // Add participant data and trial data to db
@@ -41,14 +39,14 @@ const initParticipant = (participantId, studyId, startDate) => {
     .catch((error) => {
       console.error(error)
       return false
-    });
-};
+    })
+}
 
 // Add inidividual trials to db
 const addToFirebase = (data) => {
   console.log(data)
-  const participantId = data.participant_id;
-  const studyId = data.study_id;
+  const participantId = data.participant_id
+  const studyId = data.study_id
   const startDate = data.start_date
 
   db.collection(collectionName)
@@ -58,7 +56,7 @@ const addToFirebase = (data) => {
     .collection('data')
     .doc(startDate)
     .update('results', firebase.firestore.FieldValue.arrayUnion(data))
-};
+}
 
 // Export types that exists in Firestore
 export {
@@ -66,6 +64,6 @@ export {
   collectionName,
   initParticipant,
   addToFirebase
-};
+}
 
-export default firebase;
+export default firebase
