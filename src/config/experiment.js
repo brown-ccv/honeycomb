@@ -3,7 +3,7 @@ import { envConfig } from "./main"
 import path from "path"
 import { getFirestoreConfig } from "../firebase"
 
-const getLocalConfig = async (participantID, studyID) => {
+const getConfig = async (participantID, studyID) => {
   let experimentConfig = localConfig
   if (envConfig.USE_ELECTRON) {
     const app = window.require("electron").remote.app
@@ -69,4 +69,4 @@ const getLocalConfig = async (participantID, studyID) => {
 //   return newBlocks
 // }
 
-export { getLocalConfig }
+export { getConfig }

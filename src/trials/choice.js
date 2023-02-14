@@ -12,7 +12,6 @@ import { removeCursor } from "../lib/utils"
 const choice = (word, color, duration) => {
 
   return {
-    // A type of trial that calls a function rather than display a stimulus.
     type: "html_keyboard_response",
     trial_duration: duration,
     response_ends_trial: true,

@@ -2,8 +2,8 @@ import { lang } from '../config/main'
 import { photodiodeGhostBox } from '../lib/markup/photodiode'
 import { baseStimulus } from '../lib/markup/stimuli'
 
-const pleaseBiggen = () => {
-  var stimulus = baseStimulus(`<h1>${lang.welcome.large_window}</h1>`, true) +
+const pleaseEnlargeWindow = () => {
+  let stimulus = baseStimulus(`<h1>${lang.welcome.large_window}</h1>`, true) +
                  photodiodeGhostBox()
 
   return {
@@ -29,7 +29,7 @@ const welcomeMessage = () => {
 const welcome = {
   type: 'html_keyboard_response',
   timeline: [
-    pleaseBiggen(),
+    pleaseEnlargeWindow(),
     welcomeMessage()
   ]
 }

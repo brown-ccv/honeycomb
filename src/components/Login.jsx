@@ -2,24 +2,32 @@ import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
+/**
+ * Handles login logic.
+ * @param onLogin The function to run when the participant enters a valid particpant and study ID.
+ * @param envParticipantId To prefill the participant ID field, if available.
+ * @param envStudyId To prefill the study ID field, if available.
+ * @param validationFunction The function to use to validate participant ID and study ID.
+ * @returns {JSX.Element} The login form.
+ */
 function Login({ onLogin, envParticipantId, envStudyId, validationFunction }) {
-  // State variables for login screen
+  /* State variables for login screen */
   const [participantId, setParticipant] = useState("");
   const [studyId, setStudy] = useState("");
   const [error, setError] = useState(false);
 
+  /* Runs every time envParticipantId and envStudyId change. */
   useEffect(() => {
-    // Update based on environment variables
     setParticipant(envParticipantId);
     setStudy(envStudyId);
   }, [envParticipantId, envStudyId]);
 
-  // Checks if forms are filled in
+  /* Verifies that both fields have been filled out. */
   function validateForm() {
     return participantId.length > 0 && studyId.length > 0;
   }
 
-  // Function to log in participant
+  /* Handles submitting the form. */
   function handleSubmit(e) {
     e.preventDefault();
     // Validates fields

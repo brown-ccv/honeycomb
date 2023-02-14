@@ -3,11 +3,18 @@ import startCode from "../trials/startCode"
 import { lang, envConfig } from "../config/main"
 import { showMessage } from "@brown-ccv/behavioral-task-trials"
 
+/**
+ * Shows the introduction and instructions for the task.
+ * @param experimentConfig The experiment config.
+ * @returns {any} A jsPsych trial object, with a timeline containing the intro and instructions.
+ */
 const preamble = (experimentConfig) => {
+  // Get the colors that should be displayed in the task.
   const colors = experimentConfig.conditions
   let colorList = ""
 
-  // Loop through the colors and create a list of font colors and their corresponding key
+  // For instructions HTML: Loop through the colors and create a list of font colors and their corresponding
+  // keyboard input.
   for (let i = 0; i < colors.length; i++) {
     colorList +=
       // First set the font color to the current color.
@@ -45,6 +52,7 @@ const preamble = (experimentConfig) => {
     }),
   ]
 
+  // If using the photodiode, add these photodiode-specific trials to the preamble.
   if (envConfig.USE_PHOTODIODE) {
     timeline.push(holdUpMarker())
     timeline.push(startCode())

@@ -9,7 +9,10 @@ if (envConfig.USE_ELECTRON) {
   ipcRenderer = electron.ipcRenderer;
 }
 
-// Relies on styling in App.css, generate PD spot
+/**
+ * Generates HTML for the photodiode ghost box.
+ * @returns {string} The ghost box HTML.
+ */
 const photodiodeGhostBox = () => {
   const class_ = envConfig.USE_PHOTODIODE ? "visible" : "invisible";
 

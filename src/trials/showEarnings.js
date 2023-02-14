@@ -22,22 +22,24 @@ const showEarnings = (duration) => {
     on_start: (trial) => {
       // Get data from jsPsych to check the participant response.
       const data = jsPsych.data.get().values()
-      // Check the preceding (choice) trial.
+      // Check the preceding (choice) trial to see if the response was correct.
       const lastTrial = data[data.length - 1]
       const lastColor = lastTrial.color
       const response = lastTrial.key_press
+      // key_press is an integer, so change it to a character to match it to the color.
       const keyPressed = String.fromCharCode(response)
       let earnings = -1
       if (keyPressed === lastColor[0].toUpperCase()) {
         earnings = 1
       }
+      // If there was no response, we know the participant did not respond in time.
       const slow = response === null
       trial.stimulus = earningsDisplay(earnings, slow)
       if (envConfig.USE_PHOTODIODE) trial.stimulus += photodiodeGhostBox()
     },
     on_finish: (data) => {
       data.code = eventCodes.show_earnings
-      // Adding back; was removed in choice trial.
+      // Add cursor back back; it was removed in choice trial.
       addCursor("experiment")
     },
   }
