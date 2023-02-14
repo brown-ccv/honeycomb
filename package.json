@@ -124,7 +124,6 @@
     "concurrently": "^4.1.2",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.2.0",
-    "dotenv": "^8.2.0",
     "dotenv-cli": "^7.0.0",
     "electron": "19.0.8",
     "firebase-admin": "^11.0.1",
