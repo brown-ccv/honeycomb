@@ -49,23 +49,23 @@
     "rebuild": "electron-rebuild",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "electron-dev": "cross-env ELECTRON_START_URL=\"http://localhost:3000\" electron .",
+    "electron-dev": "wait-on http://localhost:3000 && cross-env ELECTRON_START_URL=\"http://localhost:3000\" electron .",
     "firebase:dev": "firebase emulators:start --import emulator_data",
     "firebase:savedev": "firebase emulators:export emulator_data",
     "firebase:download": "dotenv -e env/.env.firebase-download node download-response-data.js",
-    "dev": "concurrently --kill-others \"npm:start\" \"sleep 10 && npm run electron-dev\"",
+    "dev": "concurrently -k npm:start npm:electron-dev",
     "dev:home": "dotenv -e env/.env.home npm run dev",
     "dev:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run dev",
-    "dev:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run dev",
     "dev:clinic": "dotenv -e env/.env.clinic npm run dev",
+    "dev:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run dev",
     "dev:firebase": "dotenv -e env/.env.firebase npm run dev",
     "dev:turk-prolific": "dotenv -e env/.env.turk-prolific npm run dev",
-    "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build",
-    "build:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run build",
-    "build:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run build",
     "build:home": "dotenv -e env/.env.home npm run build",
+    "build:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run build",
     "build:clinic": "dotenv -e env/.env.clinic npm run build",
-    "build:firebase": "dotenv -e env/.env.firebase npm run build"
+    "build:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run build",
+    "build:firebase": "dotenv -e env/.env.firebase npm run build",
+    "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build"
   },
   "config": {
     "commitizen": {
@@ -120,15 +120,15 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
     "babel-plugin-macros": "^2.6.1",
     "chai": "^4.2.0",
-    "concurrently": "^4.1.2",
+    "concurrently": "^7.6.0",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.2.0",
-    "dotenv": "^8.2.0",
-    "dotenv-cli": "^4.0.0",
+    "dotenv-cli": "^7.0.0",
     "electron": "19.0.8",
     "firebase-admin": "^11.0.1",
     "firebase-tools": "^11.0.1",
-    "require-context.macro": "^1.1.1"
+    "require-context.macro": "^1.1.1",
+    "wait-on": "^7.0.1"
   },
   "babel": {
     "plugins": [
