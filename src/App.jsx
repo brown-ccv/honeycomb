@@ -9,7 +9,7 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import { getTurkUniqueId, getProlificId, sleep } from "./lib/utils"
 import { initParticipantFirestore, addToFirebase, addConfigToFirebase } from "./firebase"
 import { envConfig } from "./config/main"
-import { version } from "../package.json"
+import packageInfo from "../package.json"
 
 import Login from './components/Login'
 import JsPsychExperiment from './components/JsPsychExperiment'
@@ -125,7 +125,7 @@ function App () {
           participant_id: newParticipantID,
           study_id: newStudyID,
           start_date: startDate,
-          task_version: version
+          task_version: packageInfo.version
         })
       }
       setParticipantID(newParticipantID)
