@@ -17,18 +17,23 @@
 /dist
 /out
 
-# Firebase
+# ignored for compatability
+package-lock.json
+public/config/version.json
+.env
+
+# firebase
 .firebase
 /ui-debug.log
 /firestore-debug.log
 
-# misc
-package-lock.json
-public/config/version.json
-.DS_Store
-.env
+# ide
 /.idea
 /.vs
+/.vscode
+
+# misc
+.DS_Store
 psiturkit/*_turk
 npm-debug.log*
 yarn-debug.log*
