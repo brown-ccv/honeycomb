@@ -8,7 +8,7 @@ import Login from './components/Login'
 import JsPsychExperiment from './components/JsPsychExperiment'
 
 import { getProlificId, sleep } from './lib/utils'
-import { initParticipant, addToFirebase } from './firebase'
+import { initParticipantFirestore, addToFirebase } from './firebase'
 import { config, taskVersion, turkUniqueId } from './config/main'
 
 function App () {
@@ -33,7 +33,7 @@ function App () {
     return true
   }
   const firebaseValidation = (participantId, studyId) => {
-    return initParticipant(participantId, studyId, startDate)
+    return initParticipantFirestore(participantId, studyId, startDate)
   }
 
   // Adding data functions for firebase, electron adn Mturk

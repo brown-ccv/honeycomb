@@ -79,6 +79,7 @@ const app = initializeApp();
 const db = getFirestore(app);
 
 // Search with the same collection name that we use over in src/firebase.js.
+// TODO: Use const variable
 const collectionName = "participant_responses";
 db.collection(collectionName)
     .doc(studyId)
