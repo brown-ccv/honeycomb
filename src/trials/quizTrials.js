@@ -1,6 +1,6 @@
 import htmlButtonResponse from '@jspsych/plugin-html-button-response'
 import surveyMultiselect from '@jspsych/plugin-survey-multi-select'
-import { lang, config } from "../config/main";
+import { lang, envConfig } from "../config/main";
 import {
   survey,
   slider,
@@ -60,7 +60,7 @@ const iusSurvey = multiSurvey({
 
 // Debrief Page (non-mTurk)
 const debriefOptions = lang.quiz.answer.debriefing.confirm_completion;
-const debrief = showMessage(config, {
+const debrief = showMessage(envConfig, {
   responseType: htmlButtonResponse,
   responseEndsTrial: true,
   buttons: [debriefOptions],

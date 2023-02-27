@@ -16,6 +16,7 @@ function saveBlob(blob, media, participantId) {
   let fileName =`pid_${participantId}_${media}_${Date.now()}.webm`
   reader.onload = function() {
       if (reader.readyState === 2) {
+          // TODO: Buffer is deprecated
           var buffer = new Buffer(reader.result)
           ipcRenderer.send('save_video', fileName, buffer)
           console.log(`Saving ${JSON.stringify({ fileName, size: blob.size })}`)
