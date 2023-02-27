@@ -2,6 +2,10 @@ import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
 import { lang } from '../config/main'
 import { baseStimulus } from '../lib/markup/stimuli'
 
+/**
+ * Ask the participant to adjust their machine's volume.
+ * @returns {any} The jsPsych object for the trial.
+ */
 const adjustVolume = () => {
     const stimulus = baseStimulus(`
     <div class='instructions'>
