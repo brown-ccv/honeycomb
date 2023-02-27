@@ -1,7 +1,7 @@
 import { pdSpotEncode, photodiodeGhostBox } from "../lib/markup/photodiode"
 import { addCursor } from "../lib/utils"
 import { envConfig } from "../config/main"
-import { jsPsych } from "jspsych-react/dist/experiment"
+import { jsPsych } from "jspsych-react"
 import { eventCodes } from "../config/trigger"
 import { earningsDisplay } from "../lib/markup/earnings"
 

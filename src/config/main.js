@@ -4,7 +4,6 @@
 
 import _ from "lodash";
 import { initJsPsych } from "jspsych";
-import { init } from "@brown-ccv/behavioral-task-trials";
 
 import packageInfo from '../../package.json'
 import usLanguage from "../language/en_us.json"

@@ -2,7 +2,7 @@ import { showMessage } from "@brown-ccv/behavioral-task-trials";
 
 import holdUpMarker from "../trials/holdUpMarker";
 import startCode from "../trials/startCode";
-import { lang, envConfig } from "../config/main";
+import { language, envConfig } from "../config/main";
 
 /**
  * Shows the introduction and instructions for the task.
@@ -37,13 +37,13 @@ const preamble = (experimentConfig) => {
      let timeline = [
       showMessage(envConfig, {
         responseType: "html_button_response",
-        message: lang.task.name,
+        message: language.task.name,
         responseEndsTrial: true,
-        buttons: [lang.prompt.continue.button],
+        buttons: [language.prompt.continue.button],
       }),
       showMessage(envConfig, {
         responseType: "html_button_response",
-        message: lang.instructions.introduction,
+        message: language.instructions.introduction,
         responseEndsTrial: true,
       }),
       showMessage(envConfig, {

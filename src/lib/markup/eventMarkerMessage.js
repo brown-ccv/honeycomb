@@ -1,7 +1,7 @@
-import { lang } from '../../config/main'
+import { language } from '../../config/main'
 
 const eventMarkerMessage = async () => {
-		return `<span style="color: green;">${lang.eventMarker.found}</span>`
+		return `<span style="color: green;">${language.eventMarker.found}</span>`
 }
 
 export default eventMarkerMessage

@@ -1,4 +1,5 @@
-import requireContext from 'require-context.macro'
+import { jsPsych } from "jspsych-react"
+import requireContext from "require-context.macro"
 
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -60,6 +61,11 @@ const getQueryVariable = (variable) => {
   }
 };
 
+const getTurkUniqueId = () => {
+  const turkInfo = jsPsych.turk.turkInfo()
+  return `${turkInfo.workerId}:${turkInfo.assignmentId}`
+}
+
 const getProlificId = () => {
   const prolificId = getQueryVariable("PROLIFIC_PID");
   return prolificId
@@ -113,8 +119,9 @@ export {
   images,
   startKeypressListener,
   getProlificId,
+  getTurkUniqueId,
   beep,
   getRandomInt,
-  removeCursor,
   addCursor,
+  removeCursor
 }

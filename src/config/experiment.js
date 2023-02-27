@@ -1,7 +1,8 @@
-import localConfig from "./config.json"
-import { envConfig } from "./main"
 import path from "path"
+
 import { getFirestoreConfig } from "../firebase"
+import localConfig from "./config"
+import { envConfig } from "./main"
 
 const getConfig = async (participantID, studyID) => {
   let experimentConfig = localConfig

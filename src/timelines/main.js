@@ -1,5 +1,5 @@
 import { countdown, showMessage } from "@brown-ccv/behavioral-task-trials";
-import { lang, envConfig } from "../config/main";
+import { language, envConfig } from "../config/main";
 import { cameraStart, cameraEnd } from "../trials/camera"
 import {
   ageCheck,
@@ -34,7 +34,7 @@ const buildPrimaryTimeline = (experimentConfig) => {
     preamble(experimentConfig),
     ageCheck,
     sliderCheck,
-    countdown({ message: lang.countdown.message1 }),
+    countdown({ message: language.countdown.message1 }),
     taskBlock(experimentConfig),
     demographics,
     iusSurvey,
@@ -50,7 +50,7 @@ const buildPrimaryTimeline = (experimentConfig) => {
   // Add ending message
   timeline.push(showMessage(envConfig, {
     duration: 5000,
-    message: lang.task.end,
+    message: language.task.end,
   }))
 
   return timeline
