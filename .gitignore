@@ -17,14 +17,20 @@
 /dist
 /out
 
+# Firebase
+.firebase
+/ui-debug.log
+/firestore-debug.log
+
 # misc
+package-lock.json
+public/config/version.json
 .DS_Store
 .env
-public/config/version.json
-package-lock.json
+/.idea
+/.vs
+psiturkit/*_turk
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-psiturkit/*_turk
-.firebase
