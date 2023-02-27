@@ -21,35 +21,15 @@ const deepCopy = (obj) => JSON.parse(JSON.stringify(obj))
 // format a number as a dollar amount
 const formatDollars = (amount) => '$' + parseFloat(amount).toFixed(2)
 
-
-// create a pre-trial wait period
-const generateWaitSet = (trial, waitTime) => {
-  let waitTrial = Object.assign({}, trial)
-  waitTrial.trial_duration = waitTime
-  waitTrial.response_ends_trial = false
-  waitTrial.prompt = '-'
-
-  return [waitTrial, trial]
-}
-
-// As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
+// As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
 // The jsPsych instance passed in here should be the same one used for the running task.
 const startKeypressListener = (jsPsych) => {
-  const keypressResponse = (info) => {
-    const data = {
-      key_press: info.key
-    }
-
-    jsPsych.finishTrial(data)
-  }
-
-  let keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+  const keypressResponse = (info) =>  jsPsych.finishTrial({key_press: info.key})
+  return jsPsych.pluginAPI.getKeyboardResponse({
     callback_function: keypressResponse,
     valid_responses: ['ALL_KEYS'],
     persist: false
   })
-
-  return keyboardListener
 }
 
 // Discover and import images in src/assets/images.
@@ -98,6 +78,30 @@ const beep = (audioCodes) => {
   o.stop(context.currentTime + 0.4)
 }
 
+// Stolen from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * max);
+}
+
+/**
+ * Removes the cursor from the part of the screen covered by the specified element. When the user hovers over
+ * the element, the cursor will disappear.
+ * @param elementId The ID of the element to remove the cursor from.
+ */
+const removeCursor = (elementId) => {
+  let element = document.getElementById(elementId);
+  element.classList.add("nocursor");
+};
+
+/**
+ * The opposite of removeCursor. Adds a cursor over a specified element.
+ * @param elementId The element to add a cursor for.
+ */
+const addCursor = (elementId) => {
+  let element = document.getElementById(elementId);
+  element.classList.remove("nocursor");
+};
+
 
 export {
   sleep,
@@ -106,9 +110,11 @@ export {
   randomTrue,
   deepCopy,
   formatDollars,
-  generateWaitSet,
   images,
   startKeypressListener,
   getProlificId,
-  beep
+  beep,
+  getRandomInt,
+  removeCursor,
+  addCursor,
 }
