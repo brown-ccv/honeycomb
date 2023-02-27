@@ -77,7 +77,7 @@ const defaultBlockSettings = {
 };
 
 // setting config for trials
-const config = init({
+const envConfig = init({
   USE_PHOTODIODE,
   USE_EEG,
   USE_ELECTRON,
@@ -95,7 +95,7 @@ export {
   defaultBlockSettings,
   lang,
   eventCodes,
-  config,
+  envConfig,
   audioCodes,
   turkUniqueId
 };
