@@ -1,3 +1,5 @@
+// TODO: Make EsModule (all files?)
+
 // handle windows installer set up
 if(require('electron-squirrel-startup')) return 
 
@@ -20,11 +22,9 @@ const { getPort, sendToPort } = require('event-marker')
 // Override product ID if environment variable set
 const activeProductId = process.env.EVENT_MARKER_PRODUCT_ID || productId
 const activeComName = process.env.EVENT_MARKER_COM_NAME || comName
-if (activeProductId) {
-  log.info("Active product ID", activeProductId)
-} else {
-  log.info("COM Name", activeComName)
-}
+if (activeProductId) log.info("Active product ID", activeProductId)
+else log.info("COM Name", activeComName)
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -32,6 +32,7 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
+  // TODO: Use env variable for dev mode, which also sets ELECTRON_START_URL
   if (process.env.ELECTRON_START_URL) { // in dev mode, disable web security to allow local file loading
     console.log(process.env.ELECTRON_START_URL)
     mainWindow = new BrowserWindow({
@@ -79,12 +80,8 @@ let portAvailable
 let SKIP_SENDING_DEV = false
 
 const setUpPort = async () => {
-  let p
-  if (activeProductId){
-    p = await getPort(vendorId, activeProductId)
-  } else {
-    p = await getPort(activeComName)
-  }
+  let p = activeProductId ? await getPort(vendorId, activeProductId) : await getPort(activeComName)
+
   if (p) {
     triggerPort = p
     portAvailable = true
@@ -123,6 +120,7 @@ const handleEventSend = (code) => {
     }
     dialog.showMessageBox(mainWindow, {type: "error", message: message, title: "Task Error", buttons: buttons, defaultId: 0})
       .then((resp) => {
+        // TODO: Refactor as switch statement
         let opt = resp.response
         if (opt === 0) { // quit
           app.exit()
@@ -162,6 +160,7 @@ ipc.on('trigger', (event, args) => {
   }
 })
 
+// TODO: Use firebase emulators when in dev mode
 // <studyID> will be created on Desktop and used as root folder for saving data.
 // data save format is ~/Desktop/<studyID>/<participantID>/<date>/<filename>.json
 // it is also incrementally saved to the user's app data folder (logged to console)
@@ -196,21 +195,22 @@ const getSavePath = (participantID, studyID) => {
   }
 }
 
-const getFullPath = (fileName) => {
-  return path.join(savePath, fileName)
-}
+// Get full path to the data
+const getFullPath = (fileName) => path.join(savePath, fileName)
 
 // Read version file (git sha and branch)
 let git = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'config/version.json')));
 
 // Get Participant Id and Study Id from environment
 ipc.on('syncCredentials', (event) => {
-  event.returnValue = {envParticipantId: process.env.REACT_APP_PARTICIPANT_ID, envStudyId: process.env.REACT_APP_STUDY_ID}
+  event.returnValue = {
+    envParticipantId: process.env.REACT_APP_PARTICIPANT_ID,
+    envStudyId: process.env.REACT_APP_STUDY_ID
+  }
 })
 
-// listener for new data
+// NEW DATA
 ipc.on('data', (event, args) => {
-
   // initialize file - we got a participant_id to save the data to
   if (args.participant_id && args.study_id && !fileCreated) {
     const dir = app.getPath('userData')
@@ -224,16 +224,12 @@ ipc.on('data', (event, args) => {
     fileCreated = true
   }
 
-  if (savePath === "") {
-    savePath = getSavePath(participantID, studyID)
-  }
+  if (savePath === "") savePath = getSavePath(participantID, studyID)
 
   // we have a set up stream to write to, write to it!
   if (stream) {
     // write intermediate commas
-    if (args.trial_index > startTrial) {
-      stream.write(',')
-    }
+    if (args.trial_index > startTrial) stream.write(',')
 
     //write the data
     stream.write(JSON.stringify({...args, git}))
@@ -245,11 +241,9 @@ ipc.on('data', (event, args) => {
 
 // Save Video
 ipc.on('save_video', (event, videoFileName, buffer) => {
-  if (savePath === "") {
-    savePath = getSavePath(participantID, studyID)
-  }
+  if (savePath === "") savePath = getSavePath(participantID, studyID)
 
-  if (VIDEO){
+  if (VIDEO) {
     const fullPath = getFullPath(videoFileName)
     fs.outputFile(fullPath, buffer, err => {
       if (err) {
@@ -260,15 +254,26 @@ ipc.on('save_video', (event, videoFileName, buffer) => {
       }
   })
   }
-  
 })
 
+// Save Config
+ipc.on("save-config", (event, config, participantID, studyID) => {
+  if (savePath === "") savePath = getSavePath(participantID, studyID)
+
+  const configFileName = `pid_${participantID}_${today.getTime()}_config.json`
+  const saveConfigPath = getFullPath(configFileName)
+  if (!fs.existsSync(savePath)) {
+    fs.mkdir(savePath, { recursive: true }, (err) => {
+      log.error(err)
+      fs.writeFile(saveConfigPath, Buffer.from(JSON.stringify(config))).catch((error) => log.error(error))
+    })
+  } else {
+    fs.writeFile(saveConfigPath, Buffer.from(JSON.stringify(config))).catch((error) => log.error(error))
+  }
+})
 
 // EXPERIMENT END
-ipc.on('end', () => {
-  // quit app
-  app.quit()
-})
+ipc.on('end', () => app.quit())
 
 // Error state sent from front end to back end (e.g. wrong number of images)
 ipc.on('error', (event, args) => {
@@ -283,7 +288,7 @@ ipc.on('error', (event, args) => {
 })
 
 
-// log uncaught exceptions
+// Log uncaught exceptions
 process.on('uncaughtException', (error) => {
     // Handle the error
     log.error(error)
@@ -298,9 +303,8 @@ process.on('uncaughtException', (error) => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', () => {
-  createWindow()
-})
+app.on('ready', () => createWindow())
+
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   // On macOS it is common for applications and their menu bar
@@ -324,10 +328,15 @@ app.on('will-quit', () => {
     stream.end()
     stream = false
 
-    // copy file to config location
-    fs.mkdir(savePath, { recursive: true }, (err) => {
-      log.error(err)
+    if (!fs.existsSync(savePath)) {
+      // Create config location
+      fs.mkdir(savePath, { recursive: true }, (err) => {
+        log.error(err)
+        fs.copyFileSync(preSavePath, getFullPath(`pid_${participantID}_${today.getTime()}.json`))
+      })
+    } else {
+      // Copy file to config location
       fs.copyFileSync(preSavePath, getFullPath(`pid_${participantID}_${today.getTime()}.json`))
-    })
+    }
   }
 })
