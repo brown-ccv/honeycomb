@@ -2,35 +2,40 @@ import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
+/**
+ * Handles login logic.
+ * @param onLogin The function to run when the participant enters a valid participant and study ID.
+ * @param envParticipantId To prefill the participant ID field, if available.
+ * @param envStudyId To prefill the study ID field, if available.
+ * @param validationFunction The function to use to validate participant ID and study ID.
+ * @returns {JSX.Element} The login form.
+ */
 function Login({ onLogin, envParticipantId, envStudyId, validationFunction }) {
-  // State variables for login screen
   const [participantId, setParticipant] = useState("");
   const [studyId, setStudy] = useState("");
   const [error, setError] = useState(false);
 
+  // Update participant and study based on environment variables
+  // Runs when envParticipantId or envStudyId change.
   useEffect(() => {
-    // Update based on environment variables
     setParticipant(envParticipantId);
     setStudy(envStudyId);
   }, [envParticipantId, envStudyId]);
 
-  // Checks if forms are filled in
+  // Verifies both form fields have been filled out
   function validateForm() {
     return participantId.length > 0 && studyId.length > 0;
   }
 
-  // Function to log in participant
+  // Handles submitting the form
   function handleSubmit(e) {
     e.preventDefault();
     // Validates fields
+    // TODO: It seems like validationFunction is logging in the user? Logic should be separated
     validationFunction(participantId, studyId)
-    // Logs in depending on result from promise
     .then((loggedIn) => {
-      if (loggedIn) {
-        onLogin(loggedIn, studyId, participantId);
-      } else {
-        setError(true);
-      }
+      if (loggedIn) onLogin(loggedIn, studyId, participantId);
+      else setError(true);
     });
   }
 
