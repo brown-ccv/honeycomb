@@ -17,8 +17,8 @@ const photodiodeGhostBox = () => {
   // Conditionally render class name (App.css)
   const class_ = envConfig.USE_PHOTODIODE ? "visible" : "invisible";
   return `<div class="photodiode-box ${class_}" id="photodiode-box">
-									<span id="photodiode-spot" class="photodiode-spot"></span>
-  								</div>`;
+						<span id="photodiode-spot" class="photodiode-spot"></span>
+  				</div>`;
 };
 
 const pdSpotEncode = (taskCode) => {

@@ -1,14 +1,23 @@
-import { formatDollars } from '../utils'
+import { formatDollars } from "../utils"
 
-const earningsDisplay = (earnings) => {
-  const bclass = (earnings >= 0) ? 'success' : 'danger'
+/**
+ * Displays the earnings for a trial.
+ * @param earnings The amount of dollars to display.
+ * @param slow Whether or not the participant responded too slowly.
+ * @returns {string} The HTML to display for the earnings.
+ */
+const earningsDisplay = (earnings, slow = false) => {
+  // If earnings are positive or 0, color the font green, otherwise red.
+  const bclass = (earnings >= 0) ? "success" : "danger"
   return (
+    // Conditionally display "too slow" if the participant was too slow.
     `<div class='center_container'>
-    <h1 class='text-${bclass}'>${formatDollars(earnings)}</h1>
+      <h1>
+        ${slow ? "Too slow!<br><br>" : ""}
+        <span class='text-${bclass}'>${formatDollars(earnings)}</span>
+      </h1>
     </div>`
   )
 }
 
-export {
-  earningsDisplay
-}
+export {earningsDisplay}
