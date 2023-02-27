@@ -1,34 +1,30 @@
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
-import taskTrial from './taskTrial'
-import { generateStartingOptions } from '../lib/taskUtils'
+import taskTrial from "./taskTrial"
+import { generateStartingOptions } from "../lib/taskUtils"
 
+/**
+ * Creates the series of prompts for the actual Stroop game 
+ * (i.e., shows a series of color words and waits for user input).
+ * @param experimentConfig The experiment config.
+ * @returns {any} A jsPsych trial object containing the block timeline.
+ */
+const taskBlock = (experimentConfig) => {
+  // Creates a randomized array of the color words provided in experimentConfig.conditions.
+  // Each word is repeated the same number of times.
+  const options = generateStartingOptions(experimentConfig)
 
-const taskBlock = (blockSettings) => {
-  // initialize block
-  const startingOpts = generateStartingOptions(blockSettings)
+  // Loops through the words in startingOpts, creating a trial for each one.
+  let timeline = options.map((word) => taskTrial(experimentConfig, word))
 
-  const blockDetails = {
-    block_earnings: 0.0,
-    optimal_earnings: 0.0,
-    continue_block: true
-  }
-
-  // timeline = loop through trials
-  let timeline = startingOpts.map((condition) => taskTrial(blockSettings, blockDetails, condition))
-
-  let blockStart = {
-    type: htmlKeyboardResponse,
-    stimulus: '',
+  // Trial to start the block. Saves the experiment config being used.
+  const blockStart = {
+    type: "html_keyboard_response",
+    stimulus: "",
     trial_duration: 1,
-    on_finish: (data) => data.block_settings = blockSettings
+    on_finish: (data) => data.block_settings = experimentConfig
   }
 
   timeline.unshift(blockStart)
-
-  return {
-    type: htmlKeyboardResponse,
-    timeline: timeline
-  }
+  return {timeline}
 }
 
 export default taskBlock
