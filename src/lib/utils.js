@@ -1,4 +1,4 @@
-import { jsPsych } from "jspsych-react"
+import { JsPsych } from "jspsych";
 import requireContext from "require-context.macro"
 
 const sleep = (ms) => {
@@ -62,7 +62,8 @@ const getQueryVariable = (variable) => {
 };
 
 const getTurkUniqueId = () => {
-  const turkInfo = jsPsych.turk.turkInfo()
+  // const turkInfo = jsPsych.turk.turkInfo()
+  const turkInfo = JsPsych.turk.turkInfo()
   return `${turkInfo.workerId}:${turkInfo.assignmentId}`
 }
 

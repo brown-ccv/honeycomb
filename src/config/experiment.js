@@ -4,6 +4,10 @@ import { getFirestoreConfig } from "../firebase"
 import localConfig from "./config"
 import { envConfig } from "./main"
 
+import { defaultBlockSettings } from './main';
+import { deepCopy } from '../lib/utils'
+
+
 const getConfig = async (participantID, studyID) => {
   let experimentConfig = localConfig
   // TODO: Use switch statement
@@ -74,4 +78,15 @@ const getConfig = async (participantID, studyID) => {
 //   return newBlocks
 // }
 
+// TODO: FROM MAIN?
+let exptBlock1 = deepCopy(defaultBlockSettings)
+exptBlock1.repeats_per_condition = 2
+
+let exptBlock2 = deepCopy(defaultBlockSettings)
+exptBlock2.conditions = ["e", "f"]
+exptBlock2.repeats_per_condition = 2
+
+
 export { getConfig }
+
+export {exptBlock1, exptBlock2 } // FROM MAIN

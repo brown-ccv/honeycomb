@@ -1,9 +1,10 @@
+import { JsPsych } from "jspsych"
+
 import { pdSpotEncode, photodiodeGhostBox } from "../lib/markup/photodiode"
 import { addCursor } from "../lib/utils"
 import { envConfig } from "../config/main"
-import { jsPsych } from "jspsych-react"
-import { eventCodes } from "../config/trigger"
 import { earningsDisplay } from "../lib/markup/earnings"
+import { eventCodes } from "../config/trigger"
 
 /**
  * Displays the earnings from a trial.
@@ -19,7 +20,7 @@ const showEarnings = (duration) => {
     on_load: () => pdSpotEncode(eventCodes.show_earnings),
     on_start: (trial) => {
       // Get data from jsPsych to check the participant response.
-      const data = jsPsych.data.get().values()
+      const data = JsPsych.data.get().values()
       // Check the preceding (choice) trial to see if the response was correct.
       const lastTrial = data[data.length - 1]
       const lastColor = lastTrial.color

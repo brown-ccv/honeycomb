@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { jsPsych } from "jspsych-react"
 
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import '@fortawesome/fontawesome-free/css/all.css'
 
-
 import { getTurkUniqueId, getProlificId, sleep } from "./lib/utils"
 import { initParticipantFirestore, addToFirebase, addConfigToFirebase } from "./firebase"
 import { envConfig } from "./config/main"
-import packageInfo from "../package.json"
+// import packageInfo from "../package.json"
 
 import Login from './components/Login'
 import JsPsychExperiment from './components/JsPsychExperiment'
@@ -28,13 +26,11 @@ function App () {
    * The first variable in the array is the value stored in React's state
    * The second is the function for updating the value. Calling it will trigger a re-render of the component.
    * More info here: https://reactjs.org/docs/hooks-state.html
-   */
-
-
+  */
   // Remember startDate between renders.
   // This is necessary to allow Firebase to create a timestamped document at Login time,
   // and then to find and update the *same* timestamped document after each trial in JsPsychExperiment.
-  // TODO 128: UPdate after login
+  // TODO 128: Update after login
   const [startDate] = useState(new Date().toISOString())
   // Whether the participant has successfully logged in.
   const [loggedIn, setLogin] = useState(false)
@@ -116,18 +112,18 @@ function App () {
    * Callback function to capture login data 
    * More info here: https://reactjs.org/docs/hooks-reference.html#usecallback
    */
-  // TODo: Update startDate here
+  // TODO: Update startDate here
   // TODO: Never runs because startData never changes?
   const setLoggedIn = useCallback(
     (loggedIn, newStudyID, newParticipantID) => {
-      if (loggedIn) {
-        jsPsych.data.addProperties({
-          participant_id: newParticipantID,
-          study_id: newStudyID,
-          start_date: startDate,
-          task_version: packageInfo.version
-        })
-      }
+      // if (loggedIn) {
+      //   jsPsych.data.addProperties({
+      //     participant_id: newParticipantID,
+      //     study_id: newStudyID,
+      //     start_date: startDate,
+      //     task_version: packageInfo.version
+      //   })
+      // }
       setParticipantID(newParticipantID)
       setStudyID(newStudyID)
       setLogin(loggedIn)

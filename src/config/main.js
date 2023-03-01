@@ -3,7 +3,7 @@
  */
 
 import _ from "lodash";
-import { initJsPsych } from "jspsych";
+import { initJsPsych,} from "jspsych";
 
 import packageInfo from '../../package.json'
 import usLanguage from "../language/en_us.json"
