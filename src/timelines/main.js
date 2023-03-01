@@ -25,6 +25,7 @@ import { LANGUAGE, config, envConfig } from "../config/main";
  * Add custom jsPsych options
  * These are merged with default options needed by Honeycomb
  */
+// TODO: This is part of the default config? 
 const jsPsychOptions = {
   on_trial_finish: function (data) {
     console.log('A trial just ended, here are the latest data:');
@@ -44,11 +45,14 @@ const jsPsychOptions = {
  * @param experimentConfig The experiment config, either the default one provided in /src/config/config.json or a participant-specific override.
  * @returns {array} The experiment timeline.
 */
+// TODO: Refactor to expect jsPsych object
 const buildTimeline = (experimentConfig) => {
+  // TODO: This function is expecting a config object, not the experiment itself
   if(config.USE_MTURK) buildMTurkTimeline()
   else buildPrimaryTimeline(experimentConfig);
 }
 
+// TODO: Refactor to expect jsPsych object
 const buildPrimaryTimeline = (experimentConfig) => {
   // Build the timeline from blocks and individual trials
   const timeline = [
