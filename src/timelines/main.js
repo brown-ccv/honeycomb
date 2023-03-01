@@ -6,7 +6,7 @@ import taskBlock from "./taskBlock"
 // import { practiceBlock } from "../config/practice";
 import { tutorialBlock } from "../config/tutorial";
 // import { exptBlock1, exptBlock2 } from "../config/experiment";
-import { exptBlock2 } from "../config/experiment";
+import { exptBlock2, getConfig } from "../config/experiment";
 
 // Trials
 // TODO: Add task block for the camera trials?
@@ -46,14 +46,17 @@ const jsPsychOptions = {
  * @returns {array} The experiment timeline.
 */
 // TODO: Refactor to expect jsPsych object
-const buildTimeline = (experimentConfig) => {
+const buildTimeline = (jsPsych) => {
   // TODO: This function is expecting a config object, not the experiment itself
-  if(envConfig.USE_MTURK) buildMTurkTimeline()
-  else buildPrimaryTimeline(experimentConfig);
+  if(envConfig.USE_MTURK) return buildMTurkTimeline()
+  else return buildPrimaryTimeline(jsPsych);
 }
 
 // TODO: Refactor to expect jsPsych object
-const buildPrimaryTimeline = (experimentConfig) => {
+const buildPrimaryTimeline = async(jsPsych) => {
+  const {participant_id, study_id} = jsPsych.data.dataProperties
+  const experimentConfig = await getConfig(participant_id, study_id)
+  console.log(experimentConfig)
   // Build the timeline from blocks and individual trials
   const timeline = [
     preamble(experimentConfig), // Preamble

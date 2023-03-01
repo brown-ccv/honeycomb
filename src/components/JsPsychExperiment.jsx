@@ -46,9 +46,9 @@ function JsPsychExperiment({
 
   // Create the instance of jsPsych that we'll reuse within the scoope of this JsPsychExperiment component.
   // As of jspsych 7, we create our own jspsych instance(s) where needed instead of importing one global instance.
-  // The jsPsych instance is rebuild when props change
-  const setUpJsPsych = () => {
-    // Initialize jsPsych with combinedOptions
+  // The jsPsych instance is rebuilt when props change
+  // TODO: Should this be useCallback?
+  const jsPsych = useMemo(() => {
     const jsPsych = initJsPsych(combinedOptions)
     jsPsych.data.addProperties({
       participant_id: participantId,
@@ -57,13 +57,13 @@ function JsPsychExperiment({
       task_version: taskVersion
     })
     return jsPsych
-  }
-  const jsPsych = useMemo(setUpJsPsych, [participantId, studyId, startDate, taskVersion]);
+  }, [participantId, studyId, startDate, taskVersion]);
 
   // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
   // TODO: This is expecting combinedOptions
-  // const timeline = buildTimeline(jsPsych)
-  const timeline = buildTimeline(combinedOptions)
+  // TODO: This should be in some useEffect? It's an async function
+  const timeline = buildTimeline(jsPsych)
+  console.log("TIMELINE", timeline)
 
   // Set up event and lifecycle callbacks to start and stop jspsych.
   // Inspiration from jspsych-react: https://github.com/makebrainwaves/jspsych-react/blob/master/src/index.js
