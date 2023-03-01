@@ -1,27 +1,26 @@
-// config/main.js
-// This is the main configuration file where universal and default settings should be placed.
-// These settings can then be imported anywhere in the app as they are exported at the bottom of the file.
-
-import { initJsPsych } from "jspsych";
 import _ from "lodash";
-import { eventCodes } from "./trigger";
-import { init } from "@brown-ccv/behavioral-task-trials";
-import { getProlificId } from "../lib/utils";
-import packageInfo from '../../package.json'
+import { initJsPsych } from "jspsych";
 
+import packageInfo from '../../package.json'
+import { getProlificId } from "../lib/utils";
+import { eventCodes } from "./trigger";
 import lang from  "../language/en_us.json"
 import mlang from "../language/en_us.mturk.json"
 
-// Access package name and version so we can store these as facts with task data.
-const taskName = packageInfo.name;
-const taskVersion = packageInfo.version;
+/**
+ * Initialize JsPsych configuration based on environment variables
+ * The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment
+ * The actual task and related utils will use a different instance of jsPsych (JSPsychExperiment.jsx)
+*/
 
-// As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
-// The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
-// The actual task and related utils will use a different instance of jsPsych created after login.
+// Instantiate JsPsych
 const jsPsych = initJsPsych()
 
-// mapping of letters to key codes
+// Access package name and version to save in data object
+const taskName = packageInfo.name ? packageInfo.name : "Honeycomb";
+const taskVersion = packageInfo.version ? packageInfo.version : '1.0.0';
+
+// Mapping of letters to key codes
 const keys = {
   A: 65,
   B: 66,
@@ -31,44 +30,52 @@ const keys = {
   space: 32,
 };
 
-// audio codes
+// Create audio codes
 const audioCodes = {
   frequency: 100 * (eventCodes.open_task - 9),
   type: "sine",
 };
 
-// is this mechanical turk?
+// Determine if using Mechanical Turk
 const turkInfo = jsPsych.turk.turkInfo()
 const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`
 let USE_MTURK = !turkInfo.outsideTurk;
-let USE_PROLIFIC = getProlificId() && !USE_MTURK;
-let USE_ELECTRON = true;
-let USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true";
 
+// Determine if using Prolific
+let USE_PROLIFIC = getProlificId() && !USE_MTURK;
+
+// Determine if using Electron
+let USE_ELECTRON = true;
 try {
   window.require("electron");
 } catch(e) {
   USE_ELECTRON = false;
 }
 
-// whether or not to ask the participant to adjust the volume
+// Determine if using firebase
+let USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true";
+
+// TODO: These are optional arguments, not based on the specific environment Honeycomb is being used?
+
+// Determine if using volume tasks (passed as env variable)
 const USE_VOLUME = process.env.REACT_APP_VOLUME === "true";
-// these variables depend on USE_ELECTRON
-// whether or not to enable video
+// Determine if using video camera (only on Electron and passed as env variable )
 const USE_CAMERA = process.env.REACT_APP_VIDEO === "true" && USE_ELECTRON;
-// whether or not the EEG/event marker is available
+// Determine if using EEG machine (only on Electron and passed as env variable )
 const USE_EEG =
   process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON;
-// whether or not the photodiode is in use
+// Determine if using Photodiode (only on Electron and passed as env variable )
 const USE_PHOTODIODE =
   process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON;
 
-// get language file
+// Build language file
+const LANGUAGE = lang
 if (!USE_ELECTRON) {
-  // if this is mturk, merge in the mturk specific language
-  _.merge(lang, mlang);
+  // If this is mturk, merge in the mturk specific language
+  _.merge(LANGUAGE, mlang);
 }
 
+// TODO: Some of the same defaults that are used in config/config.js?
 const defaultBlockSettings = {
   conditions: ["a", "b", "c"],
   repeats_per_condition: 1, // number of times every condition is repeated
@@ -77,24 +84,25 @@ const defaultBlockSettings = {
   photodiode_active: false,
 };
 
-// setting config for trials
-const envConfig = init({
-  USE_PHOTODIODE,
-  USE_EEG,
-  USE_ELECTRON,
+// Build configuration settings from environment variables into a single object
+const envConfig = {
   USE_MTURK,
+  USE_PROLIFIC,
+  USE_ELECTRON,
+  USE_FIREBASE,
+
   USE_VOLUME,
   USE_CAMERA,
-  USE_PROLIFIC,
-  USE_FIREBASE
-});
+  USE_EEG,
+  USE_PHOTODIODE,
+}
 
 export {
   taskName,
   taskVersion,
   keys,
   defaultBlockSettings,
-  lang,
+  LANGUAGE,
   eventCodes,
   envConfig,
   audioCodes,

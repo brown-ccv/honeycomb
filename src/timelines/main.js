@@ -19,7 +19,7 @@ import {
   debrief,
 } from "../trials/quizTrials";
 
-import { lang, config, envConfig } from "../config/main";
+import { LANGUAGE, config, envConfig } from "../config/main";
 
 /**
  * Add custom jsPsych options
@@ -55,7 +55,7 @@ const buildPrimaryTimeline = (experimentConfig) => {
     preamble(experimentConfig), // Preamble
     ageCheck, // ageCheck trial
     sliderCheck, // sliderCheckTrial
-    countdown({ message: lang.countdown.message1 }), // Add a countdown message
+    countdown({ message: LANGUAGE.countdown.message1 }), // Add a countdown message
 
     // TODO: The preamble for the specific task should be here
     taskBlock(experimentConfig), // Add the main task block
@@ -72,7 +72,7 @@ const buildPrimaryTimeline = (experimentConfig) => {
   }
 
   // Add an ending message as a final trial
-  timeline.push(showMessage(config, {duration: 5000, message: lang.task.end }))
+  timeline.push(showMessage(config, {duration: 5000, message: LANGUAGE.task.end }))
 
   return timeline
 };
@@ -81,11 +81,11 @@ const buildMTurkTimeline =  () => {
   // TODO: Preamble is different with the mturk trial?
   [
     preamble,
-    countdown({ message: lang.countdown.message1 }),
+    countdown({ message: LANGUAGE.countdown.message1 }),
     taskBlock(tutorialBlock),
-    countdown({ message: lang.countdown.message2 }),
+    countdown({ message: LANGUAGE.countdown.message2 }),
     taskBlock(exptBlock2),
-    showMessage(config, {duration: 5000, message: lang.task.end }),
+    showMessage(config, {duration: 5000, message: LANGUAGE.task.end }),
   ]
 }
 

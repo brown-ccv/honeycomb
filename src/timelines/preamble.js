@@ -1,6 +1,6 @@
 import { showMessage } from "@brown-ccv/behavioral-task-trials";
 
-import { lang, envConfig } from "../config/main"
+import { LANGUAGE, envConfig } from "../config/main"
 
 import holdUpMarker from "../trials/holdUpMarker";
 import startCode from "../trials/startCode";
@@ -42,14 +42,14 @@ const preamble = (experimentConfig) => {
     // Show task name and wait for button response
     showMessage(envConfig, {
       responseType: "html_button_response",
-      message: lang.task.name,
+      message: LANGUAGE.task.name,
       responseEndsTrial: true,
-      buttons: [lang.prompt.continue.button],
+      buttons: [LANGUAGE.prompt.continue.button],
     }),
       // Show introduction and wait for button response
     showMessage(envConfig, {
       responseType: "html_button_response",
-      message: lang.instructions.introduction,
+      message: LANGUAGE.instructions.introduction,
       responseEndsTrial: true,
     }),
     // Show instructions and wait for button response

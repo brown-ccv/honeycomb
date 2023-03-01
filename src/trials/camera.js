@@ -1,6 +1,6 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
 import htmlButtonResponse from '@jspsych/plugin-html-button-response'
-import { lang, taskName, envConfig} from '../envConfig/main'
+import { LANGUAGE, taskName, envConfig} from '../envConfig/main'
 import { photodiodeGhostBox } from '../lib/markup/photodiode'
 import { baseStimulus } from '../lib/markup/stimuli'
 
@@ -30,7 +30,7 @@ const cameraStart = (jsPsych) => {
   document.title = taskName
   const markup = `
   <div class="d-flex flex-column align-items-center">
-  <p>${lang.instructions.camera}</p>
+  <p>${LANGUAGE.instructions.camera}</p>
   <video id="camera" width="640" height="480" autoplay></video>
   </div>
   `
@@ -39,7 +39,7 @@ const cameraStart = (jsPsych) => {
   return {
     type: htmlButtonResponse,
     stimulus: stimulus,
-    choices: [ lang.prompt.continue.button],
+    choices: [ LANGUAGE.prompt.continue.button],
     response_ends_trial: true,
     on_load: () => {
       // Grab elements, create settings, etc.
@@ -110,7 +110,7 @@ const cameraStart = (jsPsych) => {
 }
 
 const cameraEnd = (duration) => {
-  let stimulus = baseStimulus(`<h1>${lang.task.recording_end}</h1>`, true) + photodiodeGhostBox()
+  let stimulus = baseStimulus(`<h1>${LANGUAGE.task.recording_end}</h1>`, true) + photodiodeGhostBox()
 
    return {
     type: htmlKeyboardResponse,
