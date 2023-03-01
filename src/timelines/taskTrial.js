@@ -15,7 +15,7 @@ import { getRandomInt } from "../lib/utils"
  * @returns {any} A jsPsych trial object containing a Stroop trial timeline.
  */
 // TODO: experimentConfig is in config/config (swap config/config and config/main?)
-const taskTrial = (experimentConfig, word) => {
+const taskTrial = (jsPsych, experimentConfig, word) => {
   // Set a random font color for the trial, using the colors provided in experimentConfig.
   const colors = experimentConfig.conditions
   const color = colors[getRandomInt(colors.length)]
@@ -27,7 +27,8 @@ const taskTrial = (experimentConfig, word) => {
     // Display a word and wait for user input.
     choice(word, color, experimentConfig.response_time),
     // End the trial by displaying the participant's earnings.
-    showEarnings(1500)
+    // TODO: This 
+    showEarnings(jsPsych, 1500)
   ];
 
   return {

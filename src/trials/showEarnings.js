@@ -5,16 +5,12 @@ import { envConfig } from "../config/main"
 
 import { eventCodes } from "../config/trigger"
 
-// TODO: Remove this, use jsPsych object passed to it?
-import { jsPsych } from "jspsych-react/dist/experiment"
-
-
 /**
  * Displays the earnings from a trial.
  * @param {number} duration How long to display the earnings.
  * @returns trial The jsPsych trial object.
  */
-const showEarnings = (duration) => {
+const showEarnings = (jsPsych, duration) => {
   return {
     type: "html_keyboard_response",
     stimulus: "",
