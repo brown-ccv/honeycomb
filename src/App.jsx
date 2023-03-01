@@ -7,7 +7,6 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import { getTurkUniqueId, getProlificId, sleep } from "./lib/utils"
 import { initParticipantFirestore, addToFirebase, addConfigToFirebase } from "./firebase"
 import { envConfig } from "./config/main"
-// import packageInfo from "../package.json"
 
 import Login from './components/Login'
 import JsPsychExperiment from './components/JsPsychExperiment'
@@ -116,16 +115,10 @@ function App () {
   // TODO: Never runs because startData never changes?
   const setLoggedIn = useCallback(
     (loggedIn, newStudyID, newParticipantID) => {
-      // if (loggedIn) {
-      //   jsPsych.data.addProperties({
-      //     participant_id: newParticipantID,
-      //     study_id: newStudyID,
-      //     start_date: startDate,
-      //     task_version: packageInfo.version
-      //   })
-      // }
-      setParticipantID(newParticipantID)
-      setStudyID(newStudyID)
+      if (loggedIn) {
+        setParticipantID(newParticipantID)
+        setStudyID(newStudyID)
+      }
       setLogin(loggedIn)
     },
     [startDate]

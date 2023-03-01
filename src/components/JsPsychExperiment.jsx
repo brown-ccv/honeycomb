@@ -68,6 +68,7 @@ function JsPsychExperiment({
     return jsPsych
   }
   const jsPsych = useMemo(setUpJsPsych, [participantID, studyID, startDate, taskVersion]);
+  console.log("jsPsych", jsPsych)
 
   // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
   // TODO: Use with state variable?

@@ -31,18 +31,15 @@ const buildTimeline = (jsPsych) => envConfig.USE_MTURK
   ? mturkTimeline
   : buildPrimaryTimeline(jsPsych);
 
-const buildPrimaryTimeline = (experimentConfig) => {
+const buildPrimaryTimeline = (jsPsych) => {
   // Unconditional part of the timeline
   let timeline = [
-    preamble(experimentConfig),
+    preamble,
     ageCheck,
     sliderCheck,
     countdown({ message: language.countdown.message1 }),
-    taskBlock(experimentConfig),
-    // countdown({ message: lang.countdown.message1 }),
-    // taskBlock(practiceBlock),
-    // countdown({ message: lang.countdown.message2 }),
-    // taskBlock(exptBlock1),
+    // TODO: Use task from PR 88
+    taskBlock(jsPsych),
     demographics,
     iusSurvey,
     debrief
@@ -63,6 +60,7 @@ const buildPrimaryTimeline = (experimentConfig) => {
   return timeline
 }
 
+// TODO: Use stroop?
 const mturkTimeline = [
   preamble,
   countdown({ message: language.countdown.message1 }),
