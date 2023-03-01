@@ -1,12 +1,12 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
 import htmlButtonResponse from '@jspsych/plugin-html-button-response'
-import { lang, taskName, config} from '../config/main'
+import { lang, taskName, envConfig} from '../envConfig/main'
 import { photodiodeGhostBox } from '../lib/markup/photodiode'
 import { baseStimulus } from '../lib/markup/stimuli'
 
 
 let ipcRenderer = false;
-if (config.USE_ELECTRON) {
+if (envConfig.USE_ELECTRON) {
   const electron = window.require('electron');
   ipcRenderer  = electron.ipcRenderer;
 }
@@ -28,14 +28,13 @@ function saveBlob(blob, media, participantId) {
 // The jsPsych instance passed in here should be the same one used for the running task.
 const cameraStart = (jsPsych) => {
   document.title = taskName
-  let markup = `
+  const markup = `
   <div class="d-flex flex-column align-items-center">
   <p>${lang.instructions.camera}</p>
   <video id="camera" width="640" height="480" autoplay></video>
   </div>
   `
-  let stimulus = baseStimulus(markup, true) +
-                 photodiodeGhostBox()
+  const stimulus = baseStimulus(markup, true) + photodiodeGhostBox()
 
   return {
     type: htmlButtonResponse,
@@ -46,9 +45,7 @@ const cameraStart = (jsPsych) => {
       // Grab elements, create settings, etc.
       // Elements for taking the snapshot
       const participantId = jsPsych.data.get().values()[0].participant_id
-
       let camera = document.getElementById('camera');
-
 
       const handleEvents = function(stream, recorder) {
         console.log(stream)
@@ -99,7 +96,7 @@ const cameraStart = (jsPsych) => {
     
     },
     on_finish: () => {
-      if (config.USE_CAMERA) {
+      if (envConfig.USE_CAMERA) {
         try {
           window.cameraCapture.start()
           window.screenCapture.start()
@@ -120,7 +117,7 @@ const cameraEnd = (duration) => {
     stimulus: stimulus,
     trial_duration: duration,
     on_load: () => {
-      if (config.USE_CAMERA) {
+      if (envConfig.USE_CAMERA) {
         console.log('finished')
         try {
           window.cameraCapture.stop()

@@ -1,6 +1,6 @@
 // config/main.js
 // This is the main configuration file where universal and default settings should be placed.
-// These settins can then be imported anywhere in the app as they are exported at the botom of the file.
+// These settings can then be imported anywhere in the app as they are exported at the bottom of the file.
 
 import { initJsPsych } from "jspsych";
 import _ from "lodash";
@@ -9,11 +9,14 @@ import { init } from "@brown-ccv/behavioral-task-trials";
 import { getProlificId } from "../lib/utils";
 import packageInfo from '../../package.json'
 
+import lang from  "../language/en_us.json"
+import mlang from "../language/en_us.mturk.json"
+
 // Access package name and version so we can store these as facts with task data.
 const taskName = packageInfo.name;
 const taskVersion = packageInfo.version;
 
-// As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
+// As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
 // The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
 // The actual task and related utils will use a different instance of jsPsych created after login.
 const jsPsych = initJsPsych()
@@ -44,7 +47,7 @@ let USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true";
 
 try {
   window.require("electron");
-} catch {
+} catch(e) {
   USE_ELECTRON = false;
 }
 
@@ -61,10 +64,8 @@ const USE_PHOTODIODE =
   process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON;
 
 // get language file
-const lang = require("../language/en_us.json");
 if (!USE_ELECTRON) {
   // if this is mturk, merge in the mturk specific language
-  const mlang = require("../language/en_us.mturk.json");
   _.merge(lang, mlang);
 }
 
@@ -77,7 +78,7 @@ const defaultBlockSettings = {
 };
 
 // setting config for trials
-const config = init({
+const envConfig = init({
   USE_PHOTODIODE,
   USE_EEG,
   USE_ELECTRON,
@@ -95,7 +96,7 @@ export {
   defaultBlockSettings,
   lang,
   eventCodes,
-  config,
+  envConfig,
   audioCodes,
   turkUniqueId
 };

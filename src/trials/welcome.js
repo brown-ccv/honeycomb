@@ -3,9 +3,10 @@ import { lang } from '../config/main'
 import { photodiodeGhostBox } from '../lib/markup/photodiode'
 import { baseStimulus } from '../lib/markup/stimuli'
 
-const pleaseBiggen = () => {
-  var stimulus = baseStimulus(`<h1>${lang.welcome.large_window}</h1>`, true) +
-                 photodiodeGhostBox()
+const pleaseEnlargeWindow = () => {
+  const stimulus = 
+    baseStimulus(`<h1>${lang.welcome.large_window}</h1>`, true) + 
+    photodiodeGhostBox()
 
   return {
     type: htmlKeyboardResponse,
@@ -16,8 +17,9 @@ const pleaseBiggen = () => {
 }
 
 const welcomeMessage = () => {
-  var stimulus = baseStimulus(`<h1>${lang.welcome.message}</h1>`, true) +
-                 photodiodeGhostBox()
+  const stimulus = 
+    baseStimulus(`<h1>${lang.welcome.message}</h1>`, true) +
+    photodiodeGhostBox()
 
   return {
     type: htmlKeyboardResponse,
@@ -30,7 +32,7 @@ const welcomeMessage = () => {
 const welcome = {
   type: htmlKeyboardResponse,
   timeline: [
-    pleaseBiggen(),
+    pleaseEnlargeWindow(),
     welcomeMessage()
   ]
 }
