@@ -1,30 +1,33 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
-import { showMessage, fixation } from "@brown-ccv/behavioral-task-trials";
-import { config } from "../config/main";
-import { eventCodes } from "../config/main";
-import { earningsDisplay } from "../lib/markup/earnings";
+import { fixation } from "@brown-ccv/behavioral-task-trials";
 
-const taskTrial = (blockSettings, blockDetails, condition) => {
-  // timeline
+import { envConfig } from "../config/main";
+import choice from "../trials/choice"
+import showEarnings from "../trials/showEarnings"
+
+import { getRandomInt } from "../lib/utils"
+
+
+/**
+ * Sets up a Stroop trial.
+ * @param experimentConfig The experiment config object.
+ * @param word The color word to display for this trial.
+ * @returns {any} A jsPsych trial object containing a Stroop trial timeline.
+ */
+// TODO: experimentConfig is in config/config (swap config/config and config/main?)
+const taskTrial = (experimentConfig, word) => {
+  // Set a random font color for the trial, using the colors provided in experimentConfig.
+  const colors = experimentConfig.conditions
+  const color = colors[getRandomInt(colors.length)]
+
+  // Build the timeline
   let timeline = [
-    // fixation
-    fixation(config, {
-      duration: 650,
-    }),
-    // show condition
-    showMessage(config, {
-      message: condition,
-      onstart: true,
-      taskCode: eventCodes.evidence,
-    }),
-    fixation(config, {
-      duration: 650,
-    }),
-    // end the trial
-    showMessage(config, {
-      stimulus: earningsDisplay(Math.random()),
-      taskCode: eventCodes.show_earnings,
-    }),
+    // Show the fixation dot
+    fixation(envConfig, {duration: 650,}),
+    // Display a word and wait for user input.
+    choice(word, color, experimentConfig.response_time),
+    // End the trial by displaying the participant's earnings.
+    showEarnings(1500)
   ];
 
   return {

@@ -30,6 +30,7 @@
     "message2": "Countdown for the second block"
   },
   "instructions": {
+    "introduction": "Let's play Stroop, a color matching game! Make sure you're in a comfortable position, with the time to focus for the duration of the task.",
     "adjust_volume": "Set tablet volume to 50/100.",
     "camera": "Make sure the camera is pointing to you and your face is within the camera area.",
     "check_event_marker": "Make sure the event marker is connected and then continue."

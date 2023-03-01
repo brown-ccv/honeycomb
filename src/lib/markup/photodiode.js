@@ -1,22 +1,26 @@
-import { config } from "../../config/main";
+import { envConfig } from "../../config/main";
 import { eventCodes } from "../../config/trigger";
 import $ from "jquery";
 
-// conditionally load electron and psiturk based on MTURK config variable
+// Conditionally load electron and psiturk based on MTURK config variable
 let ipcRenderer = false;
-if (config.USE_ELECTRON) {
+if (envConfig.USE_ELECTRON) {
   const electron = window.require("electron");
   ipcRenderer = electron.ipcRenderer;
 }
 
-// Relies on styling in App.css, generate PD spot
-const photodiodeGhostBox = () => {
-  const class_ = config.USE_PHOTODIODE ? "visible" : "invisible";
 
-  const markup = `<div class="photodiode-box ${class_}" id="photodiode-box">
+/**
+ * Generates HTML for the photodiode ghost box.
+ * @returns {string} The ghost box HTML.
+ */
+const photodiodeGhostBox = () => {
+  // Get class styling from  App.css
+  // TODO: Rename App.css as style.css
+  const class_ = envConfig.USE_PHOTODIODE ? "visible" : "invisible";
+  return `<div class="photodiode-box ${class_}" id="photodiode-box">
 									<span id="photodiode-spot" class="photodiode-spot"></span>
   								</div>`;
-  return markup;
 };
 
 const pdSpotEncode = (taskCode) => {
@@ -38,7 +42,7 @@ const pdSpotEncode = (taskCode) => {
     }
   }
 
-  if (config.USE_PHOTODIODE) {
+  if (envConfig.USE_PHOTODIODE) {
     const blinkTime = 40;
     let numBlinks = taskCode;
     if (taskCode < eventCodes.open_task) numBlinks = 1;

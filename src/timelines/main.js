@@ -1,12 +1,16 @@
-import { lang, config } from "../config/main";
-import preamble from "./preamble";
-import taskBlock from "./taskBlock";
-import { countdown, showMessage } from "@brown-ccv/behavioral-task-trials";
-import { cameraStart, cameraEnd } from "../trials/camera"
-import { practiceBlock } from "../config/practice";
-import { tutorialBlock } from "../config/tutorial";
-import { exptBlock1, exptBlock2 } from "../config/experiment";
+import { countdown, showMessage } from "@brown-ccv/behavioral-task-trials"
 
+// Task blocks
+import preamble from "./preamble"
+import taskBlock from "./taskBlock"
+// import { practiceBlock } from "../config/practice";
+import { tutorialBlock } from "../config/tutorial";
+// import { exptBlock1, exptBlock2 } from "../config/experiment";
+import { exptBlock2 } from "../config/experiment";
+
+// Trials
+// TODO: Add task block for the camera trials?
+import { cameraStart, cameraEnd } from "../trials/camera"
 import {
   ageCheck,
   sliderCheck,
@@ -15,8 +19,12 @@ import {
   debrief,
 } from "../trials/quizTrials";
 
-// Add your jsPsych options here.
-// Honeycomb will combine these custom options with other options needed by Honyecomb.
+import { lang, config, envConfig } from "../config/main";
+
+/**
+ * Add custom jsPsych options
+ * These are merged with default options needed by Honeycomb
+ */
 const jsPsychOptions = {
   on_trial_finish: function (data) {
     console.log('A trial just ended, here are the latest data:');
@@ -25,49 +33,62 @@ const jsPsychOptions = {
   default_iti: 250
 };
 
+
+// TODO: How to pass the JsPsych options? Configuration settings?
 // Add your jsPsych timeline here.
 // Honeycomb will call this function for us after the subject logs in, and run the resulting timeline.
 // The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
-const buildTimeline = (jsPsych) => config.USE_MTURK ? mturkTimeline : buildPrimaryTimeline(jsPsych);
 
-const buildPrimaryTimeline = (jsPsych) => {
-  let primaryTimeline = [
-    preamble,
-    ageCheck,
-    sliderCheck,
-    countdown({ message: lang.countdown.message1 }),
-    taskBlock(practiceBlock),
-    countdown({ message: lang.countdown.message2 }),
-    taskBlock(exptBlock1),
-    demographics,
-    iusSurvey,
-    debrief,
-  ];
-
-  if (config.USE_CAMERA) {
-    primaryTimeline.splice(1, 0, cameraStart(jsPsych))
-    primaryTimeline.push(cameraEnd(5000))
-  }
-
-  primaryTimeline.push(showMessage(config, {
-    duration: 5000,
-    message: lang.task.end,
-  }))
-
-  return primaryTimeline
+/**
+ * Construct the timeline for the JsPsych experiment
+ * @param experimentConfig The experiment config, either the default one provided in /src/config/config.json or a participant-specific override.
+ * @returns {array} The experiment timeline.
+*/
+const buildTimeline = (experimentConfig) => {
+  if(config.USE_MTURK) buildMTurkTimeline()
+  else buildPrimaryTimeline(experimentConfig);
 }
 
-const mturkTimeline = [
-  preamble,
-  countdown({ message: lang.countdown.message1 }),
-  taskBlock(tutorialBlock),
-  countdown({ message: lang.countdown.message2 }),
-  taskBlock(exptBlock2),
-  showMessage(config, {
-    duration: 5000,
-    message: lang.task.end,
-  }),
-];
+const buildPrimaryTimeline = (experimentConfig) => {
+  // Build the timeline from blocks and individual trials
+  const timeline = [
+    preamble(experimentConfig), // Preamble
+    ageCheck, // ageCheck trial
+    sliderCheck, // sliderCheckTrial
+    countdown({ message: lang.countdown.message1 }), // Add a countdown message
+
+    // TODO: The preamble for the specific task should be here
+    taskBlock(experimentConfig), // Add the main task block
+    demographics,
+    iusSurvey,
+    debrief
+  ]
+
+  // TODO: Condiditionally add these in the timeline creation directly
+  if (envConfig.USE_CAMERA) {
+    // Add camera specific trials after the preamble
+    timeline.splice(1, 0, cameraStart())
+    timeline.push(cameraEnd(5000))
+  }
+
+  // Add an ending message as a final trial
+  timeline.push(showMessage(config, {duration: 5000, message: lang.task.end }))
+
+  return timeline
+};
+
+const buildMTurkTimeline =  () => {
+  // TODO: Preamble is different with the mturk trial?
+  [
+    preamble,
+    countdown({ message: lang.countdown.message1 }),
+    taskBlock(tutorialBlock),
+    countdown({ message: lang.countdown.message2 }),
+    taskBlock(exptBlock2),
+    showMessage(config, {duration: 5000, message: lang.task.end }),
+  ]
+}
+
 
 // Honeycomb, please include these options, and please get the timeline from this function.
 export { jsPsychOptions, buildTimeline };

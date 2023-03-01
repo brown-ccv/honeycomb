@@ -1,5 +1,7 @@
 import requireContext from 'require-context.macro'
 
+// TODO: Comments for these utility functions
+
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -32,24 +34,19 @@ const generateWaitSet = (trial, waitTime) => {
   return [waitTrial, trial]
 }
 
-// As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
+// As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
 // The jsPsych instance passed in here should be the same one used for the running task.
 const startKeypressListener = (jsPsych) => {
-  const keypressResponse = (info) => {
-    const data = {
-      key_press: info.key
-    }
-
-    jsPsych.finishTrial(data)
+  // Complete a trial on keypress - which key is pressed it recorded
+  const keypressCallback = (info) => {
+    jsPsych.finishTrial({key_press: info.key})
   }
 
-  let keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-    callback_function: keypressResponse,
+  return jsPsych.pluginAPI.getKeyboardResponse({
+    callback_function: keypressCallback,
     valid_responses: ['ALL_KEYS'],
     persist: false
   })
-
-  return keyboardListener
 }
 
 // Discover and import images in src/assets/images.
@@ -67,6 +64,7 @@ const importAll = (r) => {
   return r.keys().reduce(importImageByName, {});
 }
 
+// TODO: This should probably be somewhere else? It's the images in assets/images not a function
 const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
 
 const getQueryVariable = (variable) => {
@@ -80,10 +78,12 @@ const getQueryVariable = (variable) => {
   }
 };
 
-const getProlificId = () => {
-  const prolificId = getQueryVariable("PROLIFIC_PID");
-  return prolificId
-};
+const getTurkUniqueId = (jsPsych) => {
+  const turkInfo = jsPsych.turk.turkInfo()
+  return `${turkInfo.workerId}:${turkInfo.assignmentId}`
+}
+
+const getProlificId = () => getQueryVariable("PROLIFIC_PID");
 
 const beep = (audioCodes) => {
   const context = new AudioContext()
@@ -98,7 +98,31 @@ const beep = (audioCodes) => {
   o.stop(context.currentTime + 0.4)
 }
 
+// Stolen from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * max);
+}
 
+/**
+ * Removes the cursor from the part of the screen covered by the specified element. When the user hovers over
+ * the element, the cursor will disappear.
+ * @param elementId The ID of the element to remove the cursor from.
+ */
+const removeCursor = (elementId) => {
+  let element = document.getElementById(elementId);
+  element.classList.add("nocursor");
+};
+
+/**
+ * The opposite of removeCursor. Adds a cursor over a specified element.
+ * @param elementId The element to add a cursor for.
+ */
+const addCursor = (elementId) => {
+  let element = document.getElementById(elementId);
+  element.classList.remove("nocursor");
+};
+
+// TODO: Export each function directly (all files)
 export {
   sleep,
   jitter,
@@ -110,5 +134,9 @@ export {
   images,
   startKeypressListener,
   getProlificId,
-  beep
+  getTurkUniqueId,
+  beep,
+  getRandomInt,
+  addCursor,
+  removeCursor
 }
