@@ -1,9 +1,9 @@
-import { defaultBlockSettings } from './main';
-import { deepCopy } from '../lib/utils'
-
-import localConfig from "./config.json"
-import { envConfig } from "./main"
+// TODO: Uninstall path?
 import path from "path"
+
+import { defaultBlockSettings, envConfig } from './main';
+import localConfig from "./config.js"
+import { deepCopy } from '../lib/utils'
 import { getFirestoreConfig } from "../firebase"
 
 // TODO: Rename config as blockSettings

@@ -19,7 +19,7 @@ import {
   debrief,
 } from "../trials/quizTrials";
 
-import { LANGUAGE, config, envConfig } from "../config/main";
+import { LANGUAGE, envConfig } from "../config/main";
 
 /**
  * Add custom jsPsych options
@@ -48,7 +48,7 @@ const jsPsychOptions = {
 // TODO: Refactor to expect jsPsych object
 const buildTimeline = (experimentConfig) => {
   // TODO: This function is expecting a config object, not the experiment itself
-  if(config.USE_MTURK) buildMTurkTimeline()
+  if(envConfig.USE_MTURK) buildMTurkTimeline()
   else buildPrimaryTimeline(experimentConfig);
 }
 
@@ -76,7 +76,7 @@ const buildPrimaryTimeline = (experimentConfig) => {
   }
 
   // Add an ending message as a final trial
-  timeline.push(showMessage(config, {duration: 5000, message: LANGUAGE.task.end }))
+  timeline.push(showMessage(envConfig, {duration: 5000, message: LANGUAGE.task.end }))
 
   return timeline
 };
@@ -89,7 +89,7 @@ const buildMTurkTimeline =  () => {
     taskBlock(tutorialBlock),
     countdown({ message: LANGUAGE.countdown.message2 }),
     taskBlock(exptBlock2),
-    showMessage(config, {duration: 5000, message: LANGUAGE.task.end }),
+    showMessage(envConfig, {duration: 5000, message: LANGUAGE.task.end }),
   ]
 }
 
