@@ -1,3 +1,6 @@
+// In this file you can include the rest of your app's specific main process
+// code. You can also put them in separate files and require them here.
+
 // handle windows installer set up
 if(require('electron-squirrel-startup')) return 
 
@@ -314,20 +317,40 @@ app.on('activate', function () {
   if (mainWindow === null) createWindow()
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+ipc.on("save-config", (event, config, participantID, studyID) => {
+  if (savePath === "") {
+    savePath = getSavePath(participantID, studyID)
+  }
+
+  const configFileName = `pid_${participantID}_${today.getTime()}_config.json`
+  const saveConfigPath = getFullPath(configFileName)
+  if (!fs.existsSync(savePath)) {
+    fs.mkdir(savePath, { recursive: true }, (err) => {
+      log.error(err)
+      fs.writeFile(saveConfigPath, Buffer.from(JSON.stringify(config))).catch((error) => log.error(error))
+    })
+  } else {
+    fs.writeFile(saveConfigPath, Buffer.from(JSON.stringify(config))).catch((error) => log.error(error))
+  }
+})
 
 // EXPERIMENT END
+
 app.on('will-quit', () => {
-  if (fileCreated) {// finish writing file
+  if (fileCreated) {
     stream.write("]")
     stream.end()
     stream = false
 
-    // copy file to config location
-    fs.mkdir(savePath, { recursive: true }, (err) => {
-      log.error(err)
+    // Create config location and save file
+    if (!fs.existsSync(savePath)) {
+      fs.mkdir(savePath, { recursive: true }, (err) => {
+        log.error(err)
+        fs.copyFileSync(preSavePath, getFullPath(`pid_${participantID}_${today.getTime()}.json`))
+      })
+    } else {
+      // Copy file to config location
       fs.copyFileSync(preSavePath, getFullPath(`pid_${participantID}_${today.getTime()}.json`))
-    })
+    }
   }
 })
