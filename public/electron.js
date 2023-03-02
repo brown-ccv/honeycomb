@@ -44,7 +44,6 @@ function createWindow () {
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
-        enableRemoteModule: true
       }
     })
   } else {
@@ -56,7 +55,6 @@ function createWindow () {
         nodeIntegration: true,
         webSecurity: true,
         contextIsolation: false,
-        enableRemoteModule: true
       }
     })
   }
