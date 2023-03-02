@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import { initJsPsych } from 'jspsych'
 
-// TODO: jsPsychOptions
 import { jsPsychOptions, buildTimeline } from "../timelines/main";
 
 /**
@@ -27,12 +26,11 @@ function JsPsychExperiment({
   height = "100%",
   width = "100%"
 }) {
-  // TODO: Create the startDate function here - this is only displayed after logging in
-  // TODO: Can also check the taskVersion from here?
+  // TODO: Fix props, Can also check the taskVersion from here?
 
   // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
   // TODO: Initialize as an empty array
-  const [timeline, setTimeline] = useState()
+  const [timeline, setTimeline] = useState([])
   const [error, setError] = useState()
 
   // This will be the div in the dom that holds the experiment.
@@ -41,26 +39,22 @@ function JsPsychExperiment({
   const experimentDivId = 'experimentWindow';
   const experimentDiv = useRef(null);
 
-  // Combine custom options imported from timelines/main.js, with necessary Honeycomb options.
-  // TODO: These options are different on a trial by trial basis - should it be an array?
-  const combinedOptions = {
-    ...jsPsychOptions,
-    display_element: experimentDivId,
-    on_data_update: (data) => dataUpdateFunction(data),
-    on_finish: (data) => dataFinishFunction(data),
-  };
-
   // Create the instance of jsPsych that we'll reuse within the scoope of this JsPsychExperiment component.
   // As of jspsych 7, we create our own jspsych instance(s) where needed instead of importing one global instance.
   // The jsPsych instance is rebuilt when props change
-  // TODO: Should this be useCallback?
   const jsPsych = useMemo(() => {
     // Initialize jsPsych and add the study/participant properties
-    const jsPsych = initJsPsych(combinedOptions)
+    const jsPsych = initJsPsych({
+      // Combine custom options imported from timelines/main.js, with necessary Honeycomb options.
+      ...jsPsychOptions,
+      display_element: experimentDivId,
+      on_data_update: (data) => dataUpdateFunction(data),
+      on_finish: (data) => dataFinishFunction(data),
+    })
     jsPsych.data.addProperties({
       participant_id: participantId,
       study_id: studyId,
-      start_date: startDate,
+      start_date: startDate, // TODO: Initialize startDate here?
       task_version: taskVersion
     })
     return jsPsych
@@ -98,9 +92,7 @@ function JsPsychExperiment({
     window.addEventListener("keyup", handleKeyEvent, true);
     window.addEventListener("keydown", handleKeyEvent, true);
 
-    // TODO: Need a better way of handling the promise?
-    console.log(timeline)
-    if(timeline) jsPsych.run(timeline);
+    jsPsych.run(timeline);
 
     return () => {
       window.removeEventListener("keyup", handleKeyEvent, true);
@@ -115,7 +107,7 @@ function JsPsychExperiment({
   });
 
   // TODO: What to do if timeline rejects from the promise? (error)
-  return timeline ? (
+  return timeline.length > 0 ? (
     <div className="App">
       <div id={experimentDivId} style={{ height, width }} ref={experimentDiv} />
     </div>

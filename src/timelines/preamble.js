@@ -14,8 +14,6 @@ import startCode from "../trials/startCode";
  * @param experimentConfig The experiment config.
  * @returns {any} A jsPsych trial object, with a timeline containing the intro and instructions.
  */
-// TODo: This should just be preamble for the experiment, NOT the taskBlock
-// TODO: Function won't take any input then
 const preamble = (experimentConfig) => {
   // Stroop: Create a list of font colors and their corresponding keyboard input.
   const colors = experimentConfig.conditions

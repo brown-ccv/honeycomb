@@ -15,7 +15,6 @@ import { getConfig } from '../config/experiment';
  * @param word The color word to display for this trial.
  * @returns {any} A jsPsych trial object containing a Stroop trial timeline.
  */
-// TODO: experimentConfig is in config/config (swap config/config and config/main?)
 const taskTrial = async (jsPsych, word) => {
   const {participant_id, study_id} = jsPsych.data.dataProperties
   const experimentConfig = await getConfig(participant_id, study_id)

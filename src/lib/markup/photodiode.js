@@ -16,7 +16,6 @@ if (envConfig.USE_ELECTRON) {
  */
 const photodiodeGhostBox = () => {
   // Get class styling from  App.css
-  // TODO: Rename App.css as style.css
   const class_ = envConfig.USE_PHOTODIODE ? "visible" : "invisible";
   return `<div class="photodiode-box ${class_}" id="photodiode-box">
 									<span id="photodiode-spot" class="photodiode-spot"></span>

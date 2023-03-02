@@ -5,7 +5,6 @@ import 'firebase/compat/firestore';
 // Set collection name
 
 /* Useful variables for reusing the Firestore database path. */
-// TODO: These can be used elsewhere
 const REGISTERED_COLLECTION_NAME = "registered_studies"
 const RESPONSE_COLLECTION_NAME = "participant_responses";
 

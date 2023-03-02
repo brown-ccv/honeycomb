@@ -3,8 +3,6 @@ import localConfig from "./config.js"
 import { deepCopy } from '../lib/utils'
 import { getFirestoreConfig } from "../firebase"
 
-// TODO: Rename config as blockSettings
-// TODO: Rename config.js as DefaultBlockSettings.json?
 /**
  * Get configuration file for the experiment
  * @param {string} participantID 
@@ -16,7 +14,6 @@ const getConfig = async(participantID, studyID) => {
   // TODO: USING ELECTRON AND FIREBASE ARE NOT MUTUALLY EXCLUSIVE
   let experimentConfig = localConfig
   if (envConfig.USE_ELECTRON) {
-    // TODO: Where is window coming from?
     const { ipcRenderer } = window.require('electron')
 
 
@@ -35,7 +32,6 @@ const getConfig = async(participantID, studyID) => {
     //   console.log("Using default config")
     // }
 
-
     // Save experiment configuration
     ipcRenderer.send("save-config", experimentConfig, participantID, studyID)
   } else if (envConfig.USE_FIREBASE) {
@@ -49,40 +45,7 @@ const getConfig = async(participantID, studyID) => {
 
 export { getConfig }
 
-// TODO: Why is this commented out?
-/**
- * Creates a new config object, using the default settings as a baseline and overriding each one with the specific block
- * settings from the provided override object.
- * @param override The custom config to merge with the default.
- * @param defaultBlockSettings An object containing the default block settings.
- * @returns newConfig An object containing the new config settings.
- */
-// const overrideSettings = (override, defaultBlockSettings) => {
-//   const newBlock = deepCopy(defaultBlockSettings)
-//   Object.assign(newBlock, override)
-//
-//   return newBlock
-// }
-
-// TODO: Why is this commented out?
-/**
- * Generates an array of blocks of settings for an experiment, using a default block and an array of overrides.
- * @param defaultBlockSettings An object containing the default block settings.
- * @param {array} blockOverrides An array containing the override setting for the different experiment blocks.
- */
-// const generateExperiment = (defaultBlockSettings, blockOverrides) => {
-//   let newBlocks = []
-//
-//   for (let i = 0; i < blockOverrides.length; i++) {
-//     newBlocks.push(overrideSettings(blockOverrides[i], defaultBlockSettings))
-//   }
-//
-//   return newBlocks
-// }
-
-
-// TODO: BLOCK SETTINGS IN MAIN
-
+// TODO: Can these be deleted now that we're using stroop? exptBlock1 and exptBlock2
 
 // FIRST EXPERIMENT BLOCK SETTINGS
 
@@ -92,7 +55,6 @@ exptBlock1.repeats_per_condition = 2
 
 // SECOND EXPERIMENT BLOCK SETTINGS
 
-// TODO: IN MAIN
 // Create copy of default settings for the second experiment
 const exptBlock2 = deepCopy(defaultBlockSettings)
 exptBlock2.conditions = ["e", "f"]

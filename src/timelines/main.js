@@ -9,7 +9,6 @@ import { tutorialBlock } from "../config/tutorial";
 import { exptBlock2, getConfig } from "../config/experiment";
 
 // Trials
-// TODO: Add task block for the camera trials?
 import { cameraStart, cameraEnd } from "../trials/camera"
 import {
   ageCheck,
@@ -22,10 +21,9 @@ import {
 import { LANGUAGE, envConfig } from "../config/main";
 
 /**
- * Add custom jsPsych options
+ * Add custom jsPsych options for all trials
  * These are merged with default options needed by Honeycomb
  */
-// TODO: This is part of the default config? 
 const jsPsychOptions = {
   on_trial_finish: function (data) {
     console.log('A trial just ended, here are the latest data:');
@@ -35,7 +33,7 @@ const jsPsychOptions = {
 };
 
 
-// TODO: How to pass the JsPsych options? Configuration settings?
+// TODO: Comments about passing jsPsych object
 // Add your jsPsych timeline here.
 // Honeycomb will call this function for us after the subject logs in, and run the resulting timeline.
 // The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
@@ -45,14 +43,11 @@ const jsPsychOptions = {
  * @param experimentConfig The experiment config, either the default one provided in /src/config/config.json or a participant-specific override.
  * @returns {array} The experiment timeline.
 */
-// TODO: Refactor to expect jsPsych object
 const buildTimeline = async (jsPsych) => {
-  // TODO: This function is expecting a config object, not the experiment itself
   if(envConfig.USE_MTURK) return await buildMTurkTimeline()
   else return await buildPrimaryTimeline(jsPsych);
 }
 
-// TODO: Refactor to expect jsPsych object
 const buildPrimaryTimeline = async (jsPsych) => {
   const {participant_id, study_id} = jsPsych.data.dataProperties
   const experimentConfig = await getConfig(participant_id, study_id)
@@ -71,7 +66,8 @@ const buildPrimaryTimeline = async (jsPsych) => {
     debrief
   ]
 
-  // TODO: Condiditionally add these in the timeline creation directly
+  // TODO: Add task block for the camera trials?
+  // TODO: Conditionally add these in the timeline creation directly
   if (envConfig.USE_CAMERA) {
     // Add camera specific trials after the preamble
     timeline.splice(1, 0, cameraStart())
@@ -84,7 +80,6 @@ const buildPrimaryTimeline = async (jsPsych) => {
 };
 
 const buildMTurkTimeline = async () => {
-  // TODO: Preamble is different with the mturk trial?
   [
     preamble,
     countdown({ message: LANGUAGE.countdown.message1 }),
