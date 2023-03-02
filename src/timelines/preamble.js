@@ -1,4 +1,5 @@
 import { showMessage } from "@brown-ccv/behavioral-task-trials";
+import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
 import { LANGUAGE, envConfig } from "../config/main"
@@ -43,20 +44,20 @@ const preamble = (experimentConfig) => {
   const timeline = [
     // Show task name and wait for button response
     showMessage(envConfig, {
-      responseType: "html_button_response",
+      responseType: htmlButtonResponse,
       message: LANGUAGE.task.name,
       responseEndsTrial: true,
       buttons: [LANGUAGE.prompt.continue.button],
     }),
       // Show introduction and wait for button response
     showMessage(envConfig, {
-      responseType: "html_button_response",
+      responseType: htmlButtonResponse,
       message: LANGUAGE.instructions.introduction,
       responseEndsTrial: true,
     }),
     // Show instructions and wait for button response
     showMessage(envConfig, {
-      responseType: "html_button_response",
+      responseType: htmlButtonResponse,
       message: instructions,
       responseEndsTrial: true,
     }),

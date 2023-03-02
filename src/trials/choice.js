@@ -1,3 +1,4 @@
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response"
 import { removeCursor } from "../lib/utils"
 
 /**
@@ -12,7 +13,7 @@ import { removeCursor } from "../lib/utils"
 const choice = (word, color, duration) => {
 
   return {
-    type: "html_keyboard_response",
+    type: htmlKeyboardResponse,
     trial_duration: duration,
     response_ends_trial: true,
     stimulus:
