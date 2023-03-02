@@ -34,8 +34,4 @@ public/config/version.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-<<<<<<< HEAD
 psiturkit/*_turk
-=======
-psiturkit/*_turk
->>>>>>> a6a7f04a9877e9295b834be65091355ffcc884ee
