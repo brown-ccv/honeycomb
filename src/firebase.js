@@ -3,8 +3,6 @@ import 'firebase/compat/firestore';
 
 
 // Set collection name
-// TODO: Delete in favor of RESPONSE_COLLECTION_NAME
-const collectionName = "participant_responses";
 
 /* Useful variables for reusing the Firestore database path. */
 // TODO: These can be used elsewhere
@@ -148,7 +146,6 @@ const addToFirebase = (data) => {
 // Export types that exists in Firestore
 export {
   db,
-  collectionName,
   REGISTERED_COLLECTION_NAME,
   RESPONSE_COLLECTION_NAME,
   initParticipant,

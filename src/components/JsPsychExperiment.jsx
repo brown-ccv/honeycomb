@@ -31,11 +31,13 @@ function JsPsychExperiment({
   // TODO: Can also check the taskVersion from here?
 
   // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
+  // TODO: Initialize as an empty array
   const [timeline, setTimeline] = useState()
   const [error, setError] = useState()
 
   // This will be the div in the dom that holds the experiment.
   // We reference it explicitly here so we can do some plumbing with react, jspsych, and events.
+  // TODO: experimentWindow should be a constant?
   const experimentDivId = 'experimentWindow';
   const experimentDiv = useRef(null);
 

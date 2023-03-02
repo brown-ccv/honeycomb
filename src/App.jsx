@@ -72,7 +72,7 @@ function App () {
  // Do nothing by default
   const defaultFunction = () => {}
   // Write the data to firebase
-  // TODO: Don't need this function? Just use addToFirebase?
+  // TODO: Don't need this function? Just use addToFirebase? (function in setMethod)
   const firebaseUpdateFunction = (data) => {
     addToFirebase(data)
   }

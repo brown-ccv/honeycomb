@@ -40,7 +40,7 @@ const showEarnings = (jsPsych, duration) => {
     on_finish: (data) => {
       data.code = eventCodes.show_earnings
       // Add cursor back back; it was removed in choice trial.
-      addCursor("experiment")
+      addCursor("experimentWindow")
     },
   }
 }

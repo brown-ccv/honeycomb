@@ -21,7 +21,8 @@ const choice = (word, color, duration) => {
             <p id="color-display" class="centered-h-v font-weight-bold font-size-extra-large" style="color:${color}">${word}</p>
         </div>`,
     // Don't use cursor for this trial
-    on_start: () => removeCursor("experiment"),
+    // TODO: experimenWindow should be a global constant
+    on_start: () => removeCursor("experimentWindow"),
     // Update the color 
     on_finish: (data) => { data.color = color }
   }

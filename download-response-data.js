@@ -65,6 +65,7 @@
 const { ensureDirSync, writeFile } = require('fs-extra');
 const { initializeApp } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
+const { RESPONSE_COLLECTION_NAME } = require('./src/firebase');
 
 // Get study, participant, and session number from command line.
 const args = process.argv.slice(2);
@@ -79,8 +80,7 @@ const app = initializeApp();
 const db = getFirestore(app);
 
 // Search with the same collection name that we use over in src/firebase.js.
-const collectionName = "participant_responses";
-db.collection(collectionName)
+db.collection(RESPONSE_COLLECTION_NAME)
     .doc(studyId)
     .collection('participants')
     .doc(participantId)
@@ -104,7 +104,7 @@ db.collection(collectionName)
     })
     .then((doc) => {
         // Save the chosen session to a unique JSON file.
-        const outputDir = `${outputRoot}/${collectionName}/${studyId}/${participantId}`;
+        const outputDir = `${outputRoot}/${RESPONSE_COLLECTION_NAME}/${studyId}/${participantId}`;
         ensureDirSync(outputDir);
         const outputFile = `${outputDir}/${doc.id}.json`;
         console.log(`Saving ${outputFile}`);
