@@ -1,4 +1,5 @@
 import { showMessage } from "@brown-ccv/behavioral-task-trials";
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
 import { LANGUAGE, envConfig } from "../config/main"
 
@@ -12,11 +13,12 @@ import startCode from "../trials/startCode";
  * @param experimentConfig The experiment config.
  * @returns {any} A jsPsych trial object, with a timeline containing the intro and instructions.
  */
+// TODo: This should just be preamble for the experiment, NOT the taskBlock
+// TODO: Function won't take any input then
 const preamble = (experimentConfig) => {
   // Stroop: Create a list of font colors and their corresponding keyboard input.
   const colors = experimentConfig.conditions
   let colorList = ""
-  // TODO: colors is set up incorrectly?
   for (let i = 0; i < colors.length; i++) {
     colorList +=
       // First set the font color to the current color.
@@ -68,7 +70,7 @@ const preamble = (experimentConfig) => {
 
   // Return preamble block
   return {
-    type: "html_keyboard_response",
+    type: htmlKeyboardResponse,
     stimulus: "",
     timeline: timeline
   };

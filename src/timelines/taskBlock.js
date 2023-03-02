@@ -1,5 +1,8 @@
+import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
+
 import taskTrial from "./taskTrial";
 import { generateStartingOpts } from "../lib/taskUtils";
+import { getConfig } from "../config/experiment";
 
 
 /**
@@ -11,7 +14,10 @@ import { generateStartingOpts } from "../lib/taskUtils";
  * @param experimentConfig Configuration object for the experiment
  * @returns {any} A jsPsych trial object containing the block timeline.
  */
-const taskBlock = (experimentConfig) => {
+const taskBlock = async (jsPsych) => {
+  const {participant_id, study_id} = jsPsych.data.dataProperties
+  const experimentConfig = await getConfig(participant_id, study_id)
+
   /**
    * Generate the starting options for the block
    *
@@ -27,7 +33,7 @@ const taskBlock = (experimentConfig) => {
    * Stroop:
    * Create a trial for each individual word in startingOptions
    */
-  const timeline = startingOptions.map((word) => taskTrial(experimentConfig, word));
+  const timeline = await Promise.all(startingOptions.map((word) => taskTrial(jsPsych, word)));
 
   // Trial to start the block. Saves the experiment config being used on finish.
   // const blockStart = {
@@ -40,7 +46,7 @@ const taskBlock = (experimentConfig) => {
 
   // Return task block
   return {
-    type: "html_keyboard_response",
+    type: htmlKeyboardResponse,
     stimulus: "",
     trial_duration: 1,
     on_finish: (data) => (data.block_settings = experimentConfig),

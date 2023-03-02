@@ -59,13 +59,13 @@ const buildPrimaryTimeline = async (jsPsych) => {
 
   // Build the timeline from blocks and individual trials
   const timeline = [
+    // TODO: This should just be a preamble for the experiment in total
     preamble(experimentConfig), // Preamble
     ageCheck, // ageCheck trial
     sliderCheck, // sliderCheckTrial
     countdown({ message: LANGUAGE.countdown.message1 }), // Add a countdown message
-
     // TODO: The preamble for the specific task should be here
-    taskBlock(experimentConfig), // Add the main task block
+    await taskBlock(jsPsych), // Add the main task block
     demographics,
     iusSurvey,
     debrief
@@ -80,7 +80,6 @@ const buildPrimaryTimeline = async (jsPsych) => {
 
   // Add an ending message as a final trial
   timeline.push(showMessage(envConfig, {duration: 5000, message: LANGUAGE.task.end }))
-
   return timeline
 };
 

@@ -1,3 +1,5 @@
+import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
+
 import { pdSpotEncode, photodiodeGhostBox } from "../lib/markup/photodiode"
 import { addCursor } from "../lib/utils"
 import { earningsDisplay } from "../lib/markup/earnings"
@@ -12,7 +14,7 @@ import { eventCodes } from "../config/trigger"
  */
 const showEarnings = (jsPsych, duration) => {
   return {
-    type: "html_keyboard_response",
+    type: htmlKeyboardResponse,
     stimulus: "",
     response_ends_trial: false,
     trial_duration: duration,

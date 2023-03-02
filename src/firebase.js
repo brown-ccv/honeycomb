@@ -57,7 +57,7 @@ const addConfigToFirebase = (participantID, studyID, startDate, config) => {
  * @param docName The name of the config document, either "default" or the participant ID.
  * @returns {Promise<config>} A Promise containing the config object, if it exists. Returns null otherwise.
  */
-const handleFirestoreConfigFetch = (studyID, docName) => {
+const handleFirestoreConfigFetch = async (studyID, docName) => {
   return db
     .collection(REGISTERED_COLLECTION_NAME)
     .doc(studyID)

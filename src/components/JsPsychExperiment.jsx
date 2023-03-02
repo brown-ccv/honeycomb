@@ -30,11 +30,9 @@ function JsPsychExperiment({
   // TODO: Create the startDate function here - this is only displayed after logging in
   // TODO: Can also check the taskVersion from here?
 
-    // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
-  // const timeline = buildTimeline(jsPsych)
+  // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
   const [timeline, setTimeline] = useState()
   const [error, setError] = useState()
-  console.log("TIMELINE", timeline)
 
   // This will be the div in the dom that holds the experiment.
   // We reference it explicitly here so we can do some plumbing with react, jspsych, and events.
@@ -68,15 +66,14 @@ function JsPsychExperiment({
 
   useEffect(() => {
     // Build the timeline asynchronously
-    // TODO: React wants you to write the async function here and call it immediately
+    // TODO: React wants you to write the async function here and call it immediately?
     try {
-      setTimeline(buildTimeline(jsPsych))
+      Promise.resolve(buildTimeline(jsPsych)).then(tl => setTimeline(tl))
     } catch (e) {
       // There was an error initializing the timeline
       console.error("ERROR", e, error)
       setError(e)
     }
-    
   }, [jsPsych])
   
 
@@ -98,7 +95,10 @@ function JsPsychExperiment({
   useEffect(() => {
     window.addEventListener("keyup", handleKeyEvent, true);
     window.addEventListener("keydown", handleKeyEvent, true);
-    jsPsych.run(timeline);
+
+    // TODO: Need a better way of handling the promise?
+    console.log(timeline)
+    if(timeline) jsPsych.run(timeline);
 
     return () => {
       window.removeEventListener("keyup", handleKeyEvent, true);
