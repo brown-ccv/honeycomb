@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { initJsPsych } from 'jspsych'
 
 // TODO: jsPsychOptions
@@ -30,6 +30,12 @@ function JsPsychExperiment({
   // TODO: Create the startDate function here - this is only displayed after logging in
   // TODO: Can also check the taskVersion from here?
 
+    // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
+  // const timeline = buildTimeline(jsPsych)
+  const [timeline, setTimeline] = useState()
+  const [error, setError] = useState()
+  console.log("TIMELINE", timeline)
+
   // This will be the div in the dom that holds the experiment.
   // We reference it explicitly here so we can do some plumbing with react, jspsych, and events.
   const experimentDivId = 'experimentWindow';
@@ -49,6 +55,7 @@ function JsPsychExperiment({
   // The jsPsych instance is rebuilt when props change
   // TODO: Should this be useCallback?
   const jsPsych = useMemo(() => {
+    // Initialize jsPsych and add the study/participant properties
     const jsPsych = initJsPsych(combinedOptions)
     jsPsych.data.addProperties({
       participant_id: participantId,
@@ -59,15 +66,25 @@ function JsPsychExperiment({
     return jsPsych
   }, [participantId, studyId, startDate, taskVersion]);
 
-  // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
-  // TODO: This is expecting combinedOptions
-  // TODO: This should be in some useEffect? It's an async function
-  const timeline = buildTimeline(jsPsych)
-  console.log("TIMELINE", timeline)
+  useEffect(() => {
+    // Build the timeline asynchronously
+    // TODO: React wants you to write the async function here and call it immediately
+    try {
+      setTimeline(buildTimeline(jsPsych))
+    } catch (e) {
+      // There was an error initializing the timeline
+      console.error("ERROR", e, error)
+      setError(e)
+    }
+    
+  }, [jsPsych])
+  
+
+
 
   // Set up event and lifecycle callbacks to start and stop jspsych.
   // Inspiration from jspsych-react: https://github.com/makebrainwaves/jspsych-react/blob/master/src/index.js
-  const handleKeyEvent = e => {
+  const handleKeyEvent = (e) => {
     if (e.redispatched) return
 
     const new_event = new e.constructor(e.type, e);
@@ -90,11 +107,13 @@ function JsPsychExperiment({
         jsPsych.endExperiment("Ended Experiment");
       } catch (e) {
         console.error("Experiment closed before unmount");
+        setError(e)
       }
     };
   });
 
-  return timeline.length > 0 ? (
+  // TODO: What to do if timeline rejects from the promise? (error)
+  return timeline ? (
     <div className="App">
       <div id={experimentDivId} style={{ height, width }} ref={experimentDiv} />
     </div>
@@ -103,7 +122,7 @@ function JsPsychExperiment({
     <div className="App height-100">
       <div className="centered-h-v">Loading task...</div>
     </div>
-  );
+  )
 }
 
 export default JsPsychExperiment;

@@ -46,17 +46,17 @@ const jsPsychOptions = {
  * @returns {array} The experiment timeline.
 */
 // TODO: Refactor to expect jsPsych object
-const buildTimeline = (jsPsych) => {
+const buildTimeline = async (jsPsych) => {
   // TODO: This function is expecting a config object, not the experiment itself
-  if(envConfig.USE_MTURK) return buildMTurkTimeline()
-  else return buildPrimaryTimeline(jsPsych);
+  if(envConfig.USE_MTURK) return await buildMTurkTimeline()
+  else return await buildPrimaryTimeline(jsPsych);
 }
 
 // TODO: Refactor to expect jsPsych object
-const buildPrimaryTimeline = async(jsPsych) => {
+const buildPrimaryTimeline = async (jsPsych) => {
   const {participant_id, study_id} = jsPsych.data.dataProperties
   const experimentConfig = await getConfig(participant_id, study_id)
-  console.log(experimentConfig)
+
   // Build the timeline from blocks and individual trials
   const timeline = [
     preamble(experimentConfig), // Preamble
@@ -84,7 +84,7 @@ const buildPrimaryTimeline = async(jsPsych) => {
   return timeline
 };
 
-const buildMTurkTimeline =  () => {
+const buildMTurkTimeline = async () => {
   // TODO: Preamble is different with the mturk trial?
   [
     preamble,

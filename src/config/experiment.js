@@ -14,11 +14,14 @@ import { getFirestoreConfig } from "../firebase"
  * @param {string} studyID 
  * @return {object} Block Settings used for the JsPsych experiment
  */
-const getConfig = async (participantID, studyID) => {
+const getConfig = async(participantID, studyID) => {
+  console.log("GET CONFIG")
   // Initialize experiment config as local file
   let experimentConfig = localConfig
   if (envConfig.USE_ELECTRON) {
-    const app = window.require("electron").remote.app
+    // TODO: Get these from electron.js?
+    console.log(window.require("electron"))
+    // const app = window.require("electron").remote.app
     const renderer = window.require("electron").ipcRenderer
     const fs = window.require("fs")
 
