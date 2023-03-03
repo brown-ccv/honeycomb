@@ -70,7 +70,6 @@ function App () {
   // TODO: startDate should be updated here
   const handleLogin = useCallback(
     (loggedIn, studyId, participantId) => {
-
       if (loggedIn) {
         setEnvParticipantId(participantId)
         setEnvStudyId(studyId)
@@ -83,14 +82,8 @@ function App () {
   // Login logic
   useEffect(() => {
     // For testing and debugging purposes
-    console.log('Turk:', config.USE_MTURK)
-    console.log('Firebase:', config.USE_FIREBASE)
-    console.log('Prolific:', config.USE_PROLIFIC)
-    console.log('Electron:', config.USE_ELECTRON)
-    console.log('Video:', config.USE_CAMERA)
-    console.log('Volume:', config.USE_VOLUME)
-    console.log('Event Marker:', config.USE_EEG)
-    console.log('Photodiode:', config.USE_PHOTODIODE)
+    console.log(config)
+
     // If on desktop
     if (config.USE_ELECTRON) {
       const { ipcRenderer } = window.require('electron')
