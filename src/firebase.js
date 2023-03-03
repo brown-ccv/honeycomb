@@ -25,6 +25,22 @@ if (window.location.hostname === "localhost") {
   db.useEmulator("localhost", 8080);
 }
 
+// Attempts to retrieve the data in /{collectionName}/{study_id}/participants/{participant_id}
+// Will return false if participant isn't valid
+const validateParticipant = async (participantId, studyId) => {
+  return db.collection(collectionName)
+    .doc(studyId)
+    .collection('participants')
+    .doc(participantId)
+    .then(() => {
+      return true
+    })
+    .catch((error) => {
+      console.error(error)
+      return false
+    });
+}
+
 // Add participant data and trial data to db
 const initParticipant = (participantId, studyId, startDate) => {
   // return promise with value true if participant and study id match, false otherwise
@@ -64,6 +80,7 @@ const addToFirebase = (data) => {
 export {
   db,
   collectionName,
+  validateParticipant,
   initParticipant,
   addToFirebase
 };
