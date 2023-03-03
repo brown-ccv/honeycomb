@@ -3,6 +3,7 @@ import 'firebase/compat/firestore';
 
 
 // Set collection name
+// TODO: Export as constant variable
 const collectionName = "participant_responses";
 
 // Firebase config
@@ -24,6 +25,8 @@ var db = firebase.initializeApp(config).firestore();
 if (window.location.hostname === "localhost") {
   db.useEmulator("localhost", 8080);
 }
+
+// TODO: Can store variables for the nested pieces of a record https://firebase.google.com/docs/firestore/data-model#references
 
 // Attempts to retrieve the data in /{collectionName}/{study_id}/participants/{participant_id}
 // Will return false if participant isn't valid
@@ -67,11 +70,12 @@ const addToFirebase = (data) => {
   const studyId = data.study_id;
   const startDate = data.start_date
 
-  db.collection(collectionName)
+  // Data in firestore is nested as a single collection
+  db.collection(collectionName) 
     .doc(studyId)
     .collection('participants')
-    .doc(participantId)
-    .collection('data')
+    .doc(participantId)        
+    .collection('data')         
     .doc(startDate)
     .update('results', firebase.firestore.FieldValue.arrayUnion(data))
 };
