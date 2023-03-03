@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useMemo } from "react";
-import { initJsPsych } from 'jspsych'
-import { jsPsychOptions, buildTimeline } from "../timelines/main";
+import { initJsPsych } from 'jspsych';
+import React, { useEffect, useMemo, useRef } from "react";
+import { buildTimeline, jsPsychOptions } from "../timelines/main";
 
 function JsPsychExperiment({
   participantId,

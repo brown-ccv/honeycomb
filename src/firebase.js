@@ -44,9 +44,9 @@ const initParticipant = (participantId, studyId, startDate) => {
     });
 };
 
-// Add inidividual trials to db
+// Add individual trials to db
 const addToFirebase = (data) => {
-  console.log(data)
+  console.log("Adding trial to firebase", data)
   const participantId = data.participant_id;
   const studyId = data.study_id;
   const startDate = data.start_date
