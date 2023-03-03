@@ -33,6 +33,7 @@ function App () {
     return true
   }
   const firebaseValidation = (participantId, studyId) => {
+    // TODO: startDate is sent to Firebase here
     return initParticipant(participantId, studyId, startDate)
   }
 
@@ -65,8 +66,11 @@ function App () {
   }
 
   // Function to capture login data, so we can pass it on to JsPsychExperiment.
-  const setLoggedIn = useCallback(
+  // TODO: Rename as handleLogin? That's what it's called in <Login />
+  // TODO: startDate should be updated here
+  const handleLogin = useCallback(
     (loggedIn, studyId, participantId) => {
+
       if (loggedIn) {
         setEnvParticipantId(participantId)
         setEnvStudyId(studyId)
@@ -108,13 +112,13 @@ function App () {
         window.lodash = _.noConflict()
         setPsiturk(new PsiTurk(turkUniqueId, '/complete'))
         setMethod('mturk')
-        setLoggedIn(true, 'mturk', turkUniqueId)
+        handleLogin(true, 'mturk', turkUniqueId)
         /* eslint-enable */
       } else if (config.USE_PROLIFIC) {
         const pID = getProlificId()
         if (config.USE_FIREBASE && pID) {
           setMethod('firebase')
-          setLoggedIn(true, 'prolific', pID)
+          handleLogin(true, 'prolific', pID)
         } else {
           setReject(true)
         }
@@ -181,7 +185,7 @@ function App () {
             }
             envParticipantId={envParticipantId}
             envStudyId={envStudyId}
-            onLogin={setLoggedIn}
+            handleLogin={handleLogin}
           />
         )}
       </>
