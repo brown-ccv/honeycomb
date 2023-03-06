@@ -9,7 +9,7 @@ import Login from './components/Login'
 
 import { config, taskVersion, turkUniqueId } from './config/main'
 import { addToFirebase, validateParticipant } from './firebase'
-import { getProlificId, sleep } from './lib/utils'
+import { getProlificId } from './lib/utils'
 
 /**
  * The top-level React component for Honeycomb. App handles initiating the jsPsych component when the participant
