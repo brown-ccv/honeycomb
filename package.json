@@ -35,6 +35,24 @@
     "react-dom": "^16.8.6",
     "react-scripts": "5.0.1"
   },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.64",
+    "@electron-forge/maker-deb": "^6.0.0-beta.64",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.64",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
+    "babel-plugin-macros": "^2.6.1",
+    "chai": "^4.2.0",
+    "concurrently": "^7.6.0",
+    "cross-env": "^7.0.3",
+    "cz-conventional-changelog": "^3.2.0",
+    "dotenv-cli": "^7.0.0",
+    "electron": "19.0.8",
+    "firebase-admin": "^11.0.1",
+    "firebase-tools": "^11.0.1",
+    "require-context.macro": "^1.1.1",
+    "standard": "^17.0.0",
+    "wait-on": "^7.0.1"
+  },
   "scripts": {
     "commit": "git-cz",
     "postinstall": "node version.js && npm run rebuild",
@@ -115,27 +133,14 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.64",
-    "@electron-forge/maker-deb": "^6.0.0-beta.64",
-    "@electron-forge/maker-dmg": "^6.0.0-beta.64",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
-    "babel-plugin-macros": "^2.6.1",
-    "chai": "^4.2.0",
-    "concurrently": "^7.6.0",
-    "cross-env": "^7.0.3",
-    "cz-conventional-changelog": "^3.2.0",
-    "dotenv-cli": "^7.0.0",
-    "electron": "19.0.8",
-    "firebase-admin": "^11.0.1",
-    "firebase-tools": "^11.0.1",
-    "require-context.macro": "^1.1.1",
-    "standard": "^17.0.0",
-    "wait-on": "^7.0.1"
-  },
   "babel": {
     "plugins": [
       "macros"
+    ]
+  },
+  "standard": {
+    "ignore": [
+      "/public/lib/*"
     ]
   }
 }

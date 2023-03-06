@@ -48,9 +48,9 @@ function JsPsychExperiment ({
     if (e.redispatched) {
       return
     }
-    const new_event = new e.constructor(e.type, e)
-    new_event.redispatched = true
-    experimentDiv.current.dispatchEvent(new_event)
+    const newEvent = new e.constructor(e.type, e)
+    newEvent.redispatched = true
+    experimentDiv.current.dispatchEvent(newEvent)
   }
 
   // These useEffect callbacks are similar to componentDidMount / componentWillUnmount.
