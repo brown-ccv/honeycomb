@@ -130,11 +130,13 @@ function App () {
   const desktopFinishFunction = () => { ipcRenderer.send('end', 'true') }
   const psiturkFinishFunction = () => {
     const completePsiturk = async () => {
-      psiturk.saveData()
-      await sleep(5000)
-      psiturk.completeHIT()
+      psiturk.saveData({
+        success: () => psiturk.completeHIT(),
+        error: () => setIsError(true)
+     })
     }
     completePsiturk()
+
   }
 
   // Update the study/participant data when they log in
