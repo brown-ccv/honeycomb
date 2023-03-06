@@ -140,7 +140,8 @@
   },
   "standard": {
     "ignore": [
-      "/public/lib/*"
+      "/public/lib/*",
+      "/src/__tests__/*"
     ]
   }
 }
