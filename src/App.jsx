@@ -99,7 +99,6 @@ function App () {
         setMethod('default')
       }
     }
-    console.log(currentMethod)
     // eslint-disable-next-line
   }, [])
 
@@ -109,25 +108,25 @@ function App () {
 
   // Default to valid
   const defaultValidation = async () => true
-
-  // TODO: This should JUST validate, not init the participant
-  // Validate participant/study against firestore rules
+  // Validate participant/study against Firestore rules
   const firebaseValidation = (participantId, studyId) => {
-    // return initParticipant(participantId, studyId, startDate)
     return validateParticipant(participantId, studyId)
   }
 
   /** DATA WRITE FUNCTIONS */
 
-  // Adding data functions for firebase, electron adn Mturk
   const defaultFunction = () => {}
+  // Add trial data to Firestore
   const firebaseUpdateFunction = (data) => { addToFirebase(data) }
+  // Execute the 'data' callback function (see public/electron.js)
   const desktopUpdateFunction = (data) => { ipcRenderer.send('data', data) }
   const psiturkUpdateFunction = (data) => { psiturk.recordTrialData(data) }
 
   /** EXPERIMENT FINISH FUNCTIONS */
 
+  // Save the experiment data on the desktop
   const defaultFinishFunction = (data) => { data.localSave('csv', 'neuro-task.csv') }
+  // Execute the 'end' callback function (see public/electron.js)
   const desktopFinishFunction = () => { ipcRenderer.send('end', 'true') }
   const psiturkFinishFunction = () => {
     const completePsiturk = async () => {
