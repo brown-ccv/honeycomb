@@ -73,14 +73,14 @@ function App () {
         window.lodash = _.noConflict()
         setPsiturk(new PsiTurk(turkUniqueId, '/complete'))
         setMethod('mturk')
-        // TODO: This won't work
+        // TODO 145: Function signature
         handleLogin('mturk', turkUniqueId)
         /* eslint-enable */
       } else if (config.USE_PROLIFIC) {
         const pID = getProlificId()
         if (config.USE_FIREBASE && pID) {
           setMethod('firebase')
-          // TODO: This wont work
+          // TODO 145: Function signature
           handleLogin('prolific', pID)
         } else {
           // Error - Prolific must be used with Firebase
