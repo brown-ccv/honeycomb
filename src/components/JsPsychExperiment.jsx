@@ -7,7 +7,6 @@ import { buildTimeline, jsPsychOptions } from "../timelines/main";
 function JsPsychExperiment({
   participantId,
   studyId,
-  startDate,
   taskVersion,
   dataUpdateFunction,
   dataFinishFunction,
@@ -30,6 +29,9 @@ function JsPsychExperiment({
   // Create the instance of jsPsych that we'll reuse within the scope of this JsPsychExperiment component.
   // As of jspsych 7, we create our own jspsych instance(s) where needed instead of importing one global instance.
   const jsPsych = useMemo(() => {
+    // Start date of the experiment - used as the UID
+    const startDate = new Date().toISOString()
+
     // Write the initial record to Firestore 
     if(config.USE_FIREBASE) initParticipant(participantId, studyId, startDate)
 
@@ -42,7 +44,7 @@ function JsPsychExperiment({
       task_version: taskVersion
     })
     return jsPsych
-  }, [participantId, studyId, startDate, taskVersion]);
+  }, [participantId, studyId, taskVersion]);
 
   // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
   const timeline = buildTimeline(jsPsych)

@@ -34,11 +34,6 @@ function App () {
   // Manage the data used in the experiment
   const [participantID, setParticipantID] = useState('')
   const [studyID, setStudyID] = useState('')
-  // Remember startDate between renders.
-  // This is necessary to allow Firebase to create a timestamped document at Login time,
-  // and then to find and update the *same* timestamped document after each trial in JsPsychExperiment.
-  // TODO: Shouldn't the document have a UID? Save the date but we should have a uid for the document?
-  const [startDate, setStartDate] = useState(new Date().toISOString())
 
   // Manage the method type being used ("desktop", "firebase", "mturk", or "default")
   const [currentMethod, setMethod] = useState('default')
@@ -141,10 +136,8 @@ function App () {
 
   // Update the study/participant data when they log in
   const handleLogin = useCallback((participantId, studyId) => {
-      const loginDate = new Date().toISOString()
       setParticipantID(participantId)
       setStudyID(studyId)
-      setStartDate(loginDate)
       setLoggedIn(true)
     },
     []
@@ -165,7 +158,6 @@ function App () {
           <JsPsychExperiment
             participantId={participantID}
             studyId={studyID}
-            startDate={startDate}
             taskVersion={taskVersion}
             dataUpdateFunction={
               {
