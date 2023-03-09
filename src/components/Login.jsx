@@ -1,43 +1,27 @@
-import React, { useState, useEffect } from "react";
-import Form from "react-bootstrap/Form";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
-function Login({ onLogin, envParticipantId, envStudyId, validationFunction }) {
+function Login({ handleLogin, initialParticipantID, initialStudyID, validationFunction }) {
   // State variables for login screen
-  const [participantId, setParticipant] = useState("");
-  const [studyId, setStudy] = useState("");
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    // Update based on environment variables
-    setParticipant(envParticipantId);
-    setStudy(envStudyId);
-  }, [envParticipantId, envStudyId]);
-
-  // Checks if forms are filled in
-  function validateForm() {
-    return participantId.length > 0 && studyId.length > 0;
-  }
+  const [participantId, setParticipant] = useState(initialParticipantID);
+  const [studyId, setStudy] = useState(initialStudyID);
+  const [isError, setIsError] = useState(false);
 
   // Function to log in participant
   function handleSubmit(e) {
     e.preventDefault();
-    // Validates fields
-    validationFunction(participantId, studyId)
-    // Logs in depending on result from promise
-    .then((loggedIn) => {
-      if (loggedIn) {
-        onLogin(loggedIn, studyId, participantId);
-      } else {
-        setError(true);
-      }
+    // Logs user in if a valid participant/study id combination is given
+    validationFunction(participantId, studyId).then((isValid) => {
+      setIsError(isValid);
+      if (isValid) handleLogin(participantId, studyId);
     });
   }
 
   return (
     <div className="centered-h-v">
       <div className="width-50">
-        {error ? (
+        {isError ? (
           <div className="alert alert-danger" role="alert">
             The participant ID and study ID do not match
           </div>
@@ -65,7 +49,7 @@ function Login({ onLogin, envParticipantId, envStudyId, validationFunction }) {
             block
             size="lg"
             type="submit"
-            disabled={!validateForm()}
+            disabled={participantId.length === 0 || studyId.length === 0}
           >
             Log In
           </Button>
