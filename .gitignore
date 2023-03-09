@@ -17,6 +17,9 @@
 /dist
 /out
 
+# IDEs
+/.vscode
+
 # misc
 .DS_Store
 .env
@@ -25,7 +28,4 @@ package-lock.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
 psiturkit/*_turk
-.firebase
-/.vscode
