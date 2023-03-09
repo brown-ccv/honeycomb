@@ -43,7 +43,7 @@ function JsPsychExperiment ({
   const timeline = buildTimeline(jsPsych)
 
   // Set up event and lifecycle callbacks to start and stop jspsych.
-  // Inspration from jspsych-react: https://github.com/makebrainwaves/jspsych-react/blob/master/src/index.js
+  // Inspiration from jspsych-react: https://github.com/makebrainwaves/jspsych-react/blob/master/src/index.js
   const handleKeyEvent = e => {
     if (e.redispatched) {
       return
