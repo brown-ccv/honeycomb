@@ -16,7 +16,7 @@
     "@brown-ccv/behavioral-task-trials": "^2.0.0",
     "@fortawesome/fontawesome-free": "^5.9.0",
     "@jspsych/plugin-html-button-response": "^1.1.1",
-    "@jspsych/plugin-html-keyboard-response": "^1.1.1",
+    "@jspsych/plugin-html-keyboard-response": "1.1.2",
     "@jspsych/plugin-image-keyboard-response": "^1.1.1",
     "@jspsych/plugin-survey-multi-select": "^1.1.1",
     "bootstrap": "^5.2.0-beta1",
@@ -27,14 +27,17 @@
     "firebase": "^9.8.4",
     "fs-extra": "^8.1.0",
     "jquery": "^3.4.1",
-    "jspsych": "^7.2.3",
+    "jspsych": "7.3.1",
     "lodash": "^4.17.19",
     "popper.js": "^1.16.0",
     "react": "^16.8.6",
     "react-bootstrap": "^1.6.1",
     "react-dom": "^16.8.6",
     "react-scripts": "5.0.1",
-    "typescript": "^3.6.4"
+    "typescript": "^3.6.4",
+    "@jspsych/plugin-survey-text": "1.1.2",
+    "@jspsych/plugin-survey-multi-choice": "1.1.2",
+    "@jspsych/plugin-survey-likert": "1.1.2"
   },
   "scripts": {
     "commit": "git-cz",

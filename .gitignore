@@ -20,6 +20,7 @@
 # misc
 .DS_Store
 .env
+.idea
 public/config/version.json
 package-lock.json
 npm-debug.log*

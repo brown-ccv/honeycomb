@@ -1,73 +1,44 @@
-import { lang, config } from "../config/main";
-import preamble from "./preamble";
-import taskBlock from "./taskBlock";
-import { countdown, showMessage } from "@brown-ccv/behavioral-task-trials";
-import { cameraStart, cameraEnd } from "../trials/camera"
-import { practiceBlock } from "../config/practice";
-import { tutorialBlock } from "../config/tutorial";
-import { exptBlock1, exptBlock2 } from "../config/experiment";
+import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
+import 'jspsych/css/jspsych.css'
 
-import {
-  ageCheck,
-  sliderCheck,
-  demographics,
-  iusSurvey,
-  debrief,
-} from "../trials/quizTrials";
 
-// Add your jsPsych options here.
-// Honeycomb will combine these custom options with other options needed by Honyecomb.
-const jsPsychOptions = {
-  on_trial_finish: function (data) {
-    console.log('A trial just ended, here are the latest data:');
-    console.log(data);
-  },
-  default_iti: 250
-};
+const jsPsychOptions = {}
 
-// Add your jsPsych timeline here.
-// Honeycomb will call this function for us after the subject logs in, and run the resulting timeline.
-// The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
-const buildTimeline = (jsPsych) => config.USE_MTURK ? mturkTimeline : buildPrimaryTimeline(jsPsych);
+function buildTimeline(jsPsych) {
+    console.log(jsPsych.version())
+    // create a new WritableStream
 
-const buildPrimaryTimeline = (jsPsych) => {
-  let primaryTimeline = [
-    preamble,
-    ageCheck,
-    sliderCheck,
-    countdown({ message: lang.countdown.message1 }),
-    taskBlock(practiceBlock),
-    countdown({ message: lang.countdown.message2 }),
-    taskBlock(exptBlock1),
-    demographics,
-    iusSurvey,
-    debrief,
-  ];
 
-  if (config.USE_CAMERA) {
-    primaryTimeline.splice(1, 0, cameraStart(jsPsych))
-    primaryTimeline.push(cameraEnd(5000))
-  }
-
-  primaryTimeline.push(showMessage(config, {
-    duration: 5000,
-    message: lang.task.end,
-  }))
-
-  return primaryTimeline
+    const trials = [
+        {
+            timeline: [{
+                type: jsPsychHtmlKeyboardResponse, trial_duration: () => {
+                    let duration = "2000";
+                    return duration
+                }, stimulus: () => {
+                    let text = "press a or b or wait";
+                    let color = "blue";
+                    return "<div style='color: " + color + "'>" + text + "</div>"
+                }, choices: () => {
+                    let choices = ['a', 'b'];
+                    return choices
+                }, on_finish: (data) => {
+                    data["bean_type"] = 'jsPsychHtmlKeyboardResponse';
+                    let duration = "2000";
+                    data["bean_duration"] = duration;
+                    let text = "press a or b or wait";
+                    data["bean_text"] = text;
+                    let color = "blue";
+                    data["bean_color"] = color;
+                    let choices = ['a', 'b'];
+                    data["bean_choices"] = choices;
+                    let correct_key = "";
+                    data["bean_correct_key"] = correct_key;
+                    data["bean_correct"] = correct_key == data["response"]
+                }
+            }], timeline_variables: []
+        }]
+    return trials;
 }
 
-const mturkTimeline = [
-  preamble,
-  countdown({ message: lang.countdown.message1 }),
-  taskBlock(tutorialBlock),
-  countdown({ message: lang.countdown.message2 }),
-  taskBlock(exptBlock2),
-  showMessage(config, {
-    duration: 5000,
-    message: lang.task.end,
-  }),
-];
-
-// Honeycomb, please include these options, and please get the timeline from this function.
-export { jsPsychOptions, buildTimeline };
+export {jsPsychOptions, buildTimeline}
