@@ -2,7 +2,8 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
 
 // Set collection name
-const collectionName = 'participant_responses'
+// TODO: Export as constant variable
+const collectionName = "participant_responses";
 
 // Firebase config
 const config = {
@@ -21,6 +22,24 @@ const db = firebase.initializeApp(config).firestore()
 // Use emulator if on localhost
 if (window.location.hostname === 'localhost') {
   db.useEmulator('localhost', 8080)
+}
+
+// TODO: Can store variables for the nested pieces of a record https://firebase.google.com/docs/firestore/data-model#references
+
+// Attempts to retrieve the data in /{collectionName}/{study_id}/participants/{participant_id}
+// Will return false if participant isn't valid
+const validateParticipant = async (participantId, studyId) => {
+  return db.collection(collectionName)
+    .doc(studyId)
+    .collection('participants')
+    .doc(participantId)
+    .then(() => {
+      return true
+    })
+    .catch((error) => {
+      console.error(error)
+      return false
+    });
 }
 
 // Add participant data and trial data to db
@@ -42,18 +61,19 @@ const initParticipant = (participantId, studyId, startDate) => {
     })
 }
 
-// Add inidividual trials to db
+// Add individual trials to db
 const addToFirebase = (data) => {
-  console.log(data)
-  const participantId = data.participant_id
-  const studyId = data.study_id
+  console.log("Adding trial to firebase", data)
+  const participantId = data.participant_id;
+  const studyId = data.study_id;
   const startDate = data.start_date
 
-  db.collection(collectionName)
+  // Data in firestore is nested as a single collection
+  db.collection(collectionName) 
     .doc(studyId)
     .collection('participants')
-    .doc(participantId)
-    .collection('data')
+    .doc(participantId)        
+    .collection('data')         
     .doc(startDate)
     .update('results', firebase.firestore.FieldValue.arrayUnion(data))
 }
@@ -62,6 +82,7 @@ const addToFirebase = (data) => {
 export {
   db,
   collectionName,
+  validateParticipant,
   initParticipant,
   addToFirebase
 }

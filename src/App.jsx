@@ -1,106 +1,66 @@
-import React, { useState, useEffect, useCallback } from 'react'
 import _ from 'lodash'
+import React, { useCallback, useEffect, useState } from 'react'
 
-import './App.css'
-import 'bootstrap/dist/css/bootstrap.css'
 import '@fortawesome/fontawesome-free/css/all.css'
+import 'bootstrap/dist/css/bootstrap.css'
+import './App.css'
 
-import Login from './components/Login'
 import JsPsychExperiment from './components/JsPsychExperiment'
+import Login from './components/Login'
 
-import { getProlificId, sleep } from './lib/utils'
-import { initParticipant, addToFirebase } from './firebase'
 import { config, taskVersion, turkUniqueId } from './config/main'
+import { addToFirebase, validateParticipant } from './firebase'
+import { getProlificId } from './lib/utils'
 
-function App () {
-  // Remember startDate between renders.
-  // This is necessary to allow Firebase to create a timestamped document at Login time,
-  // and then to find and update the *same* timestamped document after each trial in JsPsychExperiment.
-  const [startDate] = useState(new Date().toISOString())
+/**
+ * The top-level React component for Honeycomb. App handles initiating the jsPsych component when the participant
+ * successfully logs in, and stores the overall state of the experiment. Importantly, App keeps track of what the
+ * experiment is running on (Electron, Firebase, PsiTurk, or MTurk).
+ *
+ * Note that App is a functional component, which means it uses React callbacks rather than class methods. Learn more
+ * about functional vs. class components here: https://reactjs.org/docs/components-and-props.html. It is recommended
+ * to use functional components.
+ */
+function App() {
+  // Manage if a user is currently logged in
+  const [loggedIn, setLoggedIn] = useState(false)
+  // Manage error state of the app
+  const [isError, setIsError] = useState(false)
 
-  // Variables for login
-  const [loggedIn, setLogin] = useState(false)
-  const [ipcRenderer, setRenderer] = useState(false)
+  // Manage the electron renderer
+  const [ipcRenderer, setIpcRenderer] = useState()
+  // Manage the psiturk object
   const [psiturk, setPsiturk] = useState(false)
-  const [envParticipantId, setEnvParticipantId] = useState('')
-  const [envStudyId, setEnvStudyId] = useState('')
+
+  // Manage the data used in the experiment
+  const [participantID, setParticipantID] = useState('')
+  const [studyID, setStudyID] = useState('')
+
+  // Manage the method type being used ("desktop", "firebase", "mturk", or "default")
   const [currentMethod, setMethod] = useState('default')
-  const [reject, setReject] = useState(false)
 
-  const query = new URLSearchParams(window.location.search)
-
-  // Validation functions for desktop case and firebase
-  const defaultValidation = async () => {
-    return true
-  }
-  const firebaseValidation = (participantId, studyId) => {
-    return initParticipant(participantId, studyId, startDate)
-  }
-
-  // Adding data functions for firebase, electron adn Mturk
-  const defaultFunction = () => {}
-  const firebaseUpdateFunction = (data) => {
-    addToFirebase(data)
-  }
-  const desktopUpdateFunction = (data) => {
-    ipcRenderer.send('data', data)
-  }
-  const psiturkUpdateFunction = (data) => {
-    psiturk.recordTrialData(data)
-  }
-
-  // On finish functions for electron, Mturk
-  const defaultFinishFunction = (data) => {
-    data.localSave('csv', 'neuro-task.csv')
-  }
-  const desktopFinishFunction = () => {
-    ipcRenderer.send('end', 'true')
-  }
-  const psiturkFinishFunction = () => {
-    const completePsiturk = async () => {
-      psiturk.saveData()
-      await sleep(5000)
-      psiturk.completeHIT()
-    }
-    completePsiturk()
-  }
-
-  // Function to capture login data, so we can pass it on to JsPsychExperiment.
-  const setLoggedIn = useCallback(
-    (loggedIn, studyId, participantId) => {
-      if (loggedIn) {
-        setEnvParticipantId(participantId)
-        setEnvStudyId(studyId)
-      }
-      setLogin(loggedIn)
-    },
-    [startDate]
-  )
-
-  // Login logic
+  /**
+   * This effect is called once, on the first render of the application
+   * It checks the environment variables to initialize needed state variables
+   * And determines which methods to be using
+   */
+  // TODO: Electron shouldn't be mutually exclusive?
   useEffect(() => {
     // For testing and debugging purposes
-    console.log('Turk:', config.USE_MTURK)
-    console.log('Firebase:', config.USE_FIREBASE)
-    console.log('Prolific:', config.USE_PROLIFIC)
-    console.log('Electron:', config.USE_ELECTRON)
-    console.log('Video:', config.USE_CAMERA)
-    console.log('Volume:', config.USE_VOLUME)
-    console.log('Event Marker:', config.USE_EEG)
-    console.log('Photodiode:', config.USE_PHOTODIODE)
+    console.log(config)
+
     // If on desktop
     if (config.USE_ELECTRON) {
       const { ipcRenderer } = window.require('electron')
-      setRenderer(ipcRenderer)
+      setIpcRenderer(ipcRenderer)
+
+      // TODO: I don't think this is using the ipcRenderer from state?
       ipcRenderer.send('updateEnvironmentVariables', config)
-      // If at home, fill in fields based on environment variables
+      // Fill in login fields based on environment variables (may still be blank)
       const credentials = ipcRenderer.sendSync('syncCredentials')
-      if (credentials.envParticipantId) {
-        setEnvParticipantId(credentials.envParticipantId)
-      }
-      if (credentials.envStudyId) {
-        setEnvStudyId(credentials.envStudyId)
-      }
+      if (credentials.participantID) setParticipantID(credentials.participantID)
+      if (credentials.studyID) setStudyID(credentials.studyID)
+
       setMethod('desktop')
     } else {
       // If MTURK
@@ -108,33 +68,80 @@ function App () {
         window.lodash = _.noConflict()
         setPsiturk(new PsiTurk(turkUniqueId, '/complete'))
         setMethod('mturk')
-        setLoggedIn(true, 'mturk', turkUniqueId)
+        // TODO 145: Function signature
+        handleLogin('mturk', turkUniqueId)
       } else if (config.USE_PROLIFIC) {
         const pID = getProlificId()
         if (config.USE_FIREBASE && pID) {
           setMethod('firebase')
-          setLoggedIn(true, 'prolific', pID)
+          // TODO 145: Function signature
+          handleLogin('prolific', pID)
         } else {
-          setReject(true)
+          // Error - Prolific must be used with Firebase
+          setIsError(true)
         }
       } else if (config.USE_FIREBASE) {
-        setMethod('firebase')
-        // Autologin with query parameters
+        // Fill in login fields based on query parameters (may still be blank)
+        const query = new URLSearchParams(window.location.search)
         const participantId = query.get('participantID')
         const studyId = query.get('studyID')
-        if (participantId) {
-          setEnvParticipantId(participantId)
-        }
-        if (studyId) {
-          setEnvStudyId(studyId)
-        }
+        if (participantId) setParticipantID(participantId)
+        if (studyId) setStudyID(studyId)
+
+        setMethod('firebase')
       } else {
         setMethod('default')
       }
     }
   }, [])
 
-  if (reject) {
+
+
+  /** VALIDATION FUNCTIONS */
+
+  // Default to valid
+  const defaultValidation = async () => true
+  // Validate participant/study against Firestore rules
+  const firebaseValidation = (participantId, studyId) => {
+    return validateParticipant(participantId, studyId)
+  }
+
+  /** DATA WRITE FUNCTIONS */
+
+  const defaultFunction = () => { }
+  // Add trial data to Firestore
+  const firebaseUpdateFunction = (data) => { addToFirebase(data) }
+  // Execute the 'data' callback function (see public/electron.js)
+  const desktopUpdateFunction = (data) => { ipcRenderer.send('data', data) }
+  const psiturkUpdateFunction = (data) => { psiturk.recordTrialData(data) }
+
+  /** EXPERIMENT FINISH FUNCTIONS */
+
+  // Save the experiment data on the desktop
+  const defaultFinishFunction = (data) => { data.localSave('csv', 'neuro-task.csv') }
+  // Execute the 'end' callback function (see public/electron.js)
+  const desktopFinishFunction = () => { ipcRenderer.send('end', 'true') }
+  const psiturkFinishFunction = () => {
+    const completePsiturk = async () => {
+      psiturk.saveData({
+        success: () => psiturk.completeHIT(),
+        error: () => setIsError(true)
+      })
+    }
+    completePsiturk()
+
+  }
+
+  // Update the study/participant data when they log in
+  const handleLogin = useCallback((participantId, studyId) => {
+    setParticipantID(participantId)
+    setStudyID(studyId)
+    setLoggedIn(true)
+  },
+    []
+  )
+
+  if (isError) {
     return (
       <div className='centered-h-v'>
         <div className='width-50 alert alert-danger'>
@@ -145,14 +152,12 @@ function App () {
   } else {
     return (
       <>
-        {loggedIn
-          ? (
-            <JsPsychExperiment
-              participantId={envParticipantId}
-              studyId={envStudyId}
-              startDate={startDate}
-              taskVersion={taskVersion}
-              dataUpdateFunction={
+        {loggedIn ? (
+          <JsPsychExperiment
+            participantId={participantID}
+            studyId={studyID}
+            taskVersion={taskVersion}
+            dataUpdateFunction={
               {
                 desktop: desktopUpdateFunction,
                 firebase: firebaseUpdateFunction,
@@ -160,7 +165,7 @@ function App () {
                 default: defaultFunction
               }[currentMethod]
             }
-              dataFinishFunction={
+            dataFinishFunction={
               {
                 desktop: desktopFinishFunction,
                 mturk: psiturkFinishFunction,
@@ -168,22 +173,22 @@ function App () {
                 default: defaultFinishFunction
               }[currentMethod]
             }
-            />
-            )
+          />
+        )
           : (
             <Login
               validationFunction={
-              {
-                desktop: defaultValidation,
-                default: defaultValidation,
-                firebase: firebaseValidation
-              }[currentMethod]
-            }
-              envParticipantId={envParticipantId}
-              envStudyId={envStudyId}
-              onLogin={setLoggedIn}
+                {
+                  desktop: defaultValidation,
+                  default: defaultValidation,
+                  firebase: firebaseValidation
+                }[currentMethod]
+              }
+              initialParticipantID={participantID}
+              initialStudyID={studyID}
+              handleLogin={handleLogin}
             />
-            )}
+          )}
       </>
     )
   }

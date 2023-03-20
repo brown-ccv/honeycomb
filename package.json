@@ -33,7 +33,8 @@
     "react": "^16.8.6",
     "react-bootstrap": "^1.6.1",
     "react-dom": "^16.8.6",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "wait-on": "^7.0.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.64",
