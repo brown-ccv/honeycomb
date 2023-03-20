@@ -1,10 +1,20 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /participant_responses/{study_id}/participants/{participant_id}/data/{document=**} {
-          allow read: if false
-          allow create, update: 
-          if participant_id in get(/databases/$(database)/documents/registered_studies/$(study_id)).data.registered_participants;
-      }   
+    // Structure of configuration collection
+    match /studyConfiguration/{studyID}/studyParticipants/{participantID=**} {
+      // Do not interact with studyConfiguration programatically
+      allow create, read, update, delete: if false
+    }
+
+    // Structure of data collection
+    match /studyData/{studyID}/studyParticipants/{participantID}/participantResponses/{experimentID=**} {
+      // Disable programmatic read and delete 
+      allow read, delete: if false
+      // Create or update if studyID & participantID matches
+      // TODO: Option for this to change?
+      allow create, update:
+      if participantID in get(/databases/$(database)/documents/studyConfiguration/$(studyID)/studyParticipants/$(participantID));
+    }
     }
 }
