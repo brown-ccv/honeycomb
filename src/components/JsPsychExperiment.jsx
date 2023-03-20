@@ -1,11 +1,11 @@
-import { initJsPsych } from 'jspsych';
-import React, { useEffect, useMemo, useRef } from 'react';
+import { initJsPsych } from 'jspsych'
+import React, { useEffect, useMemo, useRef } from 'react'
 
-import { config } from '../config/main';
-import { initParticipant } from '../firebase';
-import { buildTimeline, jsPsychOptions } from "../timelines/main";
+import { config } from '../config/main'
+import { initParticipant } from '../firebase'
+import { buildTimeline, jsPsychOptions } from '../timelines/main'
 
-function JsPsychExperiment({
+function JsPsychExperiment ({
   participantId,
   studyId,
   taskVersion,
@@ -33,7 +33,7 @@ function JsPsychExperiment({
     // Start date of the experiment - used as the UID
     const startDate = new Date().toISOString()
 
-    // Write the initial record to Firestore 
+    // Write the initial record to Firestore
     if (config.USE_FIREBASE) initParticipant(participantId, studyId, startDate)
 
     const jsPsych = initJsPsych(combinedOptions)
@@ -45,7 +45,7 @@ function JsPsychExperiment({
       task_version: taskVersion
     })
     return jsPsych
-  }, [participantId, studyId, taskVersion]);
+  }, [participantId, studyId, taskVersion])
 
   // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
   const timeline = buildTimeline(jsPsych)
@@ -53,12 +53,12 @@ function JsPsychExperiment({
   // Set up event and lifecycle callbacks to start and stop jspsych.
   // Inspiration from jspsych-react: https://github.com/makebrainwaves/jspsych-react/blob/master/src/index.js
   const handleKeyEvent = (e) => {
-    if (e.redispatched) return;
+    if (e.redispatched) return
 
-    let newEvent = new e.constructor(e.type, e);
-    newEvent.redispatched = true;
-    experimentDiv.current.dispatchEvent(newEvent);
-  };
+    const newEvent = new e.constructor(e.type, e)
+    newEvent.redispatched = true
+    experimentDiv.current.dispatchEvent(newEvent)
+  }
 
   // These useEffect callbacks are similar to componentDidMount / componentWillUnmount.
   // If necessary, useLayoutEffect callbacks might be even more similar.

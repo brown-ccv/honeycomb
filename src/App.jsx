@@ -21,7 +21,7 @@ import { getProlificId } from './lib/utils'
  * about functional vs. class components here: https://reactjs.org/docs/components-and-props.html. It is recommended
  * to use functional components.
  */
-function App() {
+function App () {
   // Manage if a user is currently logged in
   const [loggedIn, setLoggedIn] = useState(false)
   // Manage error state of the app
@@ -95,8 +95,6 @@ function App() {
     }
   }, [])
 
-
-
   /** VALIDATION FUNCTIONS */
 
   // Default to valid
@@ -129,7 +127,6 @@ function App() {
       })
     }
     completePsiturk()
-
   }
 
   // Update the study/participant data when they log in
@@ -138,7 +135,7 @@ function App() {
     setStudyID(studyId)
     setLoggedIn(true)
   },
-    []
+  []
   )
 
   if (isError) {
@@ -152,12 +149,13 @@ function App() {
   } else {
     return (
       <>
-        {loggedIn ? (
-          <JsPsychExperiment
-            participantId={participantID}
-            studyId={studyID}
-            taskVersion={taskVersion}
-            dataUpdateFunction={
+        {loggedIn
+          ? (
+            <JsPsychExperiment
+              participantId={participantID}
+              studyId={studyID}
+              taskVersion={taskVersion}
+              dataUpdateFunction={
               {
                 desktop: desktopUpdateFunction,
                 firebase: firebaseUpdateFunction,
@@ -165,7 +163,7 @@ function App() {
                 default: defaultFunction
               }[currentMethod]
             }
-            dataFinishFunction={
+              dataFinishFunction={
               {
                 desktop: desktopFinishFunction,
                 mturk: psiturkFinishFunction,
@@ -173,8 +171,8 @@ function App() {
                 default: defaultFinishFunction
               }[currentMethod]
             }
-          />
-        )
+            />
+            )
           : (
             <Login
               validationFunction={
@@ -188,7 +186,7 @@ function App() {
               initialStudyID={studyID}
               handleLogin={handleLogin}
             />
-          )}
+            )}
       </>
     )
   }

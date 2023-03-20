@@ -3,7 +3,7 @@ import 'firebase/compat/firestore'
 
 // Set collection name
 // TODO: Export as constant variable
-const collectionName = "participant_responses";
+const collectionName = 'participant_responses'
 
 // Firebase config
 const config = {
@@ -39,7 +39,7 @@ const validateParticipant = async (participantId, studyId) => {
     .catch((error) => {
       console.error(error)
       return false
-    });
+    })
 }
 
 // Add participant data and trial data to db
@@ -63,17 +63,17 @@ const initParticipant = (participantId, studyId, startDate) => {
 
 // Add individual trials to db
 const addToFirebase = (data) => {
-  console.log("Adding trial to firebase", data)
-  const participantId = data.participant_id;
-  const studyId = data.study_id;
+  console.log('Adding trial to firebase', data)
+  const participantId = data.participant_id
+  const studyId = data.study_id
   const startDate = data.start_date
 
   // Data in firestore is nested as a single collection
-  db.collection(collectionName) 
+  db.collection(collectionName)
     .doc(studyId)
     .collection('participants')
-    .doc(participantId)        
-    .collection('data')         
+    .doc(participantId)
+    .collection('data')
     .doc(startDate)
     .update('results', firebase.firestore.FieldValue.arrayUnion(data))
 }
