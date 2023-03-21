@@ -52,7 +52,7 @@ try {
 const USE_VOLUME = process.env.REACT_APP_VOLUME === "true";
 // these variables depend on USE_ELECTRON
 // whether or not to enable video
-const USE_CAMERA = process.env.REACT_APP_VIDEO === "true" && USE_ELECTRON;
+const USE_CAMERA = process.env.REACT_APP_CAMERA === "true" && USE_ELECTRON;
 // whether or not the EEG/event marker is available
 const USE_EEG =
   process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON;
