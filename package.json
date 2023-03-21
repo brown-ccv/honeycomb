@@ -39,7 +39,7 @@
   "scripts": {
     "commit": "git-cz",
     "postinstall": "node version.js && npm run rebuild",
-    "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
+    "start": "cross-env BROWSER='none' NODE_PATH='./src' IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
     "start:browser": "cross-env IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
     "test": "react-scripts test",
     "prebuild": "electron-rebuild",
@@ -50,7 +50,7 @@
     "rebuild": "electron-rebuild",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "electron-dev": "wait-on http://localhost:3000 && cross-env ELECTRON_START_URL=\"http://localhost:3000\" electron .",
+    "electron-dev": "wait-on http://localhost:3000 && cross-env ELECTRON_START_URL='http://localhost:3000' electron .",
     "firebase:dev": "firebase emulators:start --import emulator_data",
     "firebase:savedev": "firebase emulators:export emulator_data",
     "firebase:download": "dotenv -e env/.env.firebase-download node download-response-data.js",
