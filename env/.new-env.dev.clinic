@@ -1,0 +1,9 @@
+# Prevent inline images
+IMAGE_INLINE_SIZE_LIMIT=0
+# Don't open a browser window as we're using electron
+BROWSER='none'
+
+# TODO: Replace for checks against NODE_ENV=== 'development'
+ELECTRON_START_URL='http://localhost:3000'
+
+# TODO: Killing the electron instance should kill the terminal too

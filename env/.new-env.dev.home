@@ -1,0 +1,2 @@
+# Prevent inline images
+IMAGE_INLINE_SIZE_LIMIT=0
