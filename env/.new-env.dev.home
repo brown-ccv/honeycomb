@@ -1,2 +1,19 @@
 # Prevent inline images
 IMAGE_INLINE_SIZE_LIMIT=0
+
+# Firebase
+REACT_APP_FIREBASE="true"
+REACT_APP_apiKey="AIzaSyB6C2nVXk__dqxdyyROFEC-ue50O_OsjTE"
+REACT_APP_authDomain="ccv-honeycomb.firebaseapp.com"
+REACT_APP_projectId="ccv-honeycomb"
+REACT_APP_storageBucket="ccv-honeycomb.appspot.com"
+REACT_APP_messagingSenderId="449496296276"
+REACT_APP_appId="1:449496296276:web:0479c82b8b068ca9e6b6c1"
+# TODO: This may (should) force the use of the emulators?
+
+# EEG, Photodiode, etc cannot be used at home
+REACT_APP_USE_EEG="false"           # Disable tasks that use an EEG machine
+REACT_APP_USE_PHOTODIODE="false"    # Disable tasks that use a photodiode machine
+REACT_APP_CAMERA="false"            # Disable a camera for recording the participant
+# TODO: Delete? Can currently be used on clinic and home but it's not used
+REACT_APP_VOLUME="false"            # Disable asking the participant to adjust the volume

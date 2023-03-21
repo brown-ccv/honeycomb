@@ -52,6 +52,7 @@ try {
 console.log("ENV", process.env)
 
 // whether or not to ask the participant to adjust the volume
+// TODO: This isn't used, delete
 const USE_VOLUME = process.env.REACT_APP_VOLUME === "true";
 // these variables depend on USE_ELECTRON
 // whether or not to enable video

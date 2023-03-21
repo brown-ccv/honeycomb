@@ -3,7 +3,26 @@ IMAGE_INLINE_SIZE_LIMIT=0
 # Don't open a browser window as we're using electron
 BROWSER='none'
 
-# TODO: Replace for checks against NODE_ENV=== 'development'
+# TODO: Replace for checks against NODE_ENV==='development'
 ELECTRON_START_URL='http://localhost:3000'
 
+
+# Environment variables for Firebase
+REACT_APP_FIREBASE="true" # TODO: Should I be setting this? Should it be passed in later?
+REACT_APP_apiKey="AIzaSyB6C2nVXk__dqxdyyROFEC-ue50O_OsjTE"
+REACT_APP_authDomain="ccv-honeycomb.firebaseapp.com"
+REACT_APP_projectId="ccv-honeycomb"
+REACT_APP_storageBucket="ccv-honeycomb.appspot.com"
+REACT_APP_messagingSenderId="449496296276"
+REACT_APP_appId="1:449496296276:web:0479c82b8b068ca9e6b6c1"
+# TODO: This may (should) force the use of the emulators?
+
 # TODO: Killing the electron instance should kill the terminal too
+
+# EEG, Photodiode, etc cannot be used at home
+# TODO: This should be passed at runtime (config file), not build time
+REACT_APP_USE_EEG="true"        # Enable tasks that use an EEG machine
+REACT_APP_USE_PHOTODIODE="true" # Enable tasks that use a photodiode machine
+REACT_APP_CAMERA="true"         # Enable a camera for recording the participant
+# TODO: Delete? Can currently be used on clinic and home but it's not used
+REACT_APP_VOLUME="true"         # Enable asking the participant to adjust the volume
