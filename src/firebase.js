@@ -4,7 +4,7 @@ import 'firebase/compat/firestore'
 // Set collection name
 // TODO: Export as constant variable
 // TODO: Add variables for sub-collection queries
-const collectionName = "participant_responses";
+const collectionName = 'participant_responses'
 
 // Firebase config
 const config = {
