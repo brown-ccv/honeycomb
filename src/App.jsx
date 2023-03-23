@@ -66,7 +66,7 @@ function App () {
       // If MTURK
       if (config.USE_MTURK) {
         window.lodash = _.noConflict()
-        setPsiturk(new PsiTurk(turkUniqueId, '/complete'))
+        setPsiturk(new PsiTurk(turkUniqueId, '/complete')) // eslint-disable-line no-undef
         setMethod('mturk')
         // TODO 145: Function signature
         handleLogin('mturk', turkUniqueId)

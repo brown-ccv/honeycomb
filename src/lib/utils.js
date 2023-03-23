@@ -85,6 +85,9 @@ const getProlificId = () => {
 }
 
 const beep = (audioCodes) => {
+  // TODO: This is a legacy fix for new AudioContext() - refactor
+  const AudioContext = window.AudioContext || window.webkitAudioContext
+
   const context = new AudioContext()
   const o = context.createOscillator()
   const g = context.createGain()

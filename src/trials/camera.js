@@ -11,11 +11,12 @@ if (config.USE_ELECTRON) {
 }
 
 function saveBlob (blob, media, participantId) {
-  const reader = new FileReader()
+  const reader = new FileReader() // eslint-disable-line no-undef
   const fileName = `pid_${participantId}_${media}_${Date.now()}.webm`
   reader.onload = function () {
     if (reader.readyState === 2) {
-      const buffer = new Buffer(reader.result)
+      const buffer = Buffer.from(reader.result)
+
       ipcRenderer.send('save_video', fileName, buffer)
       console.log(`Saving ${JSON.stringify({ fileName, size: blob.size })}`)
     }
@@ -56,7 +57,7 @@ const cameraStart = (jsPsych) => {
 
         const options = { mimeType: 'video/webm' }
         const recordedChunks = []
-        window[recorder] = new MediaRecorder(stream, options)
+        window[recorder] = new MediaRecorder(stream, options) // eslint-disable-line no-undef
 
         window[recorder].addEventListener('dataavailable', function (e) {
           if (e.data.size > 0) {
@@ -65,7 +66,7 @@ const cameraStart = (jsPsych) => {
         })
 
         window[recorder].addEventListener('stop', function () {
-          const blob = new Blob(recordedChunks)
+          const blob = new Blob(recordedChunks) // eslint-disable-line no-undef
           saveBlob(blob, recorder, participantId)
         })
       }
