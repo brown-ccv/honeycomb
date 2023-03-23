@@ -26,6 +26,7 @@
     },
     "ui": {
       "enabled": true
-    }
+    },
+    "singleProjectMode": true
   }
 }

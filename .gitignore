@@ -17,17 +17,23 @@
 /dist
 /out
 
-# IDEs
+# firebase
+.firebase
+
+# IDE
 /.vscode
 
-# misc
-.DS_Store
-.env
-public/config/version.json
-package-lock.json
+# logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# misc
+.env
+package-lock.json
+public/config/version.json
+.DS_Store
 psiturkit/*_turk
-.firebase
-/.vscode
