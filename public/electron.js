@@ -1,15 +1,23 @@
+// TODO: Why can't I import these normally?
+
 // Modules to control application life and create native browser window
-import { app, BrowserWindow, dialog, ipcMain as ipc } from 'electron'
-import { error as _error, info, warn } from 'electron-log'
-import { copyFileSync, createWriteStream, mkdir, outputFile, readFileSync } from 'fs-extra'
-import { invert } from 'lodash'
-import { join, resolve } from 'path'
+const { app, BrowserWindow, dialog } = require('electron')
+const path = require('path')
+const ipc = require('electron').ipcMain
+const _ = require('lodash')
+const fs = require('fs-extra')
+const log = require('electron-log')
 
 // Event Trigger
-import { getPort, sendToPort } from 'event-marker'
-import { comName, eventCodes, productId, vendorId } from './config/trigger'
+const {
+  eventCodes,
+  vendorId,
+  productId,
+  comName
+} = require('./config/trigger')
+const { getPort, sendToPort } = require('event-marker')
 
-// Handle windows installer set up
+// handle windows installer set up
 if (require('electron-squirrel-startup')) app.quit()
 
 // Define default environment variables
@@ -19,8 +27,8 @@ let VIDEO = false
 // Override product ID if environment variable set
 const activeProductId = process.env.EVENT_MARKER_PRODUCT_ID || productId
 const activeComName = process.env.EVENT_MARKER_COM_NAME || comName
-if (activeProductId) info('Active product ID', activeProductId)
-else info('COM Name', activeComName)
+if (activeProductId) log.info('Active product ID', activeProductId)
+else log.info('COM Name', activeComName)
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -56,8 +64,8 @@ function createWindow () {
   // and load the index.html of the app.
   const startUrl =
     process.env.ELECTRON_START_URL ||
-    `file://${join(__dirname, '../build/index.html')}`
-  info(startUrl)
+    `file://${path.join(__dirname, '../build/index.html')}`
+  log.info(startUrl)
   mainWindow.loadURL(startUrl)
 
   // Open the DevTools.
@@ -89,7 +97,7 @@ const setUpPort = async () => {
     portAvailable = true
 
     triggerPort.on('error', (err) => {
-      _error(err)
+      log.error(err)
       const buttons = ['OK']
       if (process.env.ELECTRON_START_URL) {
         buttons.push('Continue Anyway')
@@ -121,7 +129,7 @@ const setUpPort = async () => {
 const handleEventSend = (code) => {
   if (!portAvailable && !SKIP_SENDING_DEV) {
     const message = 'Event Marker not connected'
-    warn(message)
+    log.warn(message)
 
     const buttons = ['Quit', 'Retry']
     if (process.env.ELECTRON_START_URL) {
@@ -166,7 +174,7 @@ ipc.on('updateEnvironmentVariables', (event, args) => {
 ipc.on('trigger', (event, args) => {
   const code = args
   if (code !== undefined) {
-    info(`Event: ${invert(eventCodes)[code]}, code: ${code}`)
+    log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`)
     if (USE_EEG) {
       handleEventSend(code)
     }
@@ -197,17 +205,17 @@ const getSavePath = (participantID, studyID) => {
     const desktop = app.getPath('desktop')
     const name = app.getName()
     const date = today.toISOString().slice(0, 10)
-    return join(desktop, studyID, participantID, date, name)
+    return path.join(desktop, studyID, participantID, date, name)
   }
 }
 
 const getFullPath = (fileName) => {
-  return join(savePath, fileName)
+  return path.join(savePath, fileName)
 }
 
 // Read version file (git sha and branch)
 const git = JSON.parse(
-  readFileSync(resolve(__dirname, 'config/version.json'))
+  fs.readFileSync(path.resolve(__dirname, 'config/version.json'))
 )
 
 // Get Participant Id and Study Id from environment
@@ -225,13 +233,13 @@ ipc.on('data', (event, args) => {
     const dir = app.getPath('userData')
     participantID = args.participant_id
     studyID = args.study_id
-    preSavePath = resolve(
+    preSavePath = path.resolve(
       dir,
       `pid_${participantID}_${today.getTime()}.json`
     )
     startTrial = args.trial_index
-    warn(preSavePath)
-    stream = createWriteStream(preSavePath, { flags: 'ax+' })
+    log.warn(preSavePath)
+    stream = fs.createWriteStream(preSavePath, { flags: 'ax+' })
     stream.write('[')
     fileCreated = true
   }
@@ -263,7 +271,7 @@ ipc.on('save_video', (event, videoFileName, buffer) => {
 
   if (VIDEO) {
     const fullPath = getFullPath(videoFileName)
-    outputFile(fullPath, buffer, (err) => {
+    fs.outputFile(fullPath, buffer, (err) => {
       if (err) {
         event.sender.send('ERROR', err.message)
       } else {
@@ -282,7 +290,7 @@ ipc.on('end', () => {
 
 // Error state sent from front end to back end (e.g. wrong number of images)
 ipc.on('error', (event, args) => {
-  _error(args)
+  log.error(args)
   const buttons = ['OK']
   if (process.env.ELECTRON_START_URL) {
     buttons.push('Continue Anyway')
@@ -300,7 +308,7 @@ ipc.on('error', (event, args) => {
 // log uncaught exceptions
 process.on('uncaughtException', (error) => {
   // Handle the error
-  _error(error)
+  log.error(error)
 
   // this isn't dev, throw up a dialog
   if (!process.env.ELECTRON_START_URL) {
@@ -343,9 +351,9 @@ app.on('will-quit', () => {
     stream = false
 
     // copy file to config location
-    mkdir(savePath, { recursive: true }, (err) => {
-      _error(err)
-      copyFileSync(
+    fs.mkdir(savePath, { recursive: true }, (err) => {
+      log.error(err)
+      fs.copyFileSync(
         preSavePath,
         getFullPath(`pid_${participantID}_${today.getTime()}.json`)
       )
