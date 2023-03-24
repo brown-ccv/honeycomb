@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React, { useCallback, useEffect, useState } from 'react'
 
 import '@fortawesome/fontawesome-free/css/all.css'
@@ -64,13 +65,11 @@ function App () {
     } else {
       // If MTURK
       if (config.USE_MTURK) {
-        /* eslint-disable */
         window.lodash = _.noConflict()
-        setPsiturk(new PsiTurk(turkUniqueId, '/complete'))
+        setPsiturk(new PsiTurk(turkUniqueId, '/complete')) // eslint-disable-line no-undef
         setMethod('mturk')
         // TODO 145: Function signature
         handleLogin('mturk', turkUniqueId)
-        /* eslint-enable */
       } else if (config.USE_PROLIFIC) {
         const pID = getProlificId()
         if (config.USE_FIREBASE && pID) {
@@ -81,7 +80,7 @@ function App () {
           // Error - Prolific must be used with Firebase
           setIsError(true)
         }
-      } else if (config.USE_FIREBASE) { 
+      } else if (config.USE_FIREBASE) {
         // Fill in login fields based on query parameters (may still be blank)
         const query = new URLSearchParams(window.location.search)
         const participantId = query.get('participantID')
@@ -94,10 +93,7 @@ function App () {
         setMethod('default')
       }
     }
-    // eslint-disable-next-line
   }, [])
-
-  
 
   /** VALIDATION FUNCTIONS */
 
@@ -110,7 +106,7 @@ function App () {
 
   /** DATA WRITE FUNCTIONS */
 
-  const defaultFunction = () => {}
+  const defaultFunction = () => { }
   // Add trial data to Firestore
   const firebaseUpdateFunction = (data) => { addToFirebase(data) }
   // Execute the 'data' callback function (see public/electron.js)
@@ -128,25 +124,24 @@ function App () {
       psiturk.saveData({
         success: () => psiturk.completeHIT(),
         error: () => setIsError(true)
-     })
+      })
     }
     completePsiturk()
-
   }
 
   // Update the study/participant data when they log in
   const handleLogin = useCallback((participantId, studyId) => {
-      setParticipantID(participantId)
-      setStudyID(studyId)
-      setLoggedIn(true)
-    },
-    []
+    setParticipantID(participantId)
+    setStudyID(studyId)
+    setLoggedIn(true)
+  },
+  []
   )
 
   if (isError) {
     return (
-      <div className="centered-h-v">
-        <div className="width-50 alert alert-danger">
+      <div className='centered-h-v'>
+        <div className='width-50 alert alert-danger'>
           Please ask your task provider to enable firebase.
         </div>
       </div>
@@ -154,20 +149,21 @@ function App () {
   } else {
     return (
       <>
-        {loggedIn ? (
-          <JsPsychExperiment
-            participantId={participantID}
-            studyId={studyID}
-            taskVersion={taskVersion}
-            dataUpdateFunction={
+        {loggedIn
+          ? (
+            <JsPsychExperiment
+              participantId={participantID}
+              studyId={studyID}
+              taskVersion={taskVersion}
+              dataUpdateFunction={
               {
                 desktop: desktopUpdateFunction,
                 firebase: firebaseUpdateFunction,
                 mturk: psiturkUpdateFunction,
-                default: defaultFunction,
+                default: defaultFunction
               }[currentMethod]
             }
-            dataFinishFunction={
+              dataFinishFunction={
               {
                 desktop: desktopFinishFunction,
                 mturk: psiturkFinishFunction,
@@ -175,21 +171,22 @@ function App () {
                 default: defaultFinishFunction
               }[currentMethod]
             }
-          />
-        ) : (
-          <Login
-            validationFunction={
-              {
-                desktop: defaultValidation,
-                default: defaultValidation,
-                firebase: firebaseValidation,
-              }[currentMethod]
-            }
-            initialParticipantID={participantID}
-            initialStudyID={studyID}
-            handleLogin={handleLogin}
-          />
-        )}
+            />
+            )
+          : (
+            <Login
+              validationFunction={
+                {
+                  desktop: defaultValidation,
+                  default: defaultValidation,
+                  firebase: firebaseValidation
+                }[currentMethod]
+              }
+              initialParticipantID={participantID}
+              initialStudyID={studyID}
+              handleLogin={handleLogin}
+            />
+            )}
       </>
     )
   }

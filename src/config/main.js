@@ -2,16 +2,16 @@
 // This is the main configuration file where universal and default settings should be placed.
 // These settings can then be imported anywhere in the app as they are exported at the botom of the file.
 
-import { initJsPsych } from "jspsych";
-import _ from "lodash";
-import { eventCodes } from "./trigger";
-import { init } from "@brown-ccv/behavioral-task-trials";
-import { getProlificId } from "../lib/utils";
+import { initJsPsych } from 'jspsych'
+import _ from 'lodash'
+import { eventCodes } from './trigger'
+import { init } from '@brown-ccv/behavioral-task-trials'
+import { getProlificId } from '../lib/utils'
 import packageInfo from '../../package.json'
 
 // Access package name and version so we can store these as facts with task data.
-const taskName = packageInfo.name;
-const taskVersion = packageInfo.version;
+const taskName = packageInfo.name
+const taskVersion = packageInfo.version
 
 // As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
 // The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
@@ -25,22 +25,22 @@ const keys = {
   C: 67,
   F: 70,
   J: 74,
-  space: 32,
-};
+  space: 32
+}
 
 // audio codes
 const audioCodes = {
   frequency: 100 * (eventCodes.open_task - 9),
-  type: "sine",
-};
+  type: 'sine'
+}
 
 // is this mechanical turk?
 const turkInfo = jsPsych.turk.turkInfo()
 const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`
-let USE_MTURK = !turkInfo.outsideTurk;
-let USE_PROLIFIC = getProlificId() && !USE_MTURK;
-let USE_ELECTRON = true;
-let USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true";
+const USE_MTURK = !turkInfo.outsideTurk
+const USE_PROLIFIC = getProlificId() && !USE_MTURK
+let USE_ELECTRON = true
+const USE_FIREBASE = process.env.REACT_APP_FIREBASE === 'true'
 
 try {
   window.require("electron");
@@ -56,26 +56,26 @@ const USE_VOLUME = process.env.REACT_APP_VOLUME === "true";
 const USE_CAMERA = process.env.REACT_APP_CAMERA === "true" && USE_ELECTRON;
 // whether or not the EEG/event marker is available
 const USE_EEG =
-  process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON;
+  process.env.REACT_APP_USE_EEG === 'true' && USE_ELECTRON
 // whether or not the photodiode is in use
 const USE_PHOTODIODE =
-  process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON;
+  process.env.REACT_APP_USE_PHOTODIODE === 'true' && USE_ELECTRON
 
 // get language file
-const lang = require("../language/en_us.json");
+const lang = require('../language/en_us.json')
 if (!USE_ELECTRON) {
   // if this is mturk, merge in the mturk specific language
-  const mlang = require("../language/en_us.mturk.json");
-  _.merge(lang, mlang);
+  const mlang = require('../language/en_us.mturk.json')
+  _.merge(lang, mlang)
 }
 
 const defaultBlockSettings = {
-  conditions: ["a", "b", "c"],
+  conditions: ['a', 'b', 'c'],
   repeats_per_condition: 1, // number of times every condition is repeated
   is_practice: false,
   is_tutorial: false,
-  photodiode_active: false,
-};
+  photodiode_active: false
+}
 
 // setting config for trials
 const config = init({
@@ -87,7 +87,7 @@ const config = init({
   USE_CAMERA,
   USE_PROLIFIC,
   USE_FIREBASE
-});
+})
 
 // TEMP
 console.log("ENV", process.env)
@@ -103,4 +103,4 @@ export {
   config,
   audioCodes,
   turkUniqueId
-};
+}
