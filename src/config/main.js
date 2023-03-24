@@ -43,17 +43,17 @@ let USE_ELECTRON = true
 const USE_FIREBASE = process.env.REACT_APP_FIREBASE === 'true'
 
 try {
-  window.require("electron");
+  window.require('electron')
 } catch (error) {
-  USE_ELECTRON = false;
+  USE_ELECTRON = false
 }
 
 // whether or not to ask the participant to adjust the volume
 // TODO: This isn't used, delete
-const USE_VOLUME = process.env.REACT_APP_VOLUME === "true";
+const USE_VOLUME = process.env.REACT_APP_VOLUME === 'true'
 // these variables depend on USE_ELECTRON
 // whether or not to enable video
-const USE_CAMERA = process.env.REACT_APP_CAMERA === "true" && USE_ELECTRON;
+const USE_CAMERA = process.env.REACT_APP_CAMERA === 'true' && USE_ELECTRON
 // whether or not the EEG/event marker is available
 const USE_EEG =
   process.env.REACT_APP_USE_EEG === 'true' && USE_ELECTRON
@@ -90,8 +90,8 @@ const config = init({
 })
 
 // TEMP
-console.log("ENV", process.env)
-console.log("CONFIG", config)
+console.log('ENV', process.env)
+console.log('CONFIG', config)
 
 export {
   taskName,
