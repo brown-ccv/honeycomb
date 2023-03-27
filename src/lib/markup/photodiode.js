@@ -13,14 +13,15 @@ if (config.USE_ELECTRON) {
 const photodiodeGhostBox = () => {
   const class_ = config.USE_PHOTODIODE ? 'visible' : 'invisible'
 
-  const markup = `<div class="photodiode-box ${class_}" id="photodiode-box">
-									<span id="photodiode-spot" class="photodiode-spot"></span>
-  								</div>`
+  const markup =
+    `<div class="photodiode-box ${class_}" id="photodiode-box">
+      <span id="photodiode-spot" class="photodiode-spot"></span>
+    </div>`
   return markup
 }
 
 const pdSpotEncode = (taskCode) => {
-  function pulse_for (ms, callback) {
+  function pulseFor (ms, callback) {
     $('.photodiode-spot').css({ 'background-color': 'black' })
     setTimeout(() => {
       $('.photodiode-spot').css({ 'background-color': 'white' })
@@ -28,11 +29,11 @@ const pdSpotEncode = (taskCode) => {
     }, ms)
   }
 
-  function repeat_pulse_for (ms, i) {
+  function repeatPulseFor (ms, i) {
     if (i > 0) {
-      pulse_for(ms, () => {
+      pulseFor(ms, () => {
         setTimeout(() => {
-          repeat_pulse_for(ms, i - 1)
+          repeatPulseFor(ms, i - 1)
         }, ms)
       })
     }
@@ -42,7 +43,7 @@ const pdSpotEncode = (taskCode) => {
     const blinkTime = 40
     let numBlinks = taskCode
     if (taskCode < eventCodes.open_task) numBlinks = 1
-    repeat_pulse_for(blinkTime, numBlinks)
+    repeatPulseFor(blinkTime, numBlinks)
     if (ipcRenderer) ipcRenderer.send('trigger', taskCode)
   }
 }

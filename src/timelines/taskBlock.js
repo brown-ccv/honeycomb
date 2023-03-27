@@ -19,7 +19,7 @@ const taskBlock = (blockSettings) => {
     type: htmlKeyboardResponse,
     stimulus: '',
     trial_duration: 1,
-    on_finish: (data) => data.block_settings = blockSettings
+    on_finish: (data) => { data.block_settings = blockSettings }
   }
 
   timeline.unshift(blockStart)

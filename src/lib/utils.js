@@ -85,7 +85,7 @@ const getProlificId = () => {
 }
 
 const beep = (audioCodes) => {
-  const context = new AudioContext()
+  const context = new AudioContext() // eslint-disable-line no-undef
   const o = context.createOscillator()
   const g = context.createGain()
   o.type = audioCodes.type
