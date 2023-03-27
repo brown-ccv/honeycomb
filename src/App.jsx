@@ -81,7 +81,7 @@ function App () {
           // Error - Prolific must be used with Firebase
           setIsError(true)
         }
-      } else if (config.USE_FIREBASE) { 
+      } else if (config.USE_FIREBASE) {
         // Fill in login fields based on query parameters (may still be blank)
         const query = new URLSearchParams(window.location.search)
         const participantId = query.get('participantID')
@@ -96,8 +96,6 @@ function App () {
     }
     // eslint-disable-next-line
   }, [])
-
-  
 
   /** VALIDATION FUNCTIONS */
 
@@ -128,25 +126,24 @@ function App () {
       psiturk.saveData({
         success: () => psiturk.completeHIT(),
         error: () => setIsError(true)
-     })
+      })
     }
     completePsiturk()
-
   }
 
   // Update the study/participant data when they log in
   const handleLogin = useCallback((participantId, studyId) => {
-      setParticipantID(participantId)
-      setStudyID(studyId)
-      setLoggedIn(true)
-    },
-    []
+    setParticipantID(participantId)
+    setStudyID(studyId)
+    setLoggedIn(true)
+  },
+  []
   )
 
   if (isError) {
     return (
-      <div className="centered-h-v">
-        <div className="width-50 alert alert-danger">
+      <div className='centered-h-v'>
+        <div className='width-50 alert alert-danger'>
           Please ask your task provider to enable firebase.
         </div>
       </div>
@@ -154,20 +151,21 @@ function App () {
   } else {
     return (
       <>
-        {loggedIn ? (
-          <JsPsychExperiment
-            participantId={participantID}
-            studyId={studyID}
-            taskVersion={taskVersion}
-            dataUpdateFunction={
+        {loggedIn
+          ? (
+            <JsPsychExperiment
+              participantId={participantID}
+              studyId={studyID}
+              taskVersion={taskVersion}
+              dataUpdateFunction={
               {
                 desktop: desktopUpdateFunction,
                 firebase: firebaseUpdateFunction,
                 mturk: psiturkUpdateFunction,
-                default: defaultFunction,
+                default: defaultFunction
               }[currentMethod]
             }
-            dataFinishFunction={
+              dataFinishFunction={
               {
                 desktop: desktopFinishFunction,
                 mturk: psiturkFinishFunction,
@@ -175,21 +173,22 @@ function App () {
                 default: defaultFinishFunction
               }[currentMethod]
             }
-          />
-        ) : (
-          <Login
-            validationFunction={
+            />
+            )
+          : (
+            <Login
+              validationFunction={
               {
                 desktop: defaultValidation,
                 default: defaultValidation,
-                firebase: firebaseValidation,
+                firebase: firebaseValidation
               }[currentMethod]
             }
-            initialParticipantID={participantID}
-            initialStudyID={studyID}
-            handleLogin={handleLogin}
-          />
-        )}
+              initialParticipantID={participantID}
+              initialStudyID={studyID}
+              handleLogin={handleLogin}
+            />
+            )}
       </>
     )
   }
