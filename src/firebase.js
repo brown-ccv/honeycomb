@@ -1,8 +1,9 @@
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
+// TODO: Upgrade to modular SDK instead of compat
 
 // Initialize Firebase and Firestore
-const db = firebase
+firebase
   .initializeApp({
     apiKey: process.env.REACT_APP_apiKey,
     authDomain: process.env.REACT_APP_authDomain,
@@ -12,7 +13,7 @@ const db = firebase
     messagingSenderId: process.env.REACT_APP_messagingSenderId,
     appId: process.env.REACT_APP_appId
   })
-  .firestore()
+const db = firebase.firestore()
 
 // Use emulator if on localhost
 if (window.location.hostname === 'localhost') db.useEmulator('localhost', 8080)
@@ -97,8 +98,7 @@ async function addToFirebase (data) {
 
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate)
-    // Data in firestore is nested as a single collection
-    await experiment.update('results', firebase.firestore.FieldValue.arrayUnion(data))
+    await experiment.collection('trials').add(data)
   } catch (error) {
     console.error('Unable to add trial:\n', error)
   }
