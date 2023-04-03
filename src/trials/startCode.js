@@ -5,11 +5,11 @@ import { baseStimulus } from '../lib/markup/stimuli'
 import { beep } from '../lib/utils'
 
 const startCode = () => {
-  let stimulus = baseStimulus(`<h1>${lang.prompt.setting_up}</h1>`, true) + photodiodeGhostBox()
+  const stimulus = baseStimulus(`<h1>${lang.prompt.setting_up}</h1>`, true) + photodiodeGhostBox()
 
-   return {
+  return {
     type: htmlKeyboardResponse,
-    stimulus: stimulus,
+    stimulus,
     trial_duration: 2000,
     on_load: () => {
       pdSpotEncode(eventCodes.open_task)

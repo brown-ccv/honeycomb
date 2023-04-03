@@ -36,24 +36,40 @@
     "react-scripts": "5.0.1",
     "wait-on": "^7.0.1"
   },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.64",
+    "@electron-forge/maker-deb": "^6.0.0-beta.64",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.64",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
+    "babel-plugin-macros": "^2.6.1",
+    "chai": "^4.2.0",
+    "concurrently": "^7.6.0",
+    "cross-env": "^7.0.3",
+    "cz-conventional-changelog": "^3.2.0",
+    "dotenv-cli": "^7.0.0",
+    "electron": "19.0.8",
+    "firebase-admin": "^11.0.1",
+    "firebase-tools": "^11.0.1",
+    "require-context.macro": "^1.1.1",
+    "standard": "^17.0.0",
+    "wait-on": "^7.0.1"
+  },
   "scripts": {
     "commit": "git-cz",
     "postinstall": "node version.js && npm run rebuild",
-    "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
-    "start:browser": "cross-env IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
-    "test": "react-scripts test",
-    "prebuild": "electron-rebuild",
-    "build": "react-scripts build",
-    "package:windows": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
-    "package:linux": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-deb",
-    "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg",
-    "rebuild": "electron-rebuild",
     "eject": "react-scripts eject",
+    "lint": "standard",
+    "format": "standard --fix",
+    "test": "standard && react-scripts test",
+    "prebuild": "electron-rebuild",
+    "rebuild": "electron-rebuild",
     "electron": "electron .",
     "electron-dev": "wait-on http://localhost:3000 && cross-env ELECTRON_START_URL=\"http://localhost:3000\" electron .",
     "firebase:dev": "firebase emulators:start --import emulator_data",
     "firebase:savedev": "firebase emulators:export emulator_data",
     "firebase:download": "dotenv -e env/.env.firebase-download node download-response-data.js",
+    "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
+    "start:browser": "cross-env IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
     "dev": "concurrently -k npm:start npm:electron-dev",
     "dev:home": "dotenv -e env/.env.home npm run dev",
     "dev:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run dev",
@@ -61,12 +77,33 @@
     "dev:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run dev",
     "dev:firebase": "dotenv -e env/.env.firebase npm run dev",
     "dev:turk-prolific": "dotenv -e env/.env.turk-prolific npm run dev",
+    "build": "react-scripts build",
     "build:home": "dotenv -e env/.env.home npm run build",
     "build:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run build",
     "build:clinic": "dotenv -e env/.env.clinic npm run build",
     "build:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run build",
     "build:firebase": "dotenv -e env/.env.firebase npm run build",
-    "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build"
+    "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build",
+    "package:windows": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
+    "package:linux": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-deb",
+    "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg"
+  },
+  "babel": {
+    "plugins": [
+      "macros"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "config": {
     "commitizen": {
@@ -102,38 +139,10 @@
       ]
     }
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.64",
-    "@electron-forge/maker-deb": "^6.0.0-beta.64",
-    "@electron-forge/maker-dmg": "^6.0.0-beta.64",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
-    "babel-plugin-macros": "^2.6.1",
-    "chai": "^4.2.0",
-    "concurrently": "^7.6.0",
-    "cross-env": "^7.0.3",
-    "cz-conventional-changelog": "^3.2.0",
-    "dotenv-cli": "^7.0.0",
-    "electron": "19.0.8",
-    "firebase-admin": "^11.0.1",
-    "firebase-tools": "^11.24.1",
-    "require-context.macro": "^1.1.1",
-    "wait-on": "^7.0.1"
-  },
-  "babel": {
-    "plugins": [
-      "macros"
+  "standard": {
+    "ignore": [
+      "/public/lib/*",
+      "/src/__tests__/*"
     ]
   }
 }
