@@ -79,18 +79,19 @@ if ((studyID === undefined) | (participantID === undefined)) {
     'Please enter a studyID and participantID.\n' + '\n' +
     'Usage: npm run firebase:download -- studyID participantID [sessionNumber] [outputRoot]' + '\n'
   )
+} else {
+  console.log(
+  `Looking for response data for study <${studyID}>, participant <${participantID}>, ` +
+  `sessionNumber <${sessionNumber}>, outputRoot <${outputRoot}>.\n`
+  )
 }
 
-console.log(
-  `Looking for response data for study <${studyID}>, participant <${participantID}>, sessionNumber <${sessionNumber}>, outputRoot <${outputRoot}>.`
-)
-
+// Initialize Firebase and Firestore
 const app = initializeApp()
 const db = getFirestore(app)
 
 // Search with the same collection name that we use over in src/firebase.js.
-const collectionName = 'participant_responses'
-db.collection(collectionName)
+db.collection('participant_responses')
   .doc(studyID)
   .collection('participants')
   .doc(participantID)
@@ -114,15 +115,12 @@ db.collection(collectionName)
   })
   .then((doc) => {
     // Save the chosen session to a unique JSON file.
-    const outputDir = `${outputRoot}/${collectionName}/${studyID}/${participantID}`
+    const outputDir = `${outputRoot}/'participant_responses'/${studyID}/${participantID}`
     ensureDirSync(outputDir)
     const outputFile = `${outputDir}/${doc.id}.json`
-    console.log(`Saving ${outputFile}`)
+    console.log(`Saving data to ${outputFile}`)
+
     return writeFile(outputFile, JSON.stringify(doc.data()))
   })
-  .then(() => {
-    console.log('OK')
-  })
-  .catch((error) => {
-    console.error(error)
-  })
+  .then(() => console.log('OK'))
+  .catch((error) => console.error(error))
