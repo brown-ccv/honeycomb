@@ -100,15 +100,15 @@ db.collection('participant_responses')
   .then((querySnapshot) => {
     // Summarize query results.
     const sessionCount = querySnapshot.size
-    if (!sessionCount) {
-      throw new Error('No sessions found.')
-    }
+    if (!sessionCount) throw new Error('No sessions found.')
+
     console.log(`Found ${sessionCount} sessions:`)
     for (let i = 0; i < sessionCount; i++) {
       console.log(`  ${i}: ${querySnapshot.docs[i].id}`)
     }
 
     // Pick one session to save locally.
+    // TODO: Save trials directly?
     const docIndex = sessionNumber === 'latest' ? sessionCount - 1 : sessionNumber
     console.log(`Reading document data for session ${docIndex}.`)
     return querySnapshot.docs[docIndex]
