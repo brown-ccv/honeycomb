@@ -16,6 +16,7 @@ firebase
 const db = firebase.firestore()
 
 // Use emulator if on localhost
+// TODO: Refactor to use NODE_ENV
 if (window.location.hostname === 'localhost') db.useEmulator('localhost', 8080)
 
 /**
