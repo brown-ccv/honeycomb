@@ -46,7 +46,7 @@ function App () {
   // TODO: Electron shouldn't be mutually exclusive?
   useEffect(() => {
     // For testing and debugging purposes
-    console.log(config)
+    console.log('config:', config)
 
     // If on desktop
     if (config.USE_ELECTRON) {

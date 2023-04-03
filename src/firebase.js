@@ -1,8 +1,6 @@
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
 
-// TODO: Can store variables for the nested pieces of a record https://firebase.google.com/docs/firestore/data-model#references
-
 // Initialize Firebase and Firestore
 const db = firebase
   .initializeApp({
