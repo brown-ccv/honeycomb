@@ -13,6 +13,7 @@ function Login ({ handleLogin, initialParticipantID, initialStudyID, validationF
     e.preventDefault()
     // Logs user in if a valid participant/study id combination is given
     validationFunction(participantId, studyId).then((isValid) => {
+      console.log('POST VALIDATION', isValid)
       setIsError(isValid)
       if (isValid) handleLogin(participantId, studyId)
     })

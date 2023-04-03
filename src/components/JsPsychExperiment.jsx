@@ -32,6 +32,8 @@ function JsPsychExperiment ({
     // Start date of the experiment - used as the UID
     const startDate = new Date().toISOString()
 
+    console.log('JSPSYCH', config)
+
     // Write the initial record to Firestore
     if (config.USE_FIREBASE) initParticipant(participantId, studyId, startDate)
 
