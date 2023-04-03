@@ -86,14 +86,13 @@ async function initParticipant (participantID, studyID, startDate) {
   }
 }
 
-// TODO: Reverse participantID and studyID
 /**
  * Adds a JsPsych trial to Firebase
  * @param {*} data The JsPsych data object from a single trial
  */
 async function addToFirebase (data) {
-  const participantID = data.participant_id
   const studyID = data.study_id
+  const participantID = data.participant_id
   const startDate = data.start_date
 
   try {
