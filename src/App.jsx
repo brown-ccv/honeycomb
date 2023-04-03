@@ -100,20 +100,35 @@ function App () {
   /** VALIDATION FUNCTIONS */
 
   // Default to valid
-  const defaultValidation = async () => true
+  const defaultValidation = async () => {
+    console.log('default validation')
+    return true
+  }
   // Validate participant/study against Firestore rules
   const firebaseValidation = (participantId, studyId) => {
+    console.log('firebaseValidation')
     return validateParticipant(participantId, studyId)
   }
 
   /** DATA WRITE FUNCTIONS */
 
-  const defaultFunction = () => {}
+  const defaultFunction = () => {
+    console.log('Default write function')
+  }
   // Add trial data to Firestore
-  const firebaseUpdateFunction = (data) => { addToFirebase(data) }
+  const firebaseUpdateFunction = (data) => {
+    console.log('Firebase write function')
+    addToFirebase(data)
+  }
   // Execute the 'data' callback function (see public/electron.js)
-  const desktopUpdateFunction = (data) => { ipcRenderer.send('data', data) }
-  const psiturkUpdateFunction = (data) => { psiturk.recordTrialData(data) }
+  const desktopUpdateFunction = (data) => {
+    console.log('Desktop write function')
+    ipcRenderer.send('data', data)
+  }
+  const psiturkUpdateFunction = (data) => {
+    console.log('Psiturk write function')
+    psiturk.recordTrialData(data)
+  }
 
   /** EXPERIMENT FINISH FUNCTIONS */
 

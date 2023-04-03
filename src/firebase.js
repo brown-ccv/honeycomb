@@ -117,7 +117,7 @@ async function initParticipant (participantID, studyID, startDate) {
     console.log('Initialized experiment', studyID, participantID)
     return true
   } catch (error) {
-    console.error('Unable to initalize the experiment', error)
+    console.error('Unable to initialize the experiment', error)
     return false
   }
 }
