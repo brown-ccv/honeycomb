@@ -1,15 +1,21 @@
 rules_version = '2';
 service cloud.firestore {
+  // TODO: Delete update from these?
   match /databases/{database}/documents {
-    // match /participant_responses/{study_id}/participants/{participant_id}/data/{document=**} {
-    //       allow read: if false
-    //       allow create, update: 
-    //       if participant_id in get(/databases/$(database)/documents/registered_studies/$(study_id)).data.registered_participants;
-    //   }
-      match /participant_responses/{study_id}/participants/{participant_id}/{document=**} {
-        allow read: if false
-        allow create, update: 
-        if participant_id in get(/databases/$(database)/documents/registered_studies/$(study_id)).data.registered_participants;
+      // participantID must be in the registered_participants array in the registered_studies/{studyID} document
+      match /participant_responses/{studyID}/participants/{participantID} {
+        allow create, read, update: 
+        if participantID in get(/databases/$(database)/documents/registered_studies/$(studyID)).data.registered_participants;
+
+        // experimentID must be in the data subcollection
+        match /data/{experimentID} {
+          allow create, read: if true
+
+          // trialID must be in the trials subcollection
+          match /trials/{trialID} {
+            allow create, read, update: if true
+          }
+        }
       }
     }
 }
