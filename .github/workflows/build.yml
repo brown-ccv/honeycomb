@@ -20,19 +20,23 @@ jobs:
         video: [on, off]
         os: [ubuntu-latest, macOS-latest, windows-latest]
         exclude: 
+        # todo: These excludes are weird?
           # exclude clinic video on ubuntu-latest 
           - os: ubuntu-latest
-            setting: clinic
-            video: on 
-          - os: macOS-latest
-            setting: clinic
-            video: on 
+            setting: home
+            video: on
           - os: ubuntu-latest
-            setting: home
-            video: on
+            setting: clinic
+            video: on 
           - os: macOS-latest
             setting: home
             video: on
+          - os: macOS-latest
+            setting: clinic
+            video: on 
+
+
+
 
     steps:
       # Rewrite "git:" repo urls to use "https:" instead, since GitHub Actions blocks port 9418 (as of Jan 2022).

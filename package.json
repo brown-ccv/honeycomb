@@ -57,42 +57,38 @@
   "scripts": {
     "commit": "git-cz",
     "postinstall": "node version.js && npm run rebuild",
+    "prebuild": "electron-rebuild",
+    "rebuild": "electron-rebuild",
     "eject": "react-scripts eject",
+    "package:windows": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
+    "package:linux": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-deb",
+    "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg",
     "lint": "standard",
     "format": "standard --fix",
     "test": "standard && react-scripts test",
-    "prebuild": "electron-rebuild",
-    "rebuild": "electron-rebuild",
-    "electron": "electron .",
-    "electron-dev": "wait-on http://localhost:3000 && cross-env ELECTRON_START_URL=\"http://localhost:3000\" electron .",
-    "firebase:dev": "firebase emulators:start --import emulator_data",
-    "firebase:savedev": "firebase emulators:export emulator_data",
+    "firebase:emulator-start": "firebase emulators:start --import emulator_data",
+    "firebase:emulator-save": "firebase emulators:export emulator_data",
     "firebase:download": "dotenv -e env/.env.firebase-download node download-response-data.js",
-    "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
-    "start:browser": "cross-env IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
-    "dev": "concurrently -k npm:start npm:electron-dev",
-    "dev:home": "dotenv -e env/.env.home npm run dev",
-    "dev:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run dev",
-    "dev:clinic": "dotenv -e env/.env.clinic npm run dev",
-    "dev:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run dev",
-    "dev:firebase": "dotenv -e env/.env.firebase npm run dev:home",
-    "dev:firebase:video": "dotenv -e env/.env.firebase npm run dev:home:video",
-    "dev:turk-prolific": "dotenv -e env/.env.turk-prolific npm run dev",
-    "build": "react-scripts build",
-    "build:home": "dotenv -e env/.env.home npm run build",
-    "build:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run build",
-    "build:clinic": "dotenv -e env/.env.clinic npm run build",
-    "build:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run build",
+    "electron": "wait-on http://localhost:3000 && cross-env ELECTRON_START_URL='http://localhost:3000' electron .",
+    "start-electron": "cross-env BROWSER='none' NODE_PATH='./src' IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
+    "start-browser": "cross-env IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
+    "dev-electron": "concurrently -k npm:start-electron npm:electron",
+    "dev-browser": "concurrently -k npm:start-browser",
+
+
+    "dev:home": "npm run dev-browser",
+    "dev:home:firebase": "dotenv -e env/.env.firebase npm run dev:home",
+    "dev:clinic": "npm run dev-electron",
+    "dev:clinic:video": "dotenv -e env/.env.video npm run dev:clinic",
+    "dev:clinic:equipment": "dotenv -e env/.env.equipment npm run dev:clinic",
+
+    "build": "cross-env IMAGE_INLINE_SIZE_LIMIT=0 react-scripts build",
     "build:firebase": "dotenv -e env/.env.firebase npm run build",
-    "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build",
-    "package:windows": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
-    "package:linux": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-deb",
-    "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg"
+    "build:video": "dotenv -e env/.env.video npm run build",
+    "build:equipment": "dotenv -e env/.env.equipment npm run build"
   },
   "babel": {
-    "plugins": [
-      "macros"
-    ]
+    "plugins": ["macros"]
   },
   "browserslist": {
     "production": [
@@ -107,9 +103,7 @@
     ]
   },
   "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    },
+    "commitizen": { "path": "./node_modules/cz-conventional-changelog" },
     "forge": {
       "packagerConfig": {
         "asar": true

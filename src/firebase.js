@@ -44,20 +44,6 @@ function getExperimentRef (studyID, participantID, startDate) {
   return getParticipantRef(studyID, participantID).collection('data').doc(startDate)
 }
 
-// Attempts to retrieve the data in /{collectionName}/{study_id}/participants/{participant_id}
-// Will return false if participant isn't valid
-// const validateParticipant = async (participantId, studyId) => {
-//   return await db
-//     .collection(collectionName)
-//     .doc(studyId)
-//     .collection('participants')
-//     .doc(participantId)
-//     .then(() => true)
-//     .catch((error) => {
-//       console.error(error);
-//       return false;
-//     });
-// };
 // TODO: Reverse participantID and studyID
 /**
  * Validate the given studyID & participantID combo
@@ -67,36 +53,15 @@ function getExperimentRef (studyID, participantID, startDate) {
  */
 async function validateParticipant (participantID, studyID) {
   try {
-    await getParticipantRef(studyID, participantID)
-    console.log('Validated participant', studyID, participantID)
+    // Attempting to get document will fail if path is invalid
+    await getParticipantRef(studyID, participantID).get()
     return true
   } catch (error) {
-    console.error('Unable to validate the experiment', error)
+    console.error('Unable to validate the experiment\n', error)
     return false
   }
 }
 
-// const initParticipant = async (participantId, studyId, startDate) => {
-//   try {
-//     await db
-//       .collection(collectionName)
-//       .doc(studyId)
-//       .collection('participants')
-//       .doc(participantId)
-//       .collection('data')
-//       .doc(startDate)
-//       .set({
-//         start_time: startDate,
-//         app_version: window.navigator.appVersion,
-//         app_platform: window.navigator.platform,
-//         results: [],
-//       });
-//     return true;
-//   } catch (error) {
-//     console.error(error);
-//     return false;
-//   }
-// };
 // TODO: Reverse participantID and studyID
 /**
  * Initialize a new experiment in Firebase
@@ -114,53 +79,32 @@ async function initParticipant (participantID, studyID, startDate) {
       app_platform: window.navigator.platform,
       results: []
     })
-    console.log('Initialized experiment', studyID, participantID)
+    console.log('Initialized experiment:', studyID, participantID, startDate)
     return true
   } catch (error) {
-    console.error('Unable to initialize the experiment', error)
+    console.error('Unable to initialize the experiment:\n', error)
     return false
   }
 }
 
-// Add individual trials to db
-
-// const addToFirebase = (data) => {
-//   console.log('Adding trial to firebase', data)
-//   const participantID = data.participant_id
-//   const studyID = data.study_id
-//   const startDate = data.start_date
-
-//   // Data in firestore is nested as a single collection
-//   db.collection(collectionName)
-//     .doc(studyID)
-//     .collection('participants')
-//     .doc(participantID)
-//     .collection('data')
-//     .doc(startDate)
-//     .update('results', firebase.firestore.FieldValue.arrayUnion(data))
-// }
-
 // TODO: Reverse participantID and studyID
 /**
- *
- * @param {*} data The JsPsych data object
+ * Adds a JsPsych trial to Firebase
+ * @param {*} data The JsPsych data object from a single trial
  */
 async function addToFirebase (data) {
-  console.log('Adding trial to firebase', data)
   const participantID = data.participant_id
   const studyID = data.study_id
   const startDate = data.start_date
 
   try {
-    // Data in firestore is nested as a single collection
     const experiment = getExperimentRef(studyID, participantID, startDate)
+    // Data in firestore is nested as a single collection
     await experiment.update('results', firebase.firestore.FieldValue.arrayUnion(data))
   } catch (error) {
-    console.error('Unable to add trial:', error)
+    console.error('Unable to add trial:\n', error)
   }
 }
 
-// Export types that exists in Firestore
 export { db, validateParticipant, initParticipant, addToFirebase }
-
 export default firebase
