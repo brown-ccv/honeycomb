@@ -22,12 +22,12 @@ if (window.location.hostname === 'localhost') db.useEmulator('localhost', 8080)
 // Get a reference to the Firebase document at
 // "/participant_responses/{studyID}/participants/{participantID}"
 const getParticipantRef = (studyID, participantID) =>
-  db.collection('participant_responses').doc(studyID).collection('participants').doc(participantID)
+  db.doc(`participant_responses/${studyID}/participants/${participantID}`)
 
 // Get a reference to the Firebase document at
 // "/participant_responses/{studyID}/participants/{participantID}/data/{startDate}"
 const getExperimentRef = (studyID, participantID, startDate) =>
-  getParticipantRef(studyID, participantID).collection('data').doc(startDate)
+  db.doc(`${getParticipantRef(studyID, participantID).path}/data/${startDate}`)
 
 /**
  * Validate the given studyID & participantID combo

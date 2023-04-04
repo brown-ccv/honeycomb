@@ -62,11 +62,13 @@
  * This will result in data saved to
  *  /path/to/my/data/participant_responses/{session Id}/{participant Id}/{session date}.json
  */
-const { ensureDirSync, writeFile } = require('fs-extra')
-const { initializeApp } = require('firebase-admin/app')
-const { getFirestore } = require('firebase-admin/firestore')
 
-import { getExperimentRef, db } from './src/firebase'
+const { ensureDirSync, writeFile } = require('fs-extra')
+// const { initializeApp } = require('firebase-admin/app')
+// const { getFirestore } = require('firebase-admin/firestore')
+// const { collection, getDocs } = require('firebase/firestore')
+// TODO: Refactor to modular usage (firebase.js too)
+const admin = require('firebase-admin')
 
 // Get CLI arguments
 const args = process.argv.slice(2)
@@ -79,20 +81,33 @@ const outputRoot = args[3] || '.'
 if ((studyID === undefined) | (participantID === undefined)) {
   // Note that throwing an Error will halt execution of this script
   throw Error(
-    'Please enter a studyID and participantID.\n' + '\n' +
-    'Usage: npm run firebase:download -- studyID participantID [sessionNumber] [outputRoot]' + '\n'
+    'Please enter a studyID and participantID.\n' +
+      '\n' +
+      'Usage: npm run firebase:download -- studyID participantID [sessionNumber] [outputRoot]' +
+      '\n'
   )
 } else {
   console.log(
-  `Looking for response data for study <${studyID}>, participant <${participantID}>, ` +
-  `sessionNumber <${sessionNumber}>, outputRoot <${outputRoot}>.\n`
+    `Looking for response data for study <${studyID}>, participant <${participantID}>, ` +
+      `sessionNumber <${sessionNumber}>, outputRoot <${outputRoot}>.\n`
   )
 }
 
-// const app = initializeApp()
-// const db = getFirestore(app)
+// Initialize Firestore
+// const db = getFirestore(initializeApp())
+// const db = admin.firestore()
+const db = admin.initializeApp().firestore()
+
+// Query Firestore for the participantID on the given studyID
+console.log('STARTING MODULAR DOWNLOAD')
+const dataRef = db.collection(`participant_responses/${studyID}/participants/${participantID}/data`)
+console.log('Data queried: ', dataRef)
+dataRef.get().then(querySnapshot => {
+  console.log('DATA:', querySnapshot)
+})
 
 // Search with the same collection name that we use over in src/firebase.js.
+console.log('STARTING OLD DOWNLOAD')
 const collectionName = 'participant_responses'
 db.collection(collectionName)
   .doc(studyID)

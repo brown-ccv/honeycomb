@@ -1,5 +1,6 @@
 import { initJsPsych } from 'jspsych'
 import React, { useEffect, useMemo, useRef } from 'react'
+
 import { config } from '../config/main'
 import { initParticipant } from '../firebase'
 import { buildTimeline, jsPsychOptions } from '../timelines/main'
