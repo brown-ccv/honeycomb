@@ -1,29 +1,29 @@
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
 
+// TODO: Upgrade to modular SDK instead of compat
+
+// Initialize Firebase and Firestore
+firebase
+  .initializeApp({
+    apiKey: process.env.REACT_APP_apiKey,
+    authDomain: process.env.REACT_APP_authDomain,
+    databaseURL: process.env.REACT_APP_databaseURL,
+    projectId: process.env.REACT_APP_projectId || 'no-firebase',
+    storageBucket: process.env.REACT_APP_storageBucket,
+    messagingSenderId: process.env.REACT_APP_messagingSenderId,
+    appId: process.env.REACT_APP_appId
+  })
+const db = firebase.firestore()
+
+// Use emulator if on localhost
+// TODO: Refactor to use NODE_ENV
+if (window.location.hostname === 'localhost') db.useEmulator('localhost', 8080)
+
 // Set collection name
 // TODO: Export as constant variable
 // TODO: Add variables for sub-collection queries
 const collectionName = 'participant_responses'
-
-// Firebase config
-const config = {
-  apiKey: process.env.REACT_APP_apiKey,
-  authDomain: process.env.REACT_APP_authDomain,
-  databaseURL: process.env.REACT_APP_databaseURL,
-  projectId: process.env.REACT_APP_projectId || 'no-firebase',
-  storageBucket: process.env.REACT_APP_storageBucket,
-  messagingSenderId: process.env.REACT_APP_messagingSenderId,
-  appId: process.env.REACT_APP_appId
-}
-
-// Get a Firestore instance
-const db = firebase.initializeApp(config).firestore()
-
-// Use emulator if on localhost
-if (window.location.hostname === 'localhost') {
-  db.useEmulator('localhost', 8080)
-}
 
 // TODO: Can store variables for the nested pieces of a record https://firebase.google.com/docs/firestore/data-model#references
 
