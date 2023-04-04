@@ -63,7 +63,8 @@
  *  /path/to/my/data/participant_responses/{session Id}/{participant Id}/{session date}.json
  */
 
-const { ensureDirSync, writeFile } = require('fs-extra')
+// TODO: Refactor to a CJS module
+const fs = require('fs-extra')
 const firebase = require('firebase-admin')
 
 // Get CLI arguments
@@ -117,9 +118,9 @@ dataRef.get().then((dataSnapshot) => {
   if (experiments) console.log(`Found ${experiments.length} session(s):`)
   else throw new Error('No sessions found.')
   dataSnapshot.docs.forEach((experiment, idx) => console.log(`\t${idx}: ${experiment.id}`))
+  console.log()
 
   // TODO: Follow old pattern? Or download all?
-
   dataSnapshot.forEach((experiment) => {
     // Query Firestore for the experiment's trials (sorted by trial_index)
     const trialsRef = db.collection(`${dataRef.path}/${experiment.id}/trials`)
@@ -137,13 +138,15 @@ dataRef.get().then((dataSnapshot) => {
       // Save the chosen session to a unique JSON file.
       .then((experimentData) => {
         const outputDir = `${outputRoot}/participant_responses/${studyID}/${participantID}`
-        ensureDirSync(outputDir)
         const outputFile = `${outputDir}/${experiment.id}.json`
-        console.log(`Saving ${outputFile}`)
-        return writeFile(outputFile, JSON.stringify(experimentData))
-      })
-      .then(() => console.log('OK'))
-      .catch((error) => console.error(error))
+
+        // TODO: OUTPUT FILE NAME IS NOT VALID (ONLY ON WINDOWS?)
+        // TODO: Check for overwriting file?
+        // fs.outputJson(outputFile, experimentData, { spaces: 2 })
+        fs.outputJson(`${outputDir}/test.json`, experimentData, { spaces: 2 })
+          .then(() => console.log('OK:', outputFile))
+          .catch((error) => { throw new Error('Unable to write JSON file\n\n' + error.stack) })
+        })
   })
 })
 
