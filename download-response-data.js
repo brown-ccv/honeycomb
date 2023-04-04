@@ -121,6 +121,7 @@ dataRef.get().then((dataSnapshot) => {
   console.log()
 
   // TODO: Follow old pattern? Or download all?
+  // Right now sessionNumber is ignored - all experiments are saved.
   dataSnapshot.forEach((experiment) => {
     // Query Firestore for the experiment's trials (sorted by trial_index)
     const trialsRef = db.collection(`${dataRef.path}/${experiment.id}/trials`)
