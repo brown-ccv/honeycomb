@@ -129,29 +129,29 @@ dataRef.get().then((dataSnapshot) => {
       .get()
       // Get the data out of each trial document
       .then((trialsSnapshot) => trialsSnapshot.docs.map((trial) => trial.data()))
-      // Build experimentData object where trial data is "results" array
+      // Add trials to experiment object as "results" array
       .then((results) => {
         const experimentData = experiment.data()
         experimentData.results = results
         return experimentData
       })
-      // Save the chosen session to a unique JSON file.
+      // Save the session to a unique JSON file.
       .then((experimentData) => {
-        const outputDir = `${outputRoot}/participant_responses/${studyID}/${participantID}`
-        const outputFile = `${outputDir}/${experiment.id}.json`
+        const outputFile =
+          `${outputRoot}/participant_responses/` +
+          `${studyID}/${participantID}/${experiment.id}.json`
+            .replaceAll(':', '_')
 
-        // TODO: OUTPUT FILE NAME IS NOT VALID (ONLY ON WINDOWS?)
         // TODO: Check for overwriting file?
-        // fs.outputJson(outputFile, experimentData, { spaces: 2 })
-        fs.outputJson(`${outputDir}/test.json`, experimentData, { spaces: 2 })
+        // TODO: Add note about change to file name (replaced : with _)
+        fs.outputJson(outputFile, experimentData, { spaces: 2 })
           .then(() => console.log('OK:', outputFile))
           .catch((error) => { throw new Error('Unable to write JSON file\n\n' + error.stack) })
-        })
+      })
   })
 })
 
 // Search with the same collection name that we use over in src/firebase.js.
-// console.log('STARTING OLD DOWNLOAD')
 // const collectionName = 'participant_responses'
 // db.collection(collectionName)
 //   .doc(studyID)
