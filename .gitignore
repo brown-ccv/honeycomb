@@ -27,9 +27,11 @@ firebase-debug.log
 firestore-debug.log
 ui-debug.log
 
-# Misc
-.env
+# Versioning
 package-lock.json
 public/config/version.json
+
+# Misc
+.env
 .DS_Store
 psiturkit/*_turk
