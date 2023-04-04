@@ -30,6 +30,7 @@ function JsPsychExperiment ({
   // As of jspsych 7, we create our own jspsych instance(s) where needed instead of importing one global instance.
   const jsPsych = useMemo(() => {
     // Start date of the experiment - used as the UID
+    // TODO: JsPsych has a built in timestamp function
     const startDate = new Date().toISOString()
 
     // Write the initial record to Firestore

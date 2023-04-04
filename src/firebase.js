@@ -20,30 +20,16 @@ const db = firebase.firestore()
 if (window.location.hostname === 'localhost') db.useEmulator('localhost', 8080)
 
 const collectionName = 'participant_responses'
-/**
- * Get a reference to the Firebase document at /participant_responses/{studyID}/participants/{participantID}
- * @param {string} studyID The ID of a given study in Firebase
- * @param {string} participantID The ID of a given participant inside the studyID
- * @returns Firebase document reference
- */
-function getParticipantRef (studyID, participantID) {
-  return db
-    .collection('participant_responses')
-    .doc(studyID)
-    .collection('participants')
-    .doc(participantID)
-}
 
-/**
- * Get a reference to the Firebase document at /participant_responses/{studyID}/participants/{participantID}/data/{startDate}
- * @param {string} studyID The ID of a given study in Firebase
- * @param {string} participantID The ID of a given participant inside the studyID
- * @param {string} startDate The ID of a given experiment inside the studyID and participantID
- * @returns Firebase document reference
- */
-function getExperimentRef (studyID, participantID, startDate) {
-  return getParticipantRef(studyID, participantID).collection('data').doc(startDate)
-}
+// Get a reference to the Firebase document at
+// "/participant_responses/{studyID}/participants/{participantID}"
+const getParticipantRef = (studyID, participantID) =>
+  db.collection('participant_responses').doc(studyID).collection('participants').doc(participantID)
+
+// Get a reference to the Firebase document at
+// "/participant_responses/{studyID}/participants/{participantID}/data/{startDate}"
+const getExperimentRef = (studyID, participantID, startDate) =>
+  getParticipantRef(studyID, participantID).collection('data').doc(startDate)
 
 /**
  * Validate the given studyID & participantID combo
@@ -54,11 +40,11 @@ function getExperimentRef (studyID, participantID, startDate) {
 // TODO: Reverse participantID and studyID order
 async function validateParticipant (participantID, studyID) {
   try {
-    // Attempting to get document will fail if path is invalid
+    // .get() will fail on an invalid path
     await getParticipantRef(studyID, participantID).get()
     return true
   } catch (error) {
-    console.error('Unable to validate the experiment\n', error)
+    console.error('Unable to validate the experiment:\n', error)
     return false
   }
 }
@@ -76,6 +62,7 @@ async function initParticipant (participantID, studyID, startDate) {
     const experiment = getExperimentRef(studyID, participantID, startDate)
     await experiment.set({
       start_time: startDate,
+      // TODO: app_version and app_platform are deprecated
       app_version: window.navigator.appVersion,
       app_platform: window.navigator.platform,
       results: []
@@ -87,24 +74,24 @@ async function initParticipant (participantID, studyID, startDate) {
     return false
   }
 }
-// Add individual trials to db
-const addToFirebase = (data) => {
-  console.log('Adding trial to firebase', data)
-  const participantId = data.participant_id
-  const studyId = data.study_id
+
+/**
+ * Adds a JsPsych trial to Firebase.
+ * Each trial is its own document in the "trials" subcollection
+ * @param {any} data The JsPsych data object from a single trial
+ */
+async function addToFirebase (data) {
+  const studyID = data.study_id
+  const participantID = data.participant_id
   const startDate = data.start_date
 
-  // Data in firestore is nested as a single collection
-  db.collection(collectionName)
-    .doc(studyId)
-    .collection('participants')
-    .doc(participantId)
-    .collection('data')
-    .doc(startDate)
-    .update('results', firebase.firestore.FieldValue.arrayUnion(data))
+  try {
+    const experiment = getExperimentRef(studyID, participantID, startDate)
+    await experiment.collection('trials').add(data)
+  } catch (error) {
+    console.error('Unable to add trial:\n', error)
+  }
 }
 
-// Export types that exists in Firestore
 export { db, collectionName, validateParticipant, initParticipant, addToFirebase }
-
 export default firebase
