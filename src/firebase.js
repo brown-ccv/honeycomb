@@ -19,8 +19,6 @@ const db = firebase.firestore()
 // TODO: Refactor to use NODE_ENV
 if (window.location.hostname === 'localhost') db.useEmulator('localhost', 8080)
 
-const collectionName = 'participant_responses'
-
 // Get a reference to the Firebase document at
 // "/participant_responses/{studyID}/participants/{participantID}"
 const getParticipantRef = (studyID, participantID) =>
@@ -51,6 +49,7 @@ async function validateParticipant (participantID, studyID) {
 
 /**
  * Initialize a new experiment in Firebase
+ * Each experiment is its own document in the "data" subcollection. startDate is used as the ID
  * @param {string} studyID The ID of a given study in Firebase
  * @param {string} participantID The ID of a given participant inside the studyID
  * @param {string} startDate The ID of a given participant inside the studyID and participantID
@@ -93,5 +92,5 @@ async function addToFirebase (data) {
   }
 }
 
-export { db, collectionName, validateParticipant, initParticipant, addToFirebase }
+export { db, getExperimentRef, validateParticipant, initParticipant, addToFirebase }
 export default firebase

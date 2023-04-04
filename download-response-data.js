@@ -2,10 +2,10 @@
  * Connect to Firestore using a service account, and download participant response data.
  *
  * Usage:
- *   npm run firebase:download -- studyId participantId [sessionNumber] [outputRoot]
+ *   npm run firebase:download -- studyID participantID [sessionNumber] [outputRoot]
  *
- *   studyId        must be one of the study Ids that a participant can log in with
- *   participantId  must be one of the participant Ids that a participant can log in with
+ *   studyID        must be one of the study Ids that a participant can log in with
+ *   participantID  must be one of the participant Ids that a participant can log in with
  *   sessionNumber  optional number to select which session to download, defaults to "latest", ie the most recent session
  *   outputRoot     optional path to the folder where data should be saved, defaults to ".", ie the current folder
  *
@@ -39,7 +39,7 @@
  *
  * Now you can run this script, and it will automatically connect to Firebase using your service account.
  *
- * You can run this with two arguments, studyId and participantId, like this:
+ * You can run this with two arguments, studyID and participantID, like this:
  *   npm run firebase:download -- myStudyId myParticipantId
  *
  * This will save data from the last available session for that study and participant.
@@ -66,32 +66,45 @@ const { ensureDirSync, writeFile } = require('fs-extra')
 const { initializeApp } = require('firebase-admin/app')
 const { getFirestore } = require('firebase-admin/firestore')
 
-// Get study, participant, and session number from command line.
+import { getExperimentRef, db } from './src/firebase'
+
+// Get CLI arguments
 const args = process.argv.slice(2)
-const studyId = args[0]
-const participantId = args[1]
+const studyID = args[0]
+const participantID = args[1]
 const sessionNumber = args[2] || 'latest'
 const outputRoot = args[3] || '.'
 
-console.log(`Looking for response data for study <${studyId}>, participant <${participantId}>, sessionNumber <${sessionNumber}>, outputRoot <${outputRoot}>.`)
+// TODO: Cleaner way to log this error?
+if ((studyID === undefined) | (participantID === undefined)) {
+  // Note that throwing an Error will halt execution of this script
+  throw Error(
+    'Please enter a studyID and participantID.\n' + '\n' +
+    'Usage: npm run firebase:download -- studyID participantID [sessionNumber] [outputRoot]' + '\n'
+  )
+} else {
+  console.log(
+  `Looking for response data for study <${studyID}>, participant <${participantID}>, ` +
+  `sessionNumber <${sessionNumber}>, outputRoot <${outputRoot}>.\n`
+  )
+}
 
-const app = initializeApp()
-const db = getFirestore(app)
+// const app = initializeApp()
+// const db = getFirestore(app)
 
 // Search with the same collection name that we use over in src/firebase.js.
 const collectionName = 'participant_responses'
 db.collection(collectionName)
-  .doc(studyId)
+  .doc(studyID)
   .collection('participants')
-  .doc(participantId)
+  .doc(participantID)
   .collection('data')
   .get()
   .then((querySnapshot) => {
-    // Summarize query results.
     const sessionCount = querySnapshot.size
-    if (!sessionCount) {
-      throw new Error('No sessions found.')
-    }
+    if (!sessionCount) throw new Error('No sessions found.')
+
+    // Summarize query results.
     console.log(`Found ${sessionCount} sessions:`)
     for (let i = 0; i < sessionCount; i++) {
       console.log(`  ${i}: ${querySnapshot.docs[i].id}`)
@@ -104,13 +117,11 @@ db.collection(collectionName)
   })
   .then((doc) => {
     // Save the chosen session to a unique JSON file.
-    const outputDir = `${outputRoot}/${collectionName}/${studyId}/${participantId}`
+    const outputDir = `${outputRoot}/${collectionName}/${studyID}/${participantID}`
     ensureDirSync(outputDir)
     const outputFile = `${outputDir}/${doc.id}.json`
     console.log(`Saving ${outputFile}`)
     return writeFile(outputFile, JSON.stringify(doc.data()))
   })
-  .then(() => { console.log('OK') })
-  .catch((error) => {
-    console.error(error)
-  })
+  .then(() => console.log('OK'))
+  .catch((error) => console.error(error))
