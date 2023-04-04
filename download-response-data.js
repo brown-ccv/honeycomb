@@ -64,11 +64,7 @@
  */
 
 const { ensureDirSync, writeFile } = require('fs-extra')
-// const { initializeApp } = require('firebase-admin/app')
-// const { getFirestore } = require('firebase-admin/firestore')
-// const { collection, getDocs } = require('firebase/firestore')
-// TODO: Refactor to modular usage (firebase.js too)
-const admin = require('firebase-admin')
+const firebase = require('firebase-admin')
 
 // Get CLI arguments
 const args = process.argv.slice(2)
@@ -81,10 +77,8 @@ const outputRoot = args[3] || '.'
 if ((studyID === undefined) | (participantID === undefined)) {
   // Note that throwing an Error will halt execution of this script
   throw Error(
-    'Please enter a studyID and participantID.\n' +
-      '\n' +
-      'Usage: npm run firebase:download -- studyID participantID [sessionNumber] [outputRoot]' +
-      '\n'
+    'studyID and participantID not given\n' +
+      'Usage: npm run firebase:download -- studyID participantID [sessionNumber] [outputRoot]\n'
   )
 } else {
   console.log(
@@ -94,49 +88,96 @@ if ((studyID === undefined) | (participantID === undefined)) {
 }
 
 // Initialize Firestore
-// const db = getFirestore(initializeApp())
-// const db = admin.firestore()
-const db = admin.initializeApp().firestore()
+let db
+try {
+  db = firebase
+    .initializeApp({
+      credential: firebase.credential.cert(require('./firebase-service-account.json'))
+    })
+    .firestore()
+} catch (error) {
+  throw new Error(
+    'Unable to connect to Firebase\n\n' +
+      'Your secret key must be called "firebase-service-account.json" ' +
+      'and stored in the root of your repository.\n' +
+      // TODO: Link to docs
+      'More information: https://firebase.google.com/support/guides/service-accounts\n\n' +
+      error.stack
+  )
+}
 
 // Query Firestore for the participantID on the given studyID
-console.log('STARTING MODULAR DOWNLOAD')
-const dataRef = db.collection(`participant_responses/${studyID}/participants/${participantID}/data`)
-console.log('Data queried: ', dataRef)
-dataRef.get().then(querySnapshot => {
-  console.log('DATA:', querySnapshot)
+const dataRef = db.collection(
+  `participant_responses/${studyID}/participants/${participantID}/data`
+)
+dataRef.get().then((dataSnapshot) => {
+  const experiments = dataSnapshot.docs
+
+  // Summarize results
+  if (experiments) console.log(`Found ${experiments.length} session(s):`)
+  else throw new Error('No sessions found.')
+  dataSnapshot.docs.forEach((experiment, idx) => console.log(`\t${idx}: ${experiment.id}`))
+
+  // TODO: Follow old pattern? Or download all?
+
+  dataSnapshot.forEach((experiment) => {
+    // Query Firestore for the experiment's trials (sorted by trial_index)
+    const trialsRef = db.collection(`${dataRef.path}/${experiment.id}/trials`)
+    trialsRef
+      .orderBy('trial_index')
+      .get()
+      // Get the data out of each trial document
+      .then((trialsSnapshot) => trialsSnapshot.docs.map((trial) => trial.data()))
+      // Build experimentData object where trial data is "results" array
+      .then((results) => {
+        const experimentData = experiment.data()
+        experimentData.results = results
+        return experimentData
+      })
+      // Save the chosen session to a unique JSON file.
+      .then((experimentData) => {
+        const outputDir = `${outputRoot}/participant_responses/${studyID}/${participantID}`
+        ensureDirSync(outputDir)
+        const outputFile = `${outputDir}/${experiment.id}.json`
+        console.log(`Saving ${outputFile}`)
+        return writeFile(outputFile, JSON.stringify(experimentData))
+      })
+      .then(() => console.log('OK'))
+      .catch((error) => console.error(error))
+  })
 })
 
 // Search with the same collection name that we use over in src/firebase.js.
-console.log('STARTING OLD DOWNLOAD')
-const collectionName = 'participant_responses'
-db.collection(collectionName)
-  .doc(studyID)
-  .collection('participants')
-  .doc(participantID)
-  .collection('data')
-  .get()
-  .then((querySnapshot) => {
-    const sessionCount = querySnapshot.size
-    if (!sessionCount) throw new Error('No sessions found.')
+// console.log('STARTING OLD DOWNLOAD')
+// const collectionName = 'participant_responses'
+// db.collection(collectionName)
+//   .doc(studyID)
+//   .collection('participants')
+//   .doc(participantID)
+//   .collection('data')
+//   .get()
+//   .then((querySnapshot) => {
+//     const sessionCount = querySnapshot.size
+//     if (!sessionCount) throw new Error('No sessions found.')
 
-    // Summarize query results.
-    console.log(`Found ${sessionCount} sessions:`)
-    for (let i = 0; i < sessionCount; i++) {
-      console.log(`  ${i}: ${querySnapshot.docs[i].id}`)
-    }
+//     // Summarize query results.
+//     console.log(`Found ${sessionCount} sessions:`)
+//     for (let i = 0; i < sessionCount; i++) {
+//       console.log(`  ${i}: ${querySnapshot.docs[i].id}`)
+//     }
 
-    // Pick one session to save locally.
-    const docIndex = sessionNumber === 'latest' ? sessionCount - 1 : sessionNumber
-    console.log(`Reading document data for session ${docIndex}.`)
-    return querySnapshot.docs[docIndex]
-  })
-  .then((doc) => {
-    // Save the chosen session to a unique JSON file.
-    const outputDir = `${outputRoot}/${collectionName}/${studyID}/${participantID}`
-    ensureDirSync(outputDir)
-    const outputFile = `${outputDir}/${doc.id}.json`
-    console.log(`Saving ${outputFile}`)
-    return writeFile(outputFile, JSON.stringify(doc.data()))
-  })
-  .then(() => console.log('OK'))
-  .catch((error) => console.error(error))
+//     // Pick one session to save locally.
+//     const docIndex = sessionNumber === 'latest' ? sessionCount - 1 : sessionNumber
+//     console.log(`Reading document data for session ${docIndex}.`)
+//     return querySnapshot.docs[docIndex]
+//   })
+//   .then((doc) => {
+//     // Save the chosen session to a unique JSON file.
+//     const outputDir = `${outputRoot}/${collectionName}/${studyID}/${participantID}`
+//     ensureDirSync(outputDir)
+//     const outputFile = `${outputDir}/${doc.id}.json`
+//     console.log(`Saving ${outputFile}`)
+//     return writeFile(outputFile, JSON.stringify(doc.data()))
+//   })
+//   .then(() => console.log('OK'))
+//   .catch((error) => console.error(error))

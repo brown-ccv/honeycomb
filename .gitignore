@@ -13,23 +13,22 @@
 /dist
 /out
 
-# Firebase
-.firebase
-
 # IDE
 /.vscode
 
 # Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-firebase-debug.log
-firestore-debug.log
-ui-debug.log
+*.log
+*.log*
 
 # Versioning
 package-lock.json
 public/config/version.json
+
+# Firebase private key
+**/firebase-service-account.json
+
+# Live data
+**/participant_responses
 
 # Misc
 .env
