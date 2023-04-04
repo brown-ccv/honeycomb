@@ -64,8 +64,8 @@ async function initParticipant (participantID, studyID, startDate) {
       start_time: startDate,
       // TODO: app_version and app_platform are deprecated
       app_version: window.navigator.appVersion,
-      app_platform: window.navigator.platform,
-      results: []
+      app_platform: window.navigator.platform
+      // TODO: Store participantID and studyID here, not on each trial
     })
     console.log('Initialized experiment:', studyID, participantID, startDate)
     return true
