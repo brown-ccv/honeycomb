@@ -71,11 +71,11 @@ const firebase = require('firebase-admin')
 const args = process.argv.slice(2)
 const studyID = args[0]
 const participantID = args[1]
-const sessionNumber = args[2] || 'latest'
-const outputRoot = args[3] || '.'
+const sessionNumber = parseInt(args[2])
+const outputRoot = args[3] ?? '.'
 
 // TODO: Cleaner way to log this error?
-if ((studyID === undefined) | (participantID === undefined)) {
+if (studyID === undefined || participantID === undefined) {
   // Note that throwing an Error will halt execution of this script
   throw Error(
     'studyID and participantID not given\n' +
@@ -111,20 +111,29 @@ try {
 const dataRef = db.collection(
   `participant_responses/${studyID}/participants/${participantID}/data`
 )
-dataRef.get().then((dataSnapshot) => {
-  const experiments = dataSnapshot.docs
+dataRef
+  .get()
+  .then((dataSnapshot) => {
+    const experiments = dataSnapshot.docs
 
-  // Summarize results
-  if (experiments) console.log(`Found ${experiments.length} session(s):`)
-  else throw new Error('No sessions found.')
-  dataSnapshot.docs.forEach((experiment, idx) => console.log(`\t${idx}: ${experiment.id}`))
-  console.log()
+    // Summarize results
+    if (experiments) console.log(`Found ${experiments.length} session(s):`)
+    else throw new Error('No sessions found.')
+    dataSnapshot.docs.forEach((experiment, idx) => console.log(`\t${idx}: ${experiment.id}`))
+    console.log()
 
-  // TODO: Follow old pattern? Or download all?
-  // Right now sessionNumber is ignored - all experiments are saved.
-  dataSnapshot.forEach((experiment) => {
-    // Query Firestore for the experiment's trials (sorted by trial_index)
-    const trialsRef = db.collection(`${dataRef.path}/${experiment.id}/trials`)
+    // TODO: Convert to new regex check for ID?
+    if (isNaN(sessionNumber) || sessionNumber > dataSnapshot.size - 1) {
+      console.log('Invalid session number, retrieving latest session')
+      return dataSnapshot.docs[dataSnapshot.size - 1]
+    } else return dataSnapshot.docs[sessionNumber]
+  })
+  // Query Firestore for the experiment's trials (sorted by trial_index)
+  .then((experimentDoc) => {
+    console.log(`Reading document data for ${experimentDoc.id}`)
+
+    // TODO: Prevent nested promises
+    const trialsRef = db.collection(`${dataRef.path}/${experimentDoc.id}/trials`)
     trialsRef
       .orderBy('trial_index')
       .get()
@@ -132,17 +141,15 @@ dataRef.get().then((dataSnapshot) => {
       .then((trialsSnapshot) => trialsSnapshot.docs.map((trial) => trial.data()))
       // Add trials to experiment object as "results" array
       .then((results) => {
-        const experimentData = experiment.data()
+        const experimentData = experimentDoc.data()
         experimentData.results = results
         return experimentData
       })
       // Save the session to a unique JSON file.
       .then((experimentData) => {
         const outputFile =
-          `${outputRoot}/participant_responses/` +
-          `${studyID}/${participantID}/${experiment.id}.json`
-            .replaceAll(':', '_')
-
+            `${outputRoot}/participant_responses/` +
+            `${studyID}/${participantID}/${experimentDoc.id}.json`.replaceAll(':', '_')
         // TODO: Check for overwriting file?
         // TODO: Add note about change to file name (replaced : with _)
         fs.outputJson(outputFile, experimentData, { spaces: 2 })
@@ -150,38 +157,3 @@ dataRef.get().then((dataSnapshot) => {
           .catch((error) => { throw new Error('Unable to write JSON file\n\n' + error.stack) })
       })
   })
-})
-
-// Search with the same collection name that we use over in src/firebase.js.
-// const collectionName = 'participant_responses'
-// db.collection(collectionName)
-//   .doc(studyID)
-//   .collection('participants')
-//   .doc(participantID)
-//   .collection('data')
-//   .get()
-//   .then((querySnapshot) => {
-//     const sessionCount = querySnapshot.size
-//     if (!sessionCount) throw new Error('No sessions found.')
-
-//     // Summarize query results.
-//     console.log(`Found ${sessionCount} sessions:`)
-//     for (let i = 0; i < sessionCount; i++) {
-//       console.log(`  ${i}: ${querySnapshot.docs[i].id}`)
-//     }
-
-//     // Pick one session to save locally.
-//     const docIndex = sessionNumber === 'latest' ? sessionCount - 1 : sessionNumber
-//     console.log(`Reading document data for session ${docIndex}.`)
-//     return querySnapshot.docs[docIndex]
-//   })
-//   .then((doc) => {
-//     // Save the chosen session to a unique JSON file.
-//     const outputDir = `${outputRoot}/${collectionName}/${studyID}/${participantID}`
-//     ensureDirSync(outputDir)
-//     const outputFile = `${outputDir}/${doc.id}.json`
-//     console.log(`Saving ${outputFile}`)
-//     return writeFile(outputFile, JSON.stringify(doc.data()))
-//   })
-//   .then(() => console.log('OK'))
-//   .catch((error) => console.error(error))
