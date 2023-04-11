@@ -6,13 +6,11 @@ import { initParticipant } from '../firebase'
 import { buildTimeline, jsPsychOptions } from '../timelines/main'
 
 function JsPsychExperiment ({
-  participantId,
-  studyId,
+  studyID,
+  participantID,
   taskVersion,
   dataUpdateFunction,
-  dataFinishFunction,
-  height = '100%',
-  width = '100%'
+  dataFinishFunction
 }) {
   // This will be the div in the dom that holds the experiment.
   // We reference it explicitly here so we can do some plumbing with react, jspsych, and events.
@@ -35,18 +33,18 @@ function JsPsychExperiment ({
     const startDate = new Date().toISOString()
 
     // Write the initial record to Firestore
-    if (config.USE_FIREBASE) initParticipant(participantId, studyId, startDate)
+    if (config.USE_FIREBASE) initParticipant(studyID, participantID, startDate)
 
     const jsPsych = initJsPsych(combinedOptions)
     // Add experiment properties into jsPsych directly
     jsPsych.data.addProperties({
-      participant_id: participantId,
-      study_id: studyId,
+      participant_id: participantID,
+      study_id: studyID,
       start_date: startDate,
       task_version: taskVersion
     })
     return jsPsych
-  }, [participantId, studyId, taskVersion])
+  }, [participantID, studyID, taskVersion])
 
   // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
   const timeline = buildTimeline(jsPsych)
@@ -81,7 +79,7 @@ function JsPsychExperiment ({
 
   return (
     <div className='App'>
-      <div id={experimentDivId} style={{ height, width }} ref={experimentDiv} />
+      <div id={experimentDivId} style={{ height: '100%', width: '100%' }} ref={experimentDiv} />
     </div>
   )
 }

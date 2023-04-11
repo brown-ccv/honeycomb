@@ -4,17 +4,17 @@ import Form from 'react-bootstrap/Form'
 
 function Login ({ handleLogin, initialParticipantID, initialStudyID, validationFunction }) {
   // State variables for login screen
-  const [participantId, setParticipant] = useState(initialParticipantID)
-  const [studyId, setStudy] = useState(initialStudyID)
+  const [participantID, setParticipantID] = useState(initialParticipantID)
+  const [studyID, setStudyID] = useState(initialStudyID)
   const [isError, setIsError] = useState(false)
 
   // Function to log in participant
   function handleSubmit (e) {
     e.preventDefault()
     // Logs user in if a valid participant/study id combination is given
-    validationFunction(participantId, studyId).then((isValid) => {
+    validationFunction(studyID, participantID).then((isValid) => {
       setIsError(!isValid)
-      if (isValid) handleLogin(participantId, studyId)
+      if (isValid) handleLogin(studyID, participantID)
     })
   }
 
@@ -22,21 +22,21 @@ function Login ({ handleLogin, initialParticipantID, initialStudyID, validationF
     <div className='centered-h-v'>
       <div className='width-50'>
         <Form className='centered-h-v' onSubmit={handleSubmit}>
-          <Form.Group className='width-100' size='lg' controlId='participantId'>
+          <Form.Group className='width-100' size='lg' controlId='participantID'>
             <Form.Label>Participant ID</Form.Label>
             <Form.Control
               autoFocus
-              type='participantId'
-              value={participantId}
-              onChange={(e) => setParticipant(e.target.value)}
+              type='participantID'
+              value={participantID}
+              onChange={(e) => setParticipantID(e.target.value)}
             />
           </Form.Group>
-          <Form.Group className='width-100' size='lg' controlId='studyId'>
+          <Form.Group className='width-100' size='lg' controlId='studyID'>
             <Form.Label>Study ID</Form.Label>
             <Form.Control
-              type='studyId'
-              value={studyId}
-              onChange={(e) => setStudy(e.target.value)}
+              type='studyID'
+              value={studyID}
+              onChange={(e) => setStudyID(e.target.value)}
             />
           </Form.Group>
           <Button
@@ -44,7 +44,7 @@ function Login ({ handleLogin, initialParticipantID, initialStudyID, validationF
             block
             size='lg'
             type='submit'
-            disabled={participantId.length === 0 || studyId.length === 0}
+            disabled={participantID.length === 0 || studyID.length === 0}
           >
             Log In
           </Button>

@@ -10,9 +10,9 @@ if (config.USE_ELECTRON) {
   ipcRenderer = electron.ipcRenderer
 }
 
-function saveBlob (blob, media, participantId) {
+function saveBlob (blob, media, participantID) {
   const reader = new FileReader() // eslint-disable-line no-undef
-  const fileName = `pid_${participantId}_${media}_${Date.now()}.webm`
+  const fileName = `pid_${participantID}_${media}_${Date.now()}.webm`
   reader.onload = function () {
     if (reader.readyState === 2) {
       const buffer = Buffer.from(reader.result) // eslint-disable-line no-undef
@@ -44,7 +44,7 @@ const cameraStart = (jsPsych) => {
     on_load: () => {
       // Grab elements, create settings, etc.
       // Elements for taking the snapshot
-      const participantId = jsPsych.data.get().values()[0].participant_id
+      const participantID = jsPsych.data.get().values()[0].participant_id
 
       const camera = document.getElementById('camera')
 
@@ -66,7 +66,7 @@ const cameraStart = (jsPsych) => {
 
         window[recorder].addEventListener('stop', function () {
           const blob = new Blob(recordedChunks) // eslint-disable-line no-undef
-          saveBlob(blob, recorder, participantId)
+          saveBlob(blob, recorder, participantID)
         })
       }
 
