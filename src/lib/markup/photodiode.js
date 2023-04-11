@@ -13,9 +13,10 @@ if (config.USE_ELECTRON) {
 const photodiodeGhostBox = () => {
   const class_ = config.USE_PHOTODIODE ? 'visible' : 'invisible'
 
-  const markup = `<div class="photodiode-box ${class_}" id="photodiode-box">
-<span id="photodiode-spot" class="photodiode-spot"></span>
-</div>`
+  const markup =
+    `<div class="photodiode-box ${class_}" id="photodiode-box">
+      <span id="photodiode-spot" class="photodiode-spot"></span>
+    </div>`
   return markup
 }
 

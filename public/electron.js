@@ -1,4 +1,4 @@
-// TODO: Why can't I import these normally?
+// TODO 151: Can't use ES7 import statements here?
 
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, dialog } = require('electron')
@@ -62,9 +62,7 @@ function createWindow () {
   }
 
   // and load the index.html of the app.
-  const startUrl =
-    process.env.ELECTRON_START_URL ||
-    `file://${path.join(__dirname, '../build/index.html')}`
+  const startUrl = process.env.ELECTRON_START_URL || `file://${path.join(__dirname, '../build/index.html')}`
   log.info(startUrl)
   mainWindow.loadURL(startUrl)
 
@@ -165,7 +163,8 @@ ipc.on('updateEnvironmentVariables', (event, args) => {
   USE_EEG = args.USE_EEG
   VIDEO = args.USE_CAMERA
   if (USE_EEG) {
-    setUpPort().then(() => handleEventSend(eventCodes.test_connect))
+    setUpPort()
+      .then(() => handleEventSend(eventCodes.test_connect))
   }
 })
 

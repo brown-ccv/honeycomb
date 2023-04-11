@@ -13,17 +13,13 @@ const taskBlock = (blockSettings) => {
   }
 
   // timeline = loop through trials
-  const timeline = startingOpts.map((condition) =>
-    taskTrial(blockSettings, blockDetails, condition)
-  )
+  const timeline = startingOpts.map((condition) => taskTrial(blockSettings, blockDetails, condition))
 
   const blockStart = {
     type: htmlKeyboardResponse,
     stimulus: '',
     trial_duration: 1,
-    on_finish: (data) => {
-      data.block_settings = blockSettings
-    }
+    on_finish: (data) => { data.block_settings = blockSettings }
   }
 
   timeline.unshift(blockStart)

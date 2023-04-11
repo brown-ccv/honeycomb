@@ -13,7 +13,7 @@ function Login ({ handleLogin, initialParticipantID, initialStudyID, validationF
     e.preventDefault()
     // Logs user in if a valid participant/study id combination is given
     validationFunction(participantId, studyId).then((isValid) => {
-      setIsError(isValid)
+      setIsError(!isValid)
       if (isValid) handleLogin(participantId, studyId)
     })
   }
@@ -21,13 +21,6 @@ function Login ({ handleLogin, initialParticipantID, initialStudyID, validationF
   return (
     <div className='centered-h-v'>
       <div className='width-50'>
-        {isError
-          ? (
-            <div className='alert alert-danger' role='alert'>
-              The participant ID and study ID do not match
-            </div>
-            )
-          : null}
         <Form className='centered-h-v' onSubmit={handleSubmit}>
           <Form.Group className='width-100' size='lg' controlId='participantId'>
             <Form.Label>Participant ID</Form.Label>
@@ -56,6 +49,13 @@ function Login ({ handleLogin, initialParticipantID, initialStudyID, validationF
             Log In
           </Button>
         </Form>
+        {isError
+          ? (
+            <div className='alert alert-danger' role='alert'>
+              No matching experiment found for this participant and study
+            </div>
+            )
+          : null}
       </div>
     </div>
   )
