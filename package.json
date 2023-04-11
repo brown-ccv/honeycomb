@@ -62,18 +62,25 @@
     "package:windows": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
     "package:linux": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-deb",
     "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg",
+    
+    
     "start": "cross-env BROWSER='none' NODE_PATH='./src' IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
     "start:browser": "cross-env IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
+    
     "lint": "standard",
     "format": "standard --fix",
     "test": "standard && react-scripts test",
+    
     "prebuild": "electron-rebuild",
     "rebuild": "electron-rebuild",
     "electron": "electron .",
+    
     "electron-dev": "wait-on http://localhost:3000 && cross-env ELECTRON_START_URL=\"http://localhost:3000\" electron .",
+    
     "firebase:emulators:start": "firebase emulators:start --import emulator_data",
     "firebase:emulators:save": "firebase emulators:export emulator_data",
     "firebase:download": "dotenv -e env/.env.firebase-download node download-response-data.js",
+    
     "dev": "concurrently -k npm:start npm:electron-dev",
     "dev:home": "dotenv -e env/.env.home npm run dev",
     "dev:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run dev",
@@ -88,10 +95,12 @@
     "build:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run build",
     "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build",
     "build:firebase": "dotenv -e env/.env.firebase npm run build",
-    "new-dev:home": "dotenv -e env/.new-env.dev.home run-p new-start",
-    "new-dev:clinic": "dotenv -e env/.new-env.dev.clinic run-p new-start new-electron",
+    
     "new-start": "react-scripts start",
-    "new-electron": "wait-on http://localhost:3000 && electron ."
+    "new-electron": "wait-on http://localhost:3000 && electron .",
+    "new-dev:home": "dotenv -e env/.new-env.dev.home run-p new-start",
+    "new-dev:clinic": "dotenv -e env/.new-env.dev.clinic run-p new-start new-electron"
+
 
   },
   "config": {
