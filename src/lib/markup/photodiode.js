@@ -9,7 +9,7 @@ if (config.USE_ELECTRON) {
   ipcRenderer = electron.ipcRenderer
 }
 
-// Relies on styling in App.css, generate PD spot
+// Relies on styling in index.css, generate PD spot
 const photodiodeGhostBox = () => {
   const class_ = config.USE_PHOTODIODE ? 'visible' : 'invisible'
 
