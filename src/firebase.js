@@ -16,7 +16,7 @@ firebase.initializeApp({
 const db = firebase.firestore()
 
 // Use emulator if on localhost
-// TODO: Refactor to use NODE_ENV
+// TODO 173: Refactor to use NODE_ENV
 if (window.location.hostname === 'localhost') db.useEmulator('localhost', 8080)
 
 // Get a reference to the Firebase document at
@@ -35,7 +35,7 @@ const getExperimentRef = (studyID, participantID, startDate) =>
  * @param {string} participantID The ID of a given participant inside the studyID
  * @returns true if the given studyID & participantID combo is in Firebase, false otherwise
  */
-// TODO: Reverse participantID and studyID order
+// TODO 174: Reverse participantID and studyID order
 async function validateParticipant (participantID, studyID) {
   try {
     // .get() will fail on an invalid path
@@ -55,16 +55,16 @@ async function validateParticipant (participantID, studyID) {
  * @param {string} startDate The ID of a given participant inside the studyID and participantID
  * @returns true if able to initialize the new experiment, false otherwise
  */
-// TODO: Reverse participantID and studyID order
+// TODO 174: Reverse participantID and studyID order
 async function initParticipant (participantID, studyID, startDate) {
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate)
     await experiment.set({
       start_time: startDate,
-      // TODO: app_version and app_platform are deprecated
+      // TODO 173: app_version and app_platform are deprecated
       app_version: window.navigator.appVersion,
       app_platform: window.navigator.platform
-      // TODO: Store participantID and studyID here, not on each trial
+      // TODO 175: Store participantID and studyID here, not on each trial
     })
     console.log('Initialized experiment:', studyID, participantID, startDate)
     return true

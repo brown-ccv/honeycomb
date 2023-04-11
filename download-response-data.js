@@ -63,7 +63,7 @@
  *  /path/to/my/data/participant_responses/{session Id}/{participant Id}/{session date}.json
  */
 
-// TODO: Refactor to a CJS module
+// TODO 172: Refactor to a CJS module
 const fs = require('fs-extra')
 const firebase = require('firebase-admin')
 
@@ -74,7 +74,6 @@ const participantID = args[1]
 const sessionNumber = parseInt(args[2])
 const outputRoot = args[3] ?? '.'
 
-// TODO: Cleaner way to log this error?
 if (studyID === undefined || participantID === undefined) {
   // Note that throwing an Error will halt execution of this script
   throw Error(
@@ -101,7 +100,7 @@ try {
     'Unable to connect to Firebase\n\n' +
       'Your secret key must be called "firebase-service-account.json" ' +
       'and stored in the root of your repository.\n' +
-      // TODO: Link to docs
+      // TODO 42d: Add Firebase Service Account info to docs
       'More information: https://firebase.google.com/support/guides/service-accounts\n\n' +
       error.stack
   )
@@ -122,7 +121,7 @@ dataRef
     dataSnapshot.docs.forEach((experiment, idx) => console.log(`\t${idx}: ${experiment.id}`))
     console.log()
 
-    // TODO: Convert to new regex check for ID?
+    // TODO 172: Convert to new regex check for ID?
     if (isNaN(sessionNumber) || sessionNumber > dataSnapshot.size - 1) {
       console.log('Invalid session number, retrieving latest session')
       return dataSnapshot.docs[dataSnapshot.size - 1]
@@ -132,7 +131,7 @@ dataRef
   .then((experimentDoc) => {
     console.log(`Reading document data for ${experimentDoc.id}`)
 
-    // TODO: Prevent nested promises
+    // TODO 172: Prevent nested promises (async/await with cjs)
     const trialsRef = db.collection(`${dataRef.path}/${experimentDoc.id}/trials`)
     trialsRef
       .orderBy('trial_index')
@@ -150,8 +149,8 @@ dataRef
         const outputFile =
             `${outputRoot}/participant_responses/` +
             `${studyID}/${participantID}/${experimentDoc.id}.json`.replaceAll(':', '_')
-        // TODO: Check for overwriting file?
-        // TODO: Add note about change to file name (replaced : with _)
+        // TODO 172: Check for overwriting file?
+        // TODO 172: More compatible file name? (replaced : with _ for ISO date)
         fs.outputJson(outputFile, experimentData, { spaces: 2 })
           .then(() => console.log('OK:', outputFile))
           .catch((error) => { throw new Error('Unable to write JSON file\n\n' + error.stack) })

@@ -1,5 +1,5 @@
 // Get Git Commit SHA and Branch
-// TODO: Is there a better way to keep track of versioning? Just use x.x.x?
+// TODO 173: Is there a better way to keep track of versioning? Just use x.x.x?
 
 const fs = require('fs-extra')
 const execa = require('execa')
