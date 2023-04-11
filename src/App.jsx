@@ -130,8 +130,8 @@ function App () {
 
   // Update the study/participant data when they log in
   const handleLogin = useCallback((studyID, participantID) => {
-    setParticipantID(participantID)
     setStudyID(studyID)
+    setParticipantID(participantID)
     setLoggedIn(true)
   },
   []
