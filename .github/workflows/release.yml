@@ -29,6 +29,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16.x
+          cache: 'npm'
       - name: Set package version and name
         uses: brown-ccv/gh-actions/get-package-info@main
         id: package_info

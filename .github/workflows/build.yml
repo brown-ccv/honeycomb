@@ -49,6 +49,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16.x
+          cache: 'npm'
 
       # Run npm install, build, and test
       - name: npm install
