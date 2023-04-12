@@ -1,10 +1,11 @@
+
 name: 'artifacts cleanup'
 on:
   workflow_dispatch:
     inputs:
       nDays:
         description: 'Delete artifacts older than n days'
-        default: 5
+        default: '5'
 
 jobs:
   delete-artifacts:

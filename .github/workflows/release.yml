@@ -1,5 +1,6 @@
 name: release
 
+# Runs the build and package scripts when a new tagged release is created
 on:
   push:
     tags:
@@ -9,6 +10,7 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
 
+    # Run build script for [home/clinic] in [windows/macOS/ubuntu]
     strategy:
       fail-fast: false
       matrix:
@@ -31,12 +33,12 @@ jobs:
         uses: brown-ccv/gh-actions/get-package-info@main
         id: package_info
 
-      # install, test, build package
+      # Run npm install, build, and test
       - name: npm install
         run: |
           npm config set "//npm.pkg.github.com/:_authToken" ${{ secrets.GITHUB_TOKEN }}
           npm install
-      - name: Load .env file
+      - name: Load .env file (.env.${{matrix.setting}})
         uses: xom9ikk/dotenv@v1.0.2
         with:
           path: ./env
@@ -85,6 +87,7 @@ jobs:
           asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.setting }}.dmg
           tag: ${{ github.ref }}
 
+      # TODO: Remove GH pages? Can now point user to Firebase deployment
       # Update github pages - linux only
       # if your deployment fails try https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-first-deployment-with-github_token
       - name: Deploy to GH Pages
