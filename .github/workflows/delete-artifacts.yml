@@ -1,4 +1,6 @@
 
+# Workflow dispatch for deleting unneeded artifacts.
+# Used to clear storage budget when testing release/package creation
 name: 'artifacts cleanup'
 on:
   workflow_dispatch:
