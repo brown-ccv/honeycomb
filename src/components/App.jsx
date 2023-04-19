@@ -79,11 +79,12 @@ function App () {
         }
       } else if (config.USE_FIREBASE) {
         // Fill in login fields based on query parameters (may still be blank)
+        // TODO: Add explanation about PsiTurk here
         const query = new URLSearchParams(window.location.search)
-        const participantId = query.get('participantID')
-        const studyId = query.get('studyID')
-        if (participantId) setParticipantID(participantId)
-        if (studyId) setStudyID(studyId)
+        const pID = query.get('participantID')
+        const sID = query.get('studyID')
+        if (pID) setParticipantID(pID)
+        if (sID) setStudyID(sID)
 
         setMethod('firebase')
       } else {
@@ -138,6 +139,7 @@ function App () {
   []
   )
 
+  // TODO: Everything should be inside the centered-h-v, don't need to add in Login, JsPsych, etc
   if (isError) {
     return (
       <div className='centered-h-v'>
@@ -180,8 +182,10 @@ function App () {
               firebase: firebaseValidation
             }[currentMethod]
           }
-          initialParticipantID={participantID}
-          initialStudyID={studyID}
+          // initialParticipantID={participantID}
+          // initialStudyID={studyID}
+          participantID={participantID} setParticipantID={setParticipantID}
+          studyID={studyID} setStudyID={setStudyID}
           handleLogin={handleLogin}
         />
         )
