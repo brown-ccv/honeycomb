@@ -15,7 +15,7 @@ function JsPsychExperiment ({
   // This will be the div in the dom that holds the experiment.
   // We reference it explicitly here so we can do some plumbing with react, jspsych, and events.
   const experimentDivID = 'experimentWindow'
-  const experimentDiv = useRef(null)
+  const experimentDivRef = useRef(null)
 
   // Combine custom options imported from timelines/maine.js, with necessary Honeycomb options.
   const combinedOptions = {
@@ -56,7 +56,7 @@ function JsPsychExperiment ({
 
     const newEvent = new e.constructor(e.type, e)
     newEvent.redispatched = true
-    experimentDiv.current.dispatchEvent(newEvent)
+    experimentDivRef.current.dispatchEvent(newEvent)
   }
 
   // These useEffect callbacks are similar to componentDidMount / componentWillUnmount.
@@ -80,7 +80,7 @@ function JsPsychExperiment ({
   // TODO: Root is not taking up 100vh here? The <body> isn't? Are the trials causing that?
   return (
     <div className='Experiment'>
-      <div id={experimentDivID} ref={experimentDiv} style={{ width: '100%', height: '100%' }} />
+      <div id={experimentDivID} ref={experimentDivRef} style={{ width: '100%', height: '100%' }} />
     </div>
   )
 }
