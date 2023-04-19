@@ -4,7 +4,7 @@ import { photodiodeGhostBox } from '../lib/markup/photodiode';
 import { baseStimulus } from '../lib/markup/stimuli';
 import eventMarkerMessage from '../lib/markup/eventMarkerMessage';
 
-const holdUpMarker = () => {
+export default function holdUpMarker() {
   const stimulus = baseStimulus("<div><h2 id='usb-alert'></h2></div>", true) + photodiodeGhostBox();
 
   return {
@@ -17,6 +17,4 @@ const holdUpMarker = () => {
         document.getElementById('usb-alert').innerHTML = s;
       }),
   };
-};
-
-export default holdUpMarker;
+}

@@ -4,28 +4,16 @@ import { lang, taskName, config } from '../config/main';
 import { photodiodeGhostBox } from '../lib/markup/photodiode';
 import { baseStimulus } from '../lib/markup/stimuli';
 
+// TODO: Can we pull the renderer from App.jsx? Only define where it's used below?
 let ipcRenderer = false;
-if (config.USE_ELECTRON) {
-  const electron = window.require('electron');
-  ipcRenderer = electron.ipcRenderer;
-}
+if (config.USE_ELECTRON) ipcRenderer = window.require('electron').ipcRenderer;
 
-function saveBlob(blob, media, participantId) {
-  const reader = new FileReader(); // eslint-disable-line no-undef
-  const fileName = `pid_${participantId}_${media}_${Date.now()}.webm`;
-  reader.onload = function () {
-    if (reader.readyState === 2) {
-      const buffer = Buffer.from(reader.result); // eslint-disable-line no-undef
-      ipcRenderer.send('save_video', fileName, buffer);
-      console.log(`Saving ${JSON.stringify({ fileName, size: blob.size })}`);
-    }
-  };
-  reader.readAsArrayBuffer(blob);
-}
-
-// As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
-// The jsPsych instance passed in here should be the same one used for the running task.
-const cameraStart = (jsPsych) => {
+/**
+ *
+ * @param {*} jsPsych
+ * @returns
+ */
+export function cameraStart(jsPsych) {
   document.title = taskName;
   const markup = `
   <div class="d-flex flex-column align-items-center">
@@ -65,7 +53,16 @@ const cameraStart = (jsPsych) => {
 
         window[recorder].addEventListener('stop', function () {
           const blob = new Blob(recordedChunks); // eslint-disable-line no-undef
-          saveBlob(blob, recorder, participantId);
+          const reader = new FileReader(); // eslint-disable-line no-undef
+          const fileName = `pid_${participantId}_${recorder}_${Date.now()}.webm`;
+          reader.onload = function () {
+            if (reader.readyState === 2) {
+              const buffer = Buffer.from(reader.result); // eslint-disable-line no-undef
+              ipcRenderer.send('save_video', fileName, buffer);
+              console.log(`Saving ${JSON.stringify({ fileName, size: blob.size })}`);
+            }
+          };
+          reader.readAsArrayBuffer(blob);
         });
       };
 
@@ -87,9 +84,7 @@ const cameraStart = (jsPsych) => {
                   },
                 },
               })
-              .then((stream) => {
-                handleEvents(stream, 'screenCapture');
-              })
+              .then((stream) => handleEvents(stream, 'screenCapture'))
               .catch((error) => console.log(error));
           }
         }
@@ -108,9 +103,9 @@ const cameraStart = (jsPsych) => {
       }
     },
   };
-};
+}
 
-const cameraEnd = (duration) => {
+export function cameraEnd(duration) {
   const stimulus = baseStimulus(`<h1>${lang.task.recording_end}</h1>`, true) + photodiodeGhostBox();
 
   return {
@@ -129,6 +124,4 @@ const cameraEnd = (duration) => {
       }
     },
   };
-};
-
-export { cameraStart, cameraEnd };
+}

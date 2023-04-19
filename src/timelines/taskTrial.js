@@ -4,7 +4,8 @@ import { config, eventCodes } from '../config/main';
 
 import { earningsDisplay } from '../lib/markup/earnings';
 
-const taskTrial = (blockSettings, blockDetails, condition) => {
+// TODO: Not all of these are being returned as default
+export default function taskTrial(blockSettings, blockDetails, condition) {
   // timeline
   const timeline = [
     // fixation
@@ -31,6 +32,4 @@ const taskTrial = (blockSettings, blockDetails, condition) => {
     type: htmlKeyboardResponse,
     timeline,
   };
-};
-
-export default taskTrial;
+}

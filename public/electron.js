@@ -82,7 +82,7 @@ let triggerPort;
 let portAvailable;
 let SKIP_SENDING_DEV = false;
 
-const setUpPort = async () => {
+async function setUpPort() {
   let p;
   if (activeProductId) {
     p = await getPort(vendorId, activeProductId);
@@ -121,9 +121,9 @@ const setUpPort = async () => {
     triggerPort = false;
     portAvailable = false;
   }
-};
+}
 
-const handleEventSend = (code) => {
+function handleEventSend(code) {
   if (!portAvailable && !SKIP_SENDING_DEV) {
     const message = 'Event Marker not connected';
     log.warn(message);
@@ -155,15 +155,13 @@ const handleEventSend = (code) => {
   } else if (!SKIP_SENDING_DEV) {
     sendToPort(triggerPort, code);
   }
-};
+}
 
 // Update env variables with buildtime values from frontend
 ipc.on('updateEnvironmentVariables', (event, args) => {
   USE_EEG = args.USE_EEG;
   VIDEO = args.USE_CAMERA;
-  if (USE_EEG) {
-    setUpPort().then(() => handleEventSend(eventCodes.test_connect));
-  }
+  if (USE_EEG) setUpPort().then(() => handleEventSend(eventCodes.test_connect));
 });
 
 // EVENT TRIGGER
@@ -197,18 +195,18 @@ const today = new Date();
  * Abstracts constructing the filepath for saving data for this participant and study.
  * @returns {string} The filepath.
  */
-const getSavePath = (participantID, studyID) => {
+function getSavePath(participantID, studyID) {
   if (participantID !== '' && studyID !== '') {
     const desktop = app.getPath('desktop');
     const name = app.getName();
     const date = today.toISOString().slice(0, 10);
     return path.join(desktop, studyID, participantID, date, name);
   }
-};
+}
 
-const getFullPath = (fileName) => {
+function getFullPath(fileName) {
   return path.join(savePath, fileName);
-};
+}
 
 // Read version file (git sha and branch)
 const git = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'config/version.json')));
@@ -314,6 +312,7 @@ process.on('uncaughtException', (error) => {
 app.on('ready', () => {
   createWindow();
 });
+
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   // On macOS it is common for applications and their menu bar

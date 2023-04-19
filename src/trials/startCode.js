@@ -1,10 +1,11 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
+
 import { eventCodes, lang, audioCodes } from '../config/main';
 import { photodiodeGhostBox, pdSpotEncode } from '../lib/markup/photodiode';
 import { baseStimulus } from '../lib/markup/stimuli';
 import { beep } from '../lib/utils';
 
-const startCode = () => {
+export default function startCode() {
   const stimulus = baseStimulus(`<h1>${lang.prompt.setting_up}</h1>`, true) + photodiodeGhostBox();
 
   return {
@@ -16,6 +17,4 @@ const startCode = () => {
       beep(audioCodes);
     },
   };
-};
-
-export default startCode;
+}

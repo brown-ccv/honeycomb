@@ -101,9 +101,8 @@ function App() {
   // Default to valid
   const defaultValidation = async () => true;
   // Validate participant/study against Firestore rules
-  const firebaseValidation = (participantId, studyId) => {
-    return validateParticipant(participantId, studyId);
-  };
+  const firebaseValidation = (participantId, studyId) =>
+    validateParticipant(participantId, studyId);
 
   /** DATA WRITE FUNCTIONS */
 
