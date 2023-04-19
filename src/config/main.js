@@ -10,8 +10,8 @@ import { getProlificId } from '../lib/utils';
 import packageInfo from '../../package.json';
 
 // Access package name and version so we can store these as facts with task data.
-const taskName = packageInfo.name;
-const taskVersion = packageInfo.version;
+export const taskName = packageInfo.name;
+export const taskVersion = packageInfo.version;
 
 // As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
 // The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
@@ -19,7 +19,7 @@ const taskVersion = packageInfo.version;
 const jsPsych = initJsPsych();
 
 // mapping of letters to key codes
-const keys = {
+export const keys = {
   A: 65,
   B: 66,
   C: 67,
@@ -29,24 +29,29 @@ const keys = {
 };
 
 // audio codes
-const audioCodes = {
+export const audioCodes = {
   frequency: 100 * (eventCodes.open_task - 9),
   type: 'sine',
 };
+export { eventCodes }; // TODO: Just import from trigger elsewhere?
 
 // is this mechanical turk?
 const turkInfo = jsPsych.turk.turkInfo();
-const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`;
-const USE_MTURK = !turkInfo.outsideTurk;
-const USE_PROLIFIC = (getProlificId() && !USE_MTURK) || false;
-let USE_ELECTRON = true;
-const USE_FIREBASE = process.env.REACT_APP_FIREBASE === 'true';
+export const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`;
 
+// Whether or not to use electron
+let USE_ELECTRON = true;
 try {
   window.require('electron');
 } catch (error) {
   USE_ELECTRON = false;
 }
+// Whether or not to use mechanical turk
+const USE_MTURK = !turkInfo.outsideTurk;
+// Whether or not to use prolific
+const USE_PROLIFIC = (getProlificId() && !USE_MTURK) || false;
+// Whetehr or not to use Firebase
+const USE_FIREBASE = process.env.REACT_APP_FIREBASE === 'true';
 
 // whether or not to ask the participant to adjust the volume
 const USE_VOLUME = process.env.REACT_APP_VOLUME === 'true';
@@ -58,24 +63,8 @@ const USE_EEG = process.env.REACT_APP_USE_EEG === 'true' && USE_ELECTRON;
 // whether or not the photodiode is in use
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === 'true' && USE_ELECTRON;
 
-// get language file
-const lang = require('../language/en_us.json');
-if (!USE_ELECTRON) {
-  // if this is mturk, merge in the mturk specific language
-  const mlang = require('../language/en_us.mturk.json');
-  _.merge(lang, mlang);
-}
-
-const defaultBlockSettings = {
-  conditions: ['a', 'b', 'c'],
-  repeats_per_condition: 1, // number of times every condition is repeated
-  is_practice: false,
-  is_tutorial: false,
-  photodiode_active: false,
-};
-
 // setting config for trials
-const config = init({
+export const config = init({
   USE_PHOTODIODE,
   USE_EEG,
   USE_ELECTRON,
@@ -86,14 +75,20 @@ const config = init({
   USE_FIREBASE,
 });
 
-export {
-  taskName,
-  taskVersion,
-  keys,
-  defaultBlockSettings,
-  lang,
-  eventCodes,
-  config,
-  audioCodes,
-  turkUniqueId,
+// get language file
+// TODO: Create and export seperately?
+const lang = require('../language/en_us.json');
+if (!USE_ELECTRON) {
+  // if this is mturk, merge in the mturk specific language
+  const mlang = require('../language/en_us.mturk.json');
+  _.merge(lang, mlang);
+}
+export { lang };
+
+export const defaultBlockSettings = {
+  conditions: ['a', 'b', 'c'],
+  repeats_per_condition: 1, // number of times every condition is repeated
+  is_practice: false,
+  is_tutorial: false,
+  photodiode_active: false,
 };

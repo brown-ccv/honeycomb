@@ -1,6 +1,8 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
+export default firebase;
+
 // TODO: Upgrade to modular SDK instead of compat
 
 // Initialize Firebase and Firestore
@@ -13,7 +15,7 @@ firebase.initializeApp({
   messagingSenderId: process.env.REACT_APP_messagingSenderId,
   appId: process.env.REACT_APP_appId,
 });
-const db = firebase.firestore();
+export const db = firebase.firestore();
 
 // Use emulator if on localhost
 // TODO 173: Refactor to use NODE_ENV
@@ -27,7 +29,7 @@ function getParticipantRef(studyID, participantID) {
 
 // Get a reference to the Firebase document at
 // "/participant_responses/{studyID}/participants/{participantID}/data/{startDate}"
-function getExperimentRef(studyID, participantID, startDate) {
+export function getExperimentRef(studyID, participantID, startDate) {
   db.doc(`${getParticipantRef(studyID, participantID).path}/data/${startDate}`);
 }
 
@@ -38,7 +40,7 @@ function getExperimentRef(studyID, participantID, startDate) {
  * @returns true if the given studyID & participantID combo is in Firebase, false otherwise
  */
 // TODO 174: Reverse participantID and studyID order
-async function validateParticipant(participantID, studyID) {
+export async function validateParticipant(participantID, studyID) {
   try {
     // .get() will fail on an invalid path
     await getParticipantRef(studyID, participantID).get();
@@ -58,7 +60,7 @@ async function validateParticipant(participantID, studyID) {
  * @returns true if able to initialize the new experiment, false otherwise
  */
 // TODO 174: Reverse participantID and studyID order
-async function initParticipant(participantID, studyID, startDate) {
+export async function initParticipant(participantID, studyID, startDate) {
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate);
     await experiment.set({
@@ -81,7 +83,7 @@ async function initParticipant(participantID, studyID, startDate) {
  * Each trial is its own document in the "trials" subcollection
  * @param {any} data The JsPsych data object from a single trial
  */
-async function addToFirebase(data) {
+export async function addToFirebase(data) {
   const studyID = data.study_id;
   const participantID = data.participant_id;
   const startDate = data.start_date;
@@ -93,6 +95,3 @@ async function addToFirebase(data) {
     console.error('Unable to add trial:\n', error);
   }
 }
-
-export { db, getExperimentRef, validateParticipant, initParticipant, addToFirebase };
-export default firebase;

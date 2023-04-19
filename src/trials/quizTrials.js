@@ -7,20 +7,17 @@ import { survey, slider, multiSurvey, showMessage } from '@brown-ccv/behavioral-
 const ask = lang.quiz.ask.age;
 const res = lang.quiz.answer.age;
 const stmAge = `<div class='instructions'><h1>${ask}<br><b>${res}</b></div>`;
-
-const ageCheck = survey({ stimulus: stmAge });
+export const ageCheck = survey({ stimulus: stmAge });
 
 // Slider Check
 const stmSl = lang.quiz.direction.slider.right;
+export const sliderCheck = slider(stmSl);
 
-const sliderCheck = slider(stmSl);
-
+// Intolerance of Uncertainty (IUS) Scale
 const abstain = `${lang.quiz.answer.abstain}`; // give people choice to abstain
-// Survey page headers
 const surveyPreamble1 = lang.quiz.prompt.preamble.survey_1;
 const surveyPreamble2 = lang.quiz.prompt.ius.preamble;
 
-// Intolerance of Uncertainty (IUS) Scale
 const iusOptions = {
   options: [
     `${lang.quiz.answer.ius.not}`,
@@ -31,7 +28,6 @@ const iusOptions = {
     abstain,
   ],
 };
-
 const iusPrompts = [
   `${lang.quiz.prompt.ius.upset}`,
   `${lang.quiz.prompt.ius.frustration}`,
@@ -46,8 +42,7 @@ const iusPrompts = [
   `${lang.quiz.prompt.ius.organize}`,
   `${lang.quiz.prompt.ius.escape}`,
 ];
-
-const iusSurvey = multiSurvey({
+export const iusSurvey = multiSurvey({
   preamble: [surveyPreamble1 + surveyPreamble2],
   prompts: iusPrompts,
   ansChoices: iusOptions,
@@ -55,7 +50,7 @@ const iusSurvey = multiSurvey({
 
 // Debrief Page (non-mTurk)
 const debriefOptions = lang.quiz.answer.debriefing.confirm_completion;
-const debrief = showMessage(config, {
+export const debrief = showMessage(config, {
   responseType: htmlButtonResponse,
   responseEndsTrial: true,
   buttons: [debriefOptions],
@@ -71,8 +66,6 @@ const openAnswerQuestions = survey({
   preamble: demographicsPreamble1,
   stimulus: demographicsAge,
 });
-
-// multi_choice_questions
 const demoMultiChoiceOptions = {
   ethnicity: [
     lang.quiz.answer.demographics_ethnicity.hispanic_latino,
@@ -93,23 +86,18 @@ const demoMultiChoiceOptions = {
     lang.quiz.answer.demographics_gender.other,
   ],
 };
-
 const demoMultiChoicePrompts = [
   `${lang.quiz.ask.demographics_ethnicity}`,
   `${lang.quiz.ask.demographics_race}`,
   `${lang.quiz.ask.demographics_english}`,
   `${lang.quiz.ask.demographics_gender}`,
 ];
-
 const multiChoiceQuestions = multiSurvey({
   preamble: demographicsPreamble2,
   prompts: demoMultiChoicePrompts,
   ansChoices: demoMultiChoiceOptions,
 });
-
-// multi_select_questions
 const diagnosesQuestions = lang.quiz.ask.diagnoses;
-
 const diagnosesOptions = {
   diagnoses: [
     lang.quiz.answer.demographics_diagnoses.no,
@@ -119,21 +107,16 @@ const diagnosesOptions = {
     lang.quiz.answer.demographics_diagnoses.depression,
   ],
 };
-
 const multiSelectQuestions = multiSurvey({
   responseType: surveyMultiselect,
   preamble: demographicsPreamble3,
   prompts: [diagnosesQuestions],
   ansChoices: diagnosesOptions,
 });
-
-// demographics
-const demographics = {
+export const demographics = {
   timeline: [
     openAnswerQuestions, // age, sex
     multiChoiceQuestions, // ethnicity, race, english_fluency
     multiSelectQuestions, // diagnoses
   ],
 };
-
-export { ageCheck, sliderCheck, iusSurvey, debrief, demographics };
