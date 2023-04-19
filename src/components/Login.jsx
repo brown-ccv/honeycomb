@@ -3,18 +3,13 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
 function Login ({
-
   handleLogin,
-  // initialParticipantID, initialStudyID,
-  studyID, setStudyID,
-  participantID, setParticipantID,
-
+  studyID, 
+  setStudyID,
+  participantID, 
+  setParticipantID,
   validationFunction
 }) {
-  // TODO: Don't need participantID and studyID here, just pass setState functions
-  // State variables for login screen
-  // const [participantId, setParticipant] = useState(initialParticipantID)
-  // const [studyId, setStudy] = useState(initialStudyID)
   const [isError, setIsError] = useState(false)
 
   // Function to log in participant
@@ -28,7 +23,7 @@ function Login ({
   }
 
   return (
-  // TODO: Add some vertical spacing between form elements
+    // TODO: Add some vertical spacing between form elements
     <Form className='centered-h-v' onSubmit={handleSubmit}>
       <Form.Group className='width-50' size='lg' controlId='participantId'>
         <Form.Label>Participant ID</Form.Label>

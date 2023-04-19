@@ -14,10 +14,6 @@ import { getProlificId } from '../lib/utils'
  * The top-level React component for Honeycomb. App handles initiating the jsPsych component when the participant
  * successfully logs in, and stores the overall state of the experiment. Importantly, App keeps track of what the
  * experiment is running on (Electron, Firebase, PsiTurk, or MTurk).
- *
- * Note that App is a functional component, which means it uses React callbacks rather than class methods. Learn more
- * about functional vs. class components here: https://reactjs.org/docs/components-and-props.html. It is recommended
- * to use functional components.
  */
 function App () {
   // Manage user state of the app
@@ -182,8 +178,6 @@ function App () {
               firebase: firebaseValidation
             }[currentMethod]
           }
-          // initialParticipantID={participantID}
-          // initialStudyID={studyID}
           participantID={participantID} setParticipantID={setParticipantID}
           studyID={studyID} setStudyID={setStudyID}
           handleLogin={handleLogin}

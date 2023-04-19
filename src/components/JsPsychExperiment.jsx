@@ -80,7 +80,7 @@ function JsPsychExperiment ({
   })
 
   return (
-    <div className='App'>
+    <div className='Experiment'>
       <div id={experimentDivId} style={{ height, width }} ref={experimentDiv} />
     </div>
   )
