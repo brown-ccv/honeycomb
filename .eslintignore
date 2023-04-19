@@ -1,0 +1,38 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Production
+/build
+/dist
+/out
+
+# Min Files
+/public/lib
+
+# No linting needed
+**/__tests__/
+**/participant_responses
+**/firebase-service-account.json
+psiturkit/*_turk
+
+
+# Misc
+/.husky
+/.vscode
+/.env
+.env
+.DS_Store
+.gitignore
+
+# File types
+# TODO: Only running on js and jsx anyways?
+# *.md
+# *.json
+# *.loga
+# *.log
+# *.log*

@@ -1,30 +1,30 @@
-import React, { useState } from 'react'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
+import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 /** Login Form
  *
  * This component displays the login Form.
  * It uses the state variables from App.jsx and to validate a user upon submission of the Form
  */
-function Login ({
+function Login({
   studyID,
   setStudyID,
   participantID,
   setParticipantID,
   handleLogin,
-  validationFunction
+  validationFunction,
 }) {
-  const [isError, setIsError] = useState(false)
+  const [isError, setIsError] = useState(false);
 
   // Function to log in participant
-  function handleSubmit (e) {
-    e.preventDefault()
+  function handleSubmit(e) {
+    e.preventDefault();
     // Logs user in if a valid participant/study id combination is given
     validationFunction(participantID, studyID).then((isValid) => {
-      setIsError(!isValid)
-      if (isValid) handleLogin(participantID, studyID)
-    })
+      setIsError(!isValid);
+      if (isValid) handleLogin(participantID, studyID);
+    });
   }
 
   return (
@@ -41,11 +41,7 @@ function Login ({
       </Form.Group>
       <Form.Group className='width-50' size='lg' controlId='studyId'>
         <Form.Label>Study ID</Form.Label>
-        <Form.Control
-          type='studyId'
-          value={studyID}
-          onChange={(e) => setStudyID(e.target.value)}
-        />
+        <Form.Control type='studyId' value={studyID} onChange={(e) => setStudyID(e.target.value)} />
       </Form.Group>
       <Button
         className='width-50'
@@ -56,15 +52,13 @@ function Login ({
       >
         Log In
       </Button>
-      {isError
-        ? (
-          <div className='width-50 alert alert-danger' role='alert'>
-            No matching experiment found for this participant and study
-          </div>
-          )
-        : null}
+      {isError ? (
+        <div className='width-50 alert alert-danger' role='alert'>
+          No matching experiment found for this participant and study
+        </div>
+      ) : null}
     </Form>
-  )
+  );
 }
 
-export default Login
+export default Login;
