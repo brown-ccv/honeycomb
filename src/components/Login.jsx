@@ -44,7 +44,7 @@ function Login ({ handleLogin, initialParticipantID, initialStudyID, validationF
             block
             size='lg'
             type='submit'
-            disabled={participantId.length === 0 || studyId.length === 0}
+            disabled={participantId === '' || studyId === ''}
           >
             Log In
           </Button>

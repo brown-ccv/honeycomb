@@ -20,27 +20,25 @@ import { getProlificId } from '../lib/utils'
  * to use functional components.
  */
 function App () {
-  // Manage if a user is currently logged in
+  // Manage user state of the app
   const [loggedIn, setLoggedIn] = useState(false)
   // Manage error state of the app
   const [isError, setIsError] = useState(false)
+  // Manage the method state of the app ("desktop", "firebase", "mturk", or "default")
+  const [currentMethod, setMethod] = useState('default')
 
   // Manage the electron renderer
   const [ipcRenderer, setIpcRenderer] = useState()
   // Manage the psiturk object
-  const [psiturk, setPsiturk] = useState(false)
+  const [psiturk, setPsiturk] = useState()
 
-  // Manage the data used in the experiment
+  // Manage user data
   const [participantID, setParticipantID] = useState('')
   const [studyID, setStudyID] = useState('')
 
-  // Manage the method type being used ("desktop", "firebase", "mturk", or "default")
-  const [currentMethod, setMethod] = useState('default')
-
   /**
    * This effect is called once, on the first render of the application
-   * It checks the environment variables to initialize needed state variables
-   * And determines which methods to be using
+   * It uses the environment variables to initialize the above state variables
    */
   useEffect(() => {
     // For testing and debugging purposes
@@ -97,14 +95,16 @@ function App () {
 
   /** VALIDATION FUNCTIONS */
 
+  // Note that these arrow functions
+
   // Default to valid
   const defaultValidation = async () => true
   // Validate participant/study against Firestore rules
-  const firebaseValidation = (participantId, studyId) => {
-    return validateParticipant(participantId, studyId)
-  }
+  const firebaseValidation = (participantId, studyId) => validateParticipant(participantId, studyId)
 
   /** DATA WRITE FUNCTIONS */
+
+  // You can read more about arrow functions here: https://www.w3schools.com/js/js_arrow_function.asp
 
   const defaultFunction = () => {}
   // Add trial data to Firestore
@@ -147,48 +147,44 @@ function App () {
       </div>
     )
   } else {
-    return (
-      <>
-        {loggedIn
-          ? (
-            <JsPsychExperiment
-              participantId={participantID}
-              studyId={studyID}
-              taskVersion={taskVersion}
-              dataUpdateFunction={
-              {
-                desktop: desktopUpdateFunction,
-                firebase: firebaseUpdateFunction,
-                mturk: psiturkUpdateFunction,
-                default: defaultFunction
-              }[currentMethod]
-            }
-              dataFinishFunction={
-              {
-                desktop: desktopFinishFunction,
-                mturk: psiturkFinishFunction,
-                firebase: defaultFunction,
-                default: defaultFinishFunction
-              }[currentMethod]
-            }
-            />
-            )
-          : (
-            <Login
-              validationFunction={
-              {
-                desktop: defaultValidation,
-                default: defaultValidation,
-                firebase: firebaseValidation
-              }[currentMethod]
-            }
-              initialParticipantID={participantID}
-              initialStudyID={studyID}
-              handleLogin={handleLogin}
-            />
-            )}
-      </>
-    )
+    return loggedIn
+      ? (
+        <JsPsychExperiment
+          participantId={participantID}
+          studyId={studyID}
+          taskVersion={taskVersion}
+          dataUpdateFunction={
+            {
+              desktop: desktopUpdateFunction,
+              firebase: firebaseUpdateFunction,
+              mturk: psiturkUpdateFunction,
+              default: defaultFunction
+            }[currentMethod]
+          }
+          dataFinishFunction={
+            {
+              desktop: desktopFinishFunction,
+              mturk: psiturkFinishFunction,
+              firebase: defaultFunction,
+              default: defaultFinishFunction
+            }[currentMethod]
+          }
+        />
+        )
+      : (
+        <Login
+          validationFunction={
+            {
+              desktop: defaultValidation,
+              default: defaultValidation,
+              firebase: firebaseValidation
+            }[currentMethod]
+          }
+          initialParticipantID={participantID}
+          initialStudyID={studyID}
+          handleLogin={handleLogin}
+        />
+        )
   }
 }
 
