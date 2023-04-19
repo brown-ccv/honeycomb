@@ -1,19 +1,19 @@
 // TODO 151: Can't use ES7 import statements here?
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, dialog } = require("electron");
-const path = require("path");
-const ipc = require("electron").ipcMain;
-const _ = require("lodash");
-const fs = require("fs-extra");
-const log = require("electron-log");
+const { app, BrowserWindow, dialog } = require('electron');
+const path = require('path');
+const ipc = require('electron').ipcMain;
+const _ = require('lodash');
+const fs = require('fs-extra');
+const log = require('electron-log');
 
 // Event Trigger
-const { eventCodes, vendorId, productId, comName } = require("./config/trigger");
-const { getPort, sendToPort } = require("event-marker");
+const { eventCodes, vendorId, productId, comName } = require('./config/trigger');
+const { getPort, sendToPort } = require('event-marker');
 
 // handle windows installer set up
-if (require("electron-squirrel-startup")) app.quit();
+if (require('electron-squirrel-startup')) app.quit();
 
 // Define default environment variables
 let USE_EEG = false;
@@ -23,9 +23,9 @@ let VIDEO = false;
 const activeProductId = process.env.EVENT_MARKER_PRODUCT_ID || productId;
 const activeComName = process.env.EVENT_MARKER_COM_NAME || comName;
 if (activeProductId) {
-  log.info("Active product ID", activeProductId);
+  log.info('Active product ID', activeProductId);
 } else {
-  log.info("COM Name", activeComName);
+  log.info('COM Name', activeComName);
 }
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -40,7 +40,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
       width: 1500,
       height: 900,
-      icon: "./favicon.ico",
+      icon: './favicon.ico',
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
@@ -49,7 +49,7 @@ function createWindow() {
   } else {
     mainWindow = new BrowserWindow({
       fullscreen: true,
-      icon: "./favicon.ico",
+      icon: './favicon.ico',
       frame: false,
       webPreferences: {
         nodeIntegration: true,
@@ -61,7 +61,7 @@ function createWindow() {
 
   // and load the index.html of the app.
   const startUrl =
-    process.env.ELECTRON_START_URL || `file://${path.join(__dirname, "../build/index.html")}`;
+    process.env.ELECTRON_START_URL || `file://${path.join(__dirname, '../build/index.html')}`;
   log.info(startUrl);
   mainWindow.loadURL(startUrl);
 
@@ -69,7 +69,7 @@ function createWindow() {
   process.env.ELECTRON_START_URL && mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
-  mainWindow.on("closed", function () {
+  mainWindow.on('closed', function () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
@@ -93,17 +93,17 @@ const setUpPort = async () => {
     triggerPort = p;
     portAvailable = true;
 
-    triggerPort.on("error", (err) => {
+    triggerPort.on('error', (err) => {
       log.error(err);
-      const buttons = ["OK"];
+      const buttons = ['OK'];
       if (process.env.ELECTRON_START_URL) {
-        buttons.push("Continue Anyway");
+        buttons.push('Continue Anyway');
       }
       dialog
         .showMessageBox(mainWindow, {
-          type: "error",
-          message: "Error communicating with event marker.",
-          title: "Task Error",
+          type: 'error',
+          message: 'Error communicating with event marker.',
+          title: 'Task Error',
           buttons,
           defaultId: 0,
         })
@@ -125,18 +125,18 @@ const setUpPort = async () => {
 
 const handleEventSend = (code) => {
   if (!portAvailable && !SKIP_SENDING_DEV) {
-    const message = "Event Marker not connected";
+    const message = 'Event Marker not connected';
     log.warn(message);
 
-    const buttons = ["Quit", "Retry"];
+    const buttons = ['Quit', 'Retry'];
     if (process.env.ELECTRON_START_URL) {
-      buttons.push("Continue Anyway");
+      buttons.push('Continue Anyway');
     }
     dialog
       .showMessageBox(mainWindow, {
-        type: "error",
+        type: 'error',
         message,
-        title: "Task Error",
+        title: 'Task Error',
         buttons,
         defaultId: 0,
       })
@@ -158,7 +158,7 @@ const handleEventSend = (code) => {
 };
 
 // Update env variables with buildtime values from frontend
-ipc.on("updateEnvironmentVariables", (event, args) => {
+ipc.on('updateEnvironmentVariables', (event, args) => {
   USE_EEG = args.USE_EEG;
   VIDEO = args.USE_CAMERA;
   if (USE_EEG) {
@@ -168,7 +168,7 @@ ipc.on("updateEnvironmentVariables", (event, args) => {
 
 // EVENT TRIGGER
 
-ipc.on("trigger", (event, args) => {
+ipc.on('trigger', (event, args) => {
   const code = args;
   if (code !== undefined) {
     log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`);
@@ -185,10 +185,10 @@ ipc.on("trigger", (event, args) => {
 // INCREMENTAL FILE SAVING
 let stream = false;
 let fileCreated = false;
-let preSavePath = "";
-let savePath = "";
-let participantID = "";
-let studyID = "";
+let preSavePath = '';
+let savePath = '';
+let participantID = '';
+let studyID = '';
 const images = [];
 let startTrial = -1;
 const today = new Date();
@@ -198,8 +198,8 @@ const today = new Date();
  * @returns {string} The filepath.
  */
 const getSavePath = (participantID, studyID) => {
-  if (participantID !== "" && studyID !== "") {
-    const desktop = app.getPath("desktop");
+  if (participantID !== '' && studyID !== '') {
+    const desktop = app.getPath('desktop');
     const name = app.getName();
     const date = today.toISOString().slice(0, 10);
     return path.join(desktop, studyID, participantID, date, name);
@@ -211,10 +211,10 @@ const getFullPath = (fileName) => {
 };
 
 // Read version file (git sha and branch)
-const git = JSON.parse(fs.readFileSync(path.resolve(__dirname, "config/version.json")));
+const git = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'config/version.json')));
 
 // Get Participant Id and Study Id from environment
-ipc.on("syncCredentials", (event) => {
+ipc.on('syncCredentials', (event) => {
   event.returnValue = {
     envParticipantId: process.env.REACT_APP_PARTICIPANT_ID,
     envStudyId: process.env.REACT_APP_STUDY_ID,
@@ -222,21 +222,21 @@ ipc.on("syncCredentials", (event) => {
 });
 
 // listener for new data
-ipc.on("data", (event, args) => {
+ipc.on('data', (event, args) => {
   // initialize file - we got a participant_id to save the data to
   if (args.participant_id && args.study_id && !fileCreated) {
-    const dir = app.getPath("userData");
+    const dir = app.getPath('userData');
     participantID = args.participant_id;
     studyID = args.study_id;
     preSavePath = path.resolve(dir, `pid_${participantID}_${today.getTime()}.json`);
     startTrial = args.trial_index;
     log.warn(preSavePath);
-    stream = fs.createWriteStream(preSavePath, { flags: "ax+" });
-    stream.write("[");
+    stream = fs.createWriteStream(preSavePath, { flags: 'ax+' });
+    stream.write('[');
     fileCreated = true;
   }
 
-  if (savePath === "") {
+  if (savePath === '') {
     savePath = getSavePath(participantID, studyID);
   }
 
@@ -244,20 +244,20 @@ ipc.on("data", (event, args) => {
   if (stream) {
     // write intermediate commas
     if (args.trial_index > startTrial) {
-      stream.write(",");
+      stream.write(',');
     }
 
     // write the data
     stream.write(JSON.stringify({ ...args, git }));
 
     // Copy provocation images to participant's data folder
-    if (args.trial_type === "image-keyboard-response") images.push(args.stimulus.slice(7));
+    if (args.trial_type === 'image-keyboard-response') images.push(args.stimulus.slice(7));
   }
 });
 
 // Save Video
-ipc.on("save_video", (event, videoFileName, buffer) => {
-  if (savePath === "") {
+ipc.on('save_video', (event, videoFileName, buffer) => {
+  if (savePath === '') {
     savePath = getSavePath(participantID, studyID);
   }
 
@@ -265,9 +265,9 @@ ipc.on("save_video", (event, videoFileName, buffer) => {
     const fullPath = getFullPath(videoFileName);
     fs.outputFile(fullPath, buffer, (err) => {
       if (err) {
-        event.sender.send("ERROR", err.message);
+        event.sender.send('ERROR', err.message);
       } else {
-        event.sender.send("SAVED_FILE", fullPath);
+        event.sender.send('SAVED_FILE', fullPath);
         console.log(fullPath);
       }
     });
@@ -275,22 +275,22 @@ ipc.on("save_video", (event, videoFileName, buffer) => {
 });
 
 // EXPERIMENT END
-ipc.on("end", () => {
+ipc.on('end', () => {
   // quit app
   app.quit();
 });
 
 // Error state sent from front end to back end (e.g. wrong number of images)
-ipc.on("error", (event, args) => {
+ipc.on('error', (event, args) => {
   log.error(args);
-  const buttons = ["OK"];
+  const buttons = ['OK'];
   if (process.env.ELECTRON_START_URL) {
-    buttons.push("Continue Anyway");
+    buttons.push('Continue Anyway');
   }
   const opt = dialog.showMessageBoxSync(mainWindow, {
-    type: "error",
+    type: 'error',
     message: args,
-    title: "Task Error",
+    title: 'Task Error',
     buttons,
   });
 
@@ -298,30 +298,30 @@ ipc.on("error", (event, args) => {
 });
 
 // log uncaught exceptions
-process.on("uncaughtException", (error) => {
+process.on('uncaughtException', (error) => {
   // Handle the error
   log.error(error);
 
   // this isn't dev, throw up a dialog
   if (!process.env.ELECTRON_START_URL) {
-    dialog.showMessageBoxSync(mainWindow, { type: "error", message: error, title: "Task Error" });
+    dialog.showMessageBoxSync(mainWindow, { type: 'error', message: error, title: 'Task Error' });
   }
 });
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", () => {
+app.on('ready', () => {
   createWindow();
 });
 // Quit when all windows are closed.
-app.on("window-all-closed", function () {
+app.on('window-all-closed', function () {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== "darwin") app.quit();
+  if (process.platform !== 'darwin') app.quit();
 });
 
-app.on("activate", function () {
+app.on('activate', function () {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow();
@@ -331,10 +331,10 @@ app.on("activate", function () {
 // code. You can also put them in separate files and require them here.
 
 // EXPERIMENT END
-app.on("will-quit", () => {
+app.on('will-quit', () => {
   if (fileCreated) {
     // finish writing file
-    stream.write("]");
+    stream.write(']');
     stream.end();
     stream = false;
 

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 function Login({ handleLogin, initialParticipantID, initialStudyID, validationFunction }) {
   // State variables for login screen
@@ -45,7 +45,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
             />
           </Form.Group>
           <Button
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             block
             size='lg'
             type='submit'

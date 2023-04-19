@@ -62,16 +62,16 @@
  * This will result in data saved to
  *  /path/to/my/data/participant_responses/{session Id}/{participant Id}/{session date}.json
  */
-const { ensureDirSync, writeFile } = require("fs-extra");
-const { initializeApp } = require("firebase-admin/app");
-const { getFirestore } = require("firebase-admin/firestore");
+const { ensureDirSync, writeFile } = require('fs-extra');
+const { initializeApp } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
 
 // Get study, participant, and session number from command line.
 const args = process.argv.slice(2);
 const studyId = args[0];
 const participantId = args[1];
-const sessionNumber = args[2] || "latest";
-const outputRoot = args[3] || ".";
+const sessionNumber = args[2] || 'latest';
+const outputRoot = args[3] || '.';
 
 console.log(
   `Looking for response data for study <${studyId}>, participant <${participantId}>, sessionNumber <${sessionNumber}>, outputRoot <${outputRoot}>.`
@@ -81,18 +81,18 @@ const app = initializeApp();
 const db = getFirestore(app);
 
 // Search with the same collection name that we use over in src/firebase.js.
-const collectionName = "participant_responses";
+const collectionName = 'participant_responses';
 db.collection(collectionName)
   .doc(studyId)
-  .collection("participants")
+  .collection('participants')
   .doc(participantId)
-  .collection("data")
+  .collection('data')
   .get()
   .then((querySnapshot) => {
     // Summarize query results.
     const sessionCount = querySnapshot.size;
     if (!sessionCount) {
-      throw new Error("No sessions found.");
+      throw new Error('No sessions found.');
     }
     console.log(`Found ${sessionCount} sessions:`);
     for (let i = 0; i < sessionCount; i++) {
@@ -100,7 +100,7 @@ db.collection(collectionName)
     }
 
     // Pick one session to save locally.
-    const docIndex = sessionNumber === "latest" ? sessionCount - 1 : sessionNumber;
+    const docIndex = sessionNumber === 'latest' ? sessionCount - 1 : sessionNumber;
     console.log(`Reading document data for session ${docIndex}.`);
     return querySnapshot.docs[docIndex];
   })
@@ -113,7 +113,7 @@ db.collection(collectionName)
     return writeFile(outputFile, JSON.stringify(doc.data()));
   })
   .then(() => {
-    console.log("OK");
+    console.log('OK');
   })
   .catch((error) => {
     console.error(error);

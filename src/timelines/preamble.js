@@ -1,9 +1,9 @@
-import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import htmlButtonResponse from "@jspsych/plugin-html-button-response";
-import { showMessage } from "@brown-ccv/behavioral-task-trials";
-import holdUpMarker from "../trials/holdUpMarker";
-import startCode from "../trials/startCode";
-import { lang, config } from "../config/main";
+import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
+import htmlButtonResponse from '@jspsych/plugin-html-button-response';
+import { showMessage } from '@brown-ccv/behavioral-task-trials';
+import holdUpMarker from '../trials/holdUpMarker';
+import startCode from '../trials/startCode';
+import { lang, config } from '../config/main';
 
 const timeline = [
   showMessage(config, {
@@ -20,7 +20,7 @@ if (config.USE_PHOTODIODE) {
 
 const preamble = {
   type: htmlKeyboardResponse,
-  stimulus: "",
+  stimulus: '',
   timeline,
 };
 

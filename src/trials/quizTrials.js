@@ -1,7 +1,7 @@
-import htmlButtonResponse from "@jspsych/plugin-html-button-response";
-import surveyMultiselect from "@jspsych/plugin-survey-multi-select";
-import { lang, config } from "../config/main";
-import { survey, slider, multiSurvey, showMessage } from "@brown-ccv/behavioral-task-trials";
+import htmlButtonResponse from '@jspsych/plugin-html-button-response';
+import surveyMultiselect from '@jspsych/plugin-survey-multi-select';
+import { lang, config } from '../config/main';
+import { survey, slider, multiSurvey, showMessage } from '@brown-ccv/behavioral-task-trials';
 
 // Age Check
 const ask = lang.quiz.ask.age;

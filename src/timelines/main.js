@@ -1,19 +1,19 @@
-import { lang, config } from "../config/main";
-import preamble from "./preamble";
-import taskBlock from "./taskBlock";
-import { countdown, showMessage } from "@brown-ccv/behavioral-task-trials";
-import { cameraStart, cameraEnd } from "../trials/camera";
-import { practiceBlock } from "../config/practice";
-import { tutorialBlock } from "../config/tutorial";
-import { exptBlock1, exptBlock2 } from "../config/experiment";
+import { lang, config } from '../config/main';
+import preamble from './preamble';
+import taskBlock from './taskBlock';
+import { countdown, showMessage } from '@brown-ccv/behavioral-task-trials';
+import { cameraStart, cameraEnd } from '../trials/camera';
+import { practiceBlock } from '../config/practice';
+import { tutorialBlock } from '../config/tutorial';
+import { exptBlock1, exptBlock2 } from '../config/experiment';
 
-import { ageCheck, sliderCheck, demographics, iusSurvey, debrief } from "../trials/quizTrials";
+import { ageCheck, sliderCheck, demographics, iusSurvey, debrief } from '../trials/quizTrials';
 
 // Add your jsPsych options here.
 // Honeycomb will combine these custom options with other options needed by Honyecomb.
 const jsPsychOptions = {
   on_trial_finish: function (data) {
-    console.log("A trial just ended, here are the latest data:");
+    console.log('A trial just ended, here are the latest data:');
     console.log(data);
   },
   default_iti: 250,
