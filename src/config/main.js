@@ -1,6 +1,6 @@
 // config/main.js
 // This is the main configuration file where universal and default settings should be placed.
-// These settins can then be imported anywhere in the app as they are exported at the botom of the file.
+// These settings can then be imported anywhere in the app as they are exported at the botom of the file.
 
 import { initJsPsych } from 'jspsych';
 import _ from 'lodash';
