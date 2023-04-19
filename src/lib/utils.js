@@ -1,4 +1,4 @@
-import requireContext from 'require-context.macro';
+import requireContext from "require-context.macro";
 
 const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -17,14 +17,14 @@ const randomTrue = () => Math.random() > 0.5;
 const deepCopy = (obj) => JSON.parse(JSON.stringify(obj));
 
 // format a number as a dollar amount
-const formatDollars = (amount) => '$' + parseFloat(amount).toFixed(2);
+const formatDollars = (amount) => "$" + parseFloat(amount).toFixed(2);
 
 // create a pre-trial wait period
 const generateWaitSet = (trial, waitTime) => {
   const waitTrial = Object.assign({}, trial);
   waitTrial.trial_duration = waitTime;
   waitTrial.response_ends_trial = false;
-  waitTrial.prompt = '-';
+  waitTrial.prompt = "-";
 
   return [waitTrial, trial];
 };
@@ -42,7 +42,7 @@ const startKeypressListener = (jsPsych) => {
 
   const keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
     callback_function: keypressResponse,
-    valid_responses: ['ALL_KEYS'],
+    valid_responses: ["ALL_KEYS"],
     persist: false,
   });
 
@@ -58,19 +58,19 @@ const startKeypressListener = (jsPsych) => {
 //   }
 const importAll = (r) => {
   const importImageByName = (allImages, imageName) => {
-    const friendlyName = imageName.replace('./', '');
+    const friendlyName = imageName.replace("./", "");
     return { ...allImages, [friendlyName]: r(imageName) };
   };
   return r.keys().reduce(importImageByName, {});
 };
 
-const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
+const images = importAll(requireContext("../assets/images", false, /\.(png|jpe?g|svg)$/));
 
 const getQueryVariable = (variable) => {
   const query = window.location.search.substring(1);
-  const vars = query.split('&');
+  const vars = query.split("&");
   for (let i = 0; i < vars.length; i++) {
-    const pair = vars[i].split('=');
+    const pair = vars[i].split("=");
     if (decodeURIComponent(pair[0]) === variable) {
       return decodeURIComponent(pair[1]);
     }
@@ -78,7 +78,7 @@ const getQueryVariable = (variable) => {
 };
 
 const getProlificId = () => {
-  const prolificId = getQueryVariable('PROLIFIC_PID');
+  const prolificId = getQueryVariable("PROLIFIC_PID");
   return prolificId;
 };
 

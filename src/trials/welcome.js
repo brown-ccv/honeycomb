@@ -1,7 +1,7 @@
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import { lang } from '../config/main';
-import { photodiodeGhostBox } from '../lib/markup/photodiode';
-import { baseStimulus } from '../lib/markup/stimuli';
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import { lang } from "../config/main";
+import { photodiodeGhostBox } from "../lib/markup/photodiode";
+import { baseStimulus } from "../lib/markup/stimuli";
 
 const pleaseBiggen = () => {
   const stimulus =
