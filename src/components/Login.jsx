@@ -3,11 +3,11 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
 function Login ({
-  handleLogin,
-  studyID, 
+  studyID,
   setStudyID,
-  participantID, 
+  participantID,
   setParticipantID,
+  handleLogin,
   validationFunction
 }) {
   const [isError, setIsError] = useState(false)

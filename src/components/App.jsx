@@ -5,6 +5,7 @@ import '../index.css'
 
 import JsPsychExperiment from './JsPsychExperiment'
 import Login from './Login'
+import Error from './Error'
 
 import { config, taskVersion, turkUniqueId } from '../config/main'
 import { addToFirebase, validateParticipant } from '../firebase'
@@ -136,53 +137,51 @@ function App () {
   )
 
   // TODO: Everything should be inside the centered-h-v, don't need to add in Login, JsPsych, etc
-  if (isError) {
+  if (isError) { return <Error /> } else {
     return (
-      <div className='centered-h-v'>
-        <div className='width-50 alert alert-danger'>
-          Please ask your task provider to enable firebase.
-        </div>
-      </div>
+      loggedIn
+        ? (
+          // Logged in - run the experiment
+          <JsPsychExperiment
+            participantId={participantID}
+            studyId={studyID}
+            taskVersion={taskVersion}
+            dataUpdateFunction={
+              {
+                desktop: desktopUpdateFunction,
+                firebase: firebaseUpdateFunction,
+                mturk: psiturkUpdateFunction,
+                default: defaultFunction
+              }[currentMethod]
+            }
+            dataFinishFunction={
+              {
+                desktop: desktopFinishFunction,
+                mturk: psiturkFinishFunction,
+                firebase: defaultFunction,
+                default: defaultFinishFunction
+              }[currentMethod]
+            }
+          />
+          )
+        : (
+          // Not logged in - display login screen
+          <Login
+            studyID={studyID}
+            setStudyID={setStudyID}
+            participantID={participantID}
+            setParticipantID={setParticipantID}
+            handleLogin={handleLogin}
+            validationFunction={
+              {
+                desktop: defaultValidation,
+                default: defaultValidation,
+                firebase: firebaseValidation
+              }[currentMethod]
+            }
+          />
+          )
     )
-  } else {
-    return loggedIn
-      ? (
-        <JsPsychExperiment
-          participantId={participantID}
-          studyId={studyID}
-          taskVersion={taskVersion}
-          dataUpdateFunction={
-            {
-              desktop: desktopUpdateFunction,
-              firebase: firebaseUpdateFunction,
-              mturk: psiturkUpdateFunction,
-              default: defaultFunction
-            }[currentMethod]
-          }
-          dataFinishFunction={
-            {
-              desktop: desktopFinishFunction,
-              mturk: psiturkFinishFunction,
-              firebase: defaultFunction,
-              default: defaultFinishFunction
-            }[currentMethod]
-          }
-        />
-        )
-      : (
-        <Login
-          validationFunction={
-            {
-              desktop: defaultValidation,
-              default: defaultValidation,
-              firebase: firebaseValidation
-            }[currentMethod]
-          }
-          participantID={participantID} setParticipantID={setParticipantID}
-          studyID={studyID} setStudyID={setStudyID}
-          handleLogin={handleLogin}
-        />
-        )
   }
 }
 

@@ -6,23 +6,21 @@ import { initParticipant } from '../firebase'
 import { buildTimeline, jsPsychOptions } from '../timelines/main'
 
 function JsPsychExperiment ({
-  participantId,
-  studyId,
+  participantID,
+  studyID,
   taskVersion,
   dataUpdateFunction,
-  dataFinishFunction,
-  height = '100%',
-  width = '100%'
+  dataFinishFunction
 }) {
   // This will be the div in the dom that holds the experiment.
   // We reference it explicitly here so we can do some plumbing with react, jspsych, and events.
-  const experimentDivId = 'experimentWindow'
+  const experimentDivID = 'experimentWindow'
   const experimentDiv = useRef(null)
 
   // Combine custom options imported from timelines/maine.js, with necessary Honeycomb options.
   const combinedOptions = {
     ...jsPsychOptions,
-    display_element: experimentDivId,
+    display_element: experimentDivID,
     on_data_update: (data) => dataUpdateFunction(data),
     on_finish: (data) => dataFinishFunction(data)
   }
@@ -35,18 +33,18 @@ function JsPsychExperiment ({
     const startDate = new Date().toISOString()
 
     // Write the initial record to Firestore
-    if (config.USE_FIREBASE) initParticipant(participantId, studyId, startDate)
+    if (config.USE_FIREBASE) initParticipant(participantID, studyID, startDate)
 
+    // Initialize experiment with needed data
     const jsPsych = initJsPsych(combinedOptions)
-    // Add experiment properties into jsPsych directly
     jsPsych.data.addProperties({
-      participant_id: participantId,
-      study_id: studyId,
+      participant_id: participantID,
+      study_id: studyID,
       start_date: startDate,
       task_version: taskVersion
     })
     return jsPsych
-  }, [participantId, studyId, taskVersion])
+  }, [participantID, studyID, taskVersion])
 
   // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
   const timeline = buildTimeline(jsPsych)
@@ -62,7 +60,7 @@ function JsPsychExperiment ({
   }
 
   // These useEffect callbacks are similar to componentDidMount / componentWillUnmount.
-  // If necessary, useLayoutEffect callbacks might be even more similar.
+  // TODO: useLayoutEffect callbacks might be even more similar.
   useEffect(() => {
     window.addEventListener('keyup', handleKeyEvent, true)
     window.addEventListener('keydown', handleKeyEvent, true)
@@ -79,9 +77,10 @@ function JsPsychExperiment ({
     }
   })
 
+  // TODO: Root is not taking up 100vh here? The <body> isn't? Are the trials causing that?
   return (
     <div className='Experiment'>
-      <div id={experimentDivId} style={{ height, width }} ref={experimentDiv} />
+      <div id={experimentDivID} ref={experimentDiv} style={{ width: '100%', height: '100%' }} />
     </div>
   )
 }
