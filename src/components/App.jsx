@@ -94,7 +94,7 @@ function App () {
 
   /** VALIDATION FUNCTIONS */
 
-  // Note that these arrow functions
+  // More information about the arrow function syntax can be found here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
 
   // Default to valid
   const defaultValidation = async () => true
