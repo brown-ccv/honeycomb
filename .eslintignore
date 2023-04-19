@@ -30,10 +30,9 @@ psiturkit/*_turk
 .gitignore
 
 # File types
-*.md
-# Keep json?
+# TODO: Only running on js and jsx anyways?
+# *.md
 # *.json
-*.loga
-
-*.log
-*.log*
+# *.loga
+# *.log
+# *.log*

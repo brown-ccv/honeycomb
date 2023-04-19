@@ -21,21 +21,15 @@ module.exports = {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
   },
-  plugins: ['react', 'json', 'prettier'],
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:json/recommended',
-    'prettier',
-  ],
+  plugins: ['react', 'prettier'],
+  extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
   rules: {
     'react/prop-types': 'off',
     'prettier/prettier': 1, // Warning
-    'json/json': 1, // Warning
   },
   overrides: [
     {
-      files: ['*.jsx', '*.js', '*.json'],
+      files: ['*.jsx', '*.js'],
     },
   ],
 };
