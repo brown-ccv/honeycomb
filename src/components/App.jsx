@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
-import '@fortawesome/fontawesome-free/css/all.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import '../index.css'
 
