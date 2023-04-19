@@ -1,33 +1,31 @@
-import React, { useState } from 'react'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
+import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
-function Login ({ handleLogin, initialParticipantID, initialStudyID, validationFunction }) {
+function Login({ handleLogin, initialParticipantID, initialStudyID, validationFunction }) {
   // State variables for login screen
-  const [participantId, setParticipant] = useState(initialParticipantID)
-  const [studyId, setStudy] = useState(initialStudyID)
-  const [isError, setIsError] = useState(false)
+  const [participantId, setParticipant] = useState(initialParticipantID);
+  const [studyId, setStudy] = useState(initialStudyID);
+  const [isError, setIsError] = useState(false);
 
   // Function to log in participant
-  function handleSubmit (e) {
-    e.preventDefault()
+  function handleSubmit(e) {
+    e.preventDefault();
     // Logs user in if a valid participant/study id combination is given
     validationFunction(participantId, studyId).then((isValid) => {
-      setIsError(isValid)
-      if (isValid) handleLogin(participantId, studyId)
-    })
+      setIsError(isValid);
+      if (isValid) handleLogin(participantId, studyId);
+    });
   }
 
   return (
     <div className='centered-h-v'>
       <div className='width-50'>
-        {isError
-          ? (
-            <div className='alert alert-danger' role='alert'>
-              The participant ID and study ID do not match
-            </div>
-            )
-          : null}
+        {isError ? (
+          <div className='alert alert-danger' role='alert'>
+            The participant ID and study ID do not match
+          </div>
+        ) : null}
         <Form className='centered-h-v' onSubmit={handleSubmit}>
           <Form.Group className='width-100' size='lg' controlId='participantId'>
             <Form.Label>Participant ID</Form.Label>
@@ -58,7 +56,7 @@ function Login ({ handleLogin, initialParticipantID, initialStudyID, validationF
         </Form>
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

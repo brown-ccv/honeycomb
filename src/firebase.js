@@ -1,10 +1,10 @@
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/firestore'
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 
 // Set collection name
 // TODO: Export as constant variable
 // TODO: Add variables for sub-collection queries
-const collectionName = 'participant_responses'
+const collectionName = 'participant_responses';
 
 // Firebase config
 const config = {
@@ -14,15 +14,15 @@ const config = {
   projectId: process.env.REACT_APP_projectId || 'no-firebase',
   storageBucket: process.env.REACT_APP_storageBucket,
   messagingSenderId: process.env.REACT_APP_messagingSenderId,
-  appId: process.env.REACT_APP_appId
-}
+  appId: process.env.REACT_APP_appId,
+};
 
 // Get a Firestore instance
-const db = firebase.initializeApp(config).firestore()
+const db = firebase.initializeApp(config).firestore();
 
 // Use emulator if on localhost
 if (window.location.hostname === 'localhost') {
-  db.useEmulator('localhost', 8080)
+  db.useEmulator('localhost', 8080);
 }
 
 // TODO: Can store variables for the nested pieces of a record https://firebase.google.com/docs/firestore/data-model#references
@@ -30,44 +30,51 @@ if (window.location.hostname === 'localhost') {
 // Attempts to retrieve the data in /{collectionName}/{study_id}/participants/{participant_id}
 // Will return false if participant isn't valid
 const validateParticipant = async (participantId, studyId) => {
-  return db.collection(collectionName)
+  return db
+    .collection(collectionName)
     .doc(studyId)
     .collection('participants')
     .doc(participantId)
     .then(() => {
-      return true
+      return true;
     })
     .catch((error) => {
-      console.error(error)
-      return false
-    })
-}
+      console.error(error);
+      return false;
+    });
+};
 
 // Add participant data and trial data to db
 const initParticipant = (participantId, studyId, startDate) => {
   // return promise with value true if participant and study id match, false otherwise
-  return db.collection(collectionName)
+  return db
+    .collection(collectionName)
     .doc(studyId)
     .collection('participants')
     .doc(participantId)
     .collection('data')
     .doc(startDate)
-    .set({ start_time: startDate, app_version: window.navigator.appVersion, app_platform: window.navigator.platform, results: [] })
+    .set({
+      start_time: startDate,
+      app_version: window.navigator.appVersion,
+      app_platform: window.navigator.platform,
+      results: [],
+    })
     .then(() => {
-      return true
+      return true;
     })
     .catch((error) => {
-      console.error(error)
-      return false
-    })
-}
+      console.error(error);
+      return false;
+    });
+};
 
 // Add individual trials to db
 const addToFirebase = (data) => {
-  console.log('Adding trial to firebase', data)
-  const participantId = data.participant_id
-  const studyId = data.study_id
-  const startDate = data.start_date
+  console.log('Adding trial to firebase', data);
+  const participantId = data.participant_id;
+  const studyId = data.study_id;
+  const startDate = data.start_date;
 
   // Data in firestore is nested as a single collection
   db.collection(collectionName)
@@ -76,16 +83,10 @@ const addToFirebase = (data) => {
     .doc(participantId)
     .collection('data')
     .doc(startDate)
-    .update('results', firebase.firestore.FieldValue.arrayUnion(data))
-}
+    .update('results', firebase.firestore.FieldValue.arrayUnion(data));
+};
 
 // Export types that exists in Firestore
-export {
-  db,
-  collectionName,
-  validateParticipant,
-  initParticipant,
-  addToFirebase
-}
+export { db, collectionName, validateParticipant, initParticipant, addToFirebase };
 
-export default firebase
+export default firebase;

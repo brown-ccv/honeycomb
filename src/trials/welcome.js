@@ -1,38 +1,34 @@
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
-import { lang } from '../config/main'
-import { photodiodeGhostBox } from '../lib/markup/photodiode'
-import { baseStimulus } from '../lib/markup/stimuli'
+import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
+import { lang } from '../config/main';
+import { photodiodeGhostBox } from '../lib/markup/photodiode';
+import { baseStimulus } from '../lib/markup/stimuli';
 
 const pleaseBiggen = () => {
-  const stimulus = baseStimulus(`<h1>${lang.welcome.large_window}</h1>`, true) +
-                 photodiodeGhostBox()
+  const stimulus =
+    baseStimulus(`<h1>${lang.welcome.large_window}</h1>`, true) + photodiodeGhostBox();
 
   return {
     type: htmlKeyboardResponse,
     stimulus,
     prompt: lang.prompt.continue.press,
-    response_ends_trial: true
-  }
-}
+    response_ends_trial: true,
+  };
+};
 
 const welcomeMessage = () => {
-  const stimulus = baseStimulus(`<h1>${lang.welcome.message}</h1>`, true) +
-                 photodiodeGhostBox()
+  const stimulus = baseStimulus(`<h1>${lang.welcome.message}</h1>`, true) + photodiodeGhostBox();
 
   return {
     type: htmlKeyboardResponse,
     stimulus,
     prompt: lang.prompt.continue.press,
-    response_ends_trial: true
-  }
-}
+    response_ends_trial: true,
+  };
+};
 
 const welcome = {
   type: htmlKeyboardResponse,
-  timeline: [
-    pleaseBiggen(),
-    welcomeMessage()
-  ]
-}
+  timeline: [pleaseBiggen(), welcomeMessage()],
+};
 
-export default welcome
+export default welcome;

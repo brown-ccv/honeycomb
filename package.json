@@ -48,19 +48,24 @@
     "cz-conventional-changelog": "^3.2.0",
     "dotenv-cli": "^7.0.0",
     "electron": "19.0.8",
+    "eslint": "^8.38.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-json": "^3.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "firebase-admin": "^11.0.1",
     "firebase-tools": "^11.0.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.0",
     "require-context.macro": "^1.1.1",
-    "standard": "^17.0.0",
     "wait-on": "^7.0.1"
   },
   "scripts": {
     "commit": "git-cz",
     "postinstall": "node version.js && npm run rebuild",
     "eject": "react-scripts eject",
-    "lint": "standard",
-    "format": "standard --fix",
-    "test": "standard && react-scripts test",
+    "lint": "eslint .",
+    "format": "eslint --fix .",
+    "test": "react-scripts test",
     "prebuild": "electron-rebuild",
     "rebuild": "electron-rebuild",
     "electron": "electron .",
@@ -139,10 +144,9 @@
       ]
     }
   },
-  "standard": {
-    "ignore": [
-      "/public/lib/*",
-      "/src/__tests__/*"
+  "lint-staged": {
+    "*": [
+      "eslint --fix"
     ]
   }
 }
