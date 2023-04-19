@@ -103,8 +103,6 @@ function App () {
 
   /** DATA WRITE FUNCTIONS */
 
-  // You can read more about arrow functions here: https://www.w3schools.com/js/js_arrow_function.asp
-
   const defaultFunction = () => {}
   // Add trial data to Firestore
   const firebaseUpdateFunction = (data) => { addToFirebase(data) }
