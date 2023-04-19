@@ -1,21 +1,21 @@
-import React, { useState } from 'react'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
+import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
-function Login ({ handleLogin, initialParticipantID, initialStudyID, validationFunction }) {
+function Login({ handleLogin, initialParticipantID, initialStudyID, validationFunction }) {
   // State variables for login screen
-  const [participantId, setParticipant] = useState(initialParticipantID)
-  const [studyId, setStudy] = useState(initialStudyID)
-  const [isError, setIsError] = useState(false)
+  const [participantId, setParticipant] = useState(initialParticipantID);
+  const [studyId, setStudy] = useState(initialStudyID);
+  const [isError, setIsError] = useState(false);
 
   // Function to log in participant
-  function handleSubmit (e) {
-    e.preventDefault()
+  function handleSubmit(e) {
+    e.preventDefault();
     // Logs user in if a valid participant/study id combination is given
     validationFunction(participantId, studyId).then((isValid) => {
-      setIsError(!isValid)
-      if (isValid) handleLogin(participantId, studyId)
-    })
+      setIsError(!isValid);
+      if (isValid) handleLogin(participantId, studyId);
+    });
   }
 
   return (
@@ -49,16 +49,14 @@ function Login ({ handleLogin, initialParticipantID, initialStudyID, validationF
             Log In
           </Button>
         </Form>
-        {isError
-          ? (
-            <div className='alert alert-danger' role='alert'>
-              No matching experiment found for this participant and study
-            </div>
-            )
-          : null}
+        {isError ? (
+          <div className='alert alert-danger' role='alert'>
+            No matching experiment found for this participant and study
+          </div>
+        ) : null}
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;
