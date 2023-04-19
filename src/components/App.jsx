@@ -137,8 +137,8 @@ function App () {
   )
 
   // TODO: Everything should be inside the centered-h-v, don't need to add in Login, JsPsych, etc
-  if (isError) { 
-    return <Error /> 
+  if (isError) {
+    return <Error />
   } else {
     return (
       loggedIn
