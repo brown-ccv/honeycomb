@@ -2,6 +2,11 @@ import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
+/** Login Form
+ *
+ * This component displays the login Form.
+ * It uses the state variables from App.jsx and to validate a user upon submission of the Form
+ */
 function Login ({
   studyID,
   setStudyID,
@@ -55,7 +60,8 @@ function Login ({
         ? (
           <div className='width-50 alert alert-danger' role='alert'>
             No matching experiment found for this participant and study
-          </div>)
+          </div>
+          )
         : null}
     </Form>
   )

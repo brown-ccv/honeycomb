@@ -5,6 +5,12 @@ import { config } from '../config/main'
 import { initParticipant } from '../firebase'
 import { buildTimeline, jsPsychOptions } from '../timelines/main'
 
+/** JsPsych Experiment
+ *
+ * This component initializes the JsPsych instance for the experiment.
+ * It provides a window for JsPsych to run inside of (experimentDiv)
+ * It also handles the passing of keyboard/mouse events into JsPsych
+ */
 function JsPsychExperiment ({
   participantID,
   studyID,
@@ -51,6 +57,7 @@ function JsPsychExperiment ({
 
   // Set up event and lifecycle callbacks to start and stop jspsych.
   // Inspiration from jspsych-react: https://github.com/makebrainwaves/jspsych-react/blob/master/src/index.js
+  // These useEffect callbacks are similar to componentDidMount / componentWillUnmount.
   const handleKeyEvent = (e) => {
     if (e.redispatched) return
 
@@ -59,9 +66,8 @@ function JsPsychExperiment ({
     experimentDivRef.current.dispatchEvent(newEvent)
   }
 
-  // These useEffect callbacks are similar to componentDidMount / componentWillUnmount.
-  // TODO: useLayoutEffect callbacks might be even more similar.
   useEffect(() => {
+    // TODO: useLayoutEffect callbacks might be even more similar.
     window.addEventListener('keyup', handleKeyEvent, true)
     window.addEventListener('keydown', handleKeyEvent, true)
     jsPsych.run(timeline)

@@ -1,4 +1,8 @@
 
+/** Error
+ * This is a basic JSX component for displaying an error
+ * By using a separate file the code in App.jsx is easier to read
+ */
 export default function Error () {
   return (
     <div className='centered-h-v'>

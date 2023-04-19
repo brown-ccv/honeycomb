@@ -3,18 +3,19 @@ import React, { useCallback, useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.css'
 import '../index.css'
 
-import JsPsychExperiment from './JsPsychExperiment'
-import Login from './Login'
-import Error from './Error'
-
 import { config, taskVersion, turkUniqueId } from '../config/main'
 import { addToFirebase, validateParticipant } from '../firebase'
 import { getProlificId } from '../lib/utils'
 
-/**
- * The top-level React component for Honeycomb. App handles initiating the jsPsych component when the participant
- * successfully logs in, and stores the overall state of the experiment. Importantly, App keeps track of what the
- * experiment is running on (Electron, Firebase, PsiTurk, or MTurk).
+import JsPsychExperiment from './JsPsychExperiment'
+import Login from './Login'
+import Error from './Error'
+
+/** Top-level React component for Honeycomb.
+ *
+ * This component stores the state of the app.
+ * This lets us determine what the app is running on (Electron, Firebase, PsiTurk, or MTurk).
+ * It also lets us pass data between <Login> and <JsPsychExperiment />
  */
 function App () {
   // Manage user state of the app
