@@ -25,11 +25,7 @@ module.exports = {
   extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
   rules: {
     'react/prop-types': 'off',
-    'prettier/prettier': 1, // Warning
+    'prettier/prettier': 'warn',
   },
-  overrides: [
-    {
-      files: ['*.jsx', '*.js'],
-    },
-  ],
+  overrides: [{ files: ['*.jsx', '*.js'] }],
 };
