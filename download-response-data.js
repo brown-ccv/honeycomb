@@ -2,10 +2,10 @@
  * Connect to Firestore using a service account, and download participant response data.
  *
  * Usage:
- *   npm run firebase:download -- studyId participantId [sessionNumber] [outputRoot]
+ *   npm run firebase:download -- studyID participantID [sessionNumber] [outputRoot]
  *
- *   studyId        must be one of the study Ids that a participant can log in with
- *   participantId  must be one of the participant Ids that a participant can log in with
+ *   studyID        must be one of the study Ids that a participant can log in with
+ *   participantID  must be one of the participant Ids that a participant can log in with
  *   sessionNumber  optional number to select which session to download, defaults to "latest", ie the most recent session
  *   outputRoot     optional path to the folder where data should be saved, defaults to ".", ie the current folder
  *
@@ -39,7 +39,7 @@
  *
  * Now you can run this script, and it will automatically connect to Firebase using your service account.
  *
- * You can run this with two arguments, studyId and participantId, like this:
+ * You can run this with two arguments, studyID and participantID, like this:
  *   npm run firebase:download -- myStudyId myParticipantId
  *
  * This will save data from the last available session for that study and participant.
@@ -62,55 +62,97 @@
  * This will result in data saved to
  *  /path/to/my/data/participant_responses/{session Id}/{participant Id}/{session date}.json
  */
-const { ensureDirSync, writeFile } = require('fs-extra')
-const { initializeApp } = require('firebase-admin/app')
-const { getFirestore } = require('firebase-admin/firestore')
 
-// Get study, participant, and session number from command line.
+// TODO 172: Refactor to a CJS module
+const fs = require('fs-extra')
+const firebase = require('firebase-admin')
+
+// Get CLI arguments
 const args = process.argv.slice(2)
-const studyId = args[0]
-const participantId = args[1]
-const sessionNumber = args[2] || 'latest'
-const outputRoot = args[3] || '.'
+const studyID = args[0]
+const participantID = args[1]
+const sessionNumber = parseInt(args[2])
+const outputRoot = args[3] ?? '.'
 
-console.log(`Looking for response data for study <${studyId}>, participant <${participantId}>, sessionNumber <${sessionNumber}>, outputRoot <${outputRoot}>.`)
+if (studyID === undefined || participantID === undefined) {
+  // Note that throwing an Error will halt execution of this script
+  throw Error(
+    'studyID and participantID not given\n' +
+      'Usage: npm run firebase:download -- studyID participantID [sessionNumber] [outputRoot]\n'
+  )
+} else {
+  console.log(
+    `Looking for response data for study <${studyID}>, participant <${participantID}>, ` +
+      `sessionNumber <${sessionNumber}>, outputRoot <${outputRoot}>.\n`
+  )
+}
 
-const app = initializeApp()
-const db = getFirestore(app)
+// Initialize Firestore
+let db
+try {
+  db = firebase
+    .initializeApp({
+      credential: firebase.credential.cert(require('./firebase-service-account.json'))
+    })
+    .firestore()
+} catch (error) {
+  throw new Error(
+    'Unable to connect to Firebase\n\n' +
+      'Your secret key must be called "firebase-service-account.json" ' +
+      'and stored in the root of your repository.\n' +
+      // TODO 42d: Add Firebase Service Account info to docs
+      'More information: https://firebase.google.com/support/guides/service-accounts\n\n' +
+      error.stack
+  )
+}
 
-// Search with the same collection name that we use over in src/firebase.js.
-const collectionName = 'participant_responses'
-db.collection(collectionName)
-  .doc(studyId)
-  .collection('participants')
-  .doc(participantId)
-  .collection('data')
+// Query Firestore for the participantID on the given studyID
+const dataRef = db.collection(
+  `participant_responses/${studyID}/participants/${participantID}/data`
+)
+dataRef
   .get()
-  .then((querySnapshot) => {
-    // Summarize query results.
-    const sessionCount = querySnapshot.size
-    if (!sessionCount) {
-      throw new Error('No sessions found.')
-    }
-    console.log(`Found ${sessionCount} sessions:`)
-    for (let i = 0; i < sessionCount; i++) {
-      console.log(`  ${i}: ${querySnapshot.docs[i].id}`)
-    }
+  .then((dataSnapshot) => {
+    const experiments = dataSnapshot.docs
 
-    // Pick one session to save locally.
-    const docIndex = sessionNumber === 'latest' ? sessionCount - 1 : sessionNumber
-    console.log(`Reading document data for session ${docIndex}.`)
-    return querySnapshot.docs[docIndex]
+    // Summarize results
+    if (experiments) console.log(`Found ${experiments.length} session(s):`)
+    else throw new Error('No sessions found.')
+    dataSnapshot.docs.forEach((experiment, idx) => console.log(`\t${idx}: ${experiment.id}`))
+    console.log()
+
+    // TODO 172: Convert to new regex check for ID?
+    if (isNaN(sessionNumber) || sessionNumber > dataSnapshot.size - 1) {
+      console.log('Invalid session number, retrieving latest session')
+      return dataSnapshot.docs[dataSnapshot.size - 1]
+    } else return dataSnapshot.docs[sessionNumber]
   })
-  .then((doc) => {
-    // Save the chosen session to a unique JSON file.
-    const outputDir = `${outputRoot}/${collectionName}/${studyId}/${participantId}`
-    ensureDirSync(outputDir)
-    const outputFile = `${outputDir}/${doc.id}.json`
-    console.log(`Saving ${outputFile}`)
-    return writeFile(outputFile, JSON.stringify(doc.data()))
-  })
-  .then(() => { console.log('OK') })
-  .catch((error) => {
-    console.error(error)
+  // Query Firestore for the experiment's trials (sorted by trial_index)
+  .then((experimentDoc) => {
+    console.log(`Reading document data for ${experimentDoc.id}`)
+
+    // TODO 172: Prevent nested promises (async/await with cjs)
+    const trialsRef = db.collection(`${dataRef.path}/${experimentDoc.id}/trials`)
+    trialsRef
+      .orderBy('trial_index')
+      .get()
+      // Get the data out of each trial document
+      .then((trialsSnapshot) => trialsSnapshot.docs.map((trial) => trial.data()))
+      // Add trials to experiment object as "results" array
+      .then((results) => {
+        const experimentData = experimentDoc.data()
+        experimentData.results = results
+        return experimentData
+      })
+      // Save the session to a unique JSON file.
+      .then((experimentData) => {
+        const outputFile =
+            `${outputRoot}/participant_responses/` +
+            `${studyID}/${participantID}/${experimentDoc.id}.json`.replaceAll(':', '_')
+        // TODO 172: Check for overwriting file?
+        // TODO 172: More compatible file name? (replaced : with _ for ISO date)
+        fs.outputJson(outputFile, experimentData, { spaces: 2 })
+          .then(() => console.log('OK:', outputFile))
+          .catch((error) => { throw new Error('Unable to write JSON file\n\n' + error.stack) })
+      })
   })

@@ -38,13 +38,13 @@ const audioCodes = {
 const turkInfo = jsPsych.turk.turkInfo()
 const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`
 const USE_MTURK = !turkInfo.outsideTurk
-const USE_PROLIFIC = getProlificId() && !USE_MTURK
+const USE_PROLIFIC = (getProlificId() && !USE_MTURK) ?? false
 let USE_ELECTRON = true
 const USE_FIREBASE = process.env.REACT_APP_FIREBASE === 'true'
 
 try {
   window.require('electron')
-} catch {
+} catch (error) {
   USE_ELECTRON = false
 }
 
