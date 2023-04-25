@@ -21,9 +21,9 @@ function Login({
   function handleSubmit(e) {
     e.preventDefault();
     // Logs user in if a valid participant/study id combination is given
-    validationFunction(participantID, studyID).then((isValid) => {
+    validationFunction(studyID, participantID).then((isValid) => {
       setIsError(!isValid);
-      if (isValid) handleLogin(participantID, studyID);
+      if (isValid) handleLogin(studyID, participantID);
     });
   }
 

@@ -44,15 +44,15 @@ function App() {
 
     // If on desktop
     if (config.USE_ELECTRON) {
+      // TODO: ipcRenderer is a state variable? Is that okay?
       const { ipcRenderer } = window.require('electron');
       setIpcRenderer(ipcRenderer);
-
-      // TODO: I don't think this is using the ipcRenderer from state? Is that okay?
       ipcRenderer.send('updateEnvironmentVariables', config);
+
       // Fill in login fields based on environment variables (may still be blank)
       const credentials = ipcRenderer.sendSync('syncCredentials');
-      if (credentials.participantID) setParticipantID(credentials.participantID);
-      if (credentials.studyID) setStudyID(credentials.studyID);
+      setParticipantID(credentials.participantID || '');
+      setStudyID(credentials.studyID || '');
 
       setMethod('desktop');
     } else {
@@ -79,10 +79,8 @@ function App() {
         // Fill in login fields based on query parameters (may still be blank)
         // TODO: Add explanation about PsiTurk here
         const query = new URLSearchParams(window.location.search);
-        const pID = query.get('participantID');
-        const sID = query.get('studyID');
-        if (pID) setParticipantID(pID);
-        if (sID) setStudyID(sID);
+        setParticipantID(query.get('participantID') || '');
+        setStudyID(query.get('studyID') || '');
 
         setMethod('firebase');
       } else {
@@ -99,8 +97,9 @@ function App() {
   // Default to valid
   const defaultValidation = async () => true;
   // Validate participant/study against Firestore rules
-  const firebaseValidation = (participantId, studyId) =>
-    validateParticipant(participantId, studyId);
+  const firebaseValidation = (studyID, participantID) => {
+    return validateParticipant(studyID, participantID);
+  };
 
   /** DATA WRITE FUNCTIONS */
 
@@ -138,9 +137,9 @@ function App() {
   };
 
   // Update the study/participant data when they log in
-  const handleLogin = useCallback((participantId, studyId) => {
-    setParticipantID(participantId);
-    setStudyID(studyId);
+  const handleLogin = useCallback((studyID, participantID) => {
+    setStudyID(studyID);
+    setParticipantID(participantID);
     setLoggedIn(true);
   }, []);
 
@@ -149,10 +148,9 @@ function App() {
     return <Error />;
   } else {
     return loggedIn ? (
-      // Logged in - run the experiment
       <JsPsychExperiment
-        participantId={participantID}
-        studyId={studyID}
+        studyID={studyID}
+        participantID={participantID}
         taskVersion={taskVersion}
         dataUpdateFunction={
           {

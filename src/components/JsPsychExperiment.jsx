@@ -12,8 +12,8 @@ import { buildTimeline, jsPsychOptions } from '../timelines/main';
  * It also handles the passing of keyboard/mouse events into JsPsych
  */
 function JsPsychExperiment({
-  participantID,
   studyID,
+  participantID,
   taskVersion,
   dataUpdateFunction,
   dataFinishFunction,
@@ -39,7 +39,7 @@ function JsPsychExperiment({
     const startDate = new Date().toISOString();
 
     // Write the initial record to Firestore
-    if (config.USE_FIREBASE) initParticipant(participantID, studyID, startDate);
+    if (config.USE_FIREBASE) initParticipant(studyID, participantID, startDate);
 
     // Initialize experiment with needed data
     const jsPsych = initJsPsych(combinedOptions);
