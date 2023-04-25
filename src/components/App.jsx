@@ -2,14 +2,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import '@fortawesome/fontawesome-free/css/all.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import './App.css';
+import '../index.css';
 
-import JsPsychExperiment from './components/JsPsychExperiment';
-import Login from './components/Login';
+import JsPsychExperiment from './JsPsychExperiment';
+import Login from './Login';
 
-import { config, taskVersion, turkUniqueId } from './config/main';
-import { addToFirebase, validateParticipant } from './firebase';
-import { getProlificId } from './lib/utils';
+import { config, taskVersion, turkUniqueId } from '../config/main';
+import { addToFirebase, validateParticipant } from '../firebase';
+import { getProlificId } from '../lib/utils';
 
 /**
  * The top-level React component for Honeycomb. App handles initiating the jsPsych component when the participant
