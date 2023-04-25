@@ -43,7 +43,6 @@ function App() {
    * It checks the environment variables to initialize needed state variables
    * And determines which methods to be using
    */
-  // TODO: Electron shouldn't be mutually exclusive?
   useEffect(() => {
     // For testing and debugging purposes
     console.log(config);
@@ -53,7 +52,7 @@ function App() {
       const { ipcRenderer } = window.require('electron');
       setIpcRenderer(ipcRenderer);
 
-      // TODO: I don't think this is using the ipcRenderer from state?
+      // TODO: I don't think this is using the ipcRenderer from state? Is that okay?
       ipcRenderer.send('updateEnvironmentVariables', config);
       // Fill in login fields based on environment variables (may still be blank)
       const credentials = ipcRenderer.sendSync('syncCredentials');

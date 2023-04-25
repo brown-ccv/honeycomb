@@ -1,5 +1,6 @@
 import { initJsPsych } from 'jspsych';
 import React, { useEffect, useMemo, useRef } from 'react';
+
 import { config } from '../config/main';
 import { initParticipant } from '../firebase';
 import { buildTimeline, jsPsychOptions } from '../timelines/main';
@@ -30,6 +31,7 @@ function JsPsychExperiment({
   // As of jspsych 7, we create our own jspsych instance(s) where needed instead of importing one global instance.
   const jsPsych = useMemo(() => {
     // Start date of the experiment - used as the UID
+    // TODO 169: JsPsych has a built in timestamp function
     const startDate = new Date().toISOString();
 
     // Write the initial record to Firestore
