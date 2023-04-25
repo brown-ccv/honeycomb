@@ -36,7 +36,7 @@ const getExperimentRef = (studyID, participantID, startDate) =>
  * @returns true if the given studyID & participantID combo is in Firebase, false otherwise
  */
 // TODO 174: Reverse participantID and studyID order
-async function validateParticipant(participantID, studyID) {
+async function validateParticipant(studyID, participantID) {
   try {
     // .get() will fail on an invalid path
     await getParticipantRef(studyID, participantID).get();
@@ -56,7 +56,7 @@ async function validateParticipant(participantID, studyID) {
  * @returns true if able to initialize the new experiment, false otherwise
  */
 // TODO 174: Reverse participantID and studyID order
-async function initParticipant(participantID, studyID, startDate) {
+async function initParticipant(studyID, participantID, startDate) {
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate);
     await experiment.set({
