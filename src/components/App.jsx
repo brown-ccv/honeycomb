@@ -44,9 +44,8 @@ function App() {
 
     // If on desktop
     if (config.USE_ELECTRON) {
-      // TODO: ipcRenderer is a state variable? Is that okay?
       const { ipcRenderer } = window.require('electron');
-      setIpcRenderer(ipcRenderer);
+
       ipcRenderer.send('updateEnvironmentVariables', config);
 
       // Fill in login fields based on environment variables (may still be blank)
@@ -55,6 +54,7 @@ function App() {
       setStudyID(credentials.studyID || '');
 
       setMethod('desktop');
+      setIpcRenderer(ipcRenderer);
     } else {
       // If MTURK
       if (config.USE_MTURK) {
@@ -77,10 +77,11 @@ function App() {
         }
       } else if (config.USE_FIREBASE) {
         // Fill in login fields based on query parameters (may still be blank)
-        // TODO: Add explanation about PsiTurk here
+        // Prolific will pass the studyID and participantID as search parameters in the URL
+        // Please ensure the search params use the same name here
         const query = new URLSearchParams(window.location.search);
-        setParticipantID(query.get('participantID') || '');
         setStudyID(query.get('studyID') || '');
+        setParticipantID(query.get('participantID') || '');
 
         setMethod('firebase');
       } else {
@@ -102,6 +103,7 @@ function App() {
 
   /** DATA WRITE FUNCTIONS */
 
+  // Do nothing
   const defaultFunction = () => {};
   // Add trial data to Firestore
   const firebaseUpdateFunction = (data) => addToFirebase(data);
@@ -134,7 +136,6 @@ function App() {
     setLoggedIn(true);
   }, []);
 
-  // TODO: Everything should be inside the centered-h-v, don't need to add in Login, JsPsych, etc
   if (isError) {
     return <Error />;
   } else {
