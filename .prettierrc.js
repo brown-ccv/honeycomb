@@ -1,5 +1,6 @@
 /**
- * This file defines specific rules for Prettier. It adjusts their default settings
+ * This file defines specific rules for Prettier. It adjusts their default settings.
+ * The CCV recommends these settings if your lab does not have specific style standards.
  */
 module.exports = {
   trailingComma: 'es5', // Add a trailing comma to all es5 modules
