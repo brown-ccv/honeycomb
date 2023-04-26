@@ -1,4 +1,5 @@
 // NOTE - these event codes must match what is in public/config/trigger.js
+// TODO: Why can't we just used the data stored in the public folder?
 const eventCodes = {
   fixation: 1,
   evidence: 5,

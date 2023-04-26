@@ -8,6 +8,7 @@ const productId = '';
 const comName = 'COM3';
 
 // NOTE - these event codes must match what is in public/config/trigger.js
+// TODO: Pull event codes in trigger.js from this public file
 const eventCodes = {
   fixation: 1,
   evidence: 5,
@@ -16,7 +17,8 @@ const eventCodes = {
   open_task: 18,
 };
 
-// this is module.exports isntead of just exports as it is also imported into the electron app
+// this is module.exports instead of just exports as it is also imported into the electron app
+// TODO: Use the same import language in electron and the web?
 module.exports = {
   vendorId,
   productId,

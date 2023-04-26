@@ -32,10 +32,12 @@ if (activeProductId) {
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
+/**
+ * Create the browser window
+ */
 function createWindow() {
-  // Create the browser window.
   if (process.env.ELECTRON_START_URL) {
-    // in dev mode, disable web security to allow local file loading
+    // Disable web security in dev mode, allows local file loading
     console.log(process.env.ELECTRON_START_URL);
     mainWindow = new BrowserWindow({
       width: 1500,
@@ -59,20 +61,17 @@ function createWindow() {
     });
   }
 
-  // and load the index.html of the app.
+  // Load the index.html of the app.
   const startUrl =
     process.env.ELECTRON_START_URL || `file://${path.join(__dirname, '../build/index.html')}`;
   log.info(startUrl);
   mainWindow.loadURL(startUrl);
 
-  // Open the DevTools.
+  // Open the DevTools in dev mode
   process.env.ELECTRON_START_URL && mainWindow.webContents.openDevTools();
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
+  // Dereference the window object, emitted when the window is closed
+  mainWindow.on('closed', () => {
     mainWindow = null;
   });
 }
@@ -82,13 +81,14 @@ let triggerPort;
 let portAvailable;
 let SKIP_SENDING_DEV = false;
 
+/**
+ * Set up the correct ports needed for the event triggers to communicate with electron
+ */
 async function setUpPort() {
   let p;
-  if (activeProductId) {
-    p = await getPort(vendorId, activeProductId);
-  } else {
-    p = await getPort(activeComName);
-  }
+  if (activeProductId) p = await getPort(vendorId, activeProductId);
+  else p = await getPort(activeComName);
+
   if (p) {
     triggerPort = p;
     portAvailable = true;
@@ -96,9 +96,8 @@ async function setUpPort() {
     triggerPort.on('error', (err) => {
       log.error(err);
       const buttons = ['OK'];
-      if (process.env.ELECTRON_START_URL) {
-        buttons.push('Continue Anyway');
-      }
+      if (process.env.ELECTRON_START_URL) buttons.push('Continue Anyway');
+
       dialog
         .showMessageBox(mainWindow, {
           type: 'error',
@@ -123,6 +122,10 @@ async function setUpPort() {
   }
 }
 
+/**
+ * Send events between the Event Marker and electron
+ * @param {*} code
+ */
 function handleEventSend(code) {
   if (!portAvailable && !SKIP_SENDING_DEV) {
     const message = 'Event Marker not connected';
@@ -157,15 +160,14 @@ function handleEventSend(code) {
   }
 }
 
-// Update env variables with buildtime values from frontend
+// Update env variables with build-time values from frontend
 ipc.on('updateEnvironmentVariables', (event, args) => {
   USE_EEG = args.USE_EEG;
   VIDEO = args.USE_CAMERA;
   if (USE_EEG) setUpPort().then(() => handleEventSend(eventCodes.test_connect));
 });
 
-// EVENT TRIGGER
-
+// Event trigger
 ipc.on('trigger', (event, args) => {
   const code = args;
   if (code !== undefined) {
@@ -204,6 +206,11 @@ function getSavePath(participantID, studyID) {
   }
 }
 
+/**
+ * Return the full path to a file
+ * @param {string} fileName
+ * @returns string
+ */
 function getFullPath(fileName) {
   return path.join(savePath, fileName);
 }
@@ -221,7 +228,7 @@ ipc.on('syncCredentials', (event) => {
 
 // listener for new data
 ipc.on('data', (event, args) => {
-  // initialize file - we got a participant_id to save the data to
+  // Initialize file - we got a participant_id to save the data to
   if (args.participant_id && args.study_id && !fileCreated) {
     const dir = app.getPath('userData');
     participantID = args.participant_id;
@@ -272,9 +279,8 @@ ipc.on('save_video', (event, videoFileName, buffer) => {
   }
 });
 
-// EXPERIMENT END
+// Quit the app when the experiment ends
 ipc.on('end', () => {
-  // quit app
   app.quit();
 });
 
@@ -297,7 +303,6 @@ ipc.on('error', (event, args) => {
 
 // log uncaught exceptions
 process.on('uncaughtException', (error) => {
-  // Handle the error
   log.error(error);
 
   // this isn't dev, throw up a dialog
@@ -326,10 +331,6 @@ app.on('activate', function () {
   if (mainWindow === null) createWindow();
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
-
-// EXPERIMENT END
 app.on('will-quit', () => {
   if (fileCreated) {
     // finish writing file

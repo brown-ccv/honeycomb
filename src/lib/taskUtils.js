@@ -1,6 +1,8 @@
-// utilities specific to this app/task
+// Utilities specific to this app/task
 
 import _ from 'lodash';
+
+// TODO: Should the user just add these functions to utils.js?
 
 // initialize starting conditions for each trial within a block
 export function generateStartingOptions(blockSettings) {
