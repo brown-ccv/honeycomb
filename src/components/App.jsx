@@ -97,35 +97,26 @@ function App() {
   // Default to valid
   const defaultValidation = async () => true;
   // Validate participant/study against Firestore rules
-  const firebaseValidation = (studyID, participantID) => {
-    return validateParticipant(studyID, participantID);
-  };
+  const firebaseValidation = (studyID, participantID) =>
+    validateParticipant(studyID, participantID);
 
   /** DATA WRITE FUNCTIONS */
 
   const defaultFunction = () => {};
   // Add trial data to Firestore
-  const firebaseUpdateFunction = (data) => {
-    addToFirebase(data);
-  };
+  const firebaseUpdateFunction = (data) => addToFirebase(data);
+
   // Execute the 'data' callback function (see public/electron.js)
-  const desktopUpdateFunction = (data) => {
-    ipcRenderer.send('data', data);
-  };
-  const psiturkUpdateFunction = (data) => {
-    psiturk.recordTrialData(data);
-  };
+  const desktopUpdateFunction = (data) => ipcRenderer.send('data', data);
+  const psiturkUpdateFunction = (data) => psiturk.recordTrialData(data);
 
   /** EXPERIMENT FINISH FUNCTIONS */
 
   // Save the experiment data on the desktop
-  const defaultFinishFunction = (data) => {
-    data.localSave('csv', 'neuro-task.csv');
-  };
+  const defaultFinishFunction = (data) => data.localSave('csv', 'neuro-task.csv');
+
   // Execute the 'end' callback function (see public/electron.js)
-  const desktopFinishFunction = () => {
-    ipcRenderer.send('end', 'true');
-  };
+  const desktopFinishFunction = () => ipcRenderer.send('end', 'true');
   const psiturkFinishFunction = () => {
     const completePsiturk = async () => {
       psiturk.saveData({
