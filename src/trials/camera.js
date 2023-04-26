@@ -1,41 +1,40 @@
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
-import htmlButtonResponse from '@jspsych/plugin-html-button-response'
-import { lang, taskName, config } from '../config/main'
-import { photodiodeGhostBox } from '../lib/markup/photodiode'
-import { baseStimulus } from '../lib/markup/stimuli'
+import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
+import htmlButtonResponse from '@jspsych/plugin-html-button-response';
+import { lang, taskName, config } from '../config/main';
+import { photodiodeGhostBox } from '../lib/markup/photodiode';
+import { baseStimulus } from '../lib/markup/stimuli';
 
-let ipcRenderer = false
+let ipcRenderer = false;
 if (config.USE_ELECTRON) {
-  const electron = window.require('electron')
-  ipcRenderer = electron.ipcRenderer
+  const electron = window.require('electron');
+  ipcRenderer = electron.ipcRenderer;
 }
 
-function saveBlob (blob, media, participantId) {
-  const reader = new FileReader() // eslint-disable-line no-undef
-  const fileName = `pid_${participantId}_${media}_${Date.now()}.webm`
+function saveBlob(blob, media, participantID) {
+  const reader = new FileReader(); // eslint-disable-line no-undef
+  const fileName = `pid_${participantID}_${media}_${Date.now()}.webm`;
   reader.onload = function () {
     if (reader.readyState === 2) {
-      const buffer = Buffer.from(reader.result)
+      const buffer = Buffer.from(reader.result);
 
-      ipcRenderer.send('save_video', fileName, buffer)
-      console.log(`Saving ${JSON.stringify({ fileName, size: blob.size })}`)
+      ipcRenderer.send('save_video', fileName, buffer);
+      console.log(`Saving ${JSON.stringify({ fileName, size: blob.size })}`);
     }
-  }
-  reader.readAsArrayBuffer(blob)
+  };
+  reader.readAsArrayBuffer(blob);
 }
 
 // As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
 // The jsPsych instance passed in here should be the same one used for the running task.
 const cameraStart = (jsPsych) => {
-  document.title = taskName
+  document.title = taskName;
   const markup = `
   <div class="d-flex flex-column align-items-center">
   <p>${lang.instructions.camera}</p>
   <video id="camera" width="640" height="480" autoplay></video>
   </div>
-  `
-  const stimulus = baseStimulus(markup, true) +
-                 photodiodeGhostBox()
+  `;
+  const stimulus = baseStimulus(markup, true) + photodiodeGhostBox();
 
   return {
     type: htmlButtonResponse,
@@ -45,70 +44,75 @@ const cameraStart = (jsPsych) => {
     on_load: () => {
       // Grab elements, create settings, etc.
       // Elements for taking the snapshot
-      const participantId = jsPsych.data.get().values()[0].participant_id
+      const participantID = jsPsych.data.get().values()[0].participant_id;
 
-      const camera = document.getElementById('camera')
+      const camera = document.getElementById('camera');
 
       const handleEvents = function (stream, recorder) {
-        console.log(stream)
+        console.log(stream);
         if (recorder === 'cameraCapture') {
-          camera.srcObject = stream
+          camera.srcObject = stream;
         }
 
-        const options = { mimeType: 'video/webm' }
-        const recordedChunks = []
-        window[recorder] = new MediaRecorder(stream, options) // eslint-disable-line no-undef
+        const options = { mimeType: 'video/webm' };
+        const recordedChunks = [];
+        window[recorder] = new MediaRecorder(stream, options); // eslint-disable-line no-undef
 
         window[recorder].addEventListener('dataavailable', function (e) {
           if (e.data.size > 0) {
-            recordedChunks.push(e.data)
+            recordedChunks.push(e.data);
           }
-        })
+        });
 
         window[recorder].addEventListener('stop', function () {
-          const blob = new Blob(recordedChunks) // eslint-disable-line no-undef
-          saveBlob(blob, recorder, participantId)
-        })
-      }
+          const blob = new Blob(recordedChunks); // eslint-disable-line no-undef
+          saveBlob(blob, recorder, participantID);
+        });
+      };
 
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then((stream) => handleEvents(stream, 'cameraCapture'))
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => handleEvents(stream, 'cameraCapture'));
 
-      const { desktopCapturer } = window.require('electron')
+      const { desktopCapturer } = window.require('electron');
 
-      desktopCapturer.getSources({ types: ['window'] }).then(async sources => {
+      desktopCapturer.getSources({ types: ['window'] }).then(async (sources) => {
         for (const source of sources) {
           if (source.name === taskName) {
-            navigator.mediaDevices.getUserMedia({
-              video: {
-                mandatory: {
-                  chromeMediaSource: 'desktop',
-                  chromeMediaSourceId: source.id
-                }
-              }
-            }).then(stream => {
-              handleEvents(stream, 'screenCapture')
-            })
-              .catch(error => console.log(error))
+            navigator.mediaDevices
+              .getUserMedia({
+                video: {
+                  mandatory: {
+                    chromeMediaSource: 'desktop',
+                    chromeMediaSourceId: source.id,
+                  },
+                },
+              })
+              .then((stream) => {
+                handleEvents(stream, 'screenCapture');
+              })
+              .catch((error) => console.log(error));
           }
         }
-      })
+      });
     },
     on_finish: () => {
       if (config.USE_CAMERA) {
         try {
-          window.cameraCapture.start()
-          window.screenCapture.start()
+          window.cameraCapture.start();
+          window.screenCapture.start();
         } catch (error) {
-          window.alert('Camera permissions were not given, if you choose to proceed, your recording will not be saved. Please restart the experiment after you have given permission.')
+          window.alert(
+            'Camera permissions were not given, if you choose to proceed, your recording will not be saved. Please restart the experiment after you have given permission.'
+          );
         }
       }
-    }
-  }
-}
+    },
+  };
+};
 
 const cameraEnd = (duration) => {
-  const stimulus = baseStimulus(`<h1>${lang.task.recording_end}</h1>`, true) + photodiodeGhostBox()
+  const stimulus = baseStimulus(`<h1>${lang.task.recording_end}</h1>`, true) + photodiodeGhostBox();
 
   return {
     type: htmlKeyboardResponse,
@@ -116,19 +120,16 @@ const cameraEnd = (duration) => {
     trial_duration: duration,
     on_load: () => {
       if (config.USE_CAMERA) {
-        console.log('finished')
+        console.log('finished');
         try {
-          window.cameraCapture.stop()
-          window.screenCapture.stop()
+          window.cameraCapture.stop();
+          window.screenCapture.stop();
         } catch (error) {
-          window.alert('Your video recording was not saved')
+          window.alert('Your video recording was not saved');
         }
       }
-    }
-  }
-}
+    },
+  };
+};
 
-export {
-  cameraStart,
-  cameraEnd
-}
+export { cameraStart, cameraEnd };
