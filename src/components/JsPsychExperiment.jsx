@@ -83,7 +83,7 @@ function JsPsychExperiment({
     };
   });
 
-  // TODO: Root is not taking up 100vh here? The <body> isn't? Are the trials causing that?
+  // TODO 184: Root is not taking up 100vh here? The <body> isn't? Are the trials causing that?
   return (
     <div className='Experiment'>
       <div id={experimentDivID} ref={experimentDivRef} style={{ width: '100%', height: '100%' }} />
