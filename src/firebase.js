@@ -3,7 +3,7 @@ import 'firebase/compat/firestore';
 
 export default firebase;
 
-// TODO: Upgrade to modular SDK instead of compat
+// TODO 183: Upgrade to modular SDK instead of compat
 
 // Initialize Firebase and Firestore
 firebase.initializeApp({
@@ -23,7 +23,7 @@ if (window.location.hostname === 'localhost') db.useEmulator('localhost', 8080);
 
 // Get a reference to the Firebase document at
 // "/participant_responses/{studyID}/participants/{participantID}"
-function getParticipantRef(studyID, participantID) {
+export function getParticipantRef(studyID, participantID) {
   db.doc(`participant_responses/${studyID}/participants/${participantID}`);
 }
 
@@ -40,7 +40,7 @@ export function getExperimentRef(studyID, participantID, startDate) {
  * @returns true if the given studyID & participantID combo is in Firebase, false otherwise
  */
 // TODO 174: Reverse participantID and studyID order
-export async function validateParticipant(participantID, studyID) {
+export async function validateParticipant(studyID, participantID) {
   try {
     // .get() will fail on an invalid path
     await getParticipantRef(studyID, participantID).get();
@@ -60,7 +60,7 @@ export async function validateParticipant(participantID, studyID) {
  * @returns true if able to initialize the new experiment, false otherwise
  */
 // TODO 174: Reverse participantID and studyID order
-export async function initParticipant(participantID, studyID, startDate) {
+export async function initParticipant(studyID, participantID, startDate) {
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate);
     await experiment.set({

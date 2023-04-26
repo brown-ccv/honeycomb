@@ -28,11 +28,3 @@ psiturkit/*_turk
 .env
 .DS_Store
 .gitignore
-
-# File types
-# TODO: Only running on js and jsx anyways?
-# *.md
-# *.json
-# *.loga
-# *.log
-# *.log*

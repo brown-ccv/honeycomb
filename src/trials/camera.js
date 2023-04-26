@@ -31,7 +31,7 @@ export function cameraStart(jsPsych) {
     on_load: () => {
       // Grab elements, create settings, etc.
       // Elements for taking the snapshot
-      const participantId = jsPsych.data.get().values()[0].participant_id;
+      const participantID = jsPsych.data.get().values()[0].participant_id;
 
       const camera = document.getElementById('camera');
 
@@ -54,7 +54,7 @@ export function cameraStart(jsPsych) {
         window[recorder].addEventListener('stop', function () {
           const blob = new Blob(recordedChunks); // eslint-disable-line no-undef
           const reader = new FileReader(); // eslint-disable-line no-undef
-          const fileName = `pid_${participantId}_${recorder}_${Date.now()}.webm`;
+          const fileName = `pid_${participantID}_${recorder}_${Date.now()}.webm`;
           reader.onload = function () {
             if (reader.readyState === 2) {
               const buffer = Buffer.from(reader.result); // eslint-disable-line no-undef
