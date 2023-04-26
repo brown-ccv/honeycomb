@@ -14,7 +14,6 @@
   "repository": "https://github.com/brown-ccv/honeycomb",
   "dependencies": {
     "@brown-ccv/behavioral-task-trials": "^2.0.0",
-    "@fortawesome/fontawesome-free": "^5.9.0",
     "@jspsych/plugin-html-button-response": "^1.1.1",
     "@jspsych/plugin-html-keyboard-response": "^1.1.1",
     "@jspsych/plugin-image-keyboard-response": "^1.1.1",
@@ -29,7 +28,6 @@
     "jquery": "^3.4.1",
     "jspsych": "^7.2.3",
     "lodash": "^4.17.19",
-    "popper.js": "^1.16.0",
     "react": "^16.8.6",
     "react-bootstrap": "^1.6.1",
     "react-dom": "^16.8.6",
@@ -43,7 +41,7 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
     "babel-plugin-macros": "^2.6.1",
     "chai": "^4.2.0",
-    "concurrently": "^7.6.0",
+    "concurrently": "^8.0.1",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.2.0",
     "dotenv-cli": "^7.0.0",
@@ -94,7 +92,9 @@
     "prepare": "husky install"
   },
   "babel": {
-    "plugins": [ "macros" ]
+    "plugins": [
+      "macros"
+    ]
   },
   "browserslist": {
     "production": [
@@ -109,9 +109,13 @@
     ]
   },
   "config": {
-    "commitizen": { "path": "./node_modules/cz-conventional-changelog" },
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    },
     "forge": {
-      "packagerConfig": { "asar": true },
+      "packagerConfig": {
+        "asar": true
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-deb",

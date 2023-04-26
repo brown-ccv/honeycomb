@@ -1,47 +1,42 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import '@fortawesome/fontawesome-free/css/all.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../index.css';
-
-import JsPsychExperiment from './JsPsychExperiment';
-import Login from './Login';
 
 import { config, taskVersion, turkUniqueId } from '../config/main';
 import { addToFirebase, validateParticipant } from '../firebase';
 import { getProlificId } from '../lib/utils';
 
-/**
- * The top-level React component for Honeycomb. App handles initiating the jsPsych component when the participant
- * successfully logs in, and stores the overall state of the experiment. Importantly, App keeps track of what the
- * experiment is running on (Electron, Firebase, PsiTurk, or MTurk).
+import JsPsychExperiment from './JsPsychExperiment';
+import Login from './Login';
+import Error from './Error';
+
+/** Top-level React component for Honeycomb.
  *
- * Note that App is a functional component, which means it uses React callbacks rather than class methods. Learn more
- * about functional vs. class components here: https://reactjs.org/docs/components-and-props.html. It is recommended
- * to use functional components.
+ * This component stores the state of the app.
+ * This lets us determine what the app is running on (Electron, Firebase, PsiTurk, or MTurk).
+ * It also lets us pass data between <Login> and <JsPsychExperiment />
  */
 function App() {
-  // Manage if a user is currently logged in
+  // Manage user state of the app
   const [loggedIn, setLoggedIn] = useState(false);
   // Manage error state of the app
   const [isError, setIsError] = useState(false);
+  // Manage the method state of the app ("desktop", "firebase", "mturk", or "default")
+  const [currentMethod, setMethod] = useState('default');
 
   // Manage the electron renderer
   const [ipcRenderer, setIpcRenderer] = useState();
   // Manage the psiturk object
-  const [psiturk, setPsiturk] = useState(false);
+  const [psiturk, setPsiturk] = useState();
 
-  // Manage the data used in the experiment
+  // Manage user data
   const [participantID, setParticipantID] = useState('');
   const [studyID, setStudyID] = useState('');
 
-  // Manage the method type being used ("desktop", "firebase", "mturk", or "default")
-  const [currentMethod, setMethod] = useState('default');
-
   /**
    * This effect is called once, on the first render of the application
-   * It checks the environment variables to initialize needed state variables
-   * And determines which methods to be using
+   * It uses the environment variables to initialize the above state variables
    */
   useEffect(() => {
     // For testing and debugging purposes
@@ -49,9 +44,8 @@ function App() {
 
     // If on desktop
     if (config.USE_ELECTRON) {
-      // TODO: ipcRenderer is a state variable? Is that okay?
       const { ipcRenderer } = window.require('electron');
-      setIpcRenderer(ipcRenderer);
+
       ipcRenderer.send('updateEnvironmentVariables', config);
 
       // Fill in login fields based on environment variables (may still be blank)
@@ -60,6 +54,7 @@ function App() {
       setStudyID(credentials.studyID || '');
 
       setMethod('desktop');
+      setIpcRenderer(ipcRenderer);
     } else {
       // If MTURK
       if (config.USE_MTURK) {
@@ -82,9 +77,11 @@ function App() {
         }
       } else if (config.USE_FIREBASE) {
         // Fill in login fields based on query parameters (may still be blank)
+        // Prolific will pass the studyID and participantID as search parameters in the URL
+        // Please ensure the search params use the same name here
         const query = new URLSearchParams(window.location.search);
-        setParticipantID(query.get('participantID') || '');
         setStudyID(query.get('studyID') || '');
+        setParticipantID(query.get('participantID') || '');
 
         setMethod('firebase');
       } else {
@@ -96,38 +93,32 @@ function App() {
 
   /** VALIDATION FUNCTIONS */
 
+  // More information about the arrow function syntax can be found here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
+
   // Default to valid
   const defaultValidation = async () => true;
   // Validate participant/study against Firestore rules
-  const firebaseValidation = (studyID, participantID) => {
-    return validateParticipant(studyID, participantID);
-  };
+  const firebaseValidation = (studyID, participantID) =>
+    validateParticipant(studyID, participantID);
 
   /** DATA WRITE FUNCTIONS */
 
+  // Do nothing
   const defaultFunction = () => {};
   // Add trial data to Firestore
-  const firebaseUpdateFunction = (data) => {
-    addToFirebase(data);
-  };
+  const firebaseUpdateFunction = (data) => addToFirebase(data);
+
   // Execute the 'data' callback function (see public/electron.js)
-  const desktopUpdateFunction = (data) => {
-    ipcRenderer.send('data', data);
-  };
-  const psiturkUpdateFunction = (data) => {
-    psiturk.recordTrialData(data);
-  };
+  const desktopUpdateFunction = (data) => ipcRenderer.send('data', data);
+  const psiturkUpdateFunction = (data) => psiturk.recordTrialData(data);
 
   /** EXPERIMENT FINISH FUNCTIONS */
 
   // Save the experiment data on the desktop
-  const defaultFinishFunction = (data) => {
-    data.localSave('csv', 'neuro-task.csv');
-  };
+  const defaultFinishFunction = (data) => data.localSave('csv', 'neuro-task.csv');
+
   // Execute the 'end' callback function (see public/electron.js)
-  const desktopFinishFunction = () => {
-    ipcRenderer.send('end', 'true');
-  };
+  const desktopFinishFunction = () => ipcRenderer.send('end', 'true');
   const psiturkFinishFunction = () => {
     const completePsiturk = async () => {
       psiturk.saveData({
@@ -146,13 +137,7 @@ function App() {
   }, []);
 
   if (isError) {
-    return (
-      <div className='centered-h-v'>
-        <div className='width-50 alert alert-danger'>
-          Please ask your task provider to enable firebase.
-        </div>
-      </div>
-    );
+    return <Error />;
   } else {
     return loggedIn ? (
       <JsPsychExperiment
@@ -177,7 +162,13 @@ function App() {
         }
       />
     ) : (
+      // Not logged in - display login screen
       <Login
+        studyID={studyID}
+        setStudyID={setStudyID}
+        participantID={participantID}
+        setParticipantID={setParticipantID}
+        handleLogin={handleLogin}
         validationFunction={
           {
             desktop: defaultValidation,
@@ -185,9 +176,6 @@ function App() {
             firebase: firebaseValidation,
           }[currentMethod]
         }
-        initialStudyID={studyID}
-        initialParticipantID={participantID}
-        handleLogin={handleLogin}
       />
     );
   }

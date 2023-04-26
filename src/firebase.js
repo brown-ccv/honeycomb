@@ -1,7 +1,7 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
-// TODO: Upgrade to modular SDK instead of compat
+// TODO 183: Upgrade to modular SDK instead of compat
 
 // Initialize Firebase and Firestore
 firebase.initializeApp({

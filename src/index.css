@@ -1,3 +1,5 @@
+/* GLOBALS */
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -13,13 +15,15 @@ code {
 p, li {
   font-size: 1.5rem;
 }
-html, body, #root, .App {
+html, body, #root, .Experiment {
   text-align: center;
   margin: 0;
   min-height: 100vh;
   height: 100% !important;
   width: 100vw !important;
 }
+
+/* CLASSES */
 
 .centered-h-v {
   display: flex;
@@ -37,6 +41,31 @@ html, body, #root, .App {
 .width-100 {
   width: 100%;
 }
+
+.main-prompt, .center_container {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center !important;
+}
+
+.main-prompt {
+  margin-top: -10%;
+  margin-bottom: -5%;
+}
+
+.jspsych-btn {
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  box-shadow: 5px 5px 5px #efefef;
+  background-color: #d3d3d3;
+  margin: 1rem;
+  width: 10rem !important;
+}
+
+/* PHOTODIODE */
 
 .photodiode-box {
   position: fixed;
@@ -57,32 +86,9 @@ html, body, #root, .App {
   position: absolute;
 }
 
-.main-prompt, .center_container {
-  height: 100vh;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center !important;
-}
-
-.main-prompt {
-  margin-top: -10%;
-  margin-bottom: -5%;
-}
-
 #fixation-dot {
   background-color: black;
   height: 15px;
   width: 15px;
   border-radius: 50%;
-}
-
-.jspsych-btn {
-  padding: 0.5rem 1rem;
-  font-weight: bold;
-  border-radius: 5px;
-  box-shadow: 5px 5px 5px #efefef;
-  background-color: #d3d3d3;
-  margin: 1rem;
-  width: 10rem !important;
 }
