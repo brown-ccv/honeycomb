@@ -6,7 +6,7 @@
     "email": "ccv-bot@brown.edu",
     "url": "ccv.brown.edu"
   },
-  "version": "2.3.1",
+  "version": "3.0.1",
   "license": "MIT",
   "private": true,
   "main": "public/electron.js",
@@ -94,7 +94,9 @@
     "prepare": "husky install"
   },
   "babel": {
-    "plugins": [ "macros" ]
+    "plugins": [
+      "macros"
+    ]
   },
   "browserslist": {
     "production": [
@@ -109,9 +111,13 @@
     ]
   },
   "config": {
-    "commitizen": { "path": "./node_modules/cz-conventional-changelog" },
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    },
     "forge": {
-      "packagerConfig": { "asar": true },
+      "packagerConfig": {
+        "asar": true
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-deb",
