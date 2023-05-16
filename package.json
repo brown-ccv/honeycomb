@@ -65,6 +65,7 @@
     "lint": "eslint .",
     "format": "eslint --fix .",
     "test": "react-scripts test",
+    "prepare": "husky install",
     "prebuild": "electron-rebuild",
     "rebuild": "electron-rebuild",
     "electron": "electron .",
@@ -90,8 +91,7 @@
     "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build",
     "package:windows": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
     "package:linux": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-deb",
-    "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg",
-    "prepare": "husky install"
+    "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg"
   },
   "babel": {
     "plugins": [
