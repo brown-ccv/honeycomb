@@ -8,3 +8,5 @@ winget install -e --id Python.Python.3.11
 winget install -e --id Oracle.JDK.19
 winget install -e --id Microsoft.VisualStudioCode;
 winget install -e --id Microsoft.VisualStudio.2022.Community;
+
+# TODO: Python management (miniconda)?

@@ -3,9 +3,9 @@
 
 brew "git"
 brew install --cask "github"
-brew "node" # TODO: This won't always be LTS version. Is that okay?
-brew install --cask oracle-jdk
+brew install "node@18"
+brew install --cask "oracle-jdk"
 brew install --cask "visual-studio-code"
-# TODO: Not needed? Okay to install with npm -g?
-# brew install --cask "electron" 
 
+# TODO: Install node LTS?
+# TODO: Python management?
