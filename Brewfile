@@ -8,4 +8,4 @@ brew install --cask "oracle-jdk"
 brew install --cask "visual-studio-code"
 
 # TODO: Install node LTS?
-# TODO: Python management?
+# TODO: Python management (miniconda)?
