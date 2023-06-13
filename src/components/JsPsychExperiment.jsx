@@ -58,13 +58,13 @@ function JsPsychExperiment({
   // Set up event and lifecycle callbacks to start and stop jspsych.
   // Inspiration from jspsych-react: https://github.com/makebrainwaves/jspsych-react/blob/master/src/index.js
   // These useEffect callbacks are similar to componentDidMount / componentWillUnmount.
-  const handleKeyEvent = (e) => {
+  function handleKeyEvent(e) {
     if (e.redispatched) return;
 
     const newEvent = new e.constructor(e.type, e);
     newEvent.redispatched = true;
     experimentDivRef.current.dispatchEvent(newEvent);
-  };
+  }
 
   useEffect(() => {
     // TODO: useLayoutEffect callbacks might be even more similar.

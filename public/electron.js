@@ -211,7 +211,9 @@ function getSavePath(participantID, studyID) {
  * @param fileName the name of the file to be saved
  * @returns string
  */
-const getFullPath = (fileName) => path.join(savePath, fileName);
+function getFullPath(fileName) {
+  return path.join(savePath, fileName);
+}
 
 // Get Participant Id and Study Id from environment
 ipc.on('syncCredentials', (event) => {

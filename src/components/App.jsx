@@ -125,7 +125,9 @@ function App() {
   /** EXPERIMENT FINISH FUNCTIONS */
 
   // Save the experiment data on the desktop
-  const defaultFinishFunction = (data) => data.localSave('csv', 'neuro-task.csv');
+  function defaultFinishFunction(data) {
+    data.localSave('csv', 'neuro-task.csv');
+  }
 
   // Execute the 'end' callback function (see public/electron.js)
   function desktopFinishFunction() {
