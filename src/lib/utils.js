@@ -1,35 +1,60 @@
 import requireContext from 'require-context.macro';
 
+/**
+ * Delay program execution
+ * @param {number} ms Time to sleep for in milliseconds
+ */
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// add a random number between 0 and offset to the base number
+/**
+ * Add a random number between 0 and offset to the base number
+ * @param {number} base Starting number
+ * @param {number} offset Maximum jitter offset
+ * @returns
+ */
 function jitter(base, offset) {
   return base + Math.floor(Math.random() * Math.floor(offset));
 }
 
-// add a random number between 0 and 50 to the base number
+/**
+ * Add a random number between 0 and 50 to the base number
+ * @param {number} base Starting number
+ */
 function jitter50(base) {
   return jitter(base, 50);
 }
 
-// flip a coin
+/**
+ * Flips a coin
+ */
 function randomTrue() {
   return Math.random() > 0.5;
 }
 
-// deeply copy an object
+/**
+ * Copies a deeply nested object
+ * @param {Object} obj Object to be copied
+ */
 function deepCopy(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
-// format a number as a dollar amount
+/**
+ * Format a number as a US dollar amount
+ * @param {number} amount Dollar amount
+ */
 function formatDollars(amount) {
   return '$' + parseFloat(amount).toFixed(2);
 }
 
-// create a pre-trial wait period
+/**
+ * Adds a wait period before a trial begins
+ * @param {*} trial The trial to add a wait period to
+ * @param {*} waitTime The amount of time to wait by
+ */
+// TODO: This should be a trial not a utility? It's adding a separate trial in and of itself
 function generateWaitSet(trial, waitTime) {
   const waitTrial = Object.assign({}, trial);
   waitTrial.trial_duration = waitTime;
@@ -39,8 +64,10 @@ function generateWaitSet(trial, waitTime) {
   return [waitTrial, trial];
 }
 
-// As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
-// The jsPsych instance passed in here should be the same one used for the running task.
+/**
+ * Starts the JsPsych keyboard response listener
+ * @param  jsPsych The jsPsych instance running the task.
+ */
 function startKeypressListener(jsPsych) {
   function keypressResponse(info) {
     const data = { key_press: info.key };
@@ -56,13 +83,17 @@ function startKeypressListener(jsPsych) {
   return keyboardListener;
 }
 
-// Discover and import images in src/assets/images.
-// This produces an object that maps friendly image file names to obscure webpack path names.
-// For example:
-//   {
-//     image1.png: '/static/media/image1.5dca7a2a50fb8b633fd5.png',
-//     image2.png: '/static/media/image2.5dca7a2a50fb8b633fd5.png'
-//   }
+/**
+ * Discover and import images in src/assets/images.
+ * This produces an object that maps friendly image file names to obscure webpack path names.
+ *  For example:
+ *    {
+ *      image1.png: '/static/media/image1.5dca7a2a50fb8b633fd5.png',
+ *      image2.png: '/static/media/image2.5dca7a2a50fb8b633fd5.png'
+ *    }
+ * @param {Object} r
+ * @returns
+ */
 function importAll(r) {
   function importImageByName(allImages, imageName) {
     const friendlyName = imageName.replace('./', '');
@@ -70,9 +101,14 @@ function importAll(r) {
   }
   return r.keys().reduce(importImageByName, {});
 }
-// TODO: move to constants file
+// TODO: move to constants file, ALL_CAPS
 const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
 
+/**
+ * Get a query parameter out of the window's URL
+ * @param {*} variable The key to parse
+ */
+// TODO: Can this just use URLSearchParams?
 function getQueryVariable(variable) {
   const query = window.location.search.substring(1);
   const vars = query.split('&');
@@ -82,12 +118,19 @@ function getQueryVariable(variable) {
   }
 }
 
+/**
+ * Gets the getProlificId from the query string
+ */
 function getProlificId() {
   return getQueryVariable('PROLIFIC_PID');
 }
 
+/**
+ * Emits an audible beep
+ * @param {*} audioCodes The type/frequency of the beep
+ */
 function beep(audioCodes) {
-  const context = new AudioContext(); // eslint-disable-line no-undef
+  const context = new AudioContext();
   const o = context.createOscillator();
   const g = context.createGain();
   o.type = audioCodes.type;

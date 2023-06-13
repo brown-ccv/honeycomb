@@ -1,4 +1,4 @@
-// utilities specific to this app/task
+// Utilities specific to this app/task
 // TODO: Only one utils file
 import _ from 'lodash';
 
