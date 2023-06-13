@@ -2,7 +2,8 @@ import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import taskTrial from './taskTrial';
 import { generateStartingOpts } from '../lib/taskUtils';
 
-const taskBlock = (blockSettings) => {
+// TODO: Rename as function?
+function taskBlock(blockSettings) {
   // initialize block
   const startingOpts = generateStartingOpts(blockSettings);
 
@@ -32,6 +33,6 @@ const taskBlock = (blockSettings) => {
     type: htmlKeyboardResponse,
     timeline,
   };
-};
+}
 
 export default taskBlock;

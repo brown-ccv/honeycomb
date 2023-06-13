@@ -22,10 +22,11 @@ const jsPsychOptions = {
 // Add your jsPsych timeline here.
 // Honeycomb will call this function for us after the subject logs in, and run the resulting timeline.
 // The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
-const buildTimeline = (jsPsych) =>
-  config.USE_MTURK ? mturkTimeline : buildPrimaryTimeline(jsPsych);
+function buildTimeline(jsPsych) {
+  return config.USE_MTURK ? mturkTimeline : buildPrimaryTimeline(jsPsych);
+}
 
-const buildPrimaryTimeline = (jsPsych) => {
+function buildPrimaryTimeline(jsPsych) {
   const primaryTimeline = [
     preamble,
     ageCheck,
@@ -52,7 +53,7 @@ const buildPrimaryTimeline = (jsPsych) => {
   );
 
   return primaryTimeline;
-};
+}
 
 const mturkTimeline = [
   preamble,

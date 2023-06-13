@@ -3,7 +3,8 @@ import { lang } from '../config/main';
 import { photodiodeGhostBox } from '../lib/markup/photodiode';
 import { baseStimulus } from '../lib/markup/stimuli';
 
-const pleaseBiggen = () => {
+// TODO: Pull into its own file
+function pleaseBiggen() {
   const stimulus =
     baseStimulus(`<h1>${lang.welcome.large_window}</h1>`, true) + photodiodeGhostBox();
 
@@ -13,9 +14,9 @@ const pleaseBiggen = () => {
     prompt: lang.prompt.continue.press,
     response_ends_trial: true,
   };
-};
+}
 
-const welcomeMessage = () => {
+function welcomeMessage() {
   const stimulus = baseStimulus(`<h1>${lang.welcome.message}</h1>`, true) + photodiodeGhostBox();
 
   return {
@@ -24,7 +25,7 @@ const welcomeMessage = () => {
     prompt: lang.prompt.continue.press,
     response_ends_trial: true,
   };
-};
+}
 
 const welcome = {
   type: htmlKeyboardResponse,

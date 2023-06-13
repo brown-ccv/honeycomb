@@ -4,22 +4,18 @@ import { config, eventCodes } from '../config/main';
 
 import { earningsDisplay } from '../lib/markup/earnings';
 
-const taskTrial = (blockSettings, blockDetails, condition) => {
+function taskTrial(blockSettings, blockDetails, condition) {
   // timeline
   const timeline = [
     // fixation
-    fixation(config, {
-      duration: 650,
-    }),
+    fixation(config, { duration: 650 }),
     // show condition
     showMessage(config, {
       message: condition,
       onstart: true,
       taskCode: eventCodes.evidence,
     }),
-    fixation(config, {
-      duration: 650,
-    }),
+    fixation(config, { duration: 650 }),
     // end the trial
     showMessage(config, {
       stimulus: earningsDisplay(Math.random()),
@@ -31,6 +27,6 @@ const taskTrial = (blockSettings, blockDetails, condition) => {
     type: htmlKeyboardResponse,
     timeline,
   };
-};
+}
 
 export default taskTrial;

@@ -4,7 +4,7 @@ import { photodiodeGhostBox, pdSpotEncode } from '../lib/markup/photodiode';
 import { baseStimulus } from '../lib/markup/stimuli';
 import { beep } from '../lib/utils';
 
-const startCode = () => {
+function startCode() {
   const stimulus = baseStimulus(`<h1>${lang.prompt.setting_up}</h1>`, true) + photodiodeGhostBox();
 
   return {
@@ -16,6 +16,6 @@ const startCode = () => {
       beep(audioCodes);
     },
   };
-};
+}
 
 export default startCode;
