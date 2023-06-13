@@ -22,11 +22,8 @@ let VIDEO = false;
 // Override product ID if environment variable set
 const activeProductId = process.env.EVENT_MARKER_PRODUCT_ID || productId;
 const activeComName = process.env.EVENT_MARKER_COM_NAME || comName;
-if (activeProductId) {
-  log.info('Active product ID', activeProductId);
-} else {
-  log.info('COM Name', activeComName);
-}
+if (activeProductId) log.info('Active product ID', activeProductId);
+else log.info('COM Name', activeComName);
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -82,7 +79,7 @@ let triggerPort;
 let portAvailable;
 let SKIP_SENDING_DEV = false;
 
-const setUpPort = async () => {
+async function setUpPort() {
   let p;
   if (activeProductId) {
     p = await getPort(vendorId, activeProductId);
@@ -121,9 +118,9 @@ const setUpPort = async () => {
     triggerPort = false;
     portAvailable = false;
   }
-};
+}
 
-const handleEventSend = (code) => {
+function handleEventSend(code) {
   if (!portAvailable && !SKIP_SENDING_DEV) {
     const message = 'Event Marker not connected';
     log.warn(message);
@@ -155,7 +152,7 @@ const handleEventSend = (code) => {
   } else if (!SKIP_SENDING_DEV) {
     sendToPort(triggerPort, code);
   }
-};
+}
 
 // Update env variables with buildtime values from frontend
 ipc.on('updateEnvironmentVariables', (event, args) => {
@@ -183,6 +180,7 @@ ipc.on('trigger', (event, args) => {
 // it is also incrementally saved to the user's app data folder (logged to console)
 
 // INCREMENTAL FILE SAVING
+// TODO: These should be ALL_CAPS
 let stream = false;
 let fileCreated = false;
 let preSavePath = '';
@@ -192,26 +190,28 @@ let studyID = '';
 const images = [];
 let startTrial = -1;
 const today = new Date();
+// Read version file (git sha and branch)
+const git = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'config/version.json')));
 
 /**
  * Abstracts constructing the filepath for saving data for this participant and study.
  * @returns {string} The filepath.
  */
-const getSavePath = (participantID, studyID) => {
+function getSavePath(participantID, studyID) {
   if (participantID !== '' && studyID !== '') {
     const desktop = app.getPath('desktop');
     const name = app.getName();
     const date = today.toISOString().slice(0, 10);
     return path.join(desktop, studyID, participantID, date, name);
   }
-};
+}
 
-const getFullPath = (fileName) => {
-  return path.join(savePath, fileName);
-};
-
-// Read version file (git sha and branch)
-const git = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'config/version.json')));
+/**
+ * Returns the complete path to a file
+ * @param fileName the name of the file to be saved
+ * @returns string
+ */
+const getFullPath = (fileName) => path.join(savePath, fileName);
 
 // Get Participant Id and Study Id from environment
 ipc.on('syncCredentials', (event) => {

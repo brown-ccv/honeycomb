@@ -96,21 +96,31 @@ function App() {
   // More information about the arrow function syntax can be found here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
 
   // Default to valid
-  const defaultValidation = async () => true;
+  async function defaultValidation() {
+    return true;
+  }
   // Validate participant/study against Firestore rules
-  const firebaseValidation = (studyID, participantID) =>
-    validateParticipant(studyID, participantID);
+  function firebaseValidation(studyID, participantID) {
+    return validateParticipant(studyID, participantID);
+  }
 
   /** DATA WRITE FUNCTIONS */
 
+  // TODO: Have an object of functions, accessed by the config variable
   // Do nothing
-  const defaultFunction = () => {};
+  function defaultFunction() {}
   // Add trial data to Firestore
-  const firebaseUpdateFunction = (data) => addToFirebase(data);
-
+  function firebaseUpdateFunction(data) {
+    addToFirebase(data);
+  }
   // Execute the 'data' callback function (see public/electron.js)
-  const desktopUpdateFunction = (data) => ipcRenderer.send('data', data);
-  const psiturkUpdateFunction = (data) => psiturk.recordTrialData(data);
+  function desktopUpdateFunction(data) {
+    ipcRenderer.send('data', data);
+  }
+  // Add trial data to psiturk
+  function psiturkUpdateFunction(data) {
+    psiturk.recordTrialData(data);
+  }
 
   /** EXPERIMENT FINISH FUNCTIONS */
 
@@ -118,8 +128,10 @@ function App() {
   const defaultFinishFunction = (data) => data.localSave('csv', 'neuro-task.csv');
 
   // Execute the 'end' callback function (see public/electron.js)
-  const desktopFinishFunction = () => ipcRenderer.send('end', 'true');
-  const psiturkFinishFunction = () => {
+  function desktopFinishFunction() {
+    ipcRenderer.send('end', 'true');
+  }
+  function psiturkFinishFunction() {
     const completePsiturk = async () => {
       psiturk.saveData({
         success: () => psiturk.completeHIT(),
@@ -127,7 +139,7 @@ function App() {
       });
     };
     completePsiturk();
-  };
+  }
 
   // Update the study/participant data when they log in
   const handleLogin = useCallback((studyID, participantID) => {
