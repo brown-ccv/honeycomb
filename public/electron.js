@@ -29,16 +29,18 @@ else log.info('COM Name', activeComName);
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
+/**
+ * Create the browser window within the Electron app
+ */
 function createWindow() {
-  // Create the browser window.
   if (process.env.ELECTRON_START_URL) {
-    // in dev mode, disable web security to allow local file loading
     console.log(process.env.ELECTRON_START_URL);
     mainWindow = new BrowserWindow({
       width: 1500,
       height: 900,
       icon: './favicon.ico',
       webPreferences: {
+        // Note we disable web security, allows local file loading
         nodeIntegration: true,
         contextIsolation: false,
       },
@@ -56,22 +58,17 @@ function createWindow() {
     });
   }
 
-  // and load the index.html of the app.
+  // Load the index.html of the app.
   const startUrl =
     process.env.ELECTRON_START_URL || `file://${path.join(__dirname, '../build/index.html')}`;
   log.info(startUrl);
   mainWindow.loadURL(startUrl);
 
-  // Open the DevTools.
-  process.env.ELECTRON_START_URL && mainWindow.webContents.openDevTools();
+  // Open the DevTools in dev mode
+  if (process.env.ELECTRON_START_URL) mainWindow.webContents.openDevTools();
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null;
-  });
+  // Dereference the window object, emitted when the window is closed
+  mainWindow.on('closed', () => (mainWindow = null));
 }
 
 // TRIGGER PORT HELPERS
@@ -79,23 +76,25 @@ let triggerPort;
 let portAvailable;
 let SKIP_SENDING_DEV = false;
 
+/**
+ * Sets up the correct ports needed for the event triggers to communicate with electron
+ */
 async function setUpPort() {
-  let p;
-  if (activeProductId) {
-    p = await getPort(vendorId, activeProductId);
-  } else {
-    p = await getPort(activeComName);
-  }
-  if (p) {
-    triggerPort = p;
+  let port;
+  if (activeProductId) port = await getPort(vendorId, activeProductId);
+  else port = await getPort(activeComName);
+
+  if (port) {
+    triggerPort = port;
     portAvailable = true;
 
     triggerPort.on('error', (err) => {
       log.error(err);
       const buttons = ['OK'];
-      if (process.env.ELECTRON_START_URL) {
-        buttons.push('Continue Anyway');
-      }
+
+      // Always continue in dev mode
+      if (process.env.ELECTRON_START_URL) buttons.push('Continue Anyway');
+
       dialog
         .showMessageBox(mainWindow, {
           type: 'error',
@@ -120,6 +119,10 @@ async function setUpPort() {
   }
 }
 
+/**
+ * Send events between the Event Marker and electron
+ * @param {*} code
+ */
 function handleEventSend(code) {
   if (!portAvailable && !SKIP_SENDING_DEV) {
     const message = 'Event Marker not connected';
@@ -154,7 +157,9 @@ function handleEventSend(code) {
   }
 }
 
-// Update env variables with buildtime values from frontend
+/**
+ * Update env variables with build-time values from frontend
+ */
 ipc.on('updateEnvironmentVariables', (event, args) => {
   USE_EEG = args.USE_EEG;
   VIDEO = args.USE_CAMERA;
@@ -163,15 +168,14 @@ ipc.on('updateEnvironmentVariables', (event, args) => {
   }
 });
 
-// EVENT TRIGGER
-
+/**
+ * Event triggered
+ */
 ipc.on('trigger', (event, args) => {
   const code = args;
   if (code !== undefined) {
     log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`);
-    if (USE_EEG) {
-      handleEventSend(code);
-    }
+    if (USE_EEG) handleEventSend(code);
   }
 });
 
@@ -197,6 +201,7 @@ const git = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'config/version.j
  * Abstracts constructing the filepath for saving data for this participant and study.
  * @returns {string} The filepath.
  */
+// TODO: Can we  move this to utils? Separate within this file?
 function getSavePath(participantID, studyID) {
   if (participantID !== '' && studyID !== '') {
     const desktop = app.getPath('desktop');
@@ -211,11 +216,15 @@ function getSavePath(participantID, studyID) {
  * @param fileName the name of the file to be saved
  * @returns string
  */
+// TODO: Can we  move this to utils? Separate within this file?
 function getFullPath(fileName) {
   return path.join(savePath, fileName);
 }
 
-// Get Participant Id and Study Id from environment
+/**
+ * Sync participantID and studyID from the environment variables
+ */
+// TODO: Can this be synced with URL search params like on the browser?
 ipc.on('syncCredentials', (event) => {
   event.returnValue = {
     envParticipantId: process.env.REACT_APP_PARTICIPANT_ID,
@@ -223,10 +232,12 @@ ipc.on('syncCredentials', (event) => {
   };
 });
 
-// listener for new data
+/**
+ * Event fired when new data is created
+ */
 ipc.on('data', (event, args) => {
-  // initialize file - we got a participant_id to save the data to
   if (args.participant_id && args.study_id && !fileCreated) {
+    // Have participantID and studyId, need to create the file
     const dir = app.getPath('userData');
     participantID = args.participant_id;
     studyID = args.study_id;
@@ -238,16 +249,14 @@ ipc.on('data', (event, args) => {
     fileCreated = true;
   }
 
-  if (savePath === '') {
-    savePath = getSavePath(participantID, studyID);
-  }
+  // TODO: Why is this outside the above if?
+  // TODO: Can we start savePath as undefined?
+  if (savePath === '') savePath = getSavePath(participantID, studyID);
 
   // we have a set up stream to write to, write to it!
   if (stream) {
-    // write intermediate commas
-    if (args.trial_index > startTrial) {
-      stream.write(',');
-    }
+    // Add commas between trials
+    if (args.trial_index > startTrial) stream.write(',');
 
     // write the data
     stream.write(JSON.stringify({ ...args, git }));
@@ -257,11 +266,12 @@ ipc.on('data', (event, args) => {
   }
 });
 
-// Save Video
+/**
+ * Save the video file
+ */
 ipc.on('save_video', (event, videoFileName, buffer) => {
-  if (savePath === '') {
-    savePath = getSavePath(participantID, studyID);
-  }
+  // TODO: Can we start savePath as undefined?
+  if (savePath === '') savePath = getSavePath(participantID, studyID);
 
   if (VIDEO) {
     const fullPath = getFullPath(videoFileName);
@@ -276,19 +286,21 @@ ipc.on('save_video', (event, videoFileName, buffer) => {
   }
 });
 
-// EXPERIMENT END
-ipc.on('end', () => {
-  // quit app
-  app.quit();
-});
+/**
+ * Quit the app when the experiment ends
+ */
+ipc.on('end', () => app.quit());
 
-// Error state sent from front end to back end (e.g. wrong number of images)
+/**
+ * Handle errors sent from front end to back end
+ */
 ipc.on('error', (event, args) => {
   log.error(args);
   const buttons = ['OK'];
-  if (process.env.ELECTRON_START_URL) {
-    buttons.push('Continue Anyway');
-  }
+
+  // Always continue while in dev mode
+  if (process.env.ELECTRON_START_URL) buttons.push('Continue Anyway');
+
   const opt = dialog.showMessageBoxSync(mainWindow, {
     type: 'error',
     message: args,
@@ -299,40 +311,45 @@ ipc.on('error', (event, args) => {
   if (opt === 0) app.exit();
 });
 
-// log uncaught exceptions
+/**
+ * Handle any uncaught exceptions
+ */
 process.on('uncaughtException', (error) => {
   // Handle the error
   log.error(error);
 
-  // this isn't dev, throw up a dialog
+  // Display a separate dialog box while in production
   if (!process.env.ELECTRON_START_URL) {
     dialog.showMessageBoxSync(mainWindow, { type: 'error', message: error, title: 'Task Error' });
   }
 });
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', () => {
-  createWindow();
-});
-// Quit when all windows are closed.
+/**
+ * Called when Electron finishes initializing
+ */
+app.on('ready', () => createWindow());
+
+/**
+ * Called when all app windows are closed
+ */
 app.on('window-all-closed', function () {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
+  // Quit the app unless on macOS ('darwin')
+  // On mac it's common for applications to stay active until the user quits explicitly
   if (process.platform !== 'darwin') app.quit();
 });
 
+/**
+ * Called when an app window is activated
+ */
 app.on('activate', function () {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow();
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
-
-// EXPERIMENT END
+/**
+ * Cleanup function after app.quit() or user quits explicity
+ */
 app.on('will-quit', () => {
   if (fileCreated) {
     // finish writing file
