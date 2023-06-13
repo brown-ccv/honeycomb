@@ -1,11 +1,11 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import taskTrial from './taskTrial';
-import { generateStartingOpts } from '../lib/taskUtils';
+import { generateStartingOptions } from '../lib/taskUtils';
 
 // TODO: Rename as function?
 function taskBlock(blockSettings) {
   // initialize block
-  const startingOpts = generateStartingOpts(blockSettings);
+  const startingOpts = generateStartingOptions(blockSettings);
 
   const blockDetails = {
     block_earnings: 0.0,
