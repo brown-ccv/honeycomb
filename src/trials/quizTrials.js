@@ -3,6 +3,9 @@ import surveyMultiselect from '@jspsych/plugin-survey-multi-select';
 import { lang, config } from '../config/main';
 import { survey, slider, multiSurvey, showMessage } from '@brown-ccv/behavioral-task-trials';
 
+// TODO: Split each question into its own function?
+// TODO: Add trial for loading a prolific questionnaire?
+
 // Age Check
 const ask = lang.quiz.ask.age;
 const res = lang.quiz.answer.age;
