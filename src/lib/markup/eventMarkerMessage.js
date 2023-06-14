@@ -1,7 +1,8 @@
 import { lang } from '../../config/main';
 
-const eventMarkerMessage = async () => {
+// TODO: Have a markup.js file, consolidate these other files
+async function eventMarkerMessage() {
   return `<span style="color: green;">${lang.eventMarker.found}</span>`;
-};
+}
 
 export default eventMarkerMessage;

@@ -4,28 +4,17 @@ import { lang, taskName, config } from '../config/main';
 import { photodiodeGhostBox } from '../lib/markup/photodiode';
 import { baseStimulus } from '../lib/markup/stimuli';
 
+// Get the ipcRender if running in an  electron window
+// TODO: Is it okay for this to start undefined?
+// TODO: Add warning to trial if not running in electron?
 let ipcRenderer = false;
-if (config.USE_ELECTRON) {
-  const electron = window.require('electron');
-  ipcRenderer = electron.ipcRenderer;
-}
+if (config.USE_ELECTRON) ipcRenderer = window.require('electron').ipcRenderer;
 
-function saveBlob(blob, media, participantID) {
-  const reader = new FileReader(); // eslint-disable-line no-undef
-  const fileName = `pid_${participantID}_${media}_${Date.now()}.webm`;
-  reader.onload = function () {
-    if (reader.readyState === 2) {
-      const buffer = Buffer.from(reader.result); // eslint-disable-line no-undef
-      ipcRenderer.send('save_video', fileName, buffer);
-      console.log(`Saving ${JSON.stringify({ fileName, size: blob.size })}`);
-    }
-  };
-  reader.readAsArrayBuffer(blob);
-}
-
-// As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
-// The jsPsych instance passed in here should be the same one used for the running task.
-const cameraStart = (jsPsych) => {
+/**
+ * Experiment trial for starting a participant's camera feed
+ * @param jsPsych The currently running JsPsych instance
+ */
+function cameraStart(jsPsych) {
   document.title = taskName;
   const markup = `
   <div class="d-flex flex-column align-items-center">
@@ -65,7 +54,16 @@ const cameraStart = (jsPsych) => {
 
         window[recorder].addEventListener('stop', function () {
           const blob = new Blob(recordedChunks); // eslint-disable-line no-undef
-          saveBlob(blob, recorder, participantID);
+          const reader = new FileReader(); // eslint-disable-line no-undef
+          const fileName = `pid_${participantID}_${recorder}_${Date.now()}.webm`;
+          reader.onload = function () {
+            if (reader.readyState === 2) {
+              const buffer = Buffer.from(reader.result); // eslint-disable-line no-undef
+              ipcRenderer.send('save_video', fileName, buffer);
+              console.log(`Saving ${JSON.stringify({ fileName, size: blob.size })}`);
+            }
+          };
+          reader.readAsArrayBuffer(blob);
         });
       };
 
@@ -74,7 +72,6 @@ const cameraStart = (jsPsych) => {
         .then((stream) => handleEvents(stream, 'cameraCapture'));
 
       const { desktopCapturer } = window.require('electron');
-
       desktopCapturer.getSources({ types: ['window'] }).then(async (sources) => {
         for (const source of sources) {
           if (source.name === taskName) {
@@ -87,9 +84,7 @@ const cameraStart = (jsPsych) => {
                   },
                 },
               })
-              .then((stream) => {
-                handleEvents(stream, 'screenCapture');
-              })
+              .then((stream) => handleEvents(stream, 'screenCapture'))
               .catch((error) => console.log(error));
           }
         }
@@ -108,9 +103,13 @@ const cameraStart = (jsPsych) => {
       }
     },
   };
-};
+}
 
-const cameraEnd = (duration) => {
+/**
+ * Experiment trial for ending a participant's camera feed
+ * @param duration How long for the trial to run for
+ */
+function cameraEnd(duration) {
   const stimulus = baseStimulus(`<h1>${lang.task.recording_end}</h1>`, true) + photodiodeGhostBox();
 
   return {
@@ -129,6 +128,6 @@ const cameraEnd = (duration) => {
       }
     },
   };
-};
+}
 
 export { cameraStart, cameraEnd };
