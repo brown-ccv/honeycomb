@@ -23,14 +23,6 @@ function JsPsychExperiment({
   const experimentDivID = 'experimentWindow';
   const experimentDivRef = useRef(null);
 
-  // Combine custom options imported from timelines/maine.js, with necessary Honeycomb options.
-  const combinedOptions = {
-    ...jsPsychOptions,
-    display_element: experimentDivID,
-    on_data_update: (data) => dataUpdateFunction(data),
-    on_finish: (data) => dataFinishFunction(data),
-  };
-
   // Create the instance of jsPsych that we'll reuse within the scope of this JsPsychExperiment component.
   // As of jspsych 7, we create our own jspsych instance(s) where needed instead of importing one global instance.
   const jsPsych = useMemo(() => {
@@ -41,8 +33,13 @@ function JsPsychExperiment({
     // Write the initial record to Firestore
     if (config.USE_FIREBASE) initParticipant(studyID, participantID, startDate);
 
-    // Initialize experiment with needed data
-    const jsPsych = initJsPsych(combinedOptions);
+    // Initialize experiment with needed data. Combines custom options with necessary Honeycomb options.
+    const jsPsych = initJsPsych({
+      ...jsPsychOptions, // This will be passed to the package
+      display_element: experimentDivID,
+      on_data_update: (data) => dataUpdateFunction(data),
+      on_finish: (data) => dataFinishFunction(data),
+    });
     jsPsych.data.addProperties({
       participant_id: participantID,
       study_id: studyID,
@@ -54,6 +51,8 @@ function JsPsychExperiment({
 
   // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
   const timeline = buildTimeline(jsPsych);
+  // TODO: useCamera prop needs to add camera trials internally
+  // TODO: Add isFullscreen prop that adds fullscreen trials internally
 
   // Set up event and lifecycle callbacks to start and stop jspsych.
   // Inspiration from jspsych-react: https://github.com/makebrainwaves/jspsych-react/blob/master/src/index.js
@@ -70,7 +69,7 @@ function JsPsychExperiment({
     // TODO 193: useLayoutEffect callbacks might be even more similar.
     window.addEventListener('keyup', handleKeyEvent, true);
     window.addEventListener('keydown', handleKeyEvent, true);
-    jsPsych.run(timeline);
+    jsPsych.run(timeline); // This will be passed to the package
 
     return () => {
       window.removeEventListener('keyup', handleKeyEvent, true);

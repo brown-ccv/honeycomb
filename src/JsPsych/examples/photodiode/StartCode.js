@@ -4,7 +4,11 @@ import { photodiodeGhostBox, pdSpotEncode } from '../lib/markup/photodiode';
 import { baseStimulus } from '../lib/markup/stimuli';
 import { beep } from '../lib/utils';
 
-function startCode() {
+/**
+ *
+ * @returns
+ */
+export function StartCode() {
   const stimulus = baseStimulus(`<h1>${lang.prompt.setting_up}</h1>`, true) + photodiodeGhostBox();
 
   return {
@@ -17,5 +21,3 @@ function startCode() {
     },
   };
 }
-
-export default startCode;

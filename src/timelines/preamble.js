@@ -1,10 +1,11 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import htmlButtonResponse from '@jspsych/plugin-html-button-response';
 import { showMessage } from '@brown-ccv/behavioral-task-trials';
-import holdUpMarker from '../trials/holdUpMarker';
+import holdUpMarker from '../JsPsych/examples/photodiode/HoldUpMarker';
 import startCode from '../trials/startCode';
 import { lang, config } from '../config/main';
 
+// TODO: Can be deleted
 const timeline = [
   showMessage(config, {
     responseType: htmlButtonResponse,

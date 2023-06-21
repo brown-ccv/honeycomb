@@ -25,6 +25,7 @@ export const jsPsychOptions = {
 // Honeycomb will call this function for us after the subject logs in, and run the resulting timeline.
 // The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
 // TODO 162: Separate normal and MTURK timeline? Pass USE_MTURK to the function?
+// DONE
 export function buildTimeline(jsPsych) {
   return config.USE_MTURK ? mturkTimeline : buildPrimaryTimeline(jsPsych);
 }

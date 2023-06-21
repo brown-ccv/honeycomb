@@ -3,6 +3,7 @@
 import _ from 'lodash';
 
 // initialize starting conditions for each trial within a block
+// TODO: Move to taskUtils
 export function generateStartingOptions(blockSettings) {
   const startingOptions = blockSettings.conditions.map((c) => {
     // Repeat each starting condition the same number of times
