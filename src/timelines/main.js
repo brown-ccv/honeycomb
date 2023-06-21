@@ -12,6 +12,7 @@ import { ageCheck, sliderCheck, demographics, iusSurvey, debrief } from '../tria
 // Add your jsPsych options here.
 // Honeycomb will combine these custom options with other options needed by Honyecomb.
 // TODO 159: This is a base option? Move to JsPsychExperiment?
+// DONE
 export const jsPsychOptions = {
   on_trial_finish: function (data) {
     console.log('A trial just ended, here are the latest data:');
