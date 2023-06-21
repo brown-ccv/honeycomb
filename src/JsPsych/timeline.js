@@ -40,3 +40,4 @@ export function buildTimeline() {
 }
 
 // TODO: I think the user needs to confirm if they're going to enable audio?
+// TODO: Is there a way to be able to use the trials without having to call them as a function? Like a react component?
