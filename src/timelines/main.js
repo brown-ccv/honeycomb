@@ -11,7 +11,7 @@ import { ageCheck, sliderCheck, demographics, iusSurvey, debrief } from '../tria
 
 // Add your jsPsych options here.
 // Honeycomb will combine these custom options with other options needed by Honyecomb.
-// TODO: This is a base option? Move to JsPsychExperiment?
+// TODO 159: This is a base option? Move to JsPsychExperiment?
 export const jsPsychOptions = {
   on_trial_finish: function (data) {
     console.log('A trial just ended, here are the latest data:');
@@ -23,7 +23,7 @@ export const jsPsychOptions = {
 // Add your jsPsych timeline here.
 // Honeycomb will call this function for us after the subject logs in, and run the resulting timeline.
 // The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
-// TODO: Separate normal and MTURK timeline? Pass USE_MTURK to the function?
+// TODO 162: Separate normal and MTURK timeline? Pass USE_MTURK to the function?
 export function buildTimeline(jsPsych) {
   return config.USE_MTURK ? mturkTimeline : buildPrimaryTimeline(jsPsych);
 }

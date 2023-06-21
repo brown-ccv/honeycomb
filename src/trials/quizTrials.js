@@ -3,18 +3,18 @@ import surveyMultiselect from '@jspsych/plugin-survey-multi-select';
 import { lang, config } from '../config/main';
 import { survey, slider, multiSurvey, showMessage } from '@brown-ccv/behavioral-task-trials';
 
-// TODO: Split each question into its own function?
-// TODO: Add trial for loading a prolific questionnaire?
+// TODO 162: Split each question into its own function?
+// TODO 162: Add trial for loading a prolific questionnaire?
 
 // Age Check
-// TODO: Separate function
+// TODO 162: Separate function
 const ask = lang.quiz.ask.age;
 const res = lang.quiz.answer.age;
 const stmAge = `<div class='instructions'><h1>${ask}<br><b>${res}</b></div>`;
 const ageCheck = survey({ stimulus: stmAge });
 
 // Slider Check
-// TODO: Separate function
+// TODO 162: Separate function
 const stmSl = lang.quiz.direction.slider.right;
 const sliderCheck = slider(stmSl);
 
@@ -50,7 +50,7 @@ const iusPrompts = [
   `${lang.quiz.prompt.ius.escape}`,
 ];
 
-// TODO: Separate function
+// TODO 162: Separate function
 const iusSurvey = multiSurvey({
   preamble: [surveyPreamble1 + surveyPreamble2],
   prompts: iusPrompts,
@@ -58,7 +58,7 @@ const iusSurvey = multiSurvey({
 });
 
 // Debrief Page (non-mTurk)
-// TODO: Separate function
+// TODO 162: Separate function
 const debriefOptions = lang.quiz.answer.debriefing.confirm_completion;
 const debrief = showMessage(config, {
   responseType: htmlButtonResponse,
@@ -67,7 +67,7 @@ const debrief = showMessage(config, {
 });
 
 // START of Demographics Questionnaires
-// TODO: Separate function
+// TODO 162: Separate function
 const demographicsAge = lang.quiz.ask.demographics_age;
 const demographicsPreamble1 = lang.quiz.prompt.preamble.demo_1;
 const demographicsPreamble2 = lang.quiz.prompt.preamble.demo_2;
@@ -134,7 +134,7 @@ const multiSelectQuestions = multiSurvey({
 });
 
 // demographics
-// TODO: Move everything up into a demographics function
+// TODO 162: Move everything up into a demographics function
 const demographics = {
   timeline: [
     openAnswerQuestions, // age, sex

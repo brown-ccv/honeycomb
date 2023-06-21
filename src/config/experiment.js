@@ -3,7 +3,7 @@ import { deepCopy } from '../lib/utils';
 
 // FIRST EXPERIMENT BLOCK SETTINGS
 
-// TODO: Have a special file for this task? Make a function
+// TODO 194: Have a special file for this task? Make a function
 
 // create copy of default settings
 const exptBlock1 = deepCopy(defaultBlockSettings);
@@ -16,5 +16,5 @@ const exptBlock2 = deepCopy(defaultBlockSettings);
 exptBlock2.conditions = ['e', 'f'];
 exptBlock2.repeats_per_condition = 2;
 
-// TODO: Inline exports
+// TODO 194: Inline exports
 export { exptBlock1, exptBlock2 };

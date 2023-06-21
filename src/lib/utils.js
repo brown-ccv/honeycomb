@@ -54,7 +54,7 @@ export function formatDollars(amount) {
  * @param {*} trial The trial to add a wait period to
  * @param {*} waitTime The amount of time to wait by
  */
-// TODO: This should be a trial not a utility? It's adding a separate trial in and of itself
+// TODO 162: This should be a trial not a utility? It's adding a separate trial in and of itself
 export function generateWaitSet(trial, waitTime) {
   const waitTrial = Object.assign({}, trial);
   waitTrial.trial_duration = waitTime;
@@ -102,14 +102,14 @@ export function importAll(r) {
   return r.keys().reduce(importImageByName, {});
 }
 
-// TODO: move to constants file, ALL_CAPS
+// TODO 159: move to constants file, ALL_CAPS
 export const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
 
 /**
  * Get a query parameter out of the window's URL
  * @param {*} variable The key to parse
  */
-// TODO: Can this just use URLSearchParams?
+// TODO 199: Can this just use URLSearchParams?
 export function getQueryVariable(variable) {
   const query = window.location.search.substring(1);
   const vars = query.split('&');

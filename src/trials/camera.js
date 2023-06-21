@@ -5,8 +5,8 @@ import { photodiodeGhostBox } from '../lib/markup/photodiode';
 import { baseStimulus } from '../lib/markup/stimuli';
 
 // Get the ipcRender if running in an  electron window
-// TODO: Is it okay for this to start undefined?
-// TODO: Add warning to trial if not running in electron?
+// TODO 192: Is it okay for this to start undefined?
+// TODO 192: Add warning to trial if not running in electron?
 let ipcRenderer = false;
 if (config.USE_ELECTRON) ipcRenderer = window.require('electron').ipcRenderer;
 

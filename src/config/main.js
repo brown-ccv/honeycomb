@@ -11,18 +11,18 @@ import { eventCodes } from './trigger';
 import { getProlificId } from '../lib/utils';
 
 // Access package name and version so we can store these as facts with task data.
-// TODO: Move to constants
+// TODO 159: Move to constants
 export const taskName = packageInfo.name;
 export const taskVersion = packageInfo.version;
 
 // As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
 // The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
 // The actual task and related utils will use a different instance of jsPsych created after login.
-// TODO: This is only used for mturk - make a separate function that take's jsPsych as a param
+// TODO 197: This is only used for mturk - make a separate function that take's jsPsych as a param
 const jsPsych = initJsPsych();
 
 // mapping of letters to key codes
-// TODO: Move to constants? ALL_CAPS
+// TODO 159: Move to constants? ALL_CAPS
 export const keys = {
   A: 65,
   B: 66,
@@ -33,14 +33,14 @@ export const keys = {
 };
 
 // audio codes
-// TODO: Move to constants? ALL_CAPS
+// TODO 159: Move to constants? ALL_CAPS
 export const audioCodes = {
   frequency: 100 * (eventCodes.open_task - 9),
   type: 'sine',
 };
 
 // is this mechanical turk?
-// TODO: Move to constants?
+// TODO 159: Move to constants?
 const turkInfo = jsPsych.turk.turkInfo();
 export const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`;
 
@@ -67,7 +67,7 @@ const USE_VOLUME = process.env.REACT_APP_VOLUME === 'true';
 // Whether or not to enable video
 const USE_CAMERA = process.env.REACT_APP_VIDEO === 'true' && USE_ELECTRON;
 
-// TODO: Have this be a function? Use i18n?
+// TODO 159: Have this be a function? Use i18n?
 // Get language file
 const lang = require('../language/en_us.json');
 if (!USE_ELECTRON) {
@@ -76,7 +76,7 @@ if (!USE_ELECTRON) {
   _.merge(lang, mlang);
 }
 
-// TODO: Move to constants
+// TODO 159: Move to constants
 export const defaultBlockSettings = {
   conditions: ['a', 'b', 'c'],
   repeats_per_condition: 1, // number of times every condition is repeated
@@ -86,8 +86,8 @@ export const defaultBlockSettings = {
 };
 
 // setting config for trials
-// TODO: What's this init function?
-// TODO: constants?
+// TODO 159: What's this init function?
+// TODO 159: constants?
 export const config = init({
   USE_PHOTODIODE,
   USE_EEG,
@@ -99,5 +99,5 @@ export const config = init({
   USE_FIREBASE,
 });
 
-// TODO: Handle in the same file? Have a special language file?
+// TODO 196: Handle in the same file? Have a special language file?
 export { lang };

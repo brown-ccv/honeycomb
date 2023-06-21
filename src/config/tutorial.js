@@ -3,7 +3,7 @@ import { deepCopy } from '../lib/utils';
 
 // TUTORIAL SETTINGS
 
-// TODO: Make a function (makeTutorial) that can take a trial itself
+// TODO 194: Make a function (makeTutorial) that can take a trial itself
 
 // create copy of default settings
 const tutorialBlock = deepCopy(defaultBlockSettings);
