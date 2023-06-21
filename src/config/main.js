@@ -2,25 +2,28 @@
 // This is the main configuration file where universal and default settings should be placed.
 // These settings can then be imported anywhere in the app as they are exported at the bottom of the file.
 
-import { initJsPsych } from 'jspsych';
 import _ from 'lodash';
-import { eventCodes } from './trigger';
+import { initJsPsych } from 'jspsych';
 import { init } from '@brown-ccv/behavioral-task-trials';
-import { getProlificId } from '../lib/utils';
+
 import packageInfo from '../../package.json';
+import { eventCodes } from './trigger';
+import { getProlificId } from '../lib/utils';
 
 // Access package name and version so we can store these as facts with task data.
-const taskName = packageInfo.name;
-const taskVersion = packageInfo.version;
+// TODO: Move to constants
+export const taskName = packageInfo.name;
+export const taskVersion = packageInfo.version;
 
 // As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
 // The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
 // The actual task and related utils will use a different instance of jsPsych created after login.
+// TODO: This is only used for mturk - make a separate function that take's jsPsych as a param
 const jsPsych = initJsPsych();
 
 // mapping of letters to key codes
-// TODO: ALL_CAPS
-const keys = {
+// TODO: Move to constants? ALL_CAPS
+export const keys = {
   A: 65,
   B: 66,
   C: 67,
@@ -30,15 +33,16 @@ const keys = {
 };
 
 // audio codes
-// TODO: ALL_CAPS
-const audioCodes = {
+// TODO: Move to constants? ALL_CAPS
+export const audioCodes = {
   frequency: 100 * (eventCodes.open_task - 9),
   type: 'sine',
 };
 
 // is this mechanical turk?
+// TODO: Move to constants?
 const turkInfo = jsPsych.turk.turkInfo();
-const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`;
+export const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`;
 
 // Whether or not we're in an electron instance
 let USE_ELECTRON = true;
@@ -72,7 +76,8 @@ if (!USE_ELECTRON) {
   _.merge(lang, mlang);
 }
 
-const defaultBlockSettings = {
+// TODO: Move to constants
+export const defaultBlockSettings = {
   conditions: ['a', 'b', 'c'],
   repeats_per_condition: 1, // number of times every condition is repeated
   is_practice: false,
@@ -81,7 +86,9 @@ const defaultBlockSettings = {
 };
 
 // setting config for trials
-const config = init({
+// TODO: What's this init function?
+// TODO: constants?
+export const config = init({
   USE_PHOTODIODE,
   USE_EEG,
   USE_ELECTRON,
@@ -92,14 +99,5 @@ const config = init({
   USE_FIREBASE,
 });
 
-export {
-  taskName,
-  taskVersion,
-  keys,
-  defaultBlockSettings,
-  lang,
-  eventCodes,
-  config,
-  audioCodes,
-  turkUniqueId,
-};
+// TODO: Handle in the same file? Have a special language file?
+export { lang };

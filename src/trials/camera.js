@@ -14,7 +14,7 @@ if (config.USE_ELECTRON) ipcRenderer = window.require('electron').ipcRenderer;
  * Experiment trial for starting a participant's camera feed
  * @param jsPsych The currently running JsPsych instance
  */
-function cameraStart(jsPsych) {
+export function cameraStart(jsPsych) {
   document.title = taskName;
   const markup = `
   <div class="d-flex flex-column align-items-center">
@@ -109,7 +109,7 @@ function cameraStart(jsPsych) {
  * Experiment trial for ending a participant's camera feed
  * @param duration How long for the trial to run for
  */
-function cameraEnd(duration) {
+export function cameraEnd(duration) {
   const stimulus = baseStimulus(`<h1>${lang.task.recording_end}</h1>`, true) + photodiodeGhostBox();
 
   return {
@@ -129,5 +129,3 @@ function cameraEnd(duration) {
     },
   };
 }
-
-export { cameraStart, cameraEnd };

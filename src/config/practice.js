@@ -3,12 +3,12 @@ import { deepCopy } from '../lib/utils';
 
 // PRACTICE BLOCK SETTINGS
 
+// TODO: Have a special file for this task? Make a function
+
 // create copy of default settings
 const practiceBlock = deepCopy(defaultBlockSettings);
-
 practiceBlock.conditions = ['m', 'n'];
 practiceBlock.repeats_per_condition = 1;
-
 practiceBlock.is_practice = true;
 
 // export the settings

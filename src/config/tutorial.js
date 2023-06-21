@@ -3,9 +3,10 @@ import { deepCopy } from '../lib/utils';
 
 // TUTORIAL SETTINGS
 
+// TODO: Make a function (makeTutorial) that can take a trial itself
+
 // create copy of default settings
 const tutorialBlock = deepCopy(defaultBlockSettings);
-
 // update default settings for tutorial
 tutorialBlock.is_tutorial = true;
 tutorialBlock.photodiode_active = false;

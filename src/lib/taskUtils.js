@@ -3,7 +3,7 @@
 import _ from 'lodash';
 
 // initialize starting conditions for each trial within a block
-function generateStartingOptions(blockSettings) {
+export function generateStartingOptions(blockSettings) {
   const startingOptions = blockSettings.conditions.map((c) => {
     // Repeat each starting condition the same number of times
     return _.range(blockSettings.repeats_per_condition).map(() => c);
@@ -11,5 +11,3 @@ function generateStartingOptions(blockSettings) {
 
   return _.shuffle(_.flatten(startingOptions));
 }
-
-export { generateStartingOptions };
