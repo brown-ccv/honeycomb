@@ -21,7 +21,7 @@ export const JSPSYCH_OPTIONS = {
  */
 export function buildTimeline() {
   const timeline = [
-    Preamble,
+    Preamble(),
     // ageCheck,
     // sliderCheck,
     // countdown({ message: lang.countdown.message1 }),
@@ -38,3 +38,5 @@ export function buildTimeline() {
   ];
   return timeline;
 }
+
+// TODO: I think the user needs to confirm if they're going to enable audio?

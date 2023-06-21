@@ -3,7 +3,9 @@ import React, { useEffect, useMemo, useRef } from 'react';
 
 import { config } from '../config/main';
 import { initParticipant } from '../firebase';
-import { buildTimeline, jsPsychOptions } from '../timelines/main';
+
+// These will be passed in as props to the package once it's split
+import { buildTimeline, JSPSYCH_OPTIONS } from '../JsPsych/timeline';
 
 /** JsPsych Experiment
  *
@@ -35,7 +37,7 @@ function JsPsychExperiment({
 
     // Initialize experiment with needed data. Combines custom options with necessary Honeycomb options.
     const jsPsych = initJsPsych({
-      ...jsPsychOptions, // This will be passed to the package
+      ...JSPSYCH_OPTIONS, // This will be passed to the package
       display_element: experimentDivID,
       on_data_update: (data) => dataUpdateFunction(data),
       on_finish: (data) => dataFinishFunction(data),

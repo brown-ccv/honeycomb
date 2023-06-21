@@ -1,2 +1,4 @@
 // TODO: Use i18n?
-export { language } from './en_us.json';
+import * as language from './en_us.json';
+
+export { language };
