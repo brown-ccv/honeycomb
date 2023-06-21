@@ -1,4 +1,4 @@
-import { Preamble } from './examples';
+import { Preamble } from './trials/examples';
 
 /**
  * Create your custom JsPsych options here. These settings will applied experiment wide.

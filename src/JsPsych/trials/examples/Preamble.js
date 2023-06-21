@@ -7,12 +7,12 @@ import { showMessage } from '@brown-ccv/behavioral-task-trials';
 // import { lang, config } from '../config/main';
 
 // TODO: Use @signature for imports?
-import { language } from '../language'; // @language
+import { language } from '../../language'; // @language
 import { HoldUpMarker, StartCode } from './photodiode'; // @tasks
 
 // TODO: This is a task, how do I pass which config file to use?
 // Hard code for now
-import config from '../config/home.json';
+import config from '../../config/home.json';
 
 // TEMP: Helper function for interfacing with the old config type
 function useOldConfig(newConfig) {
