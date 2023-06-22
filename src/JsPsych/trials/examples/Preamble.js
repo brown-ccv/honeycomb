@@ -27,7 +27,7 @@ function useOldConfig(newConfig) {
 }
 
 // TODO: Rename as introduction?
-function createPreambleTrial() {
+export function createPreambleTrial() {
   const oldConfig = useOldConfig(config);
 
   // Trial that shows the task name with a continue button

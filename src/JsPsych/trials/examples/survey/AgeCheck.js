@@ -8,7 +8,7 @@ import { language } from '../../../language'; // @language
  *  Asks the user to
  * @returns
  */
-function createAgeCheckTrial() {
+export function createAgeCheckTrial() {
   const askAge = language.quiz.ask.age;
   const answerAge = language.quiz.answer.age;
   const ageCheck = survey({
