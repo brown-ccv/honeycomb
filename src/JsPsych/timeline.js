@@ -20,7 +20,7 @@ export const JSPSYCH_OPTIONS = {
  * Build your JsPsych timeline here. The array must be passed as a prop to <JsPsychOptions />
  * @returns array of trials
  */
-export function buildTimeline() {
+export function buildTimeline(jsPsych) {
   const timeline = [
     Preamble,
     AgeCheck,
@@ -42,3 +42,5 @@ export function buildTimeline() {
 
 // TODO: I think the user needs to confirm if they're going to enable audio?
 // TODO: Is there a way to be able to use the trials without having to call them as a function? Like a react component?
+
+export const timeline = buildTimeline();

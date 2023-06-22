@@ -1,7 +1,7 @@
 import { slider } from '@brown-ccv/behavioral-task-trials';
 
 // TODO: Use @signature for imports?
-import { language } from '../../language'; // @language
+import { language } from '../../../language'; // @language
 
 // TODO: Move slider helper here from '@brown-ccv/behavioral-task-trials'
 /**
