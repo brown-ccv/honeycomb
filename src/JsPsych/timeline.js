@@ -1,6 +1,7 @@
+// TODO: @ import for language
 import { language } from './language';
 // TODO: @ import for trials
-import { Preamble, createSliderTrial } from './trials/examples';
+import { Preamble, createCountdownTrial, createSliderTrial } from './trials/examples';
 import { AgeCheck } from './trials/examples/survey';
 
 /**
@@ -26,9 +27,14 @@ export const JSPSYCH_OPTIONS = {
 // eslint-disable-next-line
 export function buildTimeline(jsPsych) {
   // Get slider text from the language file and create the trials
-  const sliderMessages = language.quiz.direction.slider;
-  const sliderLeft = createSliderTrial(sliderMessages.left);
-  const sliderRight = createSliderTrial(sliderMessages.right);
+  const sliderLanguage = language.quiz.direction.slider;
+  const sliderLeft = createSliderTrial(sliderLanguage.left);
+  const sliderRight = createSliderTrial(sliderLanguage.right);
+
+  // Get countdown txt from the language fil and create the trials
+  const countdownLanguage = language.countdown;
+  const firstBlockCountdown = createCountdownTrial({ message: countdownLanguage.message1 });
+  const secondBlockCountdown = createCountdownTrial({ message: countdownLanguage.message2 });
 
   // Build the timeline
   const timeline = [
@@ -36,6 +42,9 @@ export function buildTimeline(jsPsych) {
     AgeCheck,
     sliderLeft,
     sliderRight,
+    firstBlockCountdown,
+    secondBlockCountdown,
+
     // countdown({ message: lang.countdown.message1 }),
     // taskBlock(practiceBlock),
     // countdown({ message: lang.countdown.message2 }),
