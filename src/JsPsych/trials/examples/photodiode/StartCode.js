@@ -12,7 +12,7 @@ import { beep } from '../../../utils';
  *
  * @returns
  */
-export function StartCode() {
+export function createStartCodeTrial() {
   const stimulus =
     baseStimulus(`<h1>${language.prompt.setting_up}</h1>`, true) + photodiodeGhostBox();
 
@@ -26,3 +26,5 @@ export function StartCode() {
     },
   };
 }
+
+export const StartCode = createStartCodeTrial();

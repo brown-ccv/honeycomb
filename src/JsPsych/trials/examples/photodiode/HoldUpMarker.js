@@ -12,7 +12,7 @@ import { language } from '../../../language';
  *
  * @returns
  */
-export function HoldUpMarker() {
+export function createHoldUpMarkerTrial() {
   const stimulus = baseStimulus("<div><h2 id='usb-alert'></h2></div>", true) + photodiodeGhostBox();
   const { prompt } = language;
 
@@ -26,3 +26,5 @@ export function HoldUpMarker() {
     },
   };
 }
+
+export const HoldUpMarker = createHoldUpMarkerTrial();
