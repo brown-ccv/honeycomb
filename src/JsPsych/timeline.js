@@ -32,6 +32,7 @@ export function buildTimeline(jsPsych) {
   const sliderRight = createSliderTrial(sliderLanguage.right);
 
   // Get countdown txt from the language fil and create the trials
+  // TODO: Rename as "first" and "second"
   const countdownLanguage = language.countdown;
   const firstBlockCountdown = createCountdownTrial({ message: countdownLanguage.message1 });
   const secondBlockCountdown = createCountdownTrial({ message: countdownLanguage.message2 });
