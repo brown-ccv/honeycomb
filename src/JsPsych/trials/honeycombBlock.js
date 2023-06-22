@@ -20,9 +20,7 @@ export const defaultBlockSettings = {
  * @returns
  */
 export function generateBlockConditions(conditions, repeats) {
-  const startingOptions = conditions.map((c) => {
-    return _.range(repeats).map(() => c);
-  });
+  const startingOptions = conditions.map((c) => _.range(repeats).map(() => c));
 
   // Randomize the conditions
   return _.shuffle(_.flatten(startingOptions));
@@ -48,9 +46,11 @@ export function createHoneycombBlock({
 } = {}) {
   // TODO: These conditions will be loaded from a config file?
   const blockConditions = generateBlockConditions(conditions, repeatsPerCondition);
+  console.log('createdBlockConditions', blockConditions);
 
   // Create an array of trials from the conditions
   const blockTrials = blockConditions.map((condition) => createHoneycombTrial(condition));
+  console.log('created block trials', blockConditions);
 
   // Create an empty trial that adds the conditions to the JsPsych data object
   // TODO: If I set the conditions in the block trial
@@ -59,7 +59,7 @@ export function createHoneycombBlock({
     type: htmlKeyboardResponse,
     stimulus: '',
     trial_duration: 1,
-    on_finish: ({ data }) => {
+    on_finish: (data) => {
       data.block_settings = blockConditions;
     },
   };
