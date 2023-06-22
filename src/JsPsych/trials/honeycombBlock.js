@@ -21,7 +21,6 @@ export const defaultBlockSettings = {
  */
 export function generateBlockConditions(conditions, repeats) {
   const startingOptions = conditions.map((c) => _.range(repeats).map(() => c));
-
   // Randomize the conditions
   return _.shuffle(_.flatten(startingOptions));
 }
@@ -38,21 +37,18 @@ export function generateBlockConditions(conditions, repeats) {
  */
 // TODO: Implement stroop game, rename as stroopBlock
 export function createHoneycombBlock({
+  // TODO: These conditions will be loaded from a config file?
   conditions = ['a', 'b', 'c'],
   repeatsPerCondition = 1, // number of times every condition is repeated
   isPractice = false,
   isTutorial = false,
   photodiodeActive = false,
 } = {}) {
-  // TODO: These conditions will be loaded from a config file?
+  // Create an array of the conditions to use and build into an array of trials
   const blockConditions = generateBlockConditions(conditions, repeatsPerCondition);
-  console.log('createdBlockConditions', blockConditions);
-
-  // Create an array of trials from the conditions
   const blockTrials = blockConditions.map((condition) => createHoneycombTrial(condition));
-  console.log('created block trials', blockConditions);
 
-  // Create an empty trial that adds the conditions to the JsPsych data object
+  // Create an empty trial that adds the blockConditions to the JsPsych data object
   // TODO: If I set the conditions in the block trial
   // TODO: If I set isPractice, isTutorial, etc will it automatically nest to the child trials?
   const startingTrial = {
@@ -64,15 +60,12 @@ export function createHoneycombBlock({
     },
   };
 
-  // Build the timeline
-  const timeline = [startingTrial, ...blockTrials];
-
   // Return the block as a single, nested, trial
   return {
     type: htmlKeyboardResponse,
     is_practice: isPractice, // TODO: Are these valid in JsPsych?
     is_tutorial: isTutorial, // TODO: Are these valid in JsPsych?
     photodiode_active: photodiodeActive, // TODO: Are these valid in JsPsych?
-    timeline,
+    timeline: [startingTrial, ...blockTrials],
   };
 }
