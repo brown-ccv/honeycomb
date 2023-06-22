@@ -1,1 +1,1 @@
-export { Preamble } from './Preamble';
+export * from './Preamble';

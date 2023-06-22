@@ -1,4 +1,5 @@
 import { Preamble } from './trials/examples';
+import { AgeCheck, SliderCheck } from './trials/examples/survey';
 
 /**
  * Create your custom JsPsych options here. These settings will applied experiment wide.
@@ -21,9 +22,9 @@ export const JSPSYCH_OPTIONS = {
  */
 export function buildTimeline() {
   const timeline = [
-    Preamble(),
-    // ageCheck,
-    // sliderCheck,
+    Preamble,
+    AgeCheck,
+    SliderCheck,
     // countdown({ message: lang.countdown.message1 }),
     // taskBlock(practiceBlock),
     // countdown({ message: lang.countdown.message2 }),

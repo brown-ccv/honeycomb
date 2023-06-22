@@ -2,10 +2,6 @@ import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import htmlButtonResponse from '@jspsych/plugin-html-button-response';
 import { showMessage } from '@brown-ccv/behavioral-task-trials';
 
-// import holdUpMarker from '../trials/holdUpMarker';
-// import startCode from '../trials/startCode';
-// import { lang, config } from '../config/main';
-
 // TODO: Use @signature for imports?
 import { language } from '../../language'; // @language
 import { HoldUpMarker, StartCode } from './photodiode'; // @tasks
@@ -31,7 +27,7 @@ function useOldConfig(newConfig) {
 }
 
 // TODO: Rename as introduction?
-export function Preamble() {
+function createPreambleTrial() {
   const oldConfig = useOldConfig(config);
 
   // Trial that shows the task name with a continue button
@@ -59,3 +55,5 @@ export function Preamble() {
     timeline,
   };
 }
+
+export const Preamble = createPreambleTrial();

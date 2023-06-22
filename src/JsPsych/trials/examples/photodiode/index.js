@@ -1,2 +1,2 @@
-export { HoldUpMarker } from './HoldUpMarker';
-export { StartCode } from './StartCode';
+export * from './HoldUpMarker';
+export * from './StartCode';
