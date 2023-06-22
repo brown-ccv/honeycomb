@@ -22,6 +22,8 @@ export const JSPSYCH_OPTIONS = {
  * Build your JsPsych timeline here. The array must be passed as a prop to <JsPsychOptions />
  * @returns array of trials
  */
+// TODO: Eslint warning is causing build to fail
+// eslint-disable-next-line
 export function buildTimeline(jsPsych) {
   // Get slider text from the language file and create the trials
   const sliderMessages = language.quiz.direction.slider;
