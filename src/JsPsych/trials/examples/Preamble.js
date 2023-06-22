@@ -4,7 +4,7 @@ import { showMessage } from '@brown-ccv/behavioral-task-trials';
 
 // TODO: Use @signature for imports?
 import { language } from '../../language'; // @language
-import { HoldUpMarker, StartCode } from './photodiode'; // @tasks
+import { HoldUpMarker, StartCode } from './photodiode'; // @trials
 
 // TODO: This is a task, how do I pass which config file to use?
 // Hard code for now
