@@ -45,8 +45,8 @@ export function createPreambleTrial() {
   //   TODO: Move to timeline? Expect to add there
   //   if (oldConfig.USE_PHOTODIODE) {
   if (config.equipment.photodiode) {
-    timeline.push(HoldUpMarker());
-    timeline.push(StartCode());
+    timeline.push(HoldUpMarker);
+    timeline.push(StartCode);
   }
 
   return {
