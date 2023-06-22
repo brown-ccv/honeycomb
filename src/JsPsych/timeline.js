@@ -3,6 +3,7 @@ import { language } from './language';
 // TODO: @ import for trials
 import { Preamble, createCountdownTrial, createSliderTrial } from './trials/examples';
 import { AgeCheck } from './trials/examples/survey';
+import { createHoneycombBlock } from './trials/honeycombBlock';
 
 /**
  * Create your custom JsPsych options here. These settings will applied experiment wide.
@@ -37,19 +38,36 @@ export function buildTimeline(jsPsych) {
   const firstBlockCountdown = createCountdownTrial({ message: countdownLanguage.message1 });
   const secondBlockCountdown = createCountdownTrial({ message: countdownLanguage.message2 });
 
+  // Create a tutorial bllock of Honeycomb's custom task
+  const honeycombTutorialBlock = createHoneycombBlock({
+    isTutorial: true,
+    photodiodeActive: false,
+  });
+
+  // Create a practice block of Honeycomb's custom task
+  const honeycombPracticeBlock = createHoneycombBlock({
+    conditions: ['m', 'n'],
+    repeatsPerCondition: 1,
+    isPractice: true,
+  });
+
+  // Create an experiment block
+  const honeycombBlock1 = createHoneycombBlock({
+    repeatsPerCondition: 2,
+  });
+
   // Build the timeline
   const timeline = [
     Preamble,
     AgeCheck,
     sliderLeft,
     sliderRight,
+    honeycombTutorialBlock,
     firstBlockCountdown,
+    honeycombPracticeBlock,
     secondBlockCountdown,
+    honeycombBlock1,
 
-    // countdown({ message: lang.countdown.message1 }),
-    // taskBlock(practiceBlock),
-    // countdown({ message: lang.countdown.message2 }),
-    // taskBlock(exptBlock1),
     // demographics,
     // iusSurvey,
     // debrief,
