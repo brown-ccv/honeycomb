@@ -32,13 +32,12 @@ export function buildTimeline(jsPsych) {
   const sliderLeft = createSliderTrial(sliderLanguage.left);
   const sliderRight = createSliderTrial(sliderLanguage.right);
 
-  // Get countdown txt from the language fil and create the trials
-  // TODO: Rename as "first" and "second"
+  // Get countdown txt from the language fil and create the trials+
   const countdownLanguage = language.countdown;
-  const firstBlockCountdown = createCountdownTrial({ message: countdownLanguage.message1 });
-  const secondBlockCountdown = createCountdownTrial({ message: countdownLanguage.message2 });
+  const firstBlockCountdown = createCountdownTrial({ message: countdownLanguage.first });
+  const secondBlockCountdown = createCountdownTrial({ message: countdownLanguage.second });
 
-  // Create a tutorial bllock of Honeycomb's custom task
+  // Create a tutorial block of Honeycomb's custom task
   const honeycombTutorialBlock = createHoneycombBlock({
     isTutorial: true,
     photodiodeActive: false,
