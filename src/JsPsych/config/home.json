@@ -1,0 +1,11 @@
+{
+  "name": "Honeycomb",
+  "environment": "electron",
+  "equipment": {
+    "eeg": true,
+    "photodiode": true,
+    "audio": true,
+    "camera": true
+  },
+  "config": {}
+}
