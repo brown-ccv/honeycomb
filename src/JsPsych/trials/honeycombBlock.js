@@ -1,29 +1,7 @@
-import _ from 'lodash';
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
+
 import { createHoneycombTrial } from './honeycombTrial';
-
-// TODO: Have these be default values for the function parameter?
-export const defaultBlockSettings = {
-  conditions: ['a', 'b', 'c'],
-  repeatsPerCondition: 1, // number of times every condition is repeated
-  isPractice: false,
-  isTutorial: false,
-  photodiodeActive: false,
-};
-
-// TODO: Should maybe delete this? Is it useful?
-/**
- * Create an array of conditions for each trial of the block.
- * There will be conditions.length * repeats number of trials in the block
- * @param {object} conditions The conditions to be present, 1 trial per condition
- * @param {number} repeats The number of times to repeat each condition, 1 trial per repeat
- * @returns
- */
-export function generateBlockConditions(conditions, repeats) {
-  const startingOptions = conditions.map((c) => _.range(repeats).map(() => c));
-  // Randomize the conditions
-  return _.shuffle(_.flatten(startingOptions));
-}
+import { generateBlockConditions } from '../utils';
 
 /**
  * Build a timeline block of multiple trials of Honeycomb's custom task
@@ -63,9 +41,9 @@ export function createHoneycombBlock({
   // Return the block as a single, nested, trial
   return {
     type: htmlKeyboardResponse,
-    is_practice: isPractice, // TODO: Are these valid in JsPsych?
-    is_tutorial: isTutorial, // TODO: Are these valid in JsPsych?
-    photodiode_active: photodiodeActive, // TODO: Are these valid in JsPsych?
+    isPractice,
+    isTutorial,
+    photodiodeActive,
     timeline: [startingTrial, ...blockTrials],
   };
 }

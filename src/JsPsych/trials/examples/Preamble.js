@@ -1,4 +1,5 @@
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
+import jsPsychInstructions from '@jspsych/plugin-instructions';
+
 import htmlButtonResponse from '@jspsych/plugin-html-button-response';
 import { showMessage } from '@brown-ccv/behavioral-task-trials';
 
@@ -27,6 +28,7 @@ function useOldConfig(newConfig) {
 }
 
 // TODO: Rename as introduction?
+// TODO: Note that instructions can have multiple pages in the same trial https://www.jspsych.org/7.3/plugins/instructions/#examples
 export function createPreambleTrial() {
   const oldConfig = useOldConfig(config);
 
@@ -50,7 +52,7 @@ export function createPreambleTrial() {
   }
 
   return {
-    type: htmlKeyboardResponse,
+    type: jsPsychInstructions,
     stimulus: '',
     timeline,
   };
