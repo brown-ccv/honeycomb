@@ -1,1 +1,1 @@
-export * from './AgeCheck';
+export * from './Demographics';
