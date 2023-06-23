@@ -27,7 +27,6 @@ export function createHoneycombBlock({
   const blockTrials = blockConditions.map((condition) => createHoneycombTrial(condition));
 
   // Create an empty trial that adds the blockConditions to the JsPsych data object
-  // TODO: If I set the conditions in the block trial
   // TODO: If I set isPractice, isTutorial, etc will it automatically nest to the child trials?
   const startingTrial = {
     type: htmlKeyboardResponse,

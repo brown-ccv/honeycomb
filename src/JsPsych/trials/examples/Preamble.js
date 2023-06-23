@@ -3,7 +3,7 @@ import jsPsychInstructions from '@jspsych/plugin-instructions';
 import htmlButtonResponse from '@jspsych/plugin-html-button-response';
 import { showMessage } from '@brown-ccv/behavioral-task-trials';
 
-// TODO: Use @signature for imports?
+// TODO 204: Use @signature for imports?
 import { language } from '../../language'; // @language
 import { HoldUpMarker, StartCode } from './photodiode'; // @trials
 
@@ -27,8 +27,8 @@ function useOldConfig(newConfig) {
   };
 }
 
-// TODO: Rename as introduction?
-// TODO: Note that instructions can have multiple pages in the same trial https://www.jspsych.org/7.3/plugins/instructions/#examples
+// TODO 213: Rename as introduction?
+// TODO 213: Note that instructions can have multiple pages in the same trial https://www.jspsych.org/7.3/plugins/instructions/#examples
 export function createPreambleTrial() {
   const oldConfig = useOldConfig(config);
 

@@ -1,9 +1,8 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
-// TODO: Move these trials into honeycomb
 import { showMessage, fixation } from '@brown-ccv/behavioral-task-trials';
 
-// TODO: Move markup files. Can I leave it here?
+// TODO 211: Move markup files. Can I leave it here?
 import { earningsDisplay } from '../../lib/markup/earnings';
 
 // TODO: This is a task, how do I pass which config file to use?
@@ -12,7 +11,7 @@ import config from '../config/home.json';
 import { EVENT_CODES } from '../constants';
 
 // TEMP: Helper function for interfacing with the old config type
-// TODO: MOve to utils? This will only ever be used internally?
+// TODO: Move to utils? This will only ever be used internally?
 function useOldConfig(newConfig) {
   const { environment, equipment } = newConfig;
 

@@ -1,6 +1,6 @@
-// TODO: @ import for language
+// TODO 204: @ import for language
 import { language } from './language';
-// TODO: @ import for trials
+// TODO 204: @ import for trials
 import { Preamble, createCountdownTrial, createSliderTrial } from './trials/examples';
 import { AgeCheck } from './trials/examples/survey';
 import { createHoneycombBlock } from './trials/honeycombBlock';
@@ -24,7 +24,7 @@ export const JSPSYCH_OPTIONS = {
  * Build your JsPsych timeline here. The array must be passed as a prop to <JsPsychOptions />
  * @returns array of trials
  */
-// TODO: Eslint warning is causing build to fail
+// TODO 207: Eslint warning is causing build to fail
 // eslint-disable-next-line
 export function buildTimeline(jsPsych) {
   // Get slider text from the language file and create the trials
@@ -77,7 +77,5 @@ export function buildTimeline(jsPsych) {
   ];
   return timeline;
 }
-
-// TODO: I think the user needs to confirm if they're going to enable audio?
 
 export const timeline = buildTimeline();

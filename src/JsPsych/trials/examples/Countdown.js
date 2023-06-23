@@ -10,9 +10,9 @@ import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
  * @param {string} message - (optional) message for the countdown. (default: "")
  * @param {number} time - start number for the countdown. (default: 3)
  */
-// TODO: Always use <h3>? Pass message and remove stimulus? Default to undefined instead of empty strings?
-// TODO: Can we do this in 1 trial instead of a nested timeline?
-// TODO: This isn't a keyboard response? Just instructions? Definitely don't need user input
+// TODO 212: Always use <h3>? Pass message and remove stimulus? Default to undefined instead of empty strings?
+// TODO 212: Can we do this in 1 trial instead of a nested timeline?
+// TODO 212: This isn't a keyboard response? Just instructions? Definitely don't need user input
 export function createCountdownTrial({
   duration = 1000, // Default to 1 second per trial
   stimulus = '', // Default empty stimulus
@@ -33,5 +33,5 @@ export function createCountdownTrial({
   };
 }
 
-// TODO: I don't know if this sets the values correctly as i think?
+// TODO 212: I don't know if this sets the values correctly as i think?
 export const Countdown = createCountdownTrial();
