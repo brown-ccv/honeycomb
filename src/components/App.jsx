@@ -106,7 +106,8 @@ function App() {
 
   /** DATA WRITE FUNCTIONS */
 
-  // TODO: Have an object of functions, accessed by the config variable
+  // TODO 157: Separate file for update/finish functions
+  // TODO 157: Have an object of functions, accessed by the config variable
   // Do nothing
   function defaultFunction() {}
   // Add trial data to Firestore

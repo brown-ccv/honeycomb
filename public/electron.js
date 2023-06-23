@@ -184,7 +184,7 @@ ipc.on('trigger', (event, args) => {
 // it is also incrementally saved to the user's app data folder (logged to console)
 
 // INCREMENTAL FILE SAVING
-// TODO: These should be ALL_CAPS
+// TODO 192: These should be ALL_CAPS
 let stream = false;
 let fileCreated = false;
 let preSavePath = '';
@@ -201,7 +201,7 @@ const git = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'config/version.j
  * Abstracts constructing the filepath for saving data for this participant and study.
  * @returns {string} The filepath.
  */
-// TODO: Can we  move this to utils? Separate within this file?
+// TODO 192: Can we  move this to utils? Separate within this file?
 function getSavePath(participantID, studyID) {
   if (participantID !== '' && studyID !== '') {
     const desktop = app.getPath('desktop');
@@ -216,7 +216,7 @@ function getSavePath(participantID, studyID) {
  * @param fileName the name of the file to be saved
  * @returns string
  */
-// TODO: Can we  move this to utils? Separate within this file?
+// TODO 192: Can we  move this to utils? Separate within this file?
 function getFullPath(fileName) {
   return path.join(savePath, fileName);
 }
@@ -224,7 +224,7 @@ function getFullPath(fileName) {
 /**
  * Sync participantID and studyID from the environment variables
  */
-// TODO: Can this be synced with URL search params like on the browser?
+// TODO 192: Can this be synced with URL search params like on the browser?
 ipc.on('syncCredentials', (event) => {
   event.returnValue = {
     envParticipantId: process.env.REACT_APP_PARTICIPANT_ID,
@@ -249,8 +249,8 @@ ipc.on('data', (event, args) => {
     fileCreated = true;
   }
 
-  // TODO: Why is this outside the above if?
-  // TODO: Can we start savePath as undefined?
+  // TODO 192: Why is this outside the above if?
+  // TODO 192: Can we start savePath as undefined?
   if (savePath === '') savePath = getSavePath(participantID, studyID);
 
   // we have a set up stream to write to, write to it!
@@ -270,7 +270,7 @@ ipc.on('data', (event, args) => {
  * Save the video file
  */
 ipc.on('save_video', (event, videoFileName, buffer) => {
-  // TODO: Can we start savePath as undefined?
+  // TODO 192: Can we start savePath as undefined?
   if (savePath === '') savePath = getSavePath(participantID, studyID);
 
   if (VIDEO) {

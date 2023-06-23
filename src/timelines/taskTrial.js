@@ -1,9 +1,11 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import { showMessage, fixation } from '@brown-ccv/behavioral-task-trials';
-import { config, eventCodes } from '../config/main';
 
+import { config } from '../config/main';
+import { eventCodes } from '../config/trigger';
 import { earningsDisplay } from '../lib/markup/earnings';
 
+// TODO 162: Rename as the specific trial
 function taskTrial(blockSettings, blockDetails, condition) {
   // timeline
   const timeline = [

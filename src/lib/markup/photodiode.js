@@ -10,7 +10,7 @@ if (config.USE_ELECTRON) {
 }
 
 // Relies on styling in index.css, generate PD spot
-function photodiodeGhostBox() {
+export function photodiodeGhostBox() {
   const class_ = config.USE_PHOTODIODE ? 'visible' : 'invisible';
 
   const markup = `<div class="photodiode-box ${class_}" id="photodiode-box">
@@ -19,7 +19,7 @@ function photodiodeGhostBox() {
   return markup;
 }
 
-function pdSpotEncode(taskCode) {
+export function pdSpotEncode(taskCode) {
   function pulseFor(ms, callback) {
     $('.photodiode-spot').css({ 'background-color': 'black' });
     setTimeout(() => {
@@ -46,5 +46,3 @@ function pdSpotEncode(taskCode) {
     if (ipcRenderer) ipcRenderer.send('trigger', taskCode);
   }
 }
-
-export { photodiodeGhostBox, pdSpotEncode };

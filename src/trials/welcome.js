@@ -3,7 +3,7 @@ import { lang } from '../config/main';
 import { photodiodeGhostBox } from '../lib/markup/photodiode';
 import { baseStimulus } from '../lib/markup/stimuli';
 
-// TODO: Pull into its own file
+// TODO 162: Pull into its own file
 function pleaseBiggen() {
   const stimulus =
     baseStimulus(`<h1>${lang.welcome.large_window}</h1>`, true) + photodiodeGhostBox();

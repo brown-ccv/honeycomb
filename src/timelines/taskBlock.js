@@ -2,7 +2,7 @@ import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import taskTrial from './taskTrial';
 import { generateStartingOptions } from '../lib/taskUtils';
 
-// TODO: Rename as function?
+// TODO 162: Rename as function?
 function taskBlock(blockSettings) {
   // initialize block
   const startingOpts = generateStartingOptions(blockSettings);

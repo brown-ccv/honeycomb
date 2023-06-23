@@ -1,5 +1,7 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import { eventCodes, lang, audioCodes } from '../config/main';
+
+import { lang, audioCodes } from '../config/main';
+import { eventCodes } from '../config/trigger';
 import { photodiodeGhostBox, pdSpotEncode } from '../lib/markup/photodiode';
 import { baseStimulus } from '../lib/markup/stimuli';
 import { beep } from '../lib/utils';

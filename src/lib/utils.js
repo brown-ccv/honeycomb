@@ -4,7 +4,7 @@ import requireContext from 'require-context.macro';
  * Delay program execution
  * @param {number} ms Time to sleep for in milliseconds
  */
-function sleep(ms) {
+export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -14,7 +14,7 @@ function sleep(ms) {
  * @param {number} offset Maximum jitter offset
  * @returns
  */
-function jitter(base, offset) {
+export function jitter(base, offset) {
   return base + Math.floor(Math.random() * Math.floor(offset));
 }
 
@@ -22,14 +22,14 @@ function jitter(base, offset) {
  * Add a random number between 0 and 50 to the base number
  * @param {number} base Starting number
  */
-function jitter50(base) {
+export function jitter50(base) {
   return jitter(base, 50);
 }
 
 /**
  * Flips a coin
  */
-function randomTrue() {
+export function randomTrue() {
   return Math.random() > 0.5;
 }
 
@@ -37,7 +37,7 @@ function randomTrue() {
  * Copies a deeply nested object
  * @param {Object} obj Object to be copied
  */
-function deepCopy(obj) {
+export function deepCopy(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
@@ -45,7 +45,7 @@ function deepCopy(obj) {
  * Format a number as a US dollar amount
  * @param {number} amount Dollar amount
  */
-function formatDollars(amount) {
+export function formatDollars(amount) {
   return '$' + parseFloat(amount).toFixed(2);
 }
 
@@ -54,8 +54,8 @@ function formatDollars(amount) {
  * @param {*} trial The trial to add a wait period to
  * @param {*} waitTime The amount of time to wait by
  */
-// TODO: This should be a trial not a utility? It's adding a separate trial in and of itself
-function generateWaitSet(trial, waitTime) {
+// TODO 162: This should be a trial not a utility? It's adding a separate trial in and of itself
+export function generateWaitSet(trial, waitTime) {
   const waitTrial = Object.assign({}, trial);
   waitTrial.trial_duration = waitTime;
   waitTrial.response_ends_trial = false;
@@ -68,7 +68,7 @@ function generateWaitSet(trial, waitTime) {
  * Starts the JsPsych keyboard response listener
  * @param  jsPsych The jsPsych instance running the task.
  */
-function startKeypressListener(jsPsych) {
+export function startKeypressListener(jsPsych) {
   function keypressResponse(info) {
     const data = { key_press: info.key };
     jsPsych.finishTrial(data);
@@ -94,22 +94,23 @@ function startKeypressListener(jsPsych) {
  * @param {Object} r
  * @returns
  */
-function importAll(r) {
+export function importAll(r) {
   function importImageByName(allImages, imageName) {
     const friendlyName = imageName.replace('./', '');
     return { ...allImages, [friendlyName]: r(imageName) };
   }
   return r.keys().reduce(importImageByName, {});
 }
-// TODO: move to constants file, ALL_CAPS
-const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
+
+// TODO 159: move to constants file, ALL_CAPS
+export const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
 
 /**
  * Get a query parameter out of the window's URL
  * @param {*} variable The key to parse
  */
-// TODO: Can this just use URLSearchParams?
-function getQueryVariable(variable) {
+// TODO 199: Can this just use URLSearchParams?
+export function getQueryVariable(variable) {
   const query = window.location.search.substring(1);
   const vars = query.split('&');
   for (let i = 0; i < vars.length; i++) {
@@ -121,7 +122,7 @@ function getQueryVariable(variable) {
 /**
  * Gets the getProlificId from the query string
  */
-function getProlificId() {
+export function getProlificId() {
   return getQueryVariable('PROLIFIC_PID');
 }
 
@@ -129,7 +130,7 @@ function getProlificId() {
  * Emits an audible beep
  * @param {*} audioCodes The type/frequency of the beep
  */
-function beep(audioCodes) {
+export function beep(audioCodes) {
   const context = new AudioContext();
   const o = context.createOscillator();
   const g = context.createGain();
@@ -141,17 +142,3 @@ function beep(audioCodes) {
   o.start();
   o.stop(context.currentTime + 0.4);
 }
-
-export {
-  sleep,
-  jitter,
-  jitter50,
-  randomTrue,
-  deepCopy,
-  formatDollars,
-  generateWaitSet,
-  images,
-  startKeypressListener,
-  getProlificId,
-  beep,
-};

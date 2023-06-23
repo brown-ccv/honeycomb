@@ -67,7 +67,7 @@ function JsPsychExperiment({
   }
 
   useEffect(() => {
-    // TODO: useLayoutEffect callbacks might be even more similar.
+    // TODO 193: useLayoutEffect callbacks might be even more similar.
     window.addEventListener('keyup', handleKeyEvent, true);
     window.addEventListener('keydown', handleKeyEvent, true);
     jsPsych.run(timeline);
