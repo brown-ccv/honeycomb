@@ -13,7 +13,7 @@ import { generateBlockConditions } from '../utils';
  * @param {number} isTutorial - Whether or not the block is a tutorial (default: false)
  * @param {number} photodiodeActive - Whether or not photodiode should be active (default: false)
  */
-// TODO: Implement stroop game, rename as stroopBlock
+// TODO 210: Implement stroop game, rename as stroopBlock
 export function createHoneycombBlock({
   // TODO: These conditions will be loaded from a config file?
   conditions = ['a', 'b', 'c'],

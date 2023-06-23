@@ -31,26 +31,26 @@ function useOldConfig(newConfig) {
 /**
  * Create a single trial of honeycomb's custom task
  */
-// TODO: Implement stroop game, rename as stroopTrial
+// TODO 210: Implement stroop game, rename as stroopTrial
 export function createHoneycombTrial(condition) {
   const oldConfig = useOldConfig(config);
   const trials = [
     // Display the fixation dot
-    // TODO: Bring fixation trial into honeycomb
+    // TODO 208: Bring fixation trial into honeycomb
     fixation(oldConfig, { duration: 650 }),
     // Display the condition
-    // TODO: Bring showMessage trial into honeycomb
+    // TODO 209: Bring showMessage trial into honeycomb
     showMessage(oldConfig, {
       message: condition, // TODO: This is undefined?
       onstart: true,
       taskCode: EVENT_CODES.evidence,
     }),
     // Display the next fixation dot
-    // TODO: Bring fixation trial into honeycomb
+    // TODO 208: Bring fixation trial into honeycomb
     fixation(oldConfig, { duration: 650 }),
 
     // Display the user's earnings for the trial
-    // TODO: Bring showMessage trial into honeycomb
+    // TODO 209: Bring showMessage trial into honeycomb
     showMessage(oldConfig, {
       stimulus: earningsDisplay(Math.random()),
       taskCode: EVENT_CODES.show_earnings,
