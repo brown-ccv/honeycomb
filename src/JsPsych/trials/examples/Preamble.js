@@ -2,13 +2,9 @@ import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import htmlButtonResponse from '@jspsych/plugin-html-button-response';
 import { showMessage } from '@brown-ccv/behavioral-task-trials';
 
-// import holdUpMarker from '../trials/holdUpMarker';
-// import startCode from '../trials/startCode';
-// import { lang, config } from '../config/main';
-
 // TODO: Use @signature for imports?
 import { language } from '../../language'; // @language
-import { HoldUpMarker, StartCode } from './photodiode'; // @tasks
+import { HoldUpMarker, StartCode } from './photodiode'; // @trials
 
 // TODO: This is a task, how do I pass which config file to use?
 // Hard code for now
@@ -31,7 +27,7 @@ function useOldConfig(newConfig) {
 }
 
 // TODO: Rename as introduction?
-export function Preamble() {
+export function createPreambleTrial() {
   const oldConfig = useOldConfig(config);
 
   // Trial that shows the task name with a continue button
@@ -49,8 +45,8 @@ export function Preamble() {
   //   TODO: Move to timeline? Expect to add there
   //   if (oldConfig.USE_PHOTODIODE) {
   if (config.equipment.photodiode) {
-    timeline.push(HoldUpMarker());
-    timeline.push(StartCode());
+    timeline.push(HoldUpMarker);
+    timeline.push(StartCode);
   }
 
   return {
@@ -59,3 +55,5 @@ export function Preamble() {
     timeline,
   };
 }
+
+export const Preamble = createPreambleTrial();

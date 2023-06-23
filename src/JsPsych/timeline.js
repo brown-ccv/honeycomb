@@ -1,4 +1,7 @@
-import { Preamble } from './trials/examples';
+import { language } from './language';
+// TODO: @ import for trials
+import { Preamble, createSliderTrial } from './trials/examples';
+import { AgeCheck } from './trials/examples/survey';
 
 /**
  * Create your custom JsPsych options here. These settings will applied experiment wide.
@@ -19,11 +22,20 @@ export const JSPSYCH_OPTIONS = {
  * Build your JsPsych timeline here. The array must be passed as a prop to <JsPsychOptions />
  * @returns array of trials
  */
-export function buildTimeline() {
+// TODO: Eslint warning is causing build to fail
+// eslint-disable-next-line
+export function buildTimeline(jsPsych) {
+  // Get slider text from the language file and create the trials
+  const sliderMessages = language.quiz.direction.slider;
+  const sliderLeft = createSliderTrial(sliderMessages.left);
+  const sliderRight = createSliderTrial(sliderMessages.right);
+
+  // Build the timeline
   const timeline = [
-    Preamble(),
-    // ageCheck,
-    // sliderCheck,
+    Preamble,
+    AgeCheck,
+    sliderLeft,
+    sliderRight,
     // countdown({ message: lang.countdown.message1 }),
     // taskBlock(practiceBlock),
     // countdown({ message: lang.countdown.message2 }),
@@ -40,4 +52,5 @@ export function buildTimeline() {
 }
 
 // TODO: I think the user needs to confirm if they're going to enable audio?
-// TODO: Is there a way to be able to use the trials without having to call them as a function? Like a react component?
+
+export const timeline = buildTimeline();

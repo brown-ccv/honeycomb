@@ -1,22 +1,10 @@
 import htmlButtonResponse from '@jspsych/plugin-html-button-response';
 import surveyMultiselect from '@jspsych/plugin-survey-multi-select';
 import { lang, config } from '../config/main';
-import { survey, slider, multiSurvey, showMessage } from '@brown-ccv/behavioral-task-trials';
+import { survey, multiSurvey, showMessage } from '@brown-ccv/behavioral-task-trials';
 
 // TODO 162: Split each question into its own function?
 // TODO 162: Add trial for loading a prolific questionnaire?
-
-// Age Check
-// TODO 162: Separate function
-const ask = lang.quiz.ask.age;
-const res = lang.quiz.answer.age;
-const stmAge = `<div class='instructions'><h1>${ask}<br><b>${res}</b></div>`;
-const ageCheck = survey({ stimulus: stmAge });
-
-// Slider Check
-// TODO 162: Separate function
-const stmSl = lang.quiz.direction.slider.right;
-const sliderCheck = slider(stmSl);
 
 const abstain = `${lang.quiz.answer.abstain}`; // give people choice to abstain
 // Survey page headers
@@ -143,4 +131,4 @@ const demographics = {
   ],
 };
 
-export { ageCheck, sliderCheck, iusSurvey, debrief, demographics };
+export { iusSurvey, debrief, demographics };

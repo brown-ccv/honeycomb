@@ -2,6 +2,8 @@ import { config } from '../../config/main';
 import { eventCodes } from '../../config/trigger';
 import $ from 'jquery';
 
+// TODO: behavior-task-trials exports these as the trial option?
+
 // conditionally load electron and psiturk based on MTURK config variable
 let ipcRenderer = false;
 if (config.USE_ELECTRON) {

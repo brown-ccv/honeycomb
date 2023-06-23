@@ -24,8 +24,9 @@ module.exports = {
   plugins: ['react', 'prettier'],
   extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
   rules: {
-    'react/prop-types': 'off',
+    'react/prop-types': 'off', // TODO: Add prop validation and remove this line
     'prettier/prettier': 'warn',
+    'no-unused-vars': 'warn',
   },
   overrides: [{ files: ['*.jsx', '*.js'] }],
 };
