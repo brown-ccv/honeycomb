@@ -32,7 +32,7 @@ function useOldConfig(newConfig) {
  * Create a single trial of honeycomb's custom task
  */
 // TODO: Implement stroop game, rename as stroopTrial
-export function createHoneycombTrial(blockSettings, blockDetails, condition) {
+export function createHoneycombTrial(condition) {
   const oldConfig = useOldConfig(config);
   const trials = [
     // Display the fixation dot
@@ -41,7 +41,7 @@ export function createHoneycombTrial(blockSettings, blockDetails, condition) {
     // Display the condition
     // TODO: Bring showMessage trial into honeycomb
     showMessage(oldConfig, {
-      message: condition,
+      message: condition, // TODO: This is undefined?
       onstart: true,
       taskCode: EVENT_CODES.evidence,
     }),
