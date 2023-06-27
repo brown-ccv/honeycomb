@@ -1,19 +1,46 @@
-import { config } from '../../config/main';
-import { eventCodes } from '../../config/trigger';
 import $ from 'jquery';
+
+import { EVENT_CODES } from '../../JsPsych/constants';
+
+// TODO: This is a task, how do I pass which config file to use?
+// Hard code for now
+import config from '../../JsPsych/config/home.json';
+
+// TEMP: Helper function for interfacing with the old config type
+function useOldConfig(newConfig) {
+  const { environment, equipment } = newConfig;
+
+  return {
+    USE_ELECTRON: environment === 'electron',
+    USE_FIREBASE: environment === 'firebase',
+    USE_MTURK: false, // TODO: What's the logic for this? Is it its own environment?
+    USE_PROLIFIC: false, // We'll be removing prolific -> passed as URLSearchParam
+    USE_PHOTODIODE: equipment.photodiode ? true : false,
+    USE_EEG: equipment.eeg ? true : false,
+    USE_VOLUME: equipment.audio ? true : false,
+    USE_CAMERA: equipment.camera ? true : false,
+  };
+}
+
+const oldConfig = useOldConfig(config);
 
 // TODO: behavior-task-trials exports these as the trial option?
 
 // conditionally load electron and psiturk based on MTURK config variable
 let ipcRenderer = false;
-if (config.USE_ELECTRON) {
-  const electron = window.require('electron');
-  ipcRenderer = electron.ipcRenderer;
+try {
+  if (oldConfig.USE_ELECTRON) {
+    const electron = window.require('electron');
+    ipcRenderer = electron.ipcRenderer;
+  }
+} catch (e) {
+  console.warn('window.require is not available');
+  console.error(e);
 }
 
 // Relies on styling in index.css, generate PD spot
 export function photodiodeGhostBox() {
-  const class_ = config.USE_PHOTODIODE ? 'visible' : 'invisible';
+  const class_ = oldConfig.USE_PHOTODIODE ? 'visible' : 'invisible';
 
   const markup = `<div class="photodiode-box ${class_}" id="photodiode-box">
       <span id="photodiode-spot" class="photodiode-spot"></span>
@@ -40,10 +67,10 @@ export function pdSpotEncode(taskCode) {
     }
   }
 
-  if (config.USE_PHOTODIODE) {
+  if (oldConfig.USE_PHOTODIODE) {
     const blinkTime = 40;
     let numBlinks = taskCode;
-    if (taskCode < eventCodes.open_task) numBlinks = 1;
+    if (taskCode < EVENT_CODES.open_task) numBlinks = 1;
     repeatPulseFor(blinkTime, numBlinks);
     if (ipcRenderer) ipcRenderer.send('trigger', taskCode);
   }

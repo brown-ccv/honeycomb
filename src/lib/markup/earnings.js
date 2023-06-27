@@ -1,4 +1,4 @@
-import { formatDollars } from '../utils';
+import { formatDollars } from '../../JsPsych/utils';
 
 // TODO 162: Have a markup.js file, consolidate these other files
 export function earningsDisplay(earnings) {
