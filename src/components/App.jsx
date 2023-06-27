@@ -76,6 +76,7 @@ function App() {
       } catch (e) {
         console.warn('window.require is not available');
         console.error(e);
+        return; // Early return
       }
 
       ipcRenderer.send('updateEnvironmentVariables', oldConfig);
