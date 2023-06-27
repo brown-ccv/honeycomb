@@ -68,7 +68,15 @@ function App() {
 
     // If on desktop
     if (oldConfig.USE_ELECTRON) {
-      const { ipcRenderer } = window.require('electron');
+      // conditionally load electron and psiturk based on MTURK config variable
+      let ipcRenderer = false;
+      try {
+        const electron = window.require('electron');
+        ipcRenderer = electron.ipcRenderer;
+      } catch (e) {
+        console.warn('window.require is not available');
+        console.error(e);
+      }
 
       ipcRenderer.send('updateEnvironmentVariables', oldConfig);
 
