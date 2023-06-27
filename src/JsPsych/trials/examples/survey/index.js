@@ -1,1 +1,1 @@
-export * from './Demographics';
+export * from './IUS';

@@ -6,7 +6,7 @@ import { createHoneycombBlock } from './trials/honeycombBlock';
 
 // TEMP
 
-import { demographics } from '../trials/quizTrials';
+import { iusSurvey } from '../trials/quizTrials';
 import { Survey } from './trials/examples/survey';
 
 /**
@@ -71,9 +71,8 @@ export function buildTimeline(jsPsych) {
     // secondBlockCountdown,
     // honeycombBlock1,
 
-    Survey,
-
-    demographics,
+    // demographics,
+    iusSurvey,
     // iusSurvey,
     // debrief,
     // showMessage(config, {
