@@ -1,20 +1,9 @@
 // TODO 204: @ import for language
 import { language } from './language';
-// TODO 204: @ import for trials
-import {
-  Preamble,
-  createCountdownTrial,
-  createSliderTrial,
-  AgeCheck,
-  EndExperiment,
-  AdjustVolume,
-  LargeWindow,
-  WelcomeMessage,
-} from './trials/examples';
-import { createHoneycombBlock } from './trials/honeycombBlock';
 
-import { DebriefSurvey, IusSurvey } from './trials/examples/survey';
-import { DemographicsSurvey } from './trials/examples/survey/Demographics';
+// TODO 204: @ import for trials
+import { Preamble, createCountdownTrial, EndExperiment } from './trials/examples';
+import { createHoneycombBlock } from './trials/honeycombBlock';
 
 /**
  * Create your custom JsPsych options here. These settings will applied experiment wide.
@@ -39,9 +28,9 @@ export const JSPSYCH_OPTIONS = {
 // eslint-disable-next-line
 export function buildTimeline(jsPsych) {
   // Get slider text from the language file and create the trials
-  const sliderLanguage = language.quiz.direction.slider;
-  const sliderLeft = createSliderTrial(sliderLanguage.left);
-  const sliderRight = createSliderTrial(sliderLanguage.right);
+  // const sliderLanguage = language.quiz.direction.slider;
+  // const sliderLeft = createSliderTrial(sliderLanguage.left);
+  // const sliderRight = createSliderTrial(sliderLanguage.right);
 
   // Get countdown txt from the language fil and create the trials+
   const countdownLanguage = language.countdown;
@@ -69,19 +58,11 @@ export function buildTimeline(jsPsych) {
   // Build the timeline
   const timeline = [
     Preamble,
-    LargeWindow,
-    WelcomeMessage,
-    // AgeCheck,
-    // sliderLeft,
-    // sliderRight,
-    // honeycombTutorialBlock,
-    // firstBlockCountdown,
-    // honeycombPracticeBlock,
-    // secondBlockCountdown,
-    // honeycombBlock1,
-    // DemographicsSurvey,
-    // IusSurvey,
-    DebriefSurvey, // "Confirm Completion" button
+    honeycombTutorialBlock,
+    firstBlockCountdown,
+    honeycombPracticeBlock,
+    secondBlockCountdown,
+    honeycombBlock1,
     EndExperiment, // Task complete message
   ];
   return timeline;
