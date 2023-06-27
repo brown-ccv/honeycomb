@@ -8,6 +8,8 @@ import {
   AgeCheck,
   EndExperiment,
   AdjustVolume,
+  LargeWindow,
+  WelcomeMessage,
 } from './trials/examples';
 import { createHoneycombBlock } from './trials/honeycombBlock';
 
@@ -67,7 +69,8 @@ export function buildTimeline(jsPsych) {
   // Build the timeline
   const timeline = [
     Preamble,
-    AdjustVolume,
+    LargeWindow,
+    WelcomeMessage,
     // AgeCheck,
     // sliderLeft,
     // sliderRight,

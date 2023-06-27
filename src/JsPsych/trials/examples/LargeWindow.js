@@ -1,5 +1,6 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import { lang } from '../../../config/main';
+
+import { language } from '../../language';
 import { photodiodeGhostBox } from '../../../lib/markup/photodiode';
 import { baseStimulus } from '../../../lib/markup/stimuli';
 
@@ -7,14 +8,15 @@ import { baseStimulus } from '../../../lib/markup/stimuli';
  * Trial that prompts the user to enlarge their window
  * @returns
  */
+// TODO: JsPsych now has a fullscreen plugin https://www.jspsych.org/7.3/plugins/fullscreen/
 export function createLargeWindowTrial() {
   const stimulus =
-    baseStimulus(`<h1>${lang.welcome.large_window}</h1>`, true) + photodiodeGhostBox();
+    baseStimulus(`<h1>${language.welcome.large_window}</h1>`, true) + photodiodeGhostBox();
 
   return {
     type: htmlKeyboardResponse,
     stimulus,
-    prompt: lang.prompt.continue.press,
+    prompt: language.prompt.continue.press,
     response_ends_trial: true,
   };
 }
