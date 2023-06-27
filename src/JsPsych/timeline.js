@@ -11,6 +11,7 @@ import {
 import { createHoneycombBlock } from './trials/honeycombBlock';
 
 import { DebriefSurvey, IusSurvey } from './trials/examples/survey';
+import { DemographicsSurvey } from './trials/examples/survey/Demographics';
 
 /**
  * Create your custom JsPsych options here. These settings will applied experiment wide.
@@ -64,20 +65,19 @@ export function buildTimeline(jsPsych) {
 
   // Build the timeline
   const timeline = [
-    // Preamble,
-    // AgeCheck,
-    // sliderLeft,
-    // sliderRight,
-    // honeycombTutorialBlock,
-    // firstBlockCountdown,
-    // honeycombPracticeBlock,
-    // secondBlockCountdown,
-    // honeycombBlock1,
-
-    // demographics,
-    // IusSurvey,
+    Preamble,
+    AgeCheck,
+    sliderLeft,
+    sliderRight,
+    honeycombTutorialBlock,
+    firstBlockCountdown,
+    honeycombPracticeBlock,
+    secondBlockCountdown,
+    honeycombBlock1,
+    DemographicsSurvey,
+    IusSurvey,
     DebriefSurvey, // "Confirm Completion" button
-    EndExperiment, // Task complete button
+    EndExperiment, // Task complete message
   ];
   return timeline;
 }
