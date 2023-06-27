@@ -49,4 +49,4 @@ export function createIUSSurvey() {
   });
 }
 
-export const IUSSurvey = createIUSSurvey();
+export const IusSurvey = createIUSSurvey();
