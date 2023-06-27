@@ -68,16 +68,16 @@ export function buildTimeline(jsPsych) {
   const timeline = [
     Preamble,
     AdjustVolume,
-    // AgeCheck,
-    // sliderLeft,
-    // sliderRight,
-    // honeycombTutorialBlock,
-    // firstBlockCountdown,
-    // honeycombPracticeBlock,
-    // secondBlockCountdown,
-    // honeycombBlock1,
-    // DemographicsSurvey,
-    // IusSurvey,
+    AgeCheck,
+    sliderLeft,
+    sliderRight,
+    honeycombTutorialBlock,
+    firstBlockCountdown,
+    honeycombPracticeBlock,
+    secondBlockCountdown,
+    honeycombBlock1,
+    DemographicsSurvey,
+    IusSurvey,
     DebriefSurvey, // "Confirm Completion" button
     EndExperiment, // Task complete message
   ];
