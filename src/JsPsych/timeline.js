@@ -7,6 +7,7 @@ import {
   createSliderTrial,
   AgeCheck,
   EndExperiment,
+  AdjustVolume,
 } from './trials/examples';
 import { createHoneycombBlock } from './trials/honeycombBlock';
 
@@ -66,16 +67,17 @@ export function buildTimeline(jsPsych) {
   // Build the timeline
   const timeline = [
     Preamble,
-    AgeCheck,
-    sliderLeft,
-    sliderRight,
-    honeycombTutorialBlock,
-    firstBlockCountdown,
-    honeycombPracticeBlock,
-    secondBlockCountdown,
-    honeycombBlock1,
-    DemographicsSurvey,
-    IusSurvey,
+    AdjustVolume,
+    // AgeCheck,
+    // sliderLeft,
+    // sliderRight,
+    // honeycombTutorialBlock,
+    // firstBlockCountdown,
+    // honeycombPracticeBlock,
+    // secondBlockCountdown,
+    // honeycombBlock1,
+    // DemographicsSurvey,
+    // IusSurvey,
     DebriefSurvey, // "Confirm Completion" button
     EndExperiment, // Task complete message
   ];
