@@ -1,8 +1,8 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
 import { language } from '../../language';
-import { photodiodeGhostBox } from '../../../lib/markup/photodiode';
-import { baseStimulus } from '../../../lib/markup/stimuli';
+import { photodiodeGhostBox } from '../..//markup/photodiode';
+import { baseStimulus } from '../..//markup/stimuli';
 
 /**
  * Displays a welcome emssage

@@ -1,8 +1,8 @@
 import htmlButtonResponse from '@jspsych/plugin-html-button-response';
 
 // TODO: Move markup to JsPsych?
-import { photodiodeGhostBox } from '../../../../lib/markup/photodiode';
-import { baseStimulus } from '../../../../lib/markup/stimuli';
+import { photodiodeGhostBox } from '../../..//markup/photodiode';
+import { baseStimulus } from '../../..//markup/stimuli';
 
 import { language } from '../../../language';
 import { TASK_NAME } from '../../../constants';
