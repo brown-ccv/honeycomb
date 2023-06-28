@@ -2,9 +2,6 @@ import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
 import { showMessage, fixation } from '@brown-ccv/behavioral-task-trials';
 
-// TODO 211: Move markup files. Can I leave it here?
-import { earningsDisplay } from '..//markup/earnings';
-
 // TODO: This is a task, how do I pass which config file to use?
 // Hard code for now
 import config from '../config/home.json';
