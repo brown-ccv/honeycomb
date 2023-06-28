@@ -2,7 +2,7 @@ import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
 // TODO: Move markup to JsPsych?
 import { photodiodeGhostBox } from '../../../markup/photodiode';
-import { baseStimulus } from '../../../markup/stimuli';
+import { baseStimulus } from '../../../markup/baseStimulus';
 
 import { language } from '../../../language';
 

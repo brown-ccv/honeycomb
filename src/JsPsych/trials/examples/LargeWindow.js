@@ -1,8 +1,8 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
 import { language } from '../../language';
-import { photodiodeGhostBox } from '../../partials/photodiode';
-import { baseStimulus } from '../../partials/stimuli';
+import { photodiodeGhostBox } from './partials/photodiode';
+import { baseStimulus } from './partials/baseStimulus';
 
 /**
  * Trial that prompts the user to enlarge their window

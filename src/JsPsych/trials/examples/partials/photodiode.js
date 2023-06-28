@@ -1,10 +1,10 @@
 import $ from 'jquery';
 
-import { EVENT_CODES } from '../constants';
+import { EVENT_CODES } from '../../../constants';
 
 // TODO: This is a task, how do I pass which config file to use?
 // Hard code for now
-import config from '../config/home.json';
+import config from '../../../config/home.json';
 
 // TEMP: Helper function for interfacing with the old config type
 function useOldConfig(newConfig) {
@@ -39,6 +39,10 @@ try {
 }
 
 // Relies on styling in index.css, generate PD spot
+/**
+ * Generates a
+ * @returns
+ */
 // TODO: Refactor to take USE_PHOTODIODE as a parameter
 export function photodiodeGhostBox() {
   const class_ = oldConfig.USE_PHOTODIODE ? 'visible' : 'invisible';
@@ -77,3 +81,26 @@ export function pdSpotEncode(taskCode) {
     if (ipcRenderer) ipcRenderer.send('trigger', taskCode);
   }
 }
+
+/* CSS Classes used by this file
+
+.photodiode-box {
+  position: fixed;
+  bottom: 3px;
+  right: 3px;
+  display: flex;
+  outline: 3px solid rgb(80, 80, 80);
+  margin: auto;
+  height: 50px;
+  width: 50px;
+}
+
+.photodiode-spot {
+  width: 50px;
+  height: 50px;
+  background-color: black;
+  border-radius: 50%;
+  position: absolute;
+}
+
+*/

@@ -1,7 +1,7 @@
 import htmlButtonResponse from '@jspsych/plugin-html-button-response';
 
-import { photodiodeGhostBox } from '../../../partials/photodiode';
-import { baseStimulus } from '../../../partials/stimuli';
+import { photodiodeGhostBox } from '../partials/photodiode';
+import { baseStimulus } from '../partials/baseStimulus';
 
 import { language } from '../../../language';
 
