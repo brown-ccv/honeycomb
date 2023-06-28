@@ -9,6 +9,7 @@ import { earningsDisplay } from '..//markup/earnings';
 // Hard code for now
 import config from '../config/home.json';
 import { EVENT_CODES } from '../constants';
+import { formatDollars } from '../utils';
 
 // TEMP: Helper function for interfacing with the old config type
 // TODO: Move to utils? This will only ever be used internally?
@@ -25,6 +26,19 @@ function useOldConfig(newConfig) {
     USE_VOLUME: equipment.audio ? true : false,
     USE_CAMERA: equipment.camera ? true : false,
   };
+}
+
+/**
+ * Create an HTML stimulus for displaying the participant's current earnings
+ * @param {number} earnings
+ * @returns
+ */
+// TODO: This may be easier without showMessage? Using JsPsych classes?
+function earningsStimulus(earnings) {
+  const bclass = earnings >= 0 ? 'success' : 'danger';
+  return `<div class='center_container'>
+    <h1 class='text-${bclass}'>${formatDollars(earnings)}</h1>
+    </div>`;
 }
 
 /**
@@ -51,7 +65,7 @@ export function createHoneycombTrial(condition) {
     // Display the user's earnings for the trial
     // TODO 209: Bring showMessage trial into honeycomb
     showMessage(oldConfig, {
-      stimulus: earningsDisplay(Math.random()),
+      stimulus: earningsStimulus(Math.random()),
       taskCode: EVENT_CODES.show_earnings,
     }),
   ];
