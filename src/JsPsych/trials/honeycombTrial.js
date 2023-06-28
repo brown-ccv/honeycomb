@@ -32,9 +32,9 @@ function useOldConfig(newConfig) {
  */
 // TODO: This may be easier without showMessage? Using JsPsych classes?
 function earningsStimulus(earnings) {
-  const bclass = earnings >= 0 ? 'success' : 'danger';
+  const class_ = earnings >= 0 ? 'success' : 'danger';
   return `<div class='center_container'>
-    <h1 class='text-${bclass}'>${formatDollars(earnings)}</h1>
+    <h1 class='text-${class_}'>${formatDollars(earnings)}</h1>
     </div>`;
 }
 

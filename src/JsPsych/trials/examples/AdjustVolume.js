@@ -1,7 +1,7 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
 import { language } from '../../language';
-import { baseStimulus } from '../..//markup/stimuli';
+import { baseStimulus } from '../../partials/stimuli';
 
 /**
  * JsPsych trial that prompts the user to adjust their volume
