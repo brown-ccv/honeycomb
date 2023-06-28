@@ -55,8 +55,6 @@ function JsPsychExperiment({
   // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
   // ? I wonder if it makes the most sense to just have the user create and pass the jsPsych object?
   const timeline = buildTimeline(jsPsych);
-  // TODO: useCamera prop needs to add camera trials internally
-  // TODO: Add isFullscreen prop that adds fullscreen trials internally
   // TODO: I think the user needs to confirm if they're going to enable audio?
 
   // Set up event and lifecycle callbacks to start and stop jspsych.
