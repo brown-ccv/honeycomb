@@ -11,21 +11,20 @@ import JsPsychExperiment from './JsPsychExperiment';
 import Login from './Login';
 import Error from './Error';
 
-// TODO: This is a task, how do I pass which config file to use?
+// TODO 226: This is a task, how do I pass which config file to use?
 // Hard code for now
 import config from '../JsPsych/config/home.json';
 import { TASK_VERSION } from '../JsPsych/constants';
 import { getProlificId } from '../JsPsych/utils';
 
-// TEMP: Helper function for interfacing with the old config type
 function useOldConfig(newConfig) {
   const { environment, equipment } = newConfig;
 
   return {
     USE_ELECTRON: environment === 'electron',
     USE_FIREBASE: environment === 'firebase',
-    USE_MTURK: false, // TODO: What's the logic for this? Is it its own environment?
-    USE_PROLIFIC: false, // We'll be removing prolific -> passed as URLSearchParam
+    USE_MTURK: false, // TODO 229: What's the logic for this? Is it its own environment?
+    USE_PROLIFIC: false, // TODO 228: We'll be removing prolific -> passed as URLSearchParam
     USE_PHOTODIODE: equipment.photodiode ? true : false,
     USE_EEG: equipment.eeg ? true : false,
     USE_VOLUME: equipment.audio ? true : false,
@@ -192,7 +191,7 @@ function App() {
         oldConfig={oldConfig}
         studyID={studyID}
         participantID={participantID}
-        taskVersion={TASK_VERSION} // TODO: Can now pull from constants directly?
+        taskVersion={TASK_VERSION}
         dataUpdateFunction={
           {
             desktop: desktopUpdateFunction,

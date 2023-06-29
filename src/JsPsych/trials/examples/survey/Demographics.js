@@ -1,6 +1,6 @@
 import SurveyMultiSelectPlugin from '@jspsych/plugin-survey-multi-select';
 
-// TODO: Use @signature for imports?
+// TODO 204: Use @signature for imports?
 import { language } from '../../../language'; // @language
 import { multiSurvey, survey } from '@brown-ccv/behavioral-task-trials';
 
@@ -8,7 +8,7 @@ import { multiSurvey, survey } from '@brown-ccv/behavioral-task-trials';
  * Creates a survey page for demographics information
  * @returns C
  */
-// TODO: Use JsPsych survey prompts https://www.jspsych.org/7.3/plugins/survey/
+// TODO 235: Use JsPsych survey prompts https://www.jspsych.org/7.3/plugins/survey/
 export function createDemographicsSurvey() {
   const { ask, prompt, answer } = language.quiz;
 
@@ -17,7 +17,6 @@ export function createDemographicsSurvey() {
   const preamble2 = prompt.preamble.demo_2;
   const preamble3 = prompt.preamble.demo_3;
 
-  // TODO: Bring survey task into Honeycomb
   const ageQuestion = survey({
     preamble: preamble1,
     stimulus: ask.demographics_age,
@@ -25,7 +24,7 @@ export function createDemographicsSurvey() {
 
   /** MULTI CHOICE QUESTIONS */
 
-  // TODO: Use JsPsych single choice plugin type
+  // TODO 235: Use JsPsych single choice plugin type
 
   // Question prompts
   const multiChoicePrompts = [
@@ -64,7 +63,8 @@ export function createDemographicsSurvey() {
   });
 
   /** MULTI SELECT QUESTIONS */
-  // TODO: Use JsPsych single choice plugin type
+
+  // TODO 235: Use JsPsych single choice plugin type
 
   const diagnosesQuestion = ask.diagnoses;
   const diagnosesOptions = {
@@ -88,7 +88,7 @@ export function createDemographicsSurvey() {
   // TODO 162: Move everything up into a demographics function
   return {
     timeline: [
-      ageQuestion, // TODO: Sex question?
+      ageQuestion,
       multiChoiceQuestions, // ethnicity, race, english_fluency, sex
       multiSelectQuestions, // diagnoses
     ],

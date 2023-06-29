@@ -5,7 +5,7 @@ import { language } from '../../../language';
 /**
  * Create a survey of Intolerance of Uncertainty Scale (IUS) questions
  */
-// TODO: Use JsPsych survey prompts https://www.jspsych.org/7.3/plugins/survey/
+// TODO 235: Use JsPsych survey prompts https://www.jspsych.org/7.3/plugins/survey/
 export function createIUSSurvey() {
   const { answer, prompt } = language.quiz;
 
@@ -41,7 +41,6 @@ export function createIUSSurvey() {
     ],
   };
 
-  // TODO: Separate multiSurvey into its own task in Honeycomb
   return multiSurvey({
     preamble: [surveyPreamble + iusPreamble],
     prompts: iusPrompts,

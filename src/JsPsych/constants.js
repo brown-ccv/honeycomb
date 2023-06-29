@@ -17,7 +17,7 @@ export const KEYS = {
 };
 
 // NOTE - these event codes must match what is in public/config/trigger.js
-// TODO: How to use public/ file in electron and browser? (Absolute imports point to public I think?)
+// TODO 224: How to use public/ file in electron and browser? (Absolute imports point to public I think?)
 
 export const EVENT_CODES = {
   fixation: 1,

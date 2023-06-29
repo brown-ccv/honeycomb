@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import { EVENT_CODES } from '../constants';
 
-// TODO: This is a task, how do I pass which config file to use?
+// TODO 226: This is a task, how do I pass which config file to use?
 // Hard code for now
 import config from '../config/home.json';
 
@@ -13,8 +13,8 @@ function useOldConfig(newConfig) {
   return {
     USE_ELECTRON: environment === 'electron',
     USE_FIREBASE: environment === 'firebase',
-    USE_MTURK: false, // TODO: What's the logic for this? Is it its own environment?
-    USE_PROLIFIC: false, // We'll be removing prolific -> passed as URLSearchParam
+    USE_MTURK: false, // TODO 228: What's the logic for this? Is it its own environment?
+    USE_PROLIFIC: false, // TODO 227: We'll be removing prolific -> passed as URLSearchParam
     USE_PHOTODIODE: equipment.photodiode ? true : false,
     USE_EEG: equipment.eeg ? true : false,
     USE_VOLUME: equipment.audio ? true : false,
@@ -23,8 +23,6 @@ function useOldConfig(newConfig) {
 }
 
 const oldConfig = useOldConfig(config);
-
-// TODO: behavior-task-trials exports these as the trial option?
 
 // conditionally load electron and psiturk based on MTURK config variable
 let ipcRenderer = false;
@@ -39,7 +37,7 @@ try {
 }
 
 // Relies on styling in index.css, generate PD spot
-// TODO: Refactor to take USE_PHOTODIODE as a parameter
+// TODO 226: Refactor to take USE_PHOTODIODE as a parameter
 export function photodiodeGhostBox() {
   const class_ = oldConfig.USE_PHOTODIODE ? 'visible' : 'invisible';
 
@@ -48,7 +46,7 @@ export function photodiodeGhostBox() {
       </div>`;
 }
 
-// TODO: Refactor to take USE_PHOTODIODE as a parameter
+// TODO 226: Refactor to take USE_PHOTODIODE as a parameter
 // ? What's the taskCode really for?
 export function pdSpotEncode(taskCode) {
   function pulseFor(ms, callback) {

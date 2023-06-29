@@ -1,7 +1,6 @@
 import { initJsPsych } from 'jspsych';
 import React, { useEffect, useMemo, useRef } from 'react';
 
-// import { config } from '../config/main';
 import { initParticipant } from '../firebase';
 
 // These will be passed in as props to the package once it's split
@@ -55,7 +54,7 @@ function JsPsychExperiment({
   // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
   // ? I wonder if it makes the most sense to just have the user create and pass the jsPsych object?
   const timeline = buildTimeline(jsPsych);
-  // TODO: I think the user needs to confirm if they're going to enable audio?
+  // TODO 238: I think the user needs to confirm if they're going to enable audio?
 
   // Set up event and lifecycle callbacks to start and stop jspsych.
   // Inspiration from jspsych-react: https://github.com/makebrainwaves/jspsych-react/blob/master/src/index.js

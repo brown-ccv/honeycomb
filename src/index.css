@@ -28,7 +28,7 @@ body,
 
 /* CLASSES */
 
-/* TODO: Used in JSX components */
+/* TODO 239: Used in JSX components */
 .centered-h-v {
   display: flex;
   flex-direction: column;
@@ -38,17 +38,17 @@ body,
   height: 100%;
 }
 
-/* TODO: Used in JSX components */
+/* TODO 239: Used in JSX components */
 .width-50 {
   width: 50%;
 }
 
-/* TODO: Not used */
+/* TODO 239: Not used */
 .width-100 {
   width: 100%;
 }
 
-/* TODO: Used in baseStimulus, honeycombTrial */
+/* TODO 239: Used in baseStimulus, honeycombTrial */
 .main-prompt,
 .center_container {
   height: 100vh;
@@ -58,13 +58,13 @@ body,
   align-items: center !important;
 }
 
-/* TODO: Used in baseStimulus helper function */
+/* TODO 239: Used in baseStimulus helper function */
 .main-prompt {
   margin-top: -10%;
   margin-bottom: -5%;
 }
 
-/* TODO: Not used? */
+/* TODO 239: Not used? */
 .jspsych-btn {
   padding: 0.5rem 1rem;
   font-weight: bold;
@@ -96,7 +96,7 @@ body,
   position: absolute;
 }
 
-/* TODO: Not used? fixation() from behavior-task-trials needs it*/
+/* TODO 239: Not used? fixation() from behavior-task-trials needs it*/
 #fixation-dot {
   background-color: black;
   height: 15px;

@@ -7,8 +7,8 @@ import { baseStimulus } from './partials/baseStimulus';
 /**
  * Displays a welcome emssage
  */
-// TODO: Label as JsPsych instructions?
-// TODO: The text  here is just "instructions"? This is pretty useless?
+// TODO 231: Label as JsPsych instructions?
+// TODO 231: The text  here is just "instructions"? This is pretty useless?
 export function createWelcomeMessageTrial() {
   const stimulus =
     baseStimulus(`<h1>${language.welcome.message}</h1>`, true) + photodiodeGhostBox();

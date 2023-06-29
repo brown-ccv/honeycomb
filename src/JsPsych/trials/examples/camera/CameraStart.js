@@ -1,22 +1,21 @@
 import htmlButtonResponse from '@jspsych/plugin-html-button-response';
 
-// TODO: Move markup to JsPsych?
 import { photodiodeGhostBox } from '../../../markup/photodiode';
 import { baseStimulus } from '../../../markup/baseStimulus';
 
 import { language } from '../../../language';
 import { TASK_NAME } from '../../../constants';
 
-// TODO: This is a task, how do I pass which config file to use?
+// TODO 226: This is a task, how do I pass which config file to use?
 // Hard code for now
 import config from '../../../config/home.json';
 import { initJsPsych } from 'jspsych';
 
-// Get the ipcRender if running in an  electron window
 // TODO 192: Is it okay for this to start undefined?
 // TODO 192: Add warning to trial if not running in electron?
+// TODO 232: Camera can now be accessed by the browser
+// Get the ipcRender if running in an  electron window
 let ipcRenderer = false;
-// TODO: Camera can now be accessed by the browser
 // if (config.USE_ELECTRON) {
 // if (config.equipment.camera === true) {
 //   ipcRenderer = window.require('electron').ipcRenderer;
@@ -28,8 +27,8 @@ const JSPSYCH = initJsPsych();
 /**
  * Experiment trial for starting a participant's camera feed
  */
-// TODO: JsPsych now has built in camera initialization
-// TODO: How to pass JsPsych instance into the trials?
+// TODO 232: JsPsych now has built in camera initialization
+// TODO 232: How to pass JsPsych instance into the trials?
 export function createCameraStartTrial() {
   document.title = TASK_NAME;
   const markup = `
