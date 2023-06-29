@@ -1,4 +1,7 @@
+import requireContext from 'require-context.macro';
+
 import packageJson from '../../package.json';
+import { importAll } from './utils';
 
 export const TASK_NAME = packageJson.name;
 export const TASK_VERSION = packageJson.version;
@@ -29,3 +32,6 @@ export const AUDIO_CODES = {
   frequency: 100 * 9,
   type: 'sine',
 };
+
+// Automatically load images in assets/images folder
+export const IMAGES = importAll(requireContext('./assets/images', false, /\.(png|jpe?g|svg)$/));
