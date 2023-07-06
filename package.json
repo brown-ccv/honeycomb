@@ -51,7 +51,7 @@
     "electron": "19.0.8",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-prettier": "^5.0.0-alpha.0",
     "firebase-admin": "^11.0.1",
     "firebase-tools": "^11.0.1",
     "husky": "^8.0.3",
