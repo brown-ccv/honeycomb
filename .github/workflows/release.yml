@@ -52,6 +52,7 @@ jobs:
           CI: true
 
       # Build electron app package installers
+      # TODO: We might be able to simplify this with "publish" command https://www.electronforge.io/cli#publish
       - name: package electron - windows
         if: startsWith(matrix.os, 'windows')
         run: npm run package:windows
