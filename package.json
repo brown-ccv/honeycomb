@@ -99,7 +99,8 @@
     "package": "electron-forge package",
     "package:windows": "react-scripts build && npm run make -- --arch x64 --targets @electron-forge/maker-squirrel",
     "package:linux": "react-scripts build && npm run make -- --arch x64 --targets @electron-forge/maker-deb",
-    "package:mac": "react-scripts build && npm run make -- --arch x64 --targets @electron-forge/maker-dmg"
+    "package:mac": "react-scripts build && npm run make -- --arch x64 --targets @electron-forge/maker-dmg",
+    "package:zip": "react-scripts build && npm run make -- --arch x64 --targets @electron-forge/maker-zip"
   },
   "babel": {
     "plugins": [
