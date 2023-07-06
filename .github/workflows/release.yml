@@ -20,8 +20,8 @@ jobs:
     steps:
       # Rewrite "git:" repo urls to use "https:" instead, since GitHub Actions blocks port 9418 (as of Jan 2022).
       # TODO: What repo is causing this issue? (event-marker dependency?)
-      - name: Rewrite "git:" repo urls to use "https:" instead.
-        run: git config --global url."https://github.com/".insteadOf "git://github.com/"
+      # - name: Rewrite "git:" repo urls to use "https:" instead.
+      # run: git config --global url."https://github.com/".insteadOf "git://github.com/"
 
       # Set up js package
       # Set up js package
@@ -40,10 +40,6 @@ jobs:
         id: package_info
 
       # Install dependencies
-      # - name: npm install
-      # run: |
-      #   npm config set "//npm.pkg.github.com/:_authToken" ${{ secrets.GITHUB_TOKEN }}
-      #   npm install
       - name: ci
         run: npm ci
 
