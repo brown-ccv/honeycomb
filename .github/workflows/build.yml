@@ -39,6 +39,7 @@ jobs:
 
     steps:
       # Rewrite "git:" repo urls to use "https:" instead, since GitHub Actions blocks port 9418 (as of Jan 2022).
+      # TODO: What repo is causing this issue? (event-marker dependency?)
       - name: Rewrite "git:" repo urls to use "https:" instead.
         run: git config --global url."https://github.com/".insteadOf "git://github.com/"
 
