@@ -15,7 +15,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -23,9 +22,9 @@ jobs:
       matrix:
         os: ${{
           (github.event.inputs.os == 'all' && fromJSON('["ubuntu-latest", "macOS-latest", "windows-latest"]')) ||
-           (github.event.inputs.os == 'win' && fromJSON('["windows-latest"]')) ||
-           (github.event.inputs.os == 'mac' && fromJSON('["macOS-latest"]')) ||
-           (github.event.inputs.os == 'linux' && fromJSON('["ubuntu-latest"]')) }}
+          (github.event.inputs.os == 'win' && fromJSON('["windows-latest"]')) ||
+          (github.event.inputs.os == 'mac' && fromJSON('["macOS-latest"]')) ||
+          (github.event.inputs.os == 'linux' && fromJSON('["ubuntu-latest"]')) }}
 
     steps:
       # Rewrite "git:" repo urls to use "https:" instead, since GitHub Actions blocks port 9418 (as of Jan 2022).
@@ -33,29 +32,36 @@ jobs:
         run: git config --global url."https://github.com/".insteadOf "git://github.com/"
 
       # Set up js package
-      - uses: actions/checkout@v1
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.x
-          cache: 'npm'
+          cache: npm
+          cache-dependency-path: ./package.json
+          node-version: 18
+
       - name: Set package version and name
         uses: brown-ccv/gh-actions/get-package-info@main
         id: package_info
 
-      # Run npm install, build, and test
-      - name: npm install
-        run: |
-          npm config set "//npm.pkg.github.com/:_authToken" ${{ secrets.GITHUB_TOKEN }}
-          npm install
-      - name: Load .env file (.env.${{github.event.inputs.setting}})
+      # Install dependencies
+      # - name: npm install
+      # run: |
+      #   npm config set "//npm.pkg.github.com/:_authToken" ${{ secrets.GITHUB_TOKEN }}
+      #   npm install
+      - name: ci
+        run: npm ci
+
+      # Load the needed environment variables
+      - name: Load .env file - .env.${{github.event.inputs.setting}}
         uses: xom9ikk/dotenv@v1.0.2
         with:
           path: ./env
           mode: ${{github.event.inputs.setting}}
-      - name: npm build
+      - name: build
         run: npm run build
-      - name: npm test
+      - name: test
         run: npm test
         env:
           CI: true
@@ -72,6 +78,7 @@ jobs:
         run: npm run package:mac
 
       # Upload installers to github action
+      # TODO: Can this be accomplished with electron forge? https://www.electronforge.io/cli#publish
       - name: upload win-installer
         uses: actions/upload-artifact@master
         if: startsWith(matrix.os, 'windows')

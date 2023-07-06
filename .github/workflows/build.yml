@@ -1,4 +1,4 @@
-name: build
+name: Build and Test
 
 # Runs the build scripts on PR and when PR is merged to main
 on:
@@ -15,24 +15,24 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    
+
     # Run build script for [home/clinic] with video [on/off] in [windows/macOS/ubuntu]
     strategy:
       matrix:
         setting: [home, clinic]
         video: [on, off]
         os: [ubuntu-latest, macOS-latest, windows-latest]
-        exclude: 
+        exclude:
           # Exclude video on in Ubuntu and macOS
           - os: ubuntu-latest
             setting: clinic
-            video: on 
+            video: on
           - os: ubuntu-latest
             setting: home
             video: on
           - os: macOS-latest
             setting: clinic
-            video: on 
+            video: on
           - os: macOS-latest
             setting: home
             video: on
@@ -43,33 +43,40 @@ jobs:
         run: git config --global url."https://github.com/".insteadOf "git://github.com/"
 
       # Set up js package
-      # TODO: Update these versions? @v3 (all workflows)
-      - uses: actions/checkout@v1
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.x
-          cache: 'npm'
+          cache: npm
+          cache-dependency-path: ./package.json
+          node-version: 18
 
-      # Run npm install, build, and test
-      - name: npm install
-        run: |
-          npm config set "//npm.pkg.github.com/:_authToken" ${{ secrets.GITHUB_TOKEN }}
-          npm install
-      - name: Load .env file (.env.${{matrix.setting}})
+      # Install dependencies
+      # - name: npm install
+      # run: |
+      #   npm config set "//npm.pkg.github.com/:_authToken" ${{ secrets.GITHUB_TOKEN }}
+      #   npm install
+      - name: ci
+        run: npm ci
+
+      # Load the needed environment variables
+      - name: Load .env file - .env.${{matrix.setting}}
         uses: xom9ikk/dotenv@v1.0.2
         with:
           path: ./env
           mode: ${{matrix.setting}}
-      - name: Load .env file (.env.video)
+      - name: Load .env file - .env.video
         if: matrix.video=='on'
         uses: xom9ikk/dotenv@v1.0.2
         with:
           path: ./env
           mode: video
-      - name: npm build
+      # Build the project
+      - name: build
         run: npm run build
-      - name: npm test
+      # Test the project
+      - name: test
         run: npm test
         env:
           CI: true
