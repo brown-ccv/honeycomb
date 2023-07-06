@@ -22,7 +22,7 @@
     "bootstrap": "^5.2.0-beta1",
     "electron-log": "^4.4.8",
     "electron-squirrel-startup": "^1.0.0",
-    "event-marker": "git+https://github.com/brown-ccv/event-marker.git",
+    "event-marker": "github:brown-ccv/event-marker",
     "execa": "^5.0.0",
     "firebase": "^9.8.4",
     "fs-extra": "^8.1.0",
