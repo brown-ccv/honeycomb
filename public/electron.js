@@ -12,7 +12,7 @@ const log = require('electron-log');
 const { eventCodes, vendorId, productId, comName } = require('./config/trigger');
 const { getPort, sendToPort } = require('event-marker');
 
-// handle windows installer set up
+// Prevent launching multiple instances on Windows https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 if (require('electron-squirrel-startup')) app.quit();
 
 // Define default environment variables
@@ -34,7 +34,6 @@ let mainWindow;
  */
 function createWindow() {
   if (process.env.ELECTRON_START_URL) {
-    console.log(process.env.ELECTRON_START_URL);
     mainWindow = new BrowserWindow({
       width: 1500,
       height: 900,

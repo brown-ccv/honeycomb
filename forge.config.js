@@ -1,5 +1,3 @@
-import packageJSON from './package.json';
-
 /**
  * Configuration file for Electron Forge
  */
@@ -41,13 +39,16 @@ module.exports = {
         // TODO: These are used in the example?
         // certificateFile: './cert.pfx',
         // certificatePassword: process.env.CERTIFICATE_PASSWORD,
-        // TODO: Are these needed? Should be picked up automatically?
-        authors: packageJSON.author,
-        description: packageJSON.description,
       },
     },
   ],
-  plugins: [{ name: '@electron-forge/plugin-auto-unpack' }],
+  plugins: [
+    {
+      // https://www.electronforge.io/config/plugins/auto-unpack-natives
+      name: '@electron-forge/plugin-auto-unpack-natives',
+      config: {},
+    },
+  ],
   publishers: [
     {
       // TODO: These might be nice for the end user? But not Honeycomb itself?
@@ -64,5 +65,4 @@ module.exports = {
 };
 
 // TODO: Should we add rpm installers?
-// TODO: We need to handle squirrel startup events? https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 // TODO: Add launch config for debugging in Electron? https://www.electronforge.io/advanced/debugging#debugging-with-vs-code
