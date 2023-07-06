@@ -21,7 +21,6 @@
 *.log*
 
 # Versioning
-package-lock.json
 public/config/version.json
 
 # Firebase private key
