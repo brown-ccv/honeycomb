@@ -80,7 +80,7 @@
     "firebase:download": "dotenv -e env/.env.firebase-download node download-response-data.js",
     "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
     "start:browser": "cross-env IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
-    "start:electron": "cross-env ELECTRON_START_URL=\"http://localhost:3000\" electron-forge start",
+    "start:electron": "wait-on http://127.0.0.1:3000 && cross-env ELECTRON_START_URL=\"http://127.0.0.1:3000\" electron-forge start",
     "dev": "concurrently -k npm:start npm:start:electron",
     "dev:firebase": "dotenv -e env/.env.firebase npm run start:browser",
     "dev:home": "dotenv -e env/.env.home npm run dev",
@@ -97,9 +97,9 @@
     "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build",
     "make": "electron-forge make",
     "package": "electron-forge package",
-    "package:windows": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
-    "package:linux": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-deb",
-    "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg"
+    "package:windows": "react-scripts build && npm run make -- --arch x64 --targets @electron-forge/maker-squirrel",
+    "package:linux": "react-scripts build && npm run make -- --arch x64 --targets @electron-forge/maker-deb",
+    "package:mac": "react-scripts build && npm run make -- --arch x64 --targets @electron-forge/maker-dmg"
   },
   "babel": {
     "plugins": [

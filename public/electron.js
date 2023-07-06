@@ -33,6 +33,7 @@ let mainWindow;
  * Create the browser window within the Electron app
  */
 function createWindow() {
+  // TODO: Use REACT_APP_NODE_ENV instead of this start ELECTRON_START_URL variable
   if (process.env.ELECTRON_START_URL) {
     mainWindow = new BrowserWindow({
       width: 1500,
