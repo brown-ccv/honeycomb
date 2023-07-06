@@ -38,10 +38,13 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@electron-forge/cli": "^6.0.0-beta.64",
-    "@electron-forge/maker-deb": "^6.0.0-beta.64",
-    "@electron-forge/maker-dmg": "^6.0.0-beta.64",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
+    "@electron-forge/cli": "^6.2.1",
+    "@electron-forge/maker-deb": "^6.2.1",
+    "@electron-forge/maker-dmg": "^6.2.1",
+    "@electron-forge/maker-rpm": "^6.2.1",
+    "@electron-forge/maker-squirrel": "^6.2.1",
+    "@electron-forge/maker-zip": "^6.2.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
     "babel-plugin-macros": "^2.6.1",
     "chai": "^4.2.0",
     "concurrently": "^8.0.1",
@@ -53,7 +56,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "firebase-admin": "^11.0.1",
-    "firebase-tools": "^11.0.1",
+    "firebase-tools": "^12.4.2",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
     "require-context.macro": "^1.1.1",
@@ -72,7 +75,7 @@
     "firebase:emulators:start": "firebase emulators:start --import emulator_data",
     "firebase:emulators:save": "firebase emulators:export emulator_data",
     "firebase:download": "dotenv -e env/.env.firebase-download node download-response-data.js",
-    "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
+    "start": "electron-forge start",
     "start:browser": "cross-env IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
     "electron": "electron .",
     "electron-dev": "wait-on http://localhost:3000 && cross-env ELECTRON_START_URL=\"http://localhost:3000\" electron .",
@@ -92,7 +95,9 @@
     "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build",
     "package:windows": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
     "package:linux": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-deb",
-    "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg"
+    "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "babel": {
     "plugins": [
