@@ -37,7 +37,9 @@
     "wait-on": "^7.0.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.22.8",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-react": "^7.22.5",
     "@electron-forge/cli": "^6.2.1",
     "@electron-forge/maker-deb": "^6.2.1",
     "@electron-forge/maker-dmg": "^6.2.1",
@@ -45,6 +47,7 @@
     "@electron-forge/maker-squirrel": "^6.2.1",
     "@electron-forge/maker-zip": "^6.2.1",
     "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
+    "babel-loader": "^9.1.2",
     "babel-plugin-macros": "^2.6.1",
     "chai": "^4.2.0",
     "concurrently": "^8.0.1",
@@ -54,7 +57,7 @@
     "electron": "19.0.8",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-prettier": "^5.0.0-alpha.0",
     "firebase-admin": "^11.0.1",
     "firebase-tools": "^12.4.2",
     "husky": "^8.0.3",
@@ -93,11 +96,11 @@
     "build:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run build",
     "build:firebase": "dotenv -e env/.env.firebase npm run build",
     "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build",
+    "make": "electron-forge make",
+    "package": "electron-forge package",
     "package:windows": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
     "package:linux": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-deb",
-    "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg"
   },
   "babel": {
     "plugins": [
@@ -119,35 +122,6 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
-    },
-    "forge": {
-      "packagerConfig": {
-        "asar": true
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {
-            "icon": "./assets/icons/mac/icon.icns"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-dmg",
-          "config": {
-            "icon": "./assets/icons/mac/icon.icns",
-            "overwrite": true
-          },
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "iconUrl": "https://raw.githubusercontent.com/brown-ccv/honeycomb/main/assets/icons/win/icon.ico"
-          }
-        }
-      ]
     }
   },
   "lint-staged": {
