@@ -1,9 +1,17 @@
 // TODO 204: @ import for language
 import { language } from './language';
 // TODO 204: @ import for trials
-import { Preamble, createCountdownTrial, createSliderTrial } from './trials/examples';
-import { AgeCheck } from './trials/examples/survey';
+import {
+  Preamble,
+  createCountdownTrial,
+  createSliderTrial,
+  AgeCheck,
+  EndExperiment,
+} from './trials/examples';
 import { createHoneycombBlock } from './trials/honeycombBlock';
+
+import { DebriefSurvey, IusSurvey } from './trials/examples/survey';
+import { DemographicsSurvey } from './trials/examples/survey/Demographics';
 
 /**
  * Create your custom JsPsych options here. These settings will applied experiment wide.
@@ -66,14 +74,10 @@ export function buildTimeline(jsPsych) {
     honeycombPracticeBlock,
     secondBlockCountdown,
     honeycombBlock1,
-
-    // demographics,
-    // iusSurvey,
-    // debrief,
-    // showMessage(config, {
-    //   duration: 5000,
-    //   message: lang.task.end,
-    // }),
+    DemographicsSurvey,
+    IusSurvey,
+    DebriefSurvey, // "Confirm Completion" button
+    EndExperiment, // Task complete message
   ];
   return timeline;
 }
