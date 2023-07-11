@@ -30,10 +30,11 @@
     "jquery": "^3.4.1",
     "jspsych": "^7.2.3",
     "lodash": "^4.17.19",
-    "react": "^16.8.6",
-    "react-bootstrap": "^1.6.1",
-    "react-dom": "^16.8.6",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.8.0",
+    "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "require-context.macro": "^1.2.2",
     "wait-on": "^7.0.1"
   },
   "devDependencies": {
@@ -49,6 +50,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
     "babel-loader": "^9.1.2",
     "babel-plugin-macros": "^2.6.1",
+    "babel-plugin-transform-require-context": "^0.1.1",
     "chai": "^4.2.0",
     "concurrently": "^8.0.1",
     "cross-env": "^7.0.3",
@@ -62,7 +64,6 @@
     "firebase-tools": "^12.4.2",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
-    "require-context.macro": "^1.1.1",
     "wait-on": "^7.0.1"
   },
   "scripts": {

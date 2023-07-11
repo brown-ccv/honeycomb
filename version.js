@@ -1,6 +1,7 @@
 // Get Git Commit SHA and Branch
 // TODO 173: Is there a better way to keep track of versioning? Just use x.x.x?
 
+// TODO: Update fs-extra and execa, convert from cjs module
 const fs = require('fs-extra');
 const execa = require('execa');
 

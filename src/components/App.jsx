@@ -74,7 +74,6 @@ function App() {
         ipcRenderer = electron.ipcRenderer;
       } catch (e) {
         console.warn('window.require is not available');
-        console.error(e);
         return; // Early return
       }
 
