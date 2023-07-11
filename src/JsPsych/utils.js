@@ -1,6 +1,5 @@
 // Utility Functions
 import _ from 'lodash';
-import requireContext from 'require-context.macro';
 
 /**
  * Delay program execution
@@ -116,9 +115,6 @@ export function importAll(r) {
   }
   return r.keys().reduce(importImageByName, {});
 }
-
-// TODO 159: move to constants file, ALL_CAPS
-export const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
 
 /**
  * Get a query parameter out of the window's URL

@@ -15,7 +15,7 @@ import { generateBlockConditions } from '../utils';
  */
 // TODO 210: Implement stroop game, rename as stroopBlock
 export function createHoneycombBlock({
-  // TODO: These conditions will be loaded from a config file?
+  // TODO 236: These conditions will be loaded from a config file?
   conditions = ['a', 'b', 'c'],
   repeatsPerCondition = 1, // number of times every condition is repeated
   isPractice = false,
@@ -27,7 +27,6 @@ export function createHoneycombBlock({
   const blockTrials = blockConditions.map((condition) => createHoneycombTrial(condition));
 
   // Create an empty trial that adds the blockConditions to the JsPsych data object
-  // TODO: If I set isPractice, isTutorial, etc will it automatically nest to the child trials?
   const startingTrial = {
     type: htmlKeyboardResponse,
     stimulus: '',

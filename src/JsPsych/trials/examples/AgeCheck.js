@@ -1,9 +1,8 @@
 import { survey } from '@brown-ccv/behavioral-task-trials';
 
-// TODO: Use @signature for imports?
+// TODO 204: Use @signature for imports?
 import { language } from '../../language'; // @language
 
-// TODO: Move survey helper here from '@brown-ccv/behavioral-task-trials'
 /**
  *  Asks the user to
  * @returns
