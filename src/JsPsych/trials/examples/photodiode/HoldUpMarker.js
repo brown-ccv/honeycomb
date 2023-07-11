@@ -1,11 +1,8 @@
 import htmlButtonResponse from '@jspsych/plugin-html-button-response';
 
-// TODO: Move markup to JsPsych?
-import { photodiodeGhostBox } from '../../../../lib/markup/photodiode';
-import { baseStimulus } from '../../../../lib/markup/stimuli';
-import eventMarkerMessage from '../../../../lib/markup/eventMarkerMessage';
+import { photodiodeGhostBox } from '../partials/photodiode';
+import { baseStimulus } from '../partials/baseStimulus';
 
-// TODO: Update imports to use stuff inside JsPsych folder
 import { language } from '../../../language';
 
 /**
@@ -22,7 +19,10 @@ export function createHoldUpMarkerTrial() {
     prompt: [`<br><h3>${prompt.focus}</h3>`],
     choices: [prompt.continue.button],
     on_load: () => {
-      eventMarkerMessage().then((s) => (document.getElementById('usb-alert').innerHTML = s));
+      // Injects the event marker message into the 'usb-alert' element
+      document.getElementById(
+        'usb-alert'
+      ).innerHTML = `<span style="color: green;">${language.eventMarker.found}</span>`;
     },
   };
 }

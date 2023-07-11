@@ -24,7 +24,7 @@ module.exports = {
   plugins: ['react', 'prettier'],
   extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
   rules: {
-    'react/prop-types': 'off', // TODO: Add prop validation and remove this line
+    'react/prop-types': 'off', // TODO 223: Add prop validation and remove this line
     'prettier/prettier': 'warn',
     'no-unused-vars': 'warn',
   },

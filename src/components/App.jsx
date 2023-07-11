@@ -3,13 +3,34 @@ import React, { useCallback, useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../index.css';
 
-import { config, taskVersion, turkUniqueId } from '../config/main';
+// import { config, taskVersion, turkUniqueId } from '../config/main';
 import { addToFirebase, validateParticipant } from '../firebase';
-import { getProlificId } from '../lib/utils';
+// import { getProlificId } from '../lib/utils';
 
 import JsPsychExperiment from './JsPsychExperiment';
 import Login from './Login';
 import Error from './Error';
+
+// TODO 226: This is a task, how do I pass which config file to use?
+// Hard code for now
+import config from '../JsPsych/config/home.json';
+import { TASK_VERSION } from '../JsPsych/constants';
+import { getProlificId } from '../JsPsych/utils';
+
+function useOldConfig(newConfig) {
+  const { environment, equipment } = newConfig;
+
+  return {
+    USE_ELECTRON: environment === 'electron',
+    USE_FIREBASE: environment === 'firebase',
+    USE_MTURK: false, // TODO 229: What's the logic for this? Is it its own environment?
+    USE_PROLIFIC: false, // TODO 228: We'll be removing prolific -> passed as URLSearchParam
+    USE_PHOTODIODE: equipment.photodiode ? true : false,
+    USE_EEG: equipment.eeg ? true : false,
+    USE_VOLUME: equipment.audio ? true : false,
+    USE_CAMERA: equipment.camera ? true : false,
+  };
+}
 
 /** Top-level React component for Honeycomb.
  *
@@ -18,6 +39,8 @@ import Error from './Error';
  * It also lets us pass data between <Login> and <JsPsychExperiment />
  */
 function App() {
+  const oldConfig = useOldConfig(config);
+
   // Manage user state of the app
   const [loggedIn, setLoggedIn] = useState(false);
   // Manage error state of the app
@@ -40,13 +63,22 @@ function App() {
    */
   useEffect(() => {
     // For testing and debugging purposes
-    console.log(config);
+    console.log(config, oldConfig);
 
     // If on desktop
-    if (config.USE_ELECTRON) {
-      const { ipcRenderer } = window.require('electron');
+    if (oldConfig.USE_ELECTRON) {
+      // conditionally load electron and psiturk based on MTURK config variable
+      let ipcRenderer = false;
+      try {
+        const electron = window.require('electron');
+        ipcRenderer = electron.ipcRenderer;
+      } catch (e) {
+        console.warn('window.require is not available');
+        console.error(e);
+        return; // Early return
+      }
 
-      ipcRenderer.send('updateEnvironmentVariables', config);
+      ipcRenderer.send('updateEnvironmentVariables', oldConfig);
 
       // Fill in login fields based on environment variables (may still be blank)
       const credentials = ipcRenderer.sendSync('syncCredentials');
@@ -57,7 +89,7 @@ function App() {
       setIpcRenderer(ipcRenderer);
     } else {
       // If MTURK
-      if (config.USE_MTURK) {
+      if (oldConfig.USE_MTURK) {
         /* eslint-disable */
         window.lodash = _.noConflict()
         setPsiturk(new PsiTurk(turkUniqueId, '/complete'))
@@ -65,9 +97,9 @@ function App() {
         // TODO 145: Function signature
         handleLogin('mturk', turkUniqueId)
         /* eslint-enable */
-      } else if (config.USE_PROLIFIC) {
+      } else if (oldConfig.USE_PROLIFIC) {
         const pID = getProlificId();
-        if (config.USE_FIREBASE && pID) {
+        if (oldConfig.USE_FIREBASE && pID) {
           setMethod('firebase');
           // TODO 145: Function signature
           handleLogin('prolific', pID);
@@ -75,7 +107,7 @@ function App() {
           // Error - Prolific must be used with Firebase
           setIsError(true);
         }
-      } else if (config.USE_FIREBASE) {
+      } else if (oldConfig.USE_FIREBASE) {
         // Fill in login fields based on query parameters (may still be blank)
         // Prolific will pass the studyID and participantID as search parameters in the URL
         // Please ensure the search params use the same name here
@@ -156,9 +188,10 @@ function App() {
   } else {
     return loggedIn ? (
       <JsPsychExperiment
+        oldConfig={oldConfig}
         studyID={studyID}
         participantID={participantID}
-        taskVersion={taskVersion}
+        taskVersion={TASK_VERSION}
         dataUpdateFunction={
           {
             desktop: desktopUpdateFunction,
