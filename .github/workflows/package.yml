@@ -15,7 +15,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -23,22 +22,23 @@ jobs:
       matrix:
         os: ${{
           (github.event.inputs.os == 'all' && fromJSON('["ubuntu-latest", "macOS-latest", "windows-latest"]')) ||
-           (github.event.inputs.os == 'win' && fromJSON('["windows-latest"]')) ||
-           (github.event.inputs.os == 'mac' && fromJSON('["macOS-latest"]')) ||
-           (github.event.inputs.os == 'linux' && fromJSON('["ubuntu-latest"]')) }}
+          (github.event.inputs.os == 'win' && fromJSON('["windows-latest"]')) ||
+          (github.event.inputs.os == 'mac' && fromJSON('["macOS-latest"]')) ||
+          (github.event.inputs.os == 'linux' && fromJSON('["ubuntu-latest"]')) }}
 
     steps:
       # Rewrite "git:" repo urls to use "https:" instead, since GitHub Actions blocks port 9418 (as of Jan 2022).
+      # TODO: What repo is causing this issue? (event-marker dependency?)
       - name: Rewrite "git:" repo urls to use "https:" instead.
         run: git config --global url."https://github.com/".insteadOf "git://github.com/"
 
       # Set up js package
+      # TODO 240: Update these versions? @v3
       - uses: actions/checkout@v1
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
           node-version: 16.x
-          cache: 'npm'
       - name: Set package version and name
         uses: brown-ccv/gh-actions/get-package-info@main
         id: package_info
@@ -61,6 +61,7 @@ jobs:
           CI: true
 
       # Build electron app package installers
+      # TODO: These package commands are really using "make"
       - name: package electron - windows
         if: startsWith(matrix.os, 'windows')
         run: npm run package:windows
