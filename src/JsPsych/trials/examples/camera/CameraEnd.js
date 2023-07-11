@@ -1,13 +1,12 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
-// TODO: Move markup to JsPsych?
-import { photodiodeGhostBox } from '../../../../lib/markup/photodiode';
-import { baseStimulus } from '../../../../lib/markup/stimuli';
+import { photodiodeGhostBox } from '../../../markup/photodiode';
+import { baseStimulus } from '../../../markup/baseStimulus';
 
 import { language } from '../../../language';
 
-// TODO: This is a task, how do I pass which config file to use?
 // Hard code for now
+// TODO 226: This is a task, how do I pass which config file to use?
 import config from '../../../config/home.json';
 
 /**

@@ -1,14 +1,14 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
 import { language } from '../../language';
-import { photodiodeGhostBox } from '../../../lib/markup/photodiode';
-import { baseStimulus } from '../../../lib/markup/stimuli';
+import { photodiodeGhostBox } from './partials/photodiode';
+import { baseStimulus } from './partials/baseStimulus';
 
 /**
  * Displays a welcome emssage
  */
-// TODO: Label as JsPsych instructions?
-// TODO: The text  here is just "instructions"? This is pretty useless?
+// TODO 231: Label as JsPsych instructions?
+// TODO 231: The text  here is just "instructions"? This is pretty useless?
 export function createWelcomeMessageTrial() {
   const stimulus =
     baseStimulus(`<h1>${language.welcome.message}</h1>`, true) + photodiodeGhostBox();
