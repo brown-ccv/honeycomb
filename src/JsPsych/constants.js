@@ -1,4 +1,7 @@
+import requireContext from 'require-context.macro';
+
 import packageJson from '../../package.json';
+import { importAll } from './utils';
 
 export const TASK_NAME = packageJson.name;
 export const TASK_VERSION = packageJson.version;
@@ -14,7 +17,7 @@ export const KEYS = {
 };
 
 // NOTE - these event codes must match what is in public/config/trigger.js
-// TODO: How to use public/ file in electron and browser? (Absolute imports point to public I think?)
+// TODO 224: How to use public/ file in electron and browser? (Absolute imports point to public I think?)
 
 export const EVENT_CODES = {
   fixation: 1,
@@ -29,3 +32,6 @@ export const AUDIO_CODES = {
   frequency: 100 * 9,
   type: 'sine',
 };
+
+// Automatically load images in assets/images folder
+export const IMAGES = importAll(requireContext('./assets/images', false, /\.(png|jpe?g|svg)$/));

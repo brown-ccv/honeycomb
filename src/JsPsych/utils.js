@@ -1,5 +1,5 @@
 // Utility Functions
-import requireContext from 'require-context.macro';
+import _ from 'lodash';
 
 /**
  * Delay program execution
@@ -66,6 +66,19 @@ export function generateWaitSet(trial, waitTime) {
 }
 
 /**
+ * Create an array of conditions for each trial of the block.
+ * There will be conditions.length * repeats number of trials in the block
+ * @param {object} conditions The conditions to be present, 1 trial per condition
+ * @param {number} repeats The number of times to repeat each condition, 1 trial per repeat
+ * @returns
+ */
+export function generateBlockConditions(conditions, repeats) {
+  const startingOptions = conditions.map((c) => _.range(repeats).map(() => c));
+  // Randomize the conditions
+  return _.shuffle(_.flatten(startingOptions));
+}
+
+/**
  * Starts the JsPsych keyboard response listener
  * @param  jsPsych The jsPsych instance running the task.
  */
@@ -102,9 +115,6 @@ export function importAll(r) {
   }
   return r.keys().reduce(importImageByName, {});
 }
-
-// TODO 159: move to constants file, ALL_CAPS
-export const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
 
 /**
  * Get a query parameter out of the window's URL

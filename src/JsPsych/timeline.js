@@ -1,8 +1,9 @@
-// TODO: @ import for language
+// TODO 204: @ import for language
 import { language } from './language';
-// TODO: @ import for trials
-import { Preamble, createCountdownTrial, createSliderTrial } from './trials/examples';
-import { AgeCheck } from './trials/examples/survey';
+
+// TODO 204: @ import for trials
+import { Preamble, createCountdownTrial, EndExperiment } from './trials/examples';
+import { createHoneycombBlock } from './trials/honeycombBlock';
 
 /**
  * Create your custom JsPsych options here. These settings will applied experiment wide.
@@ -23,43 +24,48 @@ export const JSPSYCH_OPTIONS = {
  * Build your JsPsych timeline here. The array must be passed as a prop to <JsPsychOptions />
  * @returns array of trials
  */
-// TODO: Eslint warning is causing build to fail
+// TODO 207: Eslint warning is causing build to fail
 // eslint-disable-next-line
 export function buildTimeline(jsPsych) {
   // Get slider text from the language file and create the trials
-  const sliderLanguage = language.quiz.direction.slider;
-  const sliderLeft = createSliderTrial(sliderLanguage.left);
-  const sliderRight = createSliderTrial(sliderLanguage.right);
+  // const sliderLanguage = language.quiz.direction.slider;
+  // const sliderLeft = createSliderTrial(sliderLanguage.left);
+  // const sliderRight = createSliderTrial(sliderLanguage.right);
 
-  // Get countdown txt from the language fil and create the trials
+  // Get countdown txt from the language fil and create the trials+
   const countdownLanguage = language.countdown;
-  const firstBlockCountdown = createCountdownTrial({ message: countdownLanguage.message1 });
-  const secondBlockCountdown = createCountdownTrial({ message: countdownLanguage.message2 });
+  const firstBlockCountdown = createCountdownTrial({ message: countdownLanguage.first });
+  const secondBlockCountdown = createCountdownTrial({ message: countdownLanguage.second });
+
+  // Create a tutorial block of Honeycomb's custom task
+  const honeycombTutorialBlock = createHoneycombBlock({
+    isTutorial: true,
+    photodiodeActive: false,
+  });
+
+  // Create a practice block of Honeycomb's custom task
+  const honeycombPracticeBlock = createHoneycombBlock({
+    conditions: ['m', 'n'],
+    repeatsPerCondition: 1,
+    isPractice: true,
+  });
+
+  // Create an experiment block
+  const honeycombBlock1 = createHoneycombBlock({
+    repeatsPerCondition: 2,
+  });
 
   // Build the timeline
   const timeline = [
     Preamble,
-    AgeCheck,
-    sliderLeft,
-    sliderRight,
+    honeycombTutorialBlock,
     firstBlockCountdown,
+    honeycombPracticeBlock,
     secondBlockCountdown,
-
-    // countdown({ message: lang.countdown.message1 }),
-    // taskBlock(practiceBlock),
-    // countdown({ message: lang.countdown.message2 }),
-    // taskBlock(exptBlock1),
-    // demographics,
-    // iusSurvey,
-    // debrief,
-    // showMessage(config, {
-    //   duration: 5000,
-    //   message: lang.task.end,
-    // }),
+    honeycombBlock1,
+    EndExperiment, // Task complete message
   ];
   return timeline;
 }
-
-// TODO: I think the user needs to confirm if they're going to enable audio?
 
 export const timeline = buildTimeline();

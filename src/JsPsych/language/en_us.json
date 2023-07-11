@@ -26,8 +26,8 @@
     "not_found": "Note: no event marker found."
   },
   "countdown": {
-    "message1": "Countdown for the first block",
-    "message2": "Countdown for the second block"
+    "first": "Countdown for the first block",
+    "second": "Countdown for the second block"
   },
   "instructions": {
     "adjust_volume": "Set tablet volume to 50/100.",
