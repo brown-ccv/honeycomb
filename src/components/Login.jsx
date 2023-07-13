@@ -12,9 +12,9 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
   function handleSubmit(e) {
     e.preventDefault();
     // Logs user in if a valid participant/study id combination is given
-    validationFunction(participantId, studyId).then((isValid) => {
+    validationFunction(studyId, participantId).then((isValid) => {
       setIsError(!isValid);
-      if (isValid) handleLogin(participantId, studyId);
+      if (isValid) handleLogin(studyId, participantId);
     });
   }
 
@@ -44,7 +44,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
             block
             size='lg'
             type='submit'
-            disabled={participantId.length === 0 || studyId.length === 0}
+            disabled={studyId.length === 0 || participantId.length === 0}
           >
             Log In
           </Button>

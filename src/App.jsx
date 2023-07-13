@@ -64,17 +64,15 @@ function App() {
       // If MTURK
       if (config.USE_MTURK) {
         /* eslint-disable */
-        window.lodash = _.noConflict()
-        setPsiturk(new PsiTurk(turkUniqueId, '/complete'))
-        setMethod('mturk')
-        // TODO 145: Function signature
-        handleLogin('mturk', turkUniqueId)
+        window.lodash = _.noConflict();
+        setPsiturk(new PsiTurk(turkUniqueId, '/complete'));
+        setMethod('mturk');
+        handleLogin('mturk', turkUniqueId);
         /* eslint-enable */
       } else if (config.USE_PROLIFIC) {
         const pID = getProlificId();
         if (config.USE_FIREBASE && pID) {
           setMethod('firebase');
-          // TODO 145: Function signature
           handleLogin('prolific', pID);
         } else {
           // Error - Prolific must be used with Firebase
@@ -83,10 +81,10 @@ function App() {
       } else if (config.USE_FIREBASE) {
         // Fill in login fields based on query parameters (may still be blank)
         const query = new URLSearchParams(window.location.search);
-        const participantId = query.get('participantID');
         const studyId = query.get('studyID');
-        if (participantId) setParticipantID(participantId);
+        const participantId = query.get('participantID');
         if (studyId) setStudyID(studyId);
+        if (participantId) setParticipantID(participantId);
 
         setMethod('firebase');
       } else {
@@ -94,15 +92,15 @@ function App() {
       }
     }
     // eslint-disable-next-line
-  }, [])
+  }, []);
 
   /** VALIDATION FUNCTIONS */
 
   // Default to valid
   const defaultValidation = async () => true;
   // Validate participant/study against Firestore rules
-  const firebaseValidation = (participantId, studyId) => {
-    return validateParticipant(participantId, studyId);
+  const firebaseValidation = (studyId, participantId) => {
+    return validateParticipant(studyId, participantId);
   };
 
   /** DATA WRITE FUNCTIONS */
@@ -141,9 +139,9 @@ function App() {
   };
 
   // Update the study/participant data when they log in
-  const handleLogin = useCallback((participantId, studyId) => {
-    setParticipantID(participantId);
+  const handleLogin = useCallback((studyId, participantId) => {
     setStudyID(studyId);
+    setParticipantID(participantId);
     setLoggedIn(true);
   }, []);
 
@@ -160,8 +158,8 @@ function App() {
       <>
         {loggedIn ? (
           <JsPsychExperiment
-            participantId={participantID}
             studyId={studyID}
+            participantId={participantID}
             taskVersion={taskVersion}
             dataUpdateFunction={
               {
@@ -189,8 +187,8 @@ function App() {
                 firebase: firebaseValidation,
               }[currentMethod]
             }
-            initialParticipantID={participantID}
             initialStudyID={studyID}
+            initialParticipantID={participantID}
             handleLogin={handleLogin}
           />
         )}
