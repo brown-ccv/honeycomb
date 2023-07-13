@@ -13,6 +13,7 @@
   "homepage": ".",
   "repository": "https://github.com/brown-ccv/honeycomb",
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@brown-ccv/behavioral-task-trials": "^2.0.0",
     "@fortawesome/fontawesome-free": "^5.9.0",
     "@jspsych/plugin-html-button-response": "^1.1.1",
@@ -50,7 +51,7 @@
     "electron": "19.0.8",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-prettier": "^5.0.0",
     "firebase-admin": "^11.0.1",
     "firebase-tools": "^11.0.1",
     "husky": "^8.0.3",
