@@ -3,9 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../index.css';
 
-// import { config, taskVersion, turkUniqueId } from '../config/main';
 import { addToFirebase, validateParticipant } from '../firebase';
-// import { getProlificId } from '../lib/utils';
 
 import JsPsychExperiment from './JsPsychExperiment';
 import Login from './Login';
@@ -90,17 +88,15 @@ function App() {
       // If MTURK
       if (oldConfig.USE_MTURK) {
         /* eslint-disable */
-        window.lodash = _.noConflict()
-        setPsiturk(new PsiTurk(turkUniqueId, '/complete'))
-        setMethod('mturk')
-        // TODO 145: Function signature
-        handleLogin('mturk', turkUniqueId)
+        window.lodash = _.noConflict();
+        setPsiturk(new PsiTurk(turkUniqueId, '/complete'));
+        setMethod('mturk');
+        handleLogin('mturk', turkUniqueId);
         /* eslint-enable */
       } else if (oldConfig.USE_PROLIFIC) {
         const pID = getProlificId();
         if (oldConfig.USE_FIREBASE && pID) {
           setMethod('firebase');
-          // TODO 145: Function signature
           handleLogin('prolific', pID);
         } else {
           // Error - Prolific must be used with Firebase
