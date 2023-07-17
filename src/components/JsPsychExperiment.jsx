@@ -43,13 +43,13 @@ function JsPsychExperiment({
       on_finish: (data) => dataFinishFunction(data),
     });
     jsPsych.data.addProperties({
-      participant_id: participantID,
       study_id: studyID,
+      participant_id: participantID,
       start_date: startDate,
       task_version: taskVersion,
     });
     return jsPsych;
-  }, [participantID, studyID, taskVersion]);
+  }, [studyID, participantID, taskVersion]);
 
   // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
   // ? I wonder if it makes the most sense to just have the user create and pass the jsPsych object?
