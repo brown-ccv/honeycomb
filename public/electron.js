@@ -197,8 +197,8 @@ const today = new Date();
  * Abstracts constructing the filepath for saving data for this participant and study.
  * @returns {string} The filepath.
  */
-const getSavePath = (participantID, studyID) => {
-  if (participantID !== '' && studyID !== '') {
+const getSavePath = (studyID, participantID) => {
+  if (studyID !== '' && participantID !== '') {
     const desktop = app.getPath('desktop');
     const name = app.getName();
     const date = today.toISOString().slice(0, 10);
@@ -224,7 +224,7 @@ ipc.on('syncCredentials', (event) => {
 // listener for new data
 ipc.on('data', (event, args) => {
   // initialize file - we got a participant_id to save the data to
-  if (args.participant_id && args.study_id && !fileCreated) {
+  if (args.study_id && args.participant_id && !fileCreated) {
     const dir = app.getPath('userData');
     participantID = args.participant_id;
     studyID = args.study_id;
@@ -237,7 +237,7 @@ ipc.on('data', (event, args) => {
   }
 
   if (savePath === '') {
-    savePath = getSavePath(participantID, studyID);
+    savePath = getSavePath(studyID, participantID);
   }
 
   // we have a set up stream to write to, write to it!
@@ -258,7 +258,7 @@ ipc.on('data', (event, args) => {
 // Save Video
 ipc.on('save_video', (event, videoFileName, buffer) => {
   if (savePath === '') {
-    savePath = getSavePath(participantID, studyID);
+    savePath = getSavePath(studyID, participantID);
   }
 
   if (VIDEO) {

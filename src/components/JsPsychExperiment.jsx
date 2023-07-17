@@ -6,8 +6,8 @@ import { initParticipant } from '../firebase';
 import { buildTimeline, jsPsychOptions } from '../timelines/main';
 
 function JsPsychExperiment({
-  participantId,
   studyId,
+  participantId,
   taskVersion,
   dataUpdateFunction,
   dataFinishFunction,
@@ -35,18 +35,18 @@ function JsPsychExperiment({
     const startDate = new Date().toISOString();
 
     // Write the initial record to Firestore
-    if (config.USE_FIREBASE) initParticipant(participantId, studyId, startDate);
+    if (config.USE_FIREBASE) initParticipant(studyId, participantId, startDate);
 
     const jsPsych = initJsPsych(combinedOptions);
     // Add experiment properties into jsPsych directly
     jsPsych.data.addProperties({
-      participant_id: participantId,
       study_id: studyId,
+      participant_id: participantId,
       start_date: startDate,
       task_version: taskVersion,
     });
     return jsPsych;
-  }, [participantId, studyId, taskVersion]);
+  }, [studyId, participantId, taskVersion]);
 
   // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
   const timeline = buildTimeline(jsPsych);
