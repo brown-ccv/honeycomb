@@ -45,7 +45,7 @@ function Login({
       </Form.Group>
       <Button
         className='width-50'
-        block
+        block='true'
         size='lg'
         type='submit'
         disabled={participantID === '' || studyID === ''}
