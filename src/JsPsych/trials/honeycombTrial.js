@@ -1,13 +1,13 @@
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { showMessage, fixation } from '@brown-ccv/behavioral-task-trials';
+import { showMessage, fixation } from "@brown-ccv/behavioral-task-trials";
 
 // TODO 226: This is a task, how do I pass which config file to use?
 // Hard code for now
-import config from '../config/home.json';
-import { EVENT_CODES } from '../constants';
-import { formatDollars } from '../utils';
-import { useOldConfig } from '../../utils';
+import config from "../config/home.json";
+import { EVENT_CODES } from "../constants";
+import { formatDollars } from "../utils";
+import { useOldConfig } from "../../utils";
 
 /**
  * Create an HTML stimulus for displaying the participant's current earnings
@@ -15,7 +15,7 @@ import { useOldConfig } from '../../utils';
  * @returns
  */
 function earningsStimulus(earnings) {
-  const class_ = earnings >= 0 ? 'success' : 'danger';
+  const class_ = earnings >= 0 ? "success" : "danger";
   return `<div class='center_container'>
     <h1 class='text-${class_}'>${formatDollars(earnings)}</h1>
     </div>`;

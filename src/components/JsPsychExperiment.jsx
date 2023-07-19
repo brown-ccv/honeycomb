@@ -1,10 +1,10 @@
-import { initJsPsych } from 'jspsych';
-import React, { useEffect, useMemo, useRef } from 'react';
+import { initJsPsych } from "jspsych";
+import React, { useEffect, useMemo, useRef } from "react";
 
-import { initParticipant } from '../firebase';
+import { initParticipant } from "../firebase";
 
 // These will be passed in as props to the package once it's split
-import { buildTimeline, JSPSYCH_OPTIONS } from '../JsPsych/timeline';
+import { buildTimeline, JSPSYCH_OPTIONS } from "../JsPsych/timeline";
 
 /** JsPsych Experiment
  *
@@ -22,7 +22,7 @@ function JsPsychExperiment({
 }) {
   // This will be the div in the dom that holds the experiment.
   // We reference it explicitly here so we can do some plumbing with react, jspsych, and events.
-  const experimentDivID = 'experimentWindow';
+  const experimentDivID = "experimentWindow";
   const experimentDivRef = useRef(null);
 
   // Create the instance of jsPsych that we'll reuse within the scope of this JsPsychExperiment component.
@@ -69,25 +69,25 @@ function JsPsychExperiment({
 
   useEffect(() => {
     // TODO 193: useLayoutEffect callbacks might be even more similar.
-    window.addEventListener('keyup', handleKeyEvent, true);
-    window.addEventListener('keydown', handleKeyEvent, true);
+    window.addEventListener("keyup", handleKeyEvent, true);
+    window.addEventListener("keydown", handleKeyEvent, true);
     jsPsych.run(timeline); // This will be passed to the package
 
     return () => {
-      window.removeEventListener('keyup', handleKeyEvent, true);
-      window.removeEventListener('keydown', handleKeyEvent, true);
+      window.removeEventListener("keyup", handleKeyEvent, true);
+      window.removeEventListener("keydown", handleKeyEvent, true);
       try {
-        jsPsych.endExperiment('Ended Experiment');
+        jsPsych.endExperiment("Ended Experiment");
       } catch (e) {
-        console.error('Experiment closed before unmount');
+        console.error("Experiment closed before unmount");
       }
     };
   });
 
   // TODO 184: Root is not taking up 100vh here? The <body> isn't? Are the trials causing that?
   return (
-    <div className='Experiment'>
-      <div id={experimentDivID} ref={experimentDivRef} style={{ width: '100%', height: '100%' }} />
+    <div className="Experiment">
+      <div id={experimentDivID} ref={experimentDivRef} style={{ width: "100%", height: "100%" }} />
     </div>
   );
 }

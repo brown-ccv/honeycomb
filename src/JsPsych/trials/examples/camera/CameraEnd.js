@@ -1,13 +1,13 @@
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { photodiodeGhostBox } from '../../../markup/photodiode';
-import { baseStimulus } from '../../../markup/baseStimulus';
+import { photodiodeGhostBox } from "../../../markup/photodiode";
+import { baseStimulus } from "../../../markup/baseStimulus";
 
-import { language } from '../../../language';
+import { language } from "../../../language";
 
 // Hard code for now
 // TODO 226: This is a task, how do I pass which config file to use?
-import config from '../../../config/home.json';
+import config from "../../../config/home.json";
 
 /**
  * Experiment trial for ending a participant's camera feed
@@ -24,12 +24,12 @@ export function createCameraEndTrial(duration) {
     on_load: () => {
       //   if (config.USE_CAMERA) {
       if (config.equipment.camera === true) {
-        console.log('finished');
+        console.log("finished");
         try {
           window.cameraCapture.stop();
           window.screenCapture.stop();
         } catch (error) {
-          window.alert('Your video recording was not saved');
+          window.alert("Your video recording was not saved");
         }
       }
     },

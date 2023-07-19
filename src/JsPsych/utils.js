@@ -1,5 +1,5 @@
 // Utility Functions
-import _ from 'lodash';
+import _ from "lodash";
 
 /**
  * Delay program execution
@@ -47,7 +47,7 @@ export function deepCopy(obj) {
  * @param {number} amount Dollar amount
  */
 export function formatDollars(amount) {
-  return '$' + parseFloat(amount).toFixed(2);
+  return "$" + parseFloat(amount).toFixed(2);
 }
 
 /**
@@ -60,7 +60,7 @@ export function generateWaitSet(trial, waitTime) {
   const waitTrial = Object.assign({}, trial);
   waitTrial.trial_duration = waitTime;
   waitTrial.response_ends_trial = false;
-  waitTrial.prompt = '-';
+  waitTrial.prompt = "-";
 
   return [waitTrial, trial];
 }
@@ -90,7 +90,7 @@ export function startKeypressListener(jsPsych) {
 
   const keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
     callback_function: keypressResponse,
-    valid_responses: ['ALL_KEYS'],
+    valid_responses: ["ALL_KEYS"],
     persist: false,
   });
 
@@ -110,7 +110,7 @@ export function startKeypressListener(jsPsych) {
  */
 export function importAll(r) {
   function importImageByName(allImages, imageName) {
-    const friendlyName = imageName.replace('./', '');
+    const friendlyName = imageName.replace("./", "");
     return { ...allImages, [friendlyName]: r(imageName) };
   }
   return r.keys().reduce(importImageByName, {});
@@ -123,9 +123,9 @@ export function importAll(r) {
 // TODO 199: Can this just use URLSearchParams?
 export function getQueryVariable(variable) {
   const query = window.location.search.substring(1);
-  const vars = query.split('&');
+  const vars = query.split("&");
   for (let i = 0; i < vars.length; i++) {
-    const pair = vars[i].split('=');
+    const pair = vars[i].split("=");
     if (decodeURIComponent(pair[0]) === variable) return decodeURIComponent(pair[1]);
   }
 }
@@ -134,7 +134,7 @@ export function getQueryVariable(variable) {
  * Gets the getProlificId from the query string
  */
 export function getProlificId() {
-  return getQueryVariable('PROLIFIC_PID');
+  return getQueryVariable("PROLIFIC_PID");
 }
 
 /**

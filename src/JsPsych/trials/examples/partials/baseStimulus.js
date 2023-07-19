@@ -7,6 +7,6 @@
  */
 // TODO 234: Utility function?
 export function baseStimulus(children, prompt = false, centered = false) {
-  const class_ = centered ? 'center_container' : prompt ? 'main-prompt' : 'main';
+  const class_ = centered ? "center_container" : prompt ? "main-prompt" : "main";
   return `<div class=${class_}>${children}</div>`;
 }

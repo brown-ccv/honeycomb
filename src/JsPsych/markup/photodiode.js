@@ -1,11 +1,11 @@
-import $ from 'jquery';
+import $ from "jquery";
 
-import { EVENT_CODES } from '../constants';
+import { EVENT_CODES } from "../constants";
 
 // TODO 226: This is a task, how do I pass which config file to use?
 // Hard code for now
-import config from '../config/home.json';
-import { useOldConfig } from '../../utils';
+import config from "../config/home.json";
+import { useOldConfig } from "../../utils";
 
 const oldConfig = useOldConfig(config);
 
@@ -13,18 +13,18 @@ const oldConfig = useOldConfig(config);
 let ipcRenderer = false;
 try {
   if (oldConfig.USE_ELECTRON) {
-    const electron = window.require('electron');
+    const electron = window.require("electron");
     ipcRenderer = electron.ipcRenderer;
   }
 } catch (e) {
-  console.warn('window.require is not available');
+  console.warn("window.require is not available");
   console.error(e);
 }
 
 // Relies on styling in index.css, generate PD spot
 // TODO 226: Refactor to take USE_PHOTODIODE as a parameter
 export function photodiodeGhostBox() {
-  const class_ = oldConfig.USE_PHOTODIODE ? 'visible' : 'invisible';
+  const class_ = oldConfig.USE_PHOTODIODE ? "visible" : "invisible";
 
   return `<div class="photodiode-box ${class_}" id="photodiode-box">
         <span id="photodiode-spot" class="photodiode-spot"></span>
@@ -35,9 +35,9 @@ export function photodiodeGhostBox() {
 // ? What's the taskCode really for?
 export function pdSpotEncode(taskCode) {
   function pulseFor(ms, callback) {
-    $('.photodiode-spot').css({ 'background-color': 'black' });
+    $(".photodiode-spot").css({ "background-color": "black" });
     setTimeout(() => {
-      $('.photodiode-spot').css({ 'background-color': 'white' });
+      $(".photodiode-spot").css({ "background-color": "white" });
       callback();
     }, ms);
   }
@@ -57,6 +57,6 @@ export function pdSpotEncode(taskCode) {
     let numBlinks = taskCode;
     if (taskCode < EVENT_CODES.open_task) numBlinks = 1;
     repeatPulseFor(blinkTime, numBlinks);
-    if (ipcRenderer) ipcRenderer.send('trigger', taskCode);
+    if (ipcRenderer) ipcRenderer.send("trigger", taskCode);
   }
 }

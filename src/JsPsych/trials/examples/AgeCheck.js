@@ -1,7 +1,7 @@
-import { survey } from '@brown-ccv/behavioral-task-trials';
+import { survey } from "@brown-ccv/behavioral-task-trials";
 
 // TODO 204: Use @signature for imports?
-import { language } from '../../language'; // @language
+import { language } from "../../language"; // @language
 
 /**
  *  Asks the user to

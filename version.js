@@ -2,8 +2,8 @@
 // TODO 173: Is there a better way to keep track of versioning? Just use x.x.x?
 
 // TODO: Update fs-extra and execa, convert from cjs module
-const fs = require('fs-extra');
-const execa = require('execa');
+const fs = require("fs-extra");
+const execa = require("execa");
 
 let git;
 if (process.env.CI) {
@@ -11,11 +11,11 @@ if (process.env.CI) {
   const ref = process.env.GITHUB_REF;
   git = { sha, ref };
 } else {
-  const sha = execa.commandSync('git rev-parse HEAD').stdout;
-  const ref = execa.commandSync('git branch --show-current').stdout;
+  const sha = execa.commandSync("git rev-parse HEAD").stdout;
+  const ref = execa.commandSync("git branch --show-current").stdout;
   git = { sha, ref };
 }
 
-fs.writeFile('public/config/version.json', JSON.stringify(git))
+fs.writeFile("public/config/version.json", JSON.stringify(git))
   .then(() => console.log(`Saved version file with rev: ${git.sha}, branch: ${git.ref}`))
   .catch((error) => console.log(error));

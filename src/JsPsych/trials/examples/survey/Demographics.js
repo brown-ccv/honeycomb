@@ -1,8 +1,8 @@
-import SurveyMultiSelectPlugin from '@jspsych/plugin-survey-multi-select';
+import SurveyMultiSelectPlugin from "@jspsych/plugin-survey-multi-select";
 
 // TODO 204: Use @signature for imports?
-import { language } from '../../../language'; // @language
-import { multiSurvey, survey } from '@brown-ccv/behavioral-task-trials';
+import { language } from "../../../language"; // @language
+import { multiSurvey, survey } from "@brown-ccv/behavioral-task-trials";
 
 /**
  * Creates a survey page for demographics information

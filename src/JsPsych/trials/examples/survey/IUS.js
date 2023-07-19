@@ -1,6 +1,6 @@
-import { multiSurvey } from '@brown-ccv/behavioral-task-trials';
+import { multiSurvey } from "@brown-ccv/behavioral-task-trials";
 
-import { language } from '../../../language';
+import { language } from "../../../language";
 
 /**
  * Create a survey of Intolerance of Uncertainty Scale (IUS) questions

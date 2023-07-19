@@ -4,37 +4,37 @@
 module.exports = {
   packagerConfig: {
     asar: true,
-    icon: './assets/icons/icon',
+    icon: "./assets/icons/icon",
   },
   makers: [
     {
       // Build zip files
-      name: '@electron-forge/maker-zip',
+      name: "@electron-forge/maker-zip",
     },
     {
       // Build for Linux
-      name: '@electron-forge/maker-deb',
+      name: "@electron-forge/maker-deb",
       config: {
         options: {
-          icon: '/path/to/icon.png',
+          icon: "/path/to/icon.png",
         },
       },
     },
     {
       // Build for Mac
-      name: '@electron-forge/maker-dmg',
+      name: "@electron-forge/maker-dmg",
       config: {
         overwrite: true,
-        icon: './assets/icons/icon.icns',
+        icon: "./assets/icons/icon.icns",
       },
     },
     {
       // Build for Windows
-      name: '@electron-forge/maker-squirrel',
+      name: "@electron-forge/maker-squirrel",
       config: {
         iconUrl:
-          'https://raw.githubusercontent.com/brown-ccv/honeycomb/main/assets/icons/win/icon.ico',
-        setupIcon: './assets/icons/icon.ico',
+          "https://raw.githubusercontent.com/brown-ccv/honeycomb/main/assets/icons/win/icon.ico",
+        setupIcon: "./assets/icons/icon.ico",
 
         // TODO: These are used in the example?
         // certificateFile: './cert.pfx',
@@ -45,18 +45,18 @@ module.exports = {
   plugins: [
     {
       // https://www.electronforge.io/config/plugins/auto-unpack-natives
-      name: '@electron-forge/plugin-auto-unpack-natives',
+      name: "@electron-forge/plugin-auto-unpack-natives",
       config: {},
     },
   ],
   publishers: [
     {
       // TODO: These might be nice for the end user? But not Honeycomb itself?
-      name: '@electron-forge/publisher-github',
+      name: "@electron-forge/publisher-github",
       config: {
         repository: {
-          owner: 'brown-ccv',
-          name: 'honeycomb',
+          owner: "brown-ccv",
+          name: "honeycomb",
         },
         prerelease: true,
       },
