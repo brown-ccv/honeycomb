@@ -13,7 +13,7 @@ import { buildTimeline, JSPSYCH_OPTIONS } from "../JsPsych/timeline";
  * It also handles the passing of keyboard/mouse events into JsPsych
  */
 function JsPsychExperiment({
-  oldConfig,
+  config,
   studyID,
   participantID,
   taskVersion,
@@ -33,7 +33,7 @@ function JsPsychExperiment({
     const startDate = new Date().toISOString();
 
     // Write the initial record to Firestore
-    if (oldConfig.USE_FIREBASE) initParticipant(studyID, participantID, startDate);
+    if (config.USE_FIREBASE) initParticipant(studyID, participantID, startDate);
 
     // Initialize experiment with needed data. Combines custom options with necessary Honeycomb options.
     const jsPsych = initJsPsych({

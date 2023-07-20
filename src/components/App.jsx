@@ -167,7 +167,7 @@ function App() {
   } else {
     return loggedIn ? (
       <JsPsychExperiment
-        OLD_CONFIG={OLD_CONFIG}
+        config={OLD_CONFIG}
         studyID={studyID}
         participantID={participantID}
         taskVersion={TASK_VERSION}
