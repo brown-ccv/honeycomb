@@ -129,7 +129,7 @@ function App() {
   function firebaseUpdateFunction(data) {
     addToFirebase(data);
   }
-  // Execute the 'data' callback function (see public/electron.js)
+  // Execute the "data" callback function (see public/electron.js)
   function desktopUpdateFunction(data) {
     ipcRenderer.send("data", data);
   }
@@ -145,7 +145,7 @@ function App() {
     data.localSave("csv", "neuro-task.csv");
   }
 
-  // Execute the 'end' callback function (see public/electron.js)
+  // Execute the "end" callback function (see public/electron.js)
   function desktopFinishFunction() {
     ipcRenderer.send("end", "true");
   }

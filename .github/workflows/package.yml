@@ -5,13 +5,13 @@ on:
   workflow_dispatch:
     inputs:
       setting:
-        description: Build for 'home' or 'clinic'
+        description: Build for "home" or "clinic"
         required: true
-        default: 'home'
+        default: "home"
       os:
-        description: Which OS to target - 'win', 'mac', 'linux', 'all'
+        description: Which OS to target - "win", "mac", "linux", "all"
         required: true
-        default: 'win'
+        default: "win"
 
 jobs:
   build:

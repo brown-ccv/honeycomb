@@ -8,9 +8,9 @@ on:
   pull_request:
     # Only re-run job when certain files have been changed in the PR
     paths:
-      - 'src/**'
-      - 'public/**'
-      - '.github/workflows/build.yml'
+      - "src/**"
+      - "public/**"
+      - ".github/workflows/build.yml"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

@@ -37,7 +37,7 @@ module.exports = {
         setupIcon: "./assets/icons/icon.ico",
 
         // TODO: These are used in the example?
-        // certificateFile: './cert.pfx',
+        // certificateFile: "./cert.pfx",
         // certificatePassword: process.env.CERTIFICATE_PASSWORD,
       },
     },

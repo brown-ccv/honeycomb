@@ -1,4 +1,4 @@
-rules_version = '2';
+rules_version = "2";
 service cloud.firestore {
   match /databases/{database}/documents {
     // participantID must be in the registered_participants array in the registered_studies/{studyID} document

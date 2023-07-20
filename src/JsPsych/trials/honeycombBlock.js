@@ -7,7 +7,7 @@ import { generateBlockConditions } from "../utils";
  * Build a timeline block of multiple trials of Honeycomb's custom task
  * Each trial within a block contains randomized values for our experiment's configuration
  *
- * @param {number} conditions - The possible conditions to show in a given trial (default: ['a', 'b', 'c'])
+ * @param {number} conditions - The possible conditions to show in a given trial (default: ["a", "b", "c"])
  * @param {string} repeatsPerCondition - The number of times each condition should be repeated (default: 1)
  * @param {string} isPractice - Whether or not the block is for practice (default: false)
  * @param {number} isTutorial - Whether or not the block is a tutorial (default: false)

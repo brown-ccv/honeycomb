@@ -55,7 +55,7 @@ export function formatDollars(amount) {
  * @param {*} trial The trial to add a wait period to
  * @param {*} waitTime The amount of time to wait by
  */
-// TODO 162: This should be a trial not a utility? It's adding a separate trial in and of itself
+// TODO 162: This should be a trial not a utility? It"s adding a separate trial in and of itself
 export function generateWaitSet(trial, waitTime) {
   const waitTrial = Object.assign({}, trial);
   waitTrial.trial_duration = waitTime;
@@ -102,8 +102,8 @@ export function startKeypressListener(jsPsych) {
  * This produces an object that maps friendly image file names to obscure webpack path names.
  *  For example:
  *    {
- *      image1.png: '/static/media/image1.5dca7a2a50fb8b633fd5.png',
- *      image2.png: '/static/media/image2.5dca7a2a50fb8b633fd5.png'
+ *      image1.png: "/static/media/image1.5dca7a2a50fb8b633fd5.png",
+ *      image2.png: "/static/media/image2.5dca7a2a50fb8b633fd5.png"
  *    }
  * @param {Object} r
  * @returns
@@ -117,7 +117,7 @@ export function importAll(r) {
 }
 
 /**
- * Get a query parameter out of the window's URL
+ * Get a query parameter out of the window"s URL
  * @param {*} variable The key to parse
  */
 // TODO 199: Can this just use URLSearchParams?
