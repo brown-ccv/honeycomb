@@ -74,9 +74,9 @@ function App() {
       if (oldConfig.USE_MTURK) {
         /* eslint-disable */
         window.lodash = _.noConflict();
-        setPsiturk(new PsiTurk(turkUniqueId, '/complete'));
-        setMethod('mturk');
-        handleLogin('mturk', turkUniqueId);
+        setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
+        setMethod("mturk");
+        handleLogin("mturk", turkUniqueId);
         /* eslint-enable */
       } else if (oldConfig.USE_PROLIFIC) {
         const pID = getProlificId();
@@ -101,7 +101,7 @@ function App() {
       }
     }
     // eslint-disable-next-line
-  }, [])
+  }, []);
 
   /** VALIDATION FUNCTIONS */
 
@@ -121,7 +121,10 @@ function App() {
   // TODO 157: Separate file for update/finish functions
   // TODO 157: Have an object of functions, accessed by the config variable
   // Do nothing
-  function defaultFunction() {}
+  function defaultFunction() {
+    return;
+  }
+
   // Add trial data to Firestore
   function firebaseUpdateFunction(data) {
     addToFirebase(data);
