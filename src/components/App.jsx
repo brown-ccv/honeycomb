@@ -8,10 +8,10 @@ import JsPsychExperiment from "./JsPsychExperiment";
 import Login from "./Login";
 import Error from "./Error";
 
-// Hard code for now
-import { OLD_CONFIG } from "../constants";
+import { OLD_CONFIG, LOCATION, DEPLOYMENT } from "../constants";
+import { getQueryVariable } from "../utils";
+
 import { TASK_VERSION } from "../JsPsych/constants";
-import { getProlificId } from "../JsPsych/utils";
 
 /** Top-level React component for Honeycomb.
  *
@@ -23,6 +23,7 @@ function App() {
   // Manage user state of the app
   const [loggedIn, setLoggedIn] = useState(false);
   // Manage error state of the app
+  // TODO: Refactor to be the error message itself or null
   const [isError, setIsError] = useState(false);
   // Manage the method state of the app ("desktop", "firebase", "mturk", or "default")
   const [currentMethod, setMethod] = useState("default");
@@ -41,60 +42,81 @@ function App() {
    * It uses the environment variables to initialize the above state variables
    */
   useEffect(() => {
-    // For testing and debugging purposes
-    console.log(OLD_CONFIG);
+    console.log(OLD_CONFIG); // Log for testing
 
-    // If on desktop
-    if (OLD_CONFIG.USE_ELECTRON) {
-      // conditionally load electron and psiturk based on MTURK config variable
-      let ipcRenderer = false;
+    // TODO: Refactor to switch
+    if (LOCATION === "clinic") {
+      // Running in an Electron process
+      let renderer;
       try {
-        const electron = window.require("electron");
-        ipcRenderer = electron.ipcRenderer;
+        // Load the Electron renderer process and psiturk based on MTURK config variable
+        renderer = window.require("electron").ipcRenderer;
+        renderer.send("updateEnvironmentVariables", OLD_CONFIG);
+
+        // Fill in login fields based on environment variables (may still be blank)
+        // TODO: Can this be done with URLSearchParams?
+        const credentials = renderer.sendSync("syncCredentials");
+        setParticipantID(credentials.participantID || "");
+        setStudyID(credentials.studyID || "");
+
+        setIpcRenderer(renderer);
       } catch (e) {
-        console.warn("window.require is not available");
-        return; // Early return
+        console.error("Unable to instantiate the Electron process", e);
       }
-
-      ipcRenderer.send("updateEnvironmentVariables", OLD_CONFIG);
-
-      // Fill in login fields based on environment variables (may still be blank)
-      const credentials = ipcRenderer.sendSync("syncCredentials");
-      setParticipantID(credentials.participantID || "");
-      setStudyID(credentials.studyID || "");
-
-      setMethod("desktop");
-      setIpcRenderer(ipcRenderer);
     } else {
-      // If MTURK
-      if (OLD_CONFIG.USE_MTURK) {
-        /* eslint-disable */
-        window.lodash = _.noConflict();
-        setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
-        setMethod("mturk");
-        handleLogin("mturk", turkUniqueId);
-        /* eslint-enable */
-      } else if (OLD_CONFIG.USE_PROLIFIC) {
-        const pID = getProlificId();
-        if (OLD_CONFIG.USE_FIREBASE && pID) {
-          setMethod("firebase");
-          handleLogin("prolific", pID);
-        } else {
-          // Error - Prolific must be used with Firebase
-          setIsError(true);
-        }
-      } else if (OLD_CONFIG.USE_FIREBASE) {
-        // Fill in login fields based on query parameters (may still be blank)
-        // Prolific will pass the studyID and participantID as search parameters in the URL
-        // Please ensure the search params use the same name here
-        const query = new URLSearchParams(window.location.search);
-        setStudyID(query.get("studyID") || "");
-        setParticipantID(query.get("participantID") || "");
+      // Running in the Browser
 
-        setMethod("firebase");
-      } else {
+      // TODO: Can we use searURLSearchParams in Electron?
+      // Fill in login fields based on query parameters (may still be blank)
+      // Prolific will pass the studyID and participantID as search parameters in the URL
+      const query = new URLSearchParams(window.location.search);
+      setStudyID(query.get("studyID") || "");
+      setParticipantID(query.get("participantID") || "");
+    }
+
+    switch (DEPLOYMENT) {
+      case "csv":
+        // Data is downloaded as a CSV file at the end of the experiment
         setMethod("default");
+        break;
+      case "local":
+        // Save to a local JSON file with Honeycomb/studyID/participantID/[startDate] folder structure
+        break;
+      case "firebase": {
+        // Data is saved in Firebase's Firestore database
+        setMethod("firebase");
+        break;
       }
+      case "prolific": {
+        // TODO: Prolific will be deleted
+        // Logs with with studyID as prolific and participantID as <pID>
+        const pID = getQueryVariable("PROLIFIC_PID");
+        handleLogin("prolific", pID);
+
+        // Prolific currently uses the Firebase CRUD functions
+        setMethod("firebase");
+        break;
+      }
+      case "psiturk":
+        {
+          /* eslint-disable */
+          // ? This is using all the JavaScript min files?
+          window.lodash = _.noConflict();
+          setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
+
+          // Logs with with studyID as mturk and participantID as <pID>
+          handleLogin("mturk", turkUniqueId);
+          setMethod("mturk");
+          /* eslint-enable */
+        }
+        break;
+      // TODO: Add XAMPP support and instructions https://www.jspsych.org/7.3/overview/data/#storing-data-permanently-as-a-file
+      // TODO: Add MySQL support and instructions https://www.jspsych.org/7.3/overview/data/#storing-data-permanently-in-a-mysql-database
+      case "custom": // TODO: User will have to provide the data functions to <Honeycomb />
+      default:
+        setIsError(true);
+        console.error("process.env.DEPLOYMENT is invalid or not set: ");
+        break;
     }
     // eslint-disable-next-line
   }, []);
@@ -138,7 +160,7 @@ function App() {
 
   // Save the experiment data on the desktop
   function defaultFinishFunction(data) {
-    data.localSave("csv", "neuro-task.csv");
+    data.localSave("csv", "honeycomb.csv");
   }
 
   // Execute the "end" callback function (see public/electron.js)

@@ -13,3 +13,18 @@ export function useOldConfig(newConfig) {
     USE_CAMERA: equipment.camera ? true : false,
   };
 }
+
+/**
+ * Get a query parameter out of the window"s URL
+ * @param {*} variable The key to parse
+ */
+// TODO 199: Can this just use URLSearchParams?
+// TODO: MOve this out of JsPsych
+export function getQueryVariable(variable) {
+  const query = window.location.search.substring(1);
+  const vars = query.split("&");
+  for (let i = 0; i < vars.length; i++) {
+    const pair = vars[i].split("=");
+    if (decodeURIComponent(pair[0]) === variable) return decodeURIComponent(pair[1]);
+  }
+}
