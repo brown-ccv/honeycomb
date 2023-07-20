@@ -1,6 +1,6 @@
-import packageJson from '../../package.json';
-import requireContext from 'require-context.macro';
-import { importAll } from './utils';
+import packageJson from "../../package.json";
+import requireContext from "require-context.macro";
+import { importAll } from "./utils";
 
 export const TASK_NAME = packageJson.name;
 export const TASK_VERSION = packageJson.version;
@@ -29,9 +29,9 @@ export const EVENT_CODES = {
 // Audio code settings
 export const AUDIO_CODES = {
   frequency: 100 * 9,
-  type: 'sine',
+  type: "sine",
 };
 
 // Automatically load images in assets/images folder
 // TODO: Can update babel-plugin-macros dependency if we get rid of requireContext
-export const IMAGES = importAll(requireContext('./assets/images', false, /\.(png|jpe?g|svg)$/));
+export const IMAGES = importAll(requireContext("./assets/images", false, /\.(png|jpe?g|svg)$/));

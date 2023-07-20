@@ -1,5 +1,5 @@
-import { range } from 'lodash';
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
+import { range } from "lodash";
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
 /**
  * Builds a countdown transition with the given message and number of seconds.
@@ -15,11 +15,11 @@ import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 // TODO 212: This isn't a keyboard response? Just instructions? Definitely don't need user input
 export function createCountdownTrial({
   duration = 1000, // Default to 1 second per trial
-  stimulus = '', // Default empty stimulus
-  message = '', // Default empty message
+  stimulus = "", // Default empty stimulus
+  message = "", // Default empty message
   time = 3, // Default 3...2...1... countdown
 } = {}) {
-  const stimulusOrMessage = message !== '' ? `<h3>${message}</h3>` : stimulus;
+  const stimulusOrMessage = message !== "" ? `<h3>${message}</h3>` : stimulus;
 
   // Countdown from time -> 0
   const timeline = range(time, 0, -1).map((n) => ({ prompt: `<h1>${n}</h1>` }));

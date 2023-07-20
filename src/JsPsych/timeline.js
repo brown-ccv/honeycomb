@@ -1,9 +1,9 @@
 // TODO 204: @ import for language
-import { language } from './language';
+import { language } from "./language";
 
 // TODO 204: @ import for trials
-import { Preamble, createCountdownTrial, EndExperiment } from './trials/examples';
-import { createHoneycombBlock } from './trials/honeycombBlock';
+import { Preamble, createCountdownTrial, EndExperiment } from "./trials/examples";
+import { createHoneycombBlock } from "./trials/honeycombBlock";
 
 /**
  * Create your custom JsPsych options here. These settings will applied experiment wide.
@@ -13,7 +13,7 @@ import { createHoneycombBlock } from './trials/honeycombBlock';
 export const JSPSYCH_OPTIONS = {
   // Log each trial on the console
   on_trial_finish: function (data) {
-    console.log('A trial just ended, here are the latest data:');
+    console.log("A trial just ended, here are the latest data:");
     console.log(data);
   },
   //   Sets the default inter-trial interval
@@ -45,7 +45,7 @@ export function buildTimeline(jsPsych) {
 
   // Create a practice block of Honeycomb's custom task
   const honeycombPracticeBlock = createHoneycombBlock({
-    conditions: ['m', 'n'],
+    conditions: ["m", "n"],
     repeatsPerCondition: 1,
     isPractice: true,
   });

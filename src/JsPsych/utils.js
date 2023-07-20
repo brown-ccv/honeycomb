@@ -1,5 +1,5 @@
 // Utility Functions
-import _ from 'lodash';
+import _ from "lodash";
 
 /**
  * Delay program execution
@@ -47,7 +47,7 @@ export function deepCopy(obj) {
  * @param {number} amount Dollar amount
  */
 export function formatDollars(amount) {
-  return '$' + parseFloat(amount).toFixed(2);
+  return "$" + parseFloat(amount).toFixed(2);
 }
 
 /**
@@ -55,12 +55,12 @@ export function formatDollars(amount) {
  * @param {*} trial The trial to add a wait period to
  * @param {*} waitTime The amount of time to wait by
  */
-// TODO 162: This should be a trial not a utility? It's adding a separate trial in and of itself
+// TODO 162: This should be a trial not a utility? It"s adding a separate trial in and of itself
 export function generateWaitSet(trial, waitTime) {
   const waitTrial = Object.assign({}, trial);
   waitTrial.trial_duration = waitTime;
   waitTrial.response_ends_trial = false;
-  waitTrial.prompt = '-';
+  waitTrial.prompt = "-";
 
   return [waitTrial, trial];
 }
@@ -90,7 +90,7 @@ export function startKeypressListener(jsPsych) {
 
   const keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
     callback_function: keypressResponse,
-    valid_responses: ['ALL_KEYS'],
+    valid_responses: ["ALL_KEYS"],
     persist: false,
   });
 
@@ -102,30 +102,30 @@ export function startKeypressListener(jsPsych) {
  * This produces an object that maps friendly image file names to obscure webpack path names.
  *  For example:
  *    {
- *      image1.png: '/static/media/image1.5dca7a2a50fb8b633fd5.png',
- *      image2.png: '/static/media/image2.5dca7a2a50fb8b633fd5.png'
+ *      image1.png: "/static/media/image1.5dca7a2a50fb8b633fd5.png",
+ *      image2.png: "/static/media/image2.5dca7a2a50fb8b633fd5.png"
  *    }
  * @param {Object} r
  * @returns
  */
 export function importAll(r) {
   function importImageByName(allImages, imageName) {
-    const friendlyName = imageName.replace('./', '');
+    const friendlyName = imageName.replace("./", "");
     return { ...allImages, [friendlyName]: r(imageName) };
   }
   return r.keys().reduce(importImageByName, {});
 }
 
 /**
- * Get a query parameter out of the window's URL
+ * Get a query parameter out of the window"s URL
  * @param {*} variable The key to parse
  */
 // TODO 199: Can this just use URLSearchParams?
 export function getQueryVariable(variable) {
   const query = window.location.search.substring(1);
-  const vars = query.split('&');
+  const vars = query.split("&");
   for (let i = 0; i < vars.length; i++) {
-    const pair = vars[i].split('=');
+    const pair = vars[i].split("=");
     if (decodeURIComponent(pair[0]) === variable) return decodeURIComponent(pair[1]);
   }
 }
@@ -134,7 +134,7 @@ export function getQueryVariable(variable) {
  * Gets the getProlificId from the query string
  */
 export function getProlificId() {
-  return getQueryVariable('PROLIFIC_PID');
+  return getQueryVariable("PROLIFIC_PID");
 }
 
 /**

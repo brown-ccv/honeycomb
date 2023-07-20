@@ -1,11 +1,11 @@
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { photodiodeGhostBox, pdSpotEncode } from '../partials/photodiode';
-import { baseStimulus } from '../partials/baseStimulus';
+import { photodiodeGhostBox, pdSpotEncode } from "../partials/photodiode";
+import { baseStimulus } from "../partials/baseStimulus";
 
-import { language } from '../../../language';
-import { EVENT_CODES, AUDIO_CODES } from '../../../constants';
-import { beep } from '../../../utils';
+import { language } from "../../../language";
+import { EVENT_CODES, AUDIO_CODES } from "../../../constants";
+import { beep } from "../../../utils";
 
 /**
  *

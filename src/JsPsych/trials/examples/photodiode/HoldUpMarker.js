@@ -1,9 +1,9 @@
-import htmlButtonResponse from '@jspsych/plugin-html-button-response';
+import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 
-import { photodiodeGhostBox } from '../partials/photodiode';
-import { baseStimulus } from '../partials/baseStimulus';
+import { photodiodeGhostBox } from "../partials/photodiode";
+import { baseStimulus } from "../partials/baseStimulus";
 
-import { language } from '../../../language';
+import { language } from "../../../language";
 
 /**
  *
@@ -21,7 +21,7 @@ export function createHoldUpMarkerTrial() {
     on_load: () => {
       // Injects the event marker message into the 'usb-alert' element
       document.getElementById(
-        'usb-alert'
+        "usb-alert"
       ).innerHTML = `<span style="color: green;">${language.eventMarker.found}</span>`;
     },
   };
