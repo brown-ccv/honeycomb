@@ -2,17 +2,12 @@ import $ from "jquery";
 
 import { EVENT_CODES } from "../constants";
 
-// TODO 226: This is a task, how do I pass which config file to use?
-// Hard code for now
-import config from "../config/home.json";
-import { useOldConfig } from "../../utils";
-
-const oldConfig = useOldConfig(config);
+import { OLD_CONFIG } from "../../constants";
 
 // conditionally load electron and psiturk based on MTURK config variable
 let ipcRenderer = false;
 try {
-  if (oldConfig.USE_ELECTRON) {
+  if (OLD_CONFIG.USE_ELECTRON) {
     const electron = window.require("electron");
     ipcRenderer = electron.ipcRenderer;
   }
@@ -23,7 +18,7 @@ try {
 // Relies on styling in index.css, generate PD spot
 // TODO 226: Refactor to take USE_PHOTODIODE as a parameter
 export function photodiodeGhostBox() {
-  const class_ = oldConfig.USE_PHOTODIODE ? "visible" : "invisible";
+  const class_ = OLD_CONFIG.USE_PHOTODIODE ? "visible" : "invisible";
 
   return `<div class="photodiode-box ${class_}" id="photodiode-box">
         <span id="photodiode-spot" class="photodiode-spot"></span>
@@ -51,7 +46,7 @@ export function pdSpotEncode(taskCode) {
     }
   }
 
-  if (oldConfig.USE_PHOTODIODE) {
+  if (OLD_CONFIG.USE_PHOTODIODE) {
     const blinkTime = 40;
     let numBlinks = taskCode;
     if (taskCode < EVENT_CODES.open_task) numBlinks = 1;

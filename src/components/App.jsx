@@ -3,15 +3,13 @@ import React, { useCallback, useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 
 import { addToFirebase, validateParticipant } from "../firebase";
-import { useOldConfig } from "../utils";
 
 import JsPsychExperiment from "./JsPsychExperiment";
 import Login from "./Login";
 import Error from "./Error";
 
-// TODO 226: This is a task, how do I pass which config file to use?
 // Hard code for now
-import config from "../JsPsych/config/home.json";
+import { OLD_CONFIG } from "../constants";
 import { TASK_VERSION } from "../JsPsych/constants";
 import { getProlificId } from "../JsPsych/utils";
 
@@ -22,8 +20,6 @@ import { getProlificId } from "../JsPsych/utils";
  * It also lets us pass data between <Login> and <JsPsychExperiment />
  */
 function App() {
-  const oldConfig = useOldConfig(config);
-
   // Manage user state of the app
   const [loggedIn, setLoggedIn] = useState(false);
   // Manage error state of the app
@@ -46,10 +42,10 @@ function App() {
    */
   useEffect(() => {
     // For testing and debugging purposes
-    console.log(config, oldConfig);
+    console.log(OLD_CONFIG);
 
     // If on desktop
-    if (oldConfig.USE_ELECTRON) {
+    if (OLD_CONFIG.USE_ELECTRON) {
       // conditionally load electron and psiturk based on MTURK config variable
       let ipcRenderer = false;
       try {
@@ -60,7 +56,7 @@ function App() {
         return; // Early return
       }
 
-      ipcRenderer.send("updateEnvironmentVariables", oldConfig);
+      ipcRenderer.send("updateEnvironmentVariables", OLD_CONFIG);
 
       // Fill in login fields based on environment variables (may still be blank)
       const credentials = ipcRenderer.sendSync("syncCredentials");
@@ -71,23 +67,23 @@ function App() {
       setIpcRenderer(ipcRenderer);
     } else {
       // If MTURK
-      if (oldConfig.USE_MTURK) {
+      if (OLD_CONFIG.USE_MTURK) {
         /* eslint-disable */
         window.lodash = _.noConflict();
         setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
         setMethod("mturk");
         handleLogin("mturk", turkUniqueId);
         /* eslint-enable */
-      } else if (oldConfig.USE_PROLIFIC) {
+      } else if (OLD_CONFIG.USE_PROLIFIC) {
         const pID = getProlificId();
-        if (oldConfig.USE_FIREBASE && pID) {
+        if (OLD_CONFIG.USE_FIREBASE && pID) {
           setMethod("firebase");
           handleLogin("prolific", pID);
         } else {
           // Error - Prolific must be used with Firebase
           setIsError(true);
         }
-      } else if (oldConfig.USE_FIREBASE) {
+      } else if (OLD_CONFIG.USE_FIREBASE) {
         // Fill in login fields based on query parameters (may still be blank)
         // Prolific will pass the studyID and participantID as search parameters in the URL
         // Please ensure the search params use the same name here
@@ -171,7 +167,7 @@ function App() {
   } else {
     return loggedIn ? (
       <JsPsychExperiment
-        oldConfig={oldConfig}
+        OLD_CONFIG={OLD_CONFIG}
         studyID={studyID}
         participantID={participantID}
         taskVersion={TASK_VERSION}

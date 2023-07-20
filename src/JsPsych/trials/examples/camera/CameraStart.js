@@ -6,9 +6,7 @@ import { baseStimulus } from "../../../markup/baseStimulus";
 import { language } from "../../../language";
 import { TASK_NAME } from "../../../constants";
 
-// TODO 226: This is a task, how do I pass which config file to use?
-// Hard code for now
-import config from "../../../config/home.json";
+import { OLD_CONFIG } from "../constants";
 import { initJsPsych } from "jspsych";
 
 // TODO 192: Is it okay for this to start undefined?
@@ -106,7 +104,7 @@ export function createCameraStartTrial() {
       });
     },
     on_finish: () => {
-      if (config.USE_CAMERA) {
+      if (OLD_CONFIG.USE_CAMERA) {
         try {
           window.cameraCapture.start();
           window.screenCapture.start();
