@@ -18,7 +18,6 @@ try {
   }
 } catch (e) {
   console.warn('window.require is not available');
-  console.error(e);
 }
 
 // Relies on styling in index.css, generate PD spot
