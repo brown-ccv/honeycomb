@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.css';
-import '../index.css';
 
 import { addToFirebase, validateParticipant } from '../firebase';
+import { useOldConfig } from '../utils';
 
 import JsPsychExperiment from './JsPsychExperiment';
 import Login from './Login';
@@ -14,21 +14,6 @@ import Error from './Error';
 import config from '../JsPsych/config/home.json';
 import { TASK_VERSION } from '../JsPsych/constants';
 import { getProlificId } from '../JsPsych/utils';
-
-function useOldConfig(newConfig) {
-  const { environment, equipment } = newConfig;
-
-  return {
-    USE_ELECTRON: environment === 'electron',
-    USE_FIREBASE: environment === 'firebase',
-    USE_MTURK: false, // TODO 229: What's the logic for this? Is it its own environment?
-    USE_PROLIFIC: false, // TODO 228: We'll be removing prolific -> passed as URLSearchParam
-    USE_PHOTODIODE: equipment.photodiode ? true : false,
-    USE_EEG: equipment.eeg ? true : false,
-    USE_VOLUME: equipment.audio ? true : false,
-    USE_CAMERA: equipment.camera ? true : false,
-  };
-}
 
 /** Top-level React component for Honeycomb.
  *
