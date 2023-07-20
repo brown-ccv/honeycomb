@@ -2,14 +2,11 @@
  * The node environment in which the application is running
  */
 export const NODE_ENV = process.env.REACT_APP_NODE_ENV; // "development" | "production" | "test"
-console.log("REACT_APP_NODE_ENV", NODE_ENV);
 
 /**
  * The physical location in which the application is running
  */
 export const LOCATION = process.env.REACT_APP_LOCATION; // "home" | "clinic"
-
-console.log("REACT_APP_LOCATION", LOCATION);
 
 // TODO: Will be passed into the <Honeycomb /> component directly?
 // ? xampp and mysql from JsPsych docs https://www.jspsych.org/7.0/overview/data/#storing-data-permanently-as-a-file

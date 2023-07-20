@@ -8,7 +8,7 @@ import JsPsychExperiment from "./JsPsychExperiment";
 import Login from "./Login";
 import Error from "./Error";
 
-import { OLD_CONFIG, LOCATION, DEPLOYMENT } from "../constants";
+import { OLD_CONFIG, LOCATION, DEPLOYMENT, NODE_ENV } from "../constants";
 import { getQueryVariable } from "../utils";
 
 import { TASK_VERSION } from "../JsPsych/constants";
@@ -42,7 +42,10 @@ function App() {
    * It uses the environment variables to initialize the above state variables
    */
   useEffect(() => {
-    console.log(OLD_CONFIG); // Log for testing
+    // Logs for testing
+    console.log("NODE_ENV:\t", NODE_ENV);
+    console.log("LOCATION:\t", LOCATION);
+    console.log("DEPLOYMENT:\t", DEPLOYMENT);
 
     // TODO: Refactor to switch
     if (LOCATION === "clinic") {
@@ -51,7 +54,7 @@ function App() {
       try {
         // Load the Electron renderer process and psiturk based on MTURK config variable
         renderer = window.require("electron").ipcRenderer;
-        renderer.send("updateEnvironmentVariables", OLD_CONFIG);
+        renderer.send("updateEnvironmentVariables", OLD_CONFIG); // USE_EEG and USE_CAMERA
 
         // Fill in login fields based on environment variables (may still be blank)
         // TODO: Can this be done with URLSearchParams?
