@@ -2,7 +2,7 @@ name: release
 
 # Runs the build and package scripts when a new tagged release is created
 on:
-  # TODO: Always create a release when pushing to main?
+  # ? TODO: Always create a release when pushing to main?
   push:
     tags:
       - "*"
