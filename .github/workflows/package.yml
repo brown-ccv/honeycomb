@@ -15,7 +15,7 @@ on:
         default: "win"
 
 jobs:
-  build:
+  package:
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -50,16 +50,15 @@ jobs:
         run: npm run build:${{github.event.inputs.location}}
 
       # Package electron app package installers for the given OS(s)
-      # TODO: Package commands are really using "make"
       - name: 📦 Package for Windows
         if: startsWith(matrix.os, 'windows')
-        run: npm run package:windows
+        run: npm run make:windows
       - name: 📦 Package for Linux
         if: startsWith(matrix.os, 'ubuntu')
-        run: npm run package:linux
+        run: npm run make:linux
       - name: 📦 Package for macOS
         if: startsWith(matrix.os, 'mac')
-        run: npm run package:mac
+        run: npm run make:mac
 
       # Upload installers to github action
       # TODO: Electron forge package should let us upload the artificats automatically https://www.electronforge.io/cli#publish

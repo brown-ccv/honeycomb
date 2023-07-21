@@ -8,7 +8,7 @@ on:
       - "*"
 
 jobs:
-  build:
+  release:
     runs-on: ${{ matrix.os }}
 
     # Run build script for [home/clinic] in [windows/macOS/ubuntu]
@@ -49,13 +49,13 @@ jobs:
       # TODO: We might be able to simplify this with "publish" command https://www.electronforge.io/cli#publish
       - name: package electron - windows
         if: startsWith(matrix.os, 'windows')
-        run: npm run package:windows
+        run: npm run make:windows
       - name: package electron - linux
         if: startsWith(matrix.os, 'ubuntu')
-        run: npm run package:linux
+        run: npm run make:linux
       - name: package electron - mac
         if: startsWith(matrix.os, 'mac')
-        run: npm run package:mac
+        run: npm run make:mac
 
       # Upload installers to github release
       - name: 🚀 Upload Installer to Release (Windows)
