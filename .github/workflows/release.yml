@@ -8,13 +8,14 @@ on:
       - "*"
 
 jobs:
+  # Package the electron application [home/clinic] in [windows/macOS/ubuntu]
   release:
     runs-on: ${{ matrix.os }}
 
-    # Run build script for [home/clinic] in [windows/macOS/ubuntu]
     strategy:
       fail-fast: false
       matrix:
+        # TODO: Home doesn't make sense here?
         location: ["home", "clinic"]
         os: [ubuntu-latest, macOS-latest, windows-latest]
 
@@ -39,21 +40,26 @@ jobs:
       # Build the project with the correct location
       - name: Build
         run: npm run build:${{matrix.location}}
-        # Test the project
-      - name: test
-        run: npm test
+
+      # Lint the project
+      - name: 🔬 Lint
+        run: npm run lint
+      # Test the project
+      - name: ⚡ Test
+        run: npm run test
         env:
           CI: true
 
-      # Build electron app package installers
+      # Package electron app package installers for the given OS(s)
+      # TODO: Add zip
       # TODO: We might be able to simplify this with "publish" command https://www.electronforge.io/cli#publish
-      - name: package electron - windows
+      - name: 📦 Package for Windows
         if: startsWith(matrix.os, 'windows')
         run: npm run make:windows
-      - name: package electron - linux
+      - name: 📦 Package for Linux
         if: startsWith(matrix.os, 'ubuntu')
         run: npm run make:linux
-      - name: package electron - mac
+      - name: 📦 Package for macOS
         if: startsWith(matrix.os, 'mac')
         run: npm run make:mac
 
