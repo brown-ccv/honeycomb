@@ -14,7 +14,6 @@ export const LOCATION = process.env.REACT_APP_LOCATION; // "home" | "clinic"
 export const DEPLOYMENT = "firebase"; // "csv" | "local" | "firebase" | "pstiturk" | "custom"
 // TODO: Currently using prolific as a possible deployment, delete?
 
-// TODO: Export CONFIG and OLD_CONFIG
 export const OLD_CONFIG = {
   USE_ELECTRON: LOCATION === "clinic",
   USE_FIREBASE: DEPLOYMENT === "firebase",
