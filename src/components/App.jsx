@@ -25,8 +25,10 @@ function App() {
   // Manage error state of the app
   // TODO: Refactor to be the error message itself or null
   const [isError, setIsError] = useState(false);
-  // Manage the method state of the app ("desktop", "firebase", "mturk", or "default")
-  const [currentMethod, setMethod] = useState("default");
+
+  // Manage the method state of the app ("csv", "local", "firebase", "mturk")
+  // TODO: Will just be DEPLOYMENT?
+  const [currentMethod, setMethod] = useState("csv");
 
   // Manage the electron renderer
   const [ipcRenderer, setIpcRenderer] = useState();
@@ -80,7 +82,7 @@ function App() {
     switch (DEPLOYMENT) {
       case "csv":
         // Data is downloaded as a CSV file at the end of the experiment
-        setMethod("default");
+        setMethod("csv");
         break;
       case "local":
         // Save to a local JSON file with Honeycomb/studyID/participantID/[startDate] folder structure
