@@ -4,9 +4,8 @@
  * @param {string} participantID The ID of the Participant logging in
  * @returns {boolean}
  */
-// TODO: Can be deleted?
 export function validate_login(studyID, participantID) {
-  console.log("download login", studyID, participantID);
+  console.log("login", studyID, participantID);
   return true;
 }
 

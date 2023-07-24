@@ -11,7 +11,7 @@ export const LOCATION = process.env.REACT_APP_LOCATION; // "home" | "clinic"
 // TODO: Will be passed into the <Honeycomb /> component directly?
 // ? xampp and mysql from JsPsych docs https://www.jspsych.org/7.0/overview/data/#storing-data-permanently-as-a-file
 // ? Will psiturk be special? Or just UrlSearchParams? https://www.jspsych.org/7.0/overview/mturk/
-export const DEPLOYMENT = "download"; // "download" | "local" | "firebase" | "mturk" | "custom"
+export const DEPLOYMENT = "download"; // "download" | "local" | "firebase" | "psiturk" | "custom"
 // TODO: Currently using prolific as a possible deployment, delete?
 
 export const OLD_CONFIG = {

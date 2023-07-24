@@ -33,11 +33,10 @@ export async function on_data_update(data) {
 }
 
 /**
- *  Saves a CSV or JSON file to the computer running the experiment
- * ! This method is not valid for "home" use as the file will be downloaded on the Participant's computer
+ *  Do nothing
  * @param {object} data The JsPsych data object
  */
-// TODO: format param takes "csv" or "json"
+// TODO: Delete?
 export function on_finish(data) {
   console.log("Experiment finished: ", data);
   return;

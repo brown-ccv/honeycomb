@@ -2,29 +2,35 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import "bootstrap/dist/css/bootstrap.css";
 
+import Error from "./Error";
 import JsPsychExperiment from "./JsPsychExperiment";
 import Login from "./Login";
-import Error from "./Error";
 
-import { OLD_CONFIG, LOCATION, DEPLOYMENT, NODE_ENV } from "../constants";
+import { DEPLOYMENT, LOCATION, NODE_ENV, OLD_CONFIG } from "../constants";
 import { getQueryVariable } from "../utils";
-
 import { TASK_VERSION } from "../JsPsych/constants";
+
+// TODO 157: Have an object of functions, accessed by the config variable
 import {
-  on_data_update as downloadUpdate,
   on_finish as downloadFinish,
   validate_login as downloadLogin,
+  on_data_update as downloadUpdate,
 } from "../deployments/download";
 import {
-  on_data_update as firebaseUpdate,
-  validate_login as firebaseLogin,
   on_finish as firebaseFinish,
+  validate_login as firebaseLogin,
+  on_data_update as firebaseUpdate,
 } from "../deployments/firebase";
 import {
-  on_data_update as localUpdate,
   on_finish as localFinish,
   validate_login as localLogin,
+  on_data_update as localUpdate,
 } from "../deployments/local";
+import {
+  on_finish as psiturkFinish,
+  validate_login as psiturkLogin,
+  on_data_update as psiturkUpdate,
+} from "../deployments/psiturk";
 
 /** Top-level React component for Honeycomb.
  *
@@ -32,6 +38,7 @@ import {
  * This lets us determine what the app is running on (Electron, Firebase, PsiTurk, or MTurk).
  * It also lets us pass data between <Login> and <JsPsychExperiment />
  */
+// More information about the arrow function syntax can be found here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
 function App() {
   // Manage user state of the app
   const [loggedIn, setLoggedIn] = useState(false);
@@ -39,14 +46,9 @@ function App() {
   // TODO: Refactor to be the error message itself or null
   const [isError, setIsError] = useState(false);
 
-  // Manage the method state of the app ("download", "local", "firebase", "mturk")
-  // TODO: Will just be DEPLOYMENT?
+  // Manage the method state of the app ("download", "local", "firebase", "psiturk")
+  // ? Will just be DEPLOYMENT?
   const [currentMethod, setMethod] = useState("download");
-
-  // Manage the electron renderer
-  // const [ipcRenderer, setIpcRenderer] = useState();
-  // Manage the psiturk object
-  const [psiturk, setPsiturk] = useState();
 
   // Manage user data
   const [participantID, setParticipantID] = useState("");
@@ -115,16 +117,16 @@ function App() {
         setMethod("firebase");
         break;
       }
-      case "mturk":
+      case "psiturk":
         {
           /* eslint-disable */
           // ? This is using all the JavaScript min files?
           window.lodash = _.noConflict();
           setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
 
-          // Logs with with studyID as mturk and participantID as <pID>
-          handleLogin("mturk", turkUniqueId);
-          setMethod("mturk");
+          // Logs with with studyID as psiturk and participantID as <pID>
+          handleLogin("psiturk", turkUniqueId);
+          setMethod("psiturk");
           /* eslint-enable */
         }
         break;
@@ -138,39 +140,6 @@ function App() {
     }
     // eslint-disable-next-line
   }, []);
-
-  /** VALIDATION FUNCTIONS */
-
-  // More information about the arrow function syntax can be found here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
-
-  /** DATA WRITE FUNCTIONS */
-
-  // TODO 157: Have an object of functions, accessed by the config variable
-
-  // Execute the "data" callback function (see public/electron.js)
-  // function desktopUpdateFunction(data) {
-  //   ipcRenderer.send("data", data);
-  // }
-  // Add trial data to psiturk
-  function psiturkUpdateFunction(data) {
-    psiturk.recordTrialData(data);
-  }
-
-  /** EXPERIMENT FINISH FUNCTIONS */
-
-  // Execute the "end" callback function (see public/electron.js)
-  // function desktopFinishFunction() {
-  //   ipcRenderer.send("end", "true");
-  // }
-  function psiturkFinishFunction() {
-    const completePsiturk = async () => {
-      psiturk.saveData({
-        success: () => psiturk.completeHIT(),
-        error: () => setIsError(true),
-      });
-    };
-    completePsiturk();
-  }
 
   // Update the study/participant data when they log in
   const handleLogin = useCallback((studyID, participantID) => {
@@ -193,7 +162,7 @@ function App() {
             download: downloadUpdate,
             local: localUpdate,
             firebase: firebaseUpdate,
-            mturk: psiturkUpdateFunction,
+            psiturk: psiturkUpdate,
           }[currentMethod]
         }
         dataFinishFunction={
@@ -201,7 +170,7 @@ function App() {
             download: downloadFinish,
             local: localFinish,
             firebase: firebaseFinish,
-            mturk: psiturkFinishFunction,
+            psiturk: psiturkFinish,
           }[currentMethod]
         }
       />
@@ -218,7 +187,7 @@ function App() {
             download: downloadLogin,
             local: localLogin,
             firebase: firebaseLogin,
-            mturk: undefined,
+            psiturk: psiturkLogin,
           }[currentMethod]
         }
       />

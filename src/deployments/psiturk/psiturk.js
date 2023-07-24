@@ -1,11 +1,18 @@
-let RENDERER;
-try {
-  // Load the Electron renderer process and psiturk based on MTURK config variable
-  RENDERER = window.require("electron").ipcRenderer;
-} catch (e) {
-  // TODO: Should probably throw the error in this case?
-  console.error("Unable to instantiate the Electron process", e);
-}
+// TODO: And I try to get the renderer here instead of in the JSX component?
+
+// TODO: Manage MTurk vs PsiTurk?
+// MTurk is available through JsPsych directly
+// PsiTurk is what's using the JS min files
+
+/* eslint-disable */
+// TOD: This might insatiate multiple times?
+window.lodash = _.noConflict();
+const PSITURK = new PsiTurk(turkUniqueId, "/complete");
+
+// Logs with with studyID as mturk and participantID as <pID>
+handleLogin("mturk", turkUniqueId);
+setMethod("mturk");
+/* eslint-enable */
 
 /**
  * Validate the login credentials of the entered study and participant
@@ -27,7 +34,7 @@ export function validate_login(studyID, participantID) {
  * @returns
  */
 export function on_data_update(data) {
-  RENDERER.send("data", data);
+  PSITURK.recordTrialData(data);
   return;
 }
 
@@ -39,6 +46,12 @@ export function on_data_update(data) {
 // TODO: format param takes "csv" or "json"
 export function on_finish(data) {
   console.log("Experiment finished: ", data);
-  RENDERER.send("end", "true");
+  const completePsiturk = async () => {
+    PSITURK.saveData({
+      success: () => PSITURK.completeHIT(),
+      error: (e) => console.error("Unable to finish experiment", e),
+    });
+  };
+  completePsiturk();
   return;
 }
