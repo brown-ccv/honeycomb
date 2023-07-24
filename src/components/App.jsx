@@ -18,7 +18,13 @@ import {
 import {
   on_data_update as firebaseUpdate,
   validate_login as firebaseLogin,
+  on_finish as firebaseFinish,
 } from "../deployments/firebase";
+import {
+  on_data_update as localUpdate,
+  on_finish as localFinish,
+  validate_login as localLogin,
+} from "../deployments/local";
 
 /** Top-level React component for Honeycomb.
  *
@@ -38,7 +44,7 @@ function App() {
   const [currentMethod, setMethod] = useState("download");
 
   // Manage the electron renderer
-  const [ipcRenderer, setIpcRenderer] = useState();
+  // const [ipcRenderer, setIpcRenderer] = useState();
   // Manage the psiturk object
   const [psiturk, setPsiturk] = useState();
 
@@ -71,7 +77,7 @@ function App() {
         setParticipantID(credentials.participantID || "");
         setStudyID(credentials.studyID || "");
 
-        setIpcRenderer(renderer);
+        // setIpcRenderer(renderer);
       } catch (e) {
         console.error("Unable to instantiate the Electron process", e);
       }
@@ -93,12 +99,12 @@ function App() {
         break;
       case "local":
         // Save to a local JSON file with Honeycomb/studyID/participantID/[startDate] folder structure
+        setMethod("local");
         break;
-      case "firebase": {
+      case "firebase":
         // Data is saved in Firebase's Firestore database
         setMethod("firebase");
         break;
-      }
       case "prolific": {
         // TODO: Prolific will be deleted
         // Logs with with studyID as prolific and participantID as <pID>
@@ -109,7 +115,7 @@ function App() {
         setMethod("firebase");
         break;
       }
-      case "psiturk":
+      case "mturk":
         {
           /* eslint-disable */
           // ? This is using all the JavaScript min files?
@@ -137,23 +143,14 @@ function App() {
 
   // More information about the arrow function syntax can be found here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
 
-  // Validate participant/study against Firestore rules
-  // function firebaseValidation(studyID, participantID) {
-  //   return validateParticipant(studyID, participantID);
-  // }
-
   /** DATA WRITE FUNCTIONS */
 
   // TODO 157: Have an object of functions, accessed by the config variable
 
-  // Add trial data to Firestore
-  // function firebaseUpdateFunction(data) {
-  //   addToFirebase(data);
-  // }
   // Execute the "data" callback function (see public/electron.js)
-  function desktopUpdateFunction(data) {
-    ipcRenderer.send("data", data);
-  }
+  // function desktopUpdateFunction(data) {
+  //   ipcRenderer.send("data", data);
+  // }
   // Add trial data to psiturk
   function psiturkUpdateFunction(data) {
     psiturk.recordTrialData(data);
@@ -162,9 +159,9 @@ function App() {
   /** EXPERIMENT FINISH FUNCTIONS */
 
   // Execute the "end" callback function (see public/electron.js)
-  function desktopFinishFunction() {
-    ipcRenderer.send("end", "true");
-  }
+  // function desktopFinishFunction() {
+  //   ipcRenderer.send("end", "true");
+  // }
   function psiturkFinishFunction() {
     const completePsiturk = async () => {
       psiturk.saveData({
@@ -193,18 +190,18 @@ function App() {
         taskVersion={TASK_VERSION}
         dataUpdateFunction={
           {
-            desktop: desktopUpdateFunction,
+            download: downloadUpdate,
+            local: localUpdate,
             firebase: firebaseUpdate,
             mturk: psiturkUpdateFunction,
-            default: downloadUpdate,
           }[currentMethod]
         }
         dataFinishFunction={
           {
-            desktop: desktopFinishFunction,
+            download: downloadFinish,
+            local: localFinish,
+            firebase: firebaseFinish,
             mturk: psiturkFinishFunction,
-            firebase: undefined,
-            default: downloadFinish,
           }[currentMethod]
         }
       />
@@ -218,9 +215,10 @@ function App() {
         handleLogin={handleLogin}
         validationFunction={
           {
-            desktop: undefined,
-            default: downloadLogin,
+            download: downloadLogin,
+            local: localLogin,
             firebase: firebaseLogin,
+            mturk: undefined,
           }[currentMethod]
         }
       />
