@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import "bootstrap/dist/css/bootstrap.css";
 
-import { addToFirebase, validateParticipant } from "../firebase";
-
 import JsPsychExperiment from "./JsPsychExperiment";
 import Login from "./Login";
 import Error from "./Error";
@@ -12,6 +10,15 @@ import { OLD_CONFIG, LOCATION, DEPLOYMENT, NODE_ENV } from "../constants";
 import { getQueryVariable } from "../utils";
 
 import { TASK_VERSION } from "../JsPsych/constants";
+import {
+  on_data_update as downloadUpdate,
+  on_finish as downloadFinish,
+  validate_login as downloadLogin,
+} from "../deployments/download";
+import {
+  on_data_update as firebaseUpdate,
+  validate_login as firebaseLogin,
+} from "../deployments/firebase";
 
 /** Top-level React component for Honeycomb.
  *
@@ -26,9 +33,9 @@ function App() {
   // TODO: Refactor to be the error message itself or null
   const [isError, setIsError] = useState(false);
 
-  // Manage the method state of the app ("csv", "local", "firebase", "mturk")
+  // Manage the method state of the app ("download", "local", "firebase", "mturk")
   // TODO: Will just be DEPLOYMENT?
-  const [currentMethod, setMethod] = useState("csv");
+  const [currentMethod, setMethod] = useState("download");
 
   // Manage the electron renderer
   const [ipcRenderer, setIpcRenderer] = useState();
@@ -80,9 +87,9 @@ function App() {
     }
 
     switch (DEPLOYMENT) {
-      case "csv":
+      case "download":
         // Data is downloaded as a CSV file at the end of the experiment
-        setMethod("csv");
+        setMethod("download");
         break;
       case "local":
         // Save to a local JSON file with Honeycomb/studyID/participantID/[startDate] folder structure
@@ -130,28 +137,19 @@ function App() {
 
   // More information about the arrow function syntax can be found here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
 
-  // Default to valid
-  async function defaultValidation() {
-    return true;
-  }
   // Validate participant/study against Firestore rules
-  function firebaseValidation(studyID, participantID) {
-    return validateParticipant(studyID, participantID);
-  }
+  // function firebaseValidation(studyID, participantID) {
+  //   return validateParticipant(studyID, participantID);
+  // }
 
   /** DATA WRITE FUNCTIONS */
 
-  // TODO 157: Separate file for update/finish functions
   // TODO 157: Have an object of functions, accessed by the config variable
-  // Do nothing
-  function defaultFunction() {
-    return;
-  }
 
   // Add trial data to Firestore
-  function firebaseUpdateFunction(data) {
-    addToFirebase(data);
-  }
+  // function firebaseUpdateFunction(data) {
+  //   addToFirebase(data);
+  // }
   // Execute the "data" callback function (see public/electron.js)
   function desktopUpdateFunction(data) {
     ipcRenderer.send("data", data);
@@ -162,11 +160,6 @@ function App() {
   }
 
   /** EXPERIMENT FINISH FUNCTIONS */
-
-  // Save the experiment data on the desktop
-  function defaultFinishFunction(data) {
-    data.localSave("csv", "honeycomb.csv");
-  }
 
   // Execute the "end" callback function (see public/electron.js)
   function desktopFinishFunction() {
@@ -201,17 +194,17 @@ function App() {
         dataUpdateFunction={
           {
             desktop: desktopUpdateFunction,
-            firebase: firebaseUpdateFunction,
+            firebase: firebaseUpdate,
             mturk: psiturkUpdateFunction,
-            default: defaultFunction,
+            default: downloadUpdate,
           }[currentMethod]
         }
         dataFinishFunction={
           {
             desktop: desktopFinishFunction,
             mturk: psiturkFinishFunction,
-            firebase: defaultFunction,
-            default: defaultFinishFunction,
+            firebase: undefined,
+            default: downloadFinish,
           }[currentMethod]
         }
       />
@@ -225,9 +218,9 @@ function App() {
         handleLogin={handleLogin}
         validationFunction={
           {
-            desktop: defaultValidation,
-            default: defaultValidation,
-            firebase: firebaseValidation,
+            desktop: undefined,
+            default: downloadLogin,
+            firebase: firebaseLogin,
           }[currentMethod]
         }
       />
