@@ -4,17 +4,18 @@ name: package
 on:
   workflow_dispatch:
     inputs:
-      setting:
+      location:
+        # TODO: Home doesn't make sense here?
         description: Build for "home" or "clinic"
         required: true
-        default: "home"
+        default: "clinic"
       os:
         description: Which OS to target - "win", "mac", "linux", "all"
         required: true
         default: "win"
 
 jobs:
-  build:
+  package:
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -27,74 +28,58 @@ jobs:
           (github.event.inputs.os == 'linux' && fromJSON('["ubuntu-latest"]')) }}
 
     steps:
-      # Rewrite "git:" repo urls to use "https:" instead, since GitHub Actions blocks port 9418 (as of Jan 2022).
-      # TODO: What repo is causing this issue? (event-marker dependency?)
-      # - name: Rewrite "git:" repo urls to use "https:" instead.
-      # run: git config --global url."https://github.com/".insteadOf "git://github.com/"
-
-      # Set up js package
-      - name: Checkout repo
+      - name: ⬇️ Checkout repo
         uses: actions/checkout@v3
-      - name: Setup node
+      - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
+          node-version: 18
           cache: npm
           cache-dependency-path: ./package.json
-          node-version: 18
 
-      - name: Set package version and name
+      - name: Set Package Version and Name
         uses: brown-ccv/gh-actions/get-package-info@main
         id: package_info
 
-      # Install dependencies
-      - name: ci
+      - name: 📥 Install Dependencies
         run: npm ci
 
-      # Load the needed environment variables
-      - name: Load .env file - .env.${{github.event.inputs.setting}}
-        uses: xom9ikk/dotenv@v1.0.2
-        with:
-          path: ./env
-          mode: ${{github.event.inputs.setting}}
+      # Build the project for the given location
       - name: build
-        run: npm run build
-      - name: test
-        run: npm test
-        env:
-          CI: true
+        run: npm run build:${{github.event.inputs.location}}
 
-      # Build electron app package installers
-      # TODO: These package commands are really using "make"
-      - name: package electron - windows
+      # Package electron app package installers for the given OS(s)
+      # TODO: Add zip
+      - name: 📦 Package for Windows
         if: startsWith(matrix.os, 'windows')
-        run: npm run package:windows
-      - name: package electron - linux
+        run: npm run make:windows
+      - name: 📦 Package for Linux
         if: startsWith(matrix.os, 'ubuntu')
-        run: npm run package:linux
-      - name: package electron - mac
+        run: npm run make:linux
+      - name: 📦 Package for macOS
         if: startsWith(matrix.os, 'mac')
-        run: npm run package:mac
+        run: npm run make:mac
 
       # Upload installers to github action
-      # TODO: Can this be accomplished with electron forge? https://www.electronforge.io/cli#publish
-      - name: upload win-installer
-        uses: actions/upload-artifact@master
+      # TODO: Electron forge package should let us upload the artificats automatically https://www.electronforge.io/cli#publish
+      - name: 🔼 Upload Installer (Windows)
+        uses: actions/upload-artifact@v3
         if: startsWith(matrix.os, 'windows')
         with:
-          name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
+          name: ${{ format('win-installer-{0}', github.event.inputs.location) }}
           path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }} Setup.exe
-      - name: upload mac-installer
-        uses: actions/upload-artifact@master
-        if: startsWith(matrix.os, 'mac')
-        with:
-          name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-x64.dmg
-      - name: upload linux-installer
-        uses: actions/upload-artifact@master
+      - name: 🔼 Upload Installer (Linux)
+        uses: actions/upload-artifact@v3
         if: startsWith(matrix.os, 'ubuntu')
         with:
-          name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
+          name: ${{ format('linux-installer-{0}', github.event.inputs.location) }}
           path: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
+      - name: 🔼 Upload Installer (macOS)
+        uses: actions/upload-artifact@v3
+        if: startsWith(matrix.os, 'mac')
+        with:
+          name: ${{ format('mac-installer-{0}', github.event.inputs.location) }}
+          path: out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-x64.dmg
 
       # Build PsiTurk - linux only
       - name: Set up Python 3.7
@@ -111,7 +96,7 @@ jobs:
           cd psiturkit
           ./psiturk-it -p ${{ steps.package_info.outputs.package_name }}-psiturk
       - name: Upload PsiTurk Build
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3
         if: startsWith(matrix.os, 'ubuntu')
         with:
           name: psiturk-build

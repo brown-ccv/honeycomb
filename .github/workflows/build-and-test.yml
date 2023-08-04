@@ -1,0 +1,62 @@
+name: 🧪 Build and Test
+
+# Runs the build scripts on PR
+on: pull_request
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Lint the repository
+  lint:
+    name: 🔬 Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: ./package.json
+      - name: 📥 Install Dependencies
+        run: npm ci
+      - name: 🔬 Lint
+        run: npm run lint
+
+  # Build and test the project for [home/clinic] use on [windows/macOS/ubuntu]
+  build_and_test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        location: [home, clinic]
+        # TODO: Add deployment to the matrix
+
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: ./package.json
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      # Build the project with the correct location
+      - name: Build
+        run: npm run build:${{matrix.location}}
+
+      # Lint the project
+      - name: 🔬 Lint
+        run: npm run lint
+
+      # Test the project
+      - name: ⚡ Test
+        run: npm run test
+        env:
+          CI: true

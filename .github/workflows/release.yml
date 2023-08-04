@@ -2,103 +2,95 @@ name: release
 
 # Runs the build and package scripts when a new tagged release is created
 on:
+  # ? TODO: Always create a release when pushing to main?
   push:
     tags:
       - "*"
 
 jobs:
-  build:
+  # Package the electron application [home/clinic] in [windows/macOS/ubuntu]
+  release:
     runs-on: ${{ matrix.os }}
 
-    # Run build script for [home/clinic] in [windows/macOS/ubuntu]
     strategy:
       fail-fast: false
       matrix:
-        setting: ["home", "clinic"]
+        # TODO: Home doesn't make sense here?
+        location: ["home", "clinic"]
         os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:
-      # Rewrite "git:" repo urls to use "https:" instead, since GitHub Actions blocks port 9418 (as of Jan 2022).
-      # TODO: What repo is causing this issue? (event-marker dependency?)
-      # - name: Rewrite "git:" repo urls to use "https:" instead.
-      # run: git config --global url."https://github.com/".insteadOf "git://github.com/"
-
       # Set up js package
-      # Set up js package
-      - name: Checkout repo
+      - name: ⬇️ Checkout repo
         uses: actions/checkout@v3
-
-      - name: Setup node
+      - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
+          node-version: 18
           cache: npm
           cache-dependency-path: ./package.json
-          node-version: 18
 
-      - name: Set package version and name
+      - name: Set Package Version and Name
         uses: brown-ccv/gh-actions/get-package-info@main
         id: package_info
 
-      # Install dependencies
-      - name: ci
+      - name: 📥 Install Dependencies
         run: npm ci
 
-      # Load the needed environment variables
-      - name: Load .env file - .env.${{matrix.setting}}
-        uses: xom9ikk/dotenv@v1.0.2
-        with:
-          path: ./env
-          mode: ${{matrix.setting}}
-        # Build the project
-      - name: build
-        run: npm run build
-        # Test the project
-      - name: test
-        run: npm test
+      # Build the project with the correct location
+      - name: Build
+        run: npm run build:${{matrix.location}}
+
+      # Lint the project
+      - name: 🔬 Lint
+        run: npm run lint
+      # Test the project
+      - name: ⚡ Test
+        run: npm run test
         env:
           CI: true
 
-      # Build electron app package installers
+      # Package electron app package installers for the given OS(s)
+      # TODO: Add zip
       # TODO: We might be able to simplify this with "publish" command https://www.electronforge.io/cli#publish
-      - name: package electron - windows
+      - name: 📦 Package for Windows
         if: startsWith(matrix.os, 'windows')
-        run: npm run package:windows
-      - name: package electron - linux
+        run: npm run make:windows
+      - name: 📦 Package for Linux
         if: startsWith(matrix.os, 'ubuntu')
-        run: npm run package:linux
-      - name: package electron - mac
+        run: npm run make:linux
+      - name: 📦 Package for macOS
         if: startsWith(matrix.os, 'mac')
-        run: npm run package:mac
+        run: npm run make:mac
 
       # Upload installers to github release
-      - name: Upload app to release - windows
+      - name: 🚀 Upload Installer to Release (Windows)
         if: startsWith(matrix.os, 'windows')
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }} Setup.exe
-          asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.setting }}-setup.exe
+          asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.location }}-setup.exe
           tag: ${{ github.ref }}
-      - name: Upload app to release - linux
+      - name: 🚀 Upload Installer to Release (Linux)
         if: startsWith(matrix.os, 'ubuntu')
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
-          asset_name: ${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_${{ matrix.setting }}_amd64.deb
+          asset_name: ${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_${{ matrix.location }}_amd64.deb
           tag: ${{ github.ref }}
-      - name: Upload app to release - mac
+      - name: 🚀 Upload Installer to Release (macOS)
         if: startsWith(matrix.os, 'mac')
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-x64.dmg
-          asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.setting }}.dmg
+          asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.location }}.dmg
           tag: ${{ github.ref }}
 
-      # TODO: Remove GH pages? Can now point user to Firebase deployment
       # Update github pages - linux only
-      # if your deployment fails try https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-first-deployment-with-github_token
+      # ? TODO: Remove GH pages? Can now point user to Firebase deployment
       - name: Deploy to GH Pages
         if: startsWith(matrix.os, 'ubuntu')
         uses: peaceiris/actions-gh-pages@v3

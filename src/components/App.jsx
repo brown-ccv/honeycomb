@@ -3,17 +3,15 @@ import React, { useCallback, useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 
 import { addToFirebase, validateParticipant } from "../firebase";
-import { useOldConfig } from "../utils";
 
 import JsPsychExperiment from "./JsPsychExperiment";
 import Login from "./Login";
 import Error from "./Error";
 
-// TODO 226: This is a task, how do I pass which config file to use?
-// Hard code for now
-import config from "../JsPsych/config/home.json";
+import { OLD_CONFIG, LOCATION, DEPLOYMENT, NODE_ENV } from "../constants";
+import { getQueryVariable } from "../utils";
+
 import { TASK_VERSION } from "../JsPsych/constants";
-import { getProlificId } from "../JsPsych/utils";
 
 /** Top-level React component for Honeycomb.
  *
@@ -22,14 +20,15 @@ import { getProlificId } from "../JsPsych/utils";
  * It also lets us pass data between <Login> and <JsPsychExperiment />
  */
 function App() {
-  const oldConfig = useOldConfig(config);
-
   // Manage user state of the app
   const [loggedIn, setLoggedIn] = useState(false);
   // Manage error state of the app
+  // TODO: Refactor to be the error message itself or null
   const [isError, setIsError] = useState(false);
-  // Manage the method state of the app ("desktop", "firebase", "mturk", or "default")
-  const [currentMethod, setMethod] = useState("default");
+
+  // Manage the method state of the app ("csv", "local", "firebase", "mturk")
+  // TODO: Will just be DEPLOYMENT?
+  const [currentMethod, setMethod] = useState("csv");
 
   // Manage the electron renderer
   const [ipcRenderer, setIpcRenderer] = useState();
@@ -45,60 +44,84 @@ function App() {
    * It uses the environment variables to initialize the above state variables
    */
   useEffect(() => {
-    // For testing and debugging purposes
-    console.log(config, oldConfig);
+    // Logs for testing
+    console.log("NODE_ENV:\t", NODE_ENV);
+    console.log("LOCATION:\t", LOCATION);
+    console.log("DEPLOYMENT:\t", DEPLOYMENT);
 
-    // If on desktop
-    if (oldConfig.USE_ELECTRON) {
-      // conditionally load electron and psiturk based on MTURK config variable
-      let ipcRenderer = false;
+    // TODO: Refactor to switch
+    if (LOCATION === "clinic") {
+      // Running in an Electron process
+      let renderer;
       try {
-        const electron = window.require("electron");
-        ipcRenderer = electron.ipcRenderer;
+        // Load the Electron renderer process and psiturk based on MTURK config variable
+        renderer = window.require("electron").ipcRenderer;
+        renderer.send("updateEnvironmentVariables", OLD_CONFIG); // USE_EEG and USE_CAMERA
+
+        // Fill in login fields based on environment variables (may still be blank)
+        // TODO: Can this be done with URLSearchParams?
+        const credentials = renderer.sendSync("syncCredentials");
+        setParticipantID(credentials.participantID || "");
+        setStudyID(credentials.studyID || "");
+
+        setIpcRenderer(renderer);
       } catch (e) {
-        console.warn("window.require is not available");
-        return; // Early return
+        console.error("Unable to instantiate the Electron process", e);
       }
-
-      ipcRenderer.send("updateEnvironmentVariables", oldConfig);
-
-      // Fill in login fields based on environment variables (may still be blank)
-      const credentials = ipcRenderer.sendSync("syncCredentials");
-      setParticipantID(credentials.participantID || "");
-      setStudyID(credentials.studyID || "");
-
-      setMethod("desktop");
-      setIpcRenderer(ipcRenderer);
     } else {
-      // If MTURK
-      if (oldConfig.USE_MTURK) {
-        /* eslint-disable */
-        window.lodash = _.noConflict();
-        setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
-        setMethod("mturk");
-        handleLogin("mturk", turkUniqueId);
-        /* eslint-enable */
-      } else if (oldConfig.USE_PROLIFIC) {
-        const pID = getProlificId();
-        if (oldConfig.USE_FIREBASE && pID) {
-          setMethod("firebase");
-          handleLogin("prolific", pID);
-        } else {
-          // Error - Prolific must be used with Firebase
-          setIsError(true);
-        }
-      } else if (oldConfig.USE_FIREBASE) {
-        // Fill in login fields based on query parameters (may still be blank)
-        // Prolific will pass the studyID and participantID as search parameters in the URL
-        // Please ensure the search params use the same name here
-        const query = new URLSearchParams(window.location.search);
-        setStudyID(query.get("studyID") || "");
-        setParticipantID(query.get("participantID") || "");
+      // Running in the Browser
 
+      // TODO: Can we use searURLSearchParams in Electron?
+      // Fill in login fields based on query parameters (may still be blank)
+      // Prolific will pass the studyID and participantID as search parameters in the URL
+      const query = new URLSearchParams(window.location.search);
+      setStudyID(query.get("studyID") || "");
+      setParticipantID(query.get("participantID") || "");
+    }
+
+    switch (DEPLOYMENT) {
+      case "csv":
+        // Data is downloaded as a CSV file at the end of the experiment
+        setMethod("csv");
+        break;
+      case "local":
+        // Save to a local JSON file with Honeycomb/studyID/participantID/[startDate] folder structure
+        break;
+      case "firebase": {
+        // Data is saved in Firebase's Firestore database
         setMethod("firebase");
-      } else {
-        setMethod("default");
+        break;
       }
+      case "prolific": {
+        // TODO: Prolific will be deleted
+        // Logs with with studyID as prolific and participantID as <pID>
+        const pID = getQueryVariable("PROLIFIC_PID");
+        handleLogin("prolific", pID);
+
+        // Prolific currently uses the Firebase CRUD functions
+        setMethod("firebase");
+        break;
+      }
+      case "psiturk":
+        {
+          /* eslint-disable */
+          // ? This is using all the JavaScript min files?
+          window.lodash = _.noConflict();
+          setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
+
+          // Logs with with studyID as mturk and participantID as <pID>
+          handleLogin("mturk", turkUniqueId);
+          setMethod("mturk");
+          /* eslint-enable */
+        }
+        break;
+      // TODO: Add XAMPP support and instructions https://www.jspsych.org/7.3/overview/data/#storing-data-permanently-as-a-file
+      // TODO: Add MySQL support and instructions https://www.jspsych.org/7.3/overview/data/#storing-data-permanently-in-a-mysql-database
+      case "custom": // TODO: User will have to provide the data functions to <Honeycomb />
+      default:
+        setIsError(true);
+        console.error("process.env.DEPLOYMENT is invalid or not set: ");
+        break;
     }
     // eslint-disable-next-line
   }, []);
@@ -142,7 +165,7 @@ function App() {
 
   // Save the experiment data on the desktop
   function defaultFinishFunction(data) {
-    data.localSave("csv", "neuro-task.csv");
+    data.localSave("csv", "honeycomb.csv");
   }
 
   // Execute the "end" callback function (see public/electron.js)
@@ -171,7 +194,7 @@ function App() {
   } else {
     return loggedIn ? (
       <JsPsychExperiment
-        oldConfig={oldConfig}
+        config={OLD_CONFIG}
         studyID={studyID}
         participantID={participantID}
         taskVersion={TASK_VERSION}

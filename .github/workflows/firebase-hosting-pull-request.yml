@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       # TODO: Update docs to tell user to use default steps when setting up Firebase
-      - run: npm ci && npm run build:firebase
+      - run: npm ci && npm run build:home
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
