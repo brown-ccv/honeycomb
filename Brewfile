@@ -3,9 +3,8 @@
 
 brew "git"
 brew install --cask "github"
-brew install "node@18"
+brew install nvm
 brew install --cask "oracle-jdk"
 brew install --cask "visual-studio-code"
 
-# TODO: Install node LTS?
 # TODO: Python management (miniconda)?
