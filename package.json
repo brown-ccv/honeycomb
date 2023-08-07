@@ -75,7 +75,7 @@
     "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
     "start:browser": "cross-env IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
     "electron": "electron .",
-    "electron-dev": "wait-on http://localhost:3000 && cross-env ELECTRON_START_URL=\"http://localhost:3000\" electron .",
+    "electron-dev": "wait-on http://127.0.0.1:3000 && cross-env ELECTRON_START_URL=\"http://127.0.0.1:3000\" electron .",
     "dev": "concurrently -k npm:start npm:electron-dev",
     "dev:firebase": "dotenv -e env/.env.firebase npm run start:browser",
     "dev:home": "dotenv -e env/.env.home npm run dev",

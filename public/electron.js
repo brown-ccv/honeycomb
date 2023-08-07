@@ -339,9 +339,14 @@ app.on('will-quit', () => {
     stream = false;
 
     // copy file to config location
-    fs.mkdir(savePath, { recursive: true }, (err) => {
-      log.error(err);
-      fs.copyFileSync(preSavePath, getFullPath(`pid_${participantID}_${today.getTime()}.json`));
-    });
+    const fullPath = getFullPath(`pid_${participantID}_${today.getTime()}.json`);
+    try {
+      fs.mkdirSync(savePath, { recursive: true });
+      fs.copyFileSync(preSavePath, fullPath);
+    } catch (e) {
+      console.error('Unable to save file: ', fullPath);
+      console.error(e);
+      log.error(e);
+    }
   }
 });
