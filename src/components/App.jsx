@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.css";
 
 import { addToFirebase, validateParticipant } from "../firebase";
 
-import JsPsychExperiment from "./JsPsychExperiment";
+import Experiment from "./Experiment";
 import Login from "./Login";
 import Error from "./Error";
 
@@ -12,6 +12,9 @@ import { OLD_CONFIG, LOCATION, DEPLOYMENT, NODE_ENV } from "../constants";
 import { getQueryVariable } from "../utils";
 
 import { TASK_VERSION } from "../JsPsych/constants";
+
+// Additional options passed by the user
+import { JSPSYCH_OPTIONS } from "../JsPsych/timeline";
 
 /** Top-level React component for Honeycomb.
  *
@@ -189,11 +192,11 @@ function App() {
     setLoggedIn(true);
   }, []);
 
-  if (isError) {
-    return <Error />;
-  } else {
+  if (isError) return <Error />;
+  else {
     return loggedIn ? (
-      <JsPsychExperiment
+      // <JsPsychExperiment
+      <Experiment
         config={OLD_CONFIG}
         studyID={studyID}
         participantID={participantID}
@@ -214,6 +217,7 @@ function App() {
             default: defaultFinishFunction,
           }[currentMethod]
         }
+        jsPsychOptions={JSPSYCH_OPTIONS}
       />
     ) : (
       // Not logged in - display login screen

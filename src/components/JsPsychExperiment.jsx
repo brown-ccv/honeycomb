@@ -11,6 +11,7 @@ import { buildTimeline, JSPSYCH_OPTIONS } from "../JsPsych/timeline";
  * This component initializes the JsPsych instance for the experiment.
  * It provides a window for JsPsych to run inside of (experimentDiv)
  * It also handles the passing of keyboard/mouse events into JsPsych
+ * ! THIS IS THE OLD VERSION OF THE EXPERIMENT
  */
 function JsPsychExperiment({
   config,

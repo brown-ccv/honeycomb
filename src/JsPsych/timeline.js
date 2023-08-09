@@ -1,9 +1,10 @@
 // TODO 204: @ import for language
-import { language } from "./language";
+// import { language } from "./language";
 
 // TODO 204: @ import for trials
-import { Preamble, createCountdownTrial, EndExperiment } from "./trials/examples";
-import { createHoneycombBlock } from "./trials/honeycombBlock";
+import { Preamble, EndExperiment } from "./trials/examples";
+// import { Preamble, createCountdownTrial, EndExperiment } from "./trials/examples";
+// import { createHoneycombBlock } from "./trials/honeycombBlock";
 
 /**
  * Create your custom JsPsych options here. These settings will applied experiment wide.
@@ -25,44 +26,38 @@ export const JSPSYCH_OPTIONS = {
  * @returns array of trials
  */
 // TODO 207: Eslint warning is causing build to fail
-// eslint-disable-next-line
-export function buildTimeline(jsPsych) {
-  // Get slider text from the language file and create the trials
-  // const sliderLanguage = language.quiz.direction.slider;
-  // const sliderLeft = createSliderTrial(sliderLanguage.left);
-  // const sliderRight = createSliderTrial(sliderLanguage.right);
-
+export function buildTimeline() {
   // Get countdown txt from the language fil and create the trials+
-  const countdownLanguage = language.countdown;
-  const firstBlockCountdown = createCountdownTrial({ message: countdownLanguage.first });
-  const secondBlockCountdown = createCountdownTrial({ message: countdownLanguage.second });
+  // const countdownLanguage = language.countdown;
+  // const firstBlockCountdown = createCountdownTrial({ message: countdownLanguage.first });
+  // const secondBlockCountdown = createCountdownTrial({ message: countdownLanguage.second });
 
-  // Create a tutorial block of Honeycomb's custom task
-  const honeycombTutorialBlock = createHoneycombBlock({
-    isTutorial: true,
-    photodiodeActive: false,
-  });
+  // // Create a tutorial block of Honeycomb's custom task
+  // const honeycombTutorialBlock = createHoneycombBlock({
+  //   isTutorial: true,
+  //   photodiodeActive: false,
+  // });
 
-  // Create a practice block of Honeycomb's custom task
-  const honeycombPracticeBlock = createHoneycombBlock({
-    conditions: ["m", "n"],
-    repeatsPerCondition: 1,
-    isPractice: true,
-  });
+  // // Create a practice block of Honeycomb's custom task
+  // const honeycombPracticeBlock = createHoneycombBlock({
+  //   conditions: ["m", "n"],
+  //   repeatsPerCondition: 1,
+  //   isPractice: true,
+  // });
 
-  // Create an experiment block
-  const honeycombBlock1 = createHoneycombBlock({
-    repeatsPerCondition: 2,
-  });
+  // // Create an experiment block
+  // const honeycombBlock1 = createHoneycombBlock({
+  //   repeatsPerCondition: 2,
+  // });
 
   // Build the timeline
   const timeline = [
     Preamble,
-    honeycombTutorialBlock,
-    firstBlockCountdown,
-    honeycombPracticeBlock,
-    secondBlockCountdown,
-    honeycombBlock1,
+    // honeycombTutorialBlock,
+    // firstBlockCountdown,
+    // honeycombPracticeBlock,
+    // secondBlockCountdown,
+    // honeycombBlock1,
     EndExperiment, // Task complete message
   ];
   return timeline;
