@@ -6,7 +6,7 @@ on:
     inputs:
       location:
         # TODO: Home doesn't make sense here?
-        description: Build for "home" or "clinic"
+        description: Build for "online" or "clinic"
         required: true
         default: "clinic"
       os:
