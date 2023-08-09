@@ -45,7 +45,7 @@ export default function Experiment({
     // Run the experiment
     jsPsych.run(buildTimeline());
 
-    // TODO: Return to home page after experiment completes
+    // TODO: Return to home page after experiment completes (need to detect experiment finish - on_finish)
     return () => {
       console.log("out of useEffect");
     };
