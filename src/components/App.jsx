@@ -195,7 +195,6 @@ function App() {
   if (isError) return <Error />;
   else {
     return loggedIn ? (
-      // <JsPsychExperiment
       <Experiment
         config={OLD_CONFIG}
         studyID={studyID}

@@ -56,7 +56,7 @@ export async function initParticipant(studyID, participantID, startDate) {
     await experiment.set({
       start_time: startDate,
       // TODO 173: app_version and app_platform are deprecated
-      // TODO: Pass taskVersion into this functon from <Experiment />
+      // TODO: Pass taskVersion into this function from <Experiment />
       app_version: window.navigator.appVersion,
       app_platform: window.navigator.platform,
     });

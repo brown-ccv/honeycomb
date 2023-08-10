@@ -43,12 +43,12 @@ export default function Experiment({
     });
 
     // Run the experiment
-    jsPsych.run(buildTimeline());
-
-    // TODO: Return to home page after experiment completes (need to detect experiment finish - on_finish)
-    return () => {
-      console.log("out of useEffect");
-    };
+    jsPsych.run(buildTimeline()).then(() => {
+      // TODO: Return to home page after experiment completes
+      // TODO: Need to update the electron code to save data here, not
+      console.log("FINISHED EXPERIMENT");
+      window.location.reload();
+    });
   }, []);
 
   return <div id={EXPERIMENT_ID} />;
