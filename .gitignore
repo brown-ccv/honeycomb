@@ -2,6 +2,7 @@
 
 # Dependencies
 /node_modules
+Brewfile.lock.json
 /.pnp
 .pnp.js
 Brewfile.lock.json
@@ -23,6 +24,7 @@ Brewfile.lock.json
 
 # Versioning
 public/config/version.json
+Brewfile.lock.json
 
 # Firebase private key
 **/firebase-service-account.json
