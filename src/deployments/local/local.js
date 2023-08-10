@@ -4,7 +4,8 @@ try {
   RENDERER = window.require("electron").ipcRenderer;
 } catch (e) {
   // TODO: Should probably throw the error in this case?
-  console.error("Unable to instantiate the Electron process", e);
+  // console.error("Unable to instantiate the Electron process", e);
+  console.warn("Unable to instantiate the Electron process");
 }
 
 /**

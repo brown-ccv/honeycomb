@@ -20,11 +20,20 @@ function Login({
   // Function to log in participant
   function handleSubmit(e) {
     e.preventDefault();
+
     // Logs user in if a valid participant/study id combination is given
-    validationFunction(studyID, participantID).then((isValid) => {
+    if (validationFunction[Symbol.toStringTag] === "AsyncFunction") {
+      // Validation function is asynchronous
+      validationFunction(studyID, participantID).then((isValid) => {
+        setIsError(!isValid);
+        if (isValid) handleLogin(studyID, participantID);
+      });
+    } else {
+      // Validation function is synchronous
+      const isValid = validationFunction(studyID, participantID);
       setIsError(!isValid);
       if (isValid) handleLogin(studyID, participantID);
-    });
+    }
   }
 
   return (

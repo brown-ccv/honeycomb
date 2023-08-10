@@ -5,7 +5,7 @@
  * @returns {boolean}
  */
 export function validate_login(studyID, participantID) {
-  console.log("login", studyID, participantID);
+  console.log("validate download", studyID, participantID);
   return true;
 }
 
