@@ -1,8 +1,8 @@
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import { showMessage, fixation } from '@brown-ccv/behavioral-task-trials';
-import { config, eventCodes } from '../config/main';
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import { showMessage, fixation } from "@brown-ccv/behavioral-task-trials";
+import { config, eventCodes } from "../config/main";
 
-import { earningsDisplay } from '../lib/markup/earnings';
+import { earningsDisplay } from "../lib/markup/earnings";
 
 const taskTrial = (blockSettings, blockDetails, condition) => {
   // timeline

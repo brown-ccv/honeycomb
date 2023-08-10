@@ -1,6 +1,6 @@
 // utilities specific to this app/task
 
-import _ from 'lodash';
+import _ from "lodash";
 
 // initialize starting conditions for each trial within a block
 const generateStartingOpts = (blockSettings) => {

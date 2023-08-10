@@ -1,5 +1,5 @@
-import { defaultBlockSettings } from './main';
-import { deepCopy } from '../lib/utils';
+import { defaultBlockSettings } from "./main";
+import { deepCopy } from "../lib/utils";
 
 // TUTORIAL SETTINGS
 

@@ -1,6 +1,6 @@
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import taskTrial from './taskTrial';
-import { generateStartingOpts } from '../lib/taskUtils';
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import taskTrial from "./taskTrial";
+import { generateStartingOpts } from "../lib/taskUtils";
 
 const taskBlock = (blockSettings) => {
   // initialize block
@@ -19,7 +19,7 @@ const taskBlock = (blockSettings) => {
 
   const blockStart = {
     type: htmlKeyboardResponse,
-    stimulus: '',
+    stimulus: "",
     trial_duration: 1,
     on_finish: (data) => {
       data.block_settings = blockSettings;
