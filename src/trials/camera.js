@@ -38,7 +38,7 @@ const cameraStart = (jsPsych) => {
   return {
     type: htmlButtonResponse,
     stimulus,
-    choices: [lang.prompt.continue.button],
+    choices: [lang.prompts.continue.button],
     response_ends_trial: true,
     on_load: () => {
       // Grab elements, create settings, etc.

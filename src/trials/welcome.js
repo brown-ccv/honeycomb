@@ -1,34 +1,23 @@
+import { showMessage } from "@brown-ccv/behavioral-task-trials";
+import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import { lang } from "../config/main";
+
+import { config, lang } from "../config/main";
 import { photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
 
-const pleaseBiggen = () => {
-  const stimulus =
-    baseStimulus(`<h1>${lang.welcome.large_window}</h1>`, true) + photodiodeGhostBox();
+// TODO: Turn into jsPsych instruction trial (config is only used for task name)
+export const showName = showMessage(config, {
+  responseType: htmlButtonResponse,
+  message: lang.name,
+  responseEndsTrial: true,
+  buttons: [lang.prompts.continue.button],
+});
 
-  return {
-    type: htmlKeyboardResponse,
-    stimulus,
-    prompt: lang.prompt.continue.press,
-    response_ends_trial: true,
-  };
-};
-
-const welcomeMessage = () => {
-  const stimulus = baseStimulus(`<h1>${lang.welcome.message}</h1>`, true) + photodiodeGhostBox();
-
-  return {
-    type: htmlKeyboardResponse,
-    stimulus,
-    prompt: lang.prompt.continue.press,
-    response_ends_trial: true,
-  };
-};
-
-const welcome = {
+// TODO: Turn into jsPsych instruction trial
+export const showWelcome = {
   type: htmlKeyboardResponse,
-  timeline: [pleaseBiggen(), welcomeMessage()],
+  stimulus: baseStimulus(`<h1>${lang.prompts.welcome}</h1>`, true) + photodiodeGhostBox(),
+  prompt: lang.prompts.continue.press,
+  response_ends_trial: true,
 };
-
-export default welcome;

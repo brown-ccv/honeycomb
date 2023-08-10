@@ -1,25 +1,20 @@
 {
-  "task": {
-    "name": "Honeycomb Task",
-    "end": "This experiment has ended.",
-    "recording_end": "Your recording has ended."
-  },
-  "prompt": {
+  "name": "Honeycomb Task",
+  "prompts": {
     "continue": {
       "press": "Press any key to continue.",
       "button": "Continue"
     },
     "focus": "Make sure the photodiode is covering the spot and any external recordings have begun before continuing.",
-    "fullscreen": "Press 'cmd + ctrl + F' to toggle Fullscreen.",
-    "zoom": "Zoom in to enlarge the screen.",
-    "setting_up": "Setting up task..."
+    "setting_up": "Setting up task...",
+    "welcome": "Welcome! Here are your instructions"
   },
-  "welcome": {
-    "large_window": "Please make this window as large as possible.",
-    "message": "Instructions"
+  "finish": {
+    "end": "This experiment has ended.",
+    "recording_end": "Your recording has ended."
   },
   "userid": {
-    "set": "Please enter participant ID."
+    "set": "Setting up user ID."
   },
   "eventMarker": {
     "found": "Note: event marker found.",
