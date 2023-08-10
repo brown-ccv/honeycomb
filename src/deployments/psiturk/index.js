@@ -1,1 +1,1 @@
-export * from "./mturk";
+export * from "./psiturk";

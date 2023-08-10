@@ -9,28 +9,7 @@ import Login from "./Login";
 import { DEPLOYMENT, LOCATION, NODE_ENV, OLD_CONFIG } from "../constants";
 import { getQueryVariable } from "../utils";
 import { TASK_VERSION } from "../JsPsych/constants";
-
-// TODO 157: Have an object of functions, accessed by the config variable
-import {
-  on_finish as downloadFinish,
-  validate_login as downloadLogin,
-  on_data_update as downloadUpdate,
-} from "../deployments/download";
-import {
-  on_finish as firebaseFinish,
-  validate_login as firebaseLogin,
-  on_data_update as firebaseUpdate,
-} from "../deployments/firebase";
-import {
-  on_finish as localFinish,
-  validate_login as localLogin,
-  on_data_update as localUpdate,
-} from "../deployments/local";
-import {
-  on_finish as psiturkFinish,
-  validate_login as psiturkLogin,
-  on_data_update as psiturkUpdate,
-} from "../deployments/psiturk";
+import { DEPLOYMENT_FUNCTIONS } from "../deployments/deploymentFunctions";
 
 /** Top-level React component for Honeycomb.
  *
@@ -157,22 +136,8 @@ function App() {
         studyID={studyID}
         participantID={participantID}
         taskVersion={TASK_VERSION}
-        dataUpdateFunction={
-          {
-            download: downloadUpdate,
-            local: localUpdate,
-            firebase: firebaseUpdate,
-            psiturk: psiturkUpdate,
-          }[currentMethod]
-        }
-        dataFinishFunction={
-          {
-            download: downloadFinish,
-            local: localFinish,
-            firebase: firebaseFinish,
-            psiturk: psiturkFinish,
-          }[currentMethod]
-        }
+        dataUpdateFunction={DEPLOYMENT_FUNCTIONS.update[currentMethod]}
+        dataFinishFunction={DEPLOYMENT_FUNCTIONS.finish[currentMethod]}
       />
     ) : (
       // Not logged in - display login screen
@@ -182,14 +147,7 @@ function App() {
         participantID={participantID}
         setParticipantID={setParticipantID}
         handleLogin={handleLogin}
-        validationFunction={
-          {
-            download: downloadLogin,
-            local: localLogin,
-            firebase: firebaseLogin,
-            psiturk: psiturkLogin,
-          }[currentMethod]
-        }
+        validationFunction={DEPLOYMENT_FUNCTIONS.validation[currentMethod]}
       />
     );
   }

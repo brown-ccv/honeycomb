@@ -1,17 +1,13 @@
-// TODO: And I try to get the renderer here instead of in the JSX component?
+import _ from "lodash";
 
 // TODO: Manage MTurk vs PsiTurk?
 // MTurk is available through JsPsych directly
 // PsiTurk is what's using the JS min files
 
-/* eslint-disable */
-// TOD: This might insatiate multiple times?
 window.lodash = _.noConflict();
-const PSITURK = new PsiTurk(turkUniqueId, "/complete");
+// TODO: This is instantiated in App.jsx. I need to get that instance here?
+const PSITURK = new PsiTurk(); //eslint-disable-line no-undef
 
-// Logs with with studyID as mturk and participantID as <pID>
-handleLogin("mturk", turkUniqueId);
-setMethod("mturk");
 /* eslint-enable */
 
 /**
