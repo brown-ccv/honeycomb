@@ -8,20 +8,18 @@ import { enterFullscreen } from "../trials/fullscreen";
 import holdUpMarker from "../trials/holdUpMarker";
 import startCode from "../trials/startCode";
 
+// ? TODO: Make an instructions task? How is config used?
+const name = showMessage(config, {
+  responseType: htmlButtonResponse,
+  message: lang.task.name,
+  responseEndsTrial: true,
+  buttons: [lang.prompt.continue.button],
+});
+
 /**
  * Timeline of initial trials used for setup and instructions
  */
-const timeline = [
-  // Show task name
-  // TODO: Make its own trial
-  showMessage(config, {
-    responseType: htmlButtonResponse,
-    message: lang.task.name,
-    responseEndsTrial: true,
-    buttons: [lang.prompt.continue.button],
-  }),
-  enterFullscreen, // Enter fullscreen
-];
+const timeline = [name, enterFullscreen];
 
 // Add photodiode trials
 if (config.USE_PHOTODIODE) {
