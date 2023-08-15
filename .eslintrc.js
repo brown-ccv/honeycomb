@@ -26,7 +26,6 @@ module.exports = {
   rules: {
     "react/prop-types": "off", // TODO 223: Add prop validation and remove this line
     "prettier/prettier": "warn",
-    "no-unused-vars": "warn",
   },
   overrides: [{ files: ["*.jsx", "*.js"] }],
 };
