@@ -1,6 +1,6 @@
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import { lang } from '../config/main';
-import { baseStimulus } from '../lib/markup/stimuli';
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import { lang } from "../config/main";
+import { baseStimulus } from "../lib/markup/stimuli";
 
 const adjustVolume = () => {
   const stimulus = baseStimulus(

@@ -5,11 +5,11 @@ module.exports = {
       jsx: true,
     },
     ecmaVersion: 2018,
-    sourceType: 'module',
+    sourceType: "module",
   },
   settings: {
     react: {
-      version: 'detect',
+      version: "detect",
     },
   },
   env: {
@@ -18,14 +18,14 @@ module.exports = {
     es6: true,
   },
   globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly',
+    Atomics: "readonly",
+    SharedArrayBuffer: "readonly",
   },
-  plugins: ['react', 'prettier'],
-  extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
+  plugins: ["react", "prettier"],
+  extends: ["eslint:recommended", "plugin:react/recommended", "prettier"],
   rules: {
-    'react/prop-types': 'off',
-    'prettier/prettier': 'warn',
+    "react/prop-types": "off",
+    "prettier/prettier": "warn",
   },
-  overrides: [{ files: ['*.jsx', '*.js'] }],
+  overrides: [{ files: ["*.jsx", "*.js"] }],
 };

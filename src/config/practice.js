@@ -1,12 +1,12 @@
-import { defaultBlockSettings } from './main';
-import { deepCopy } from '../lib/utils';
+import { defaultBlockSettings } from "./main";
+import { deepCopy } from "../lib/utils";
 
 // PRACTICE BLOCK SETTINGS
 
 // create copy of default settings
 const practiceBlock = deepCopy(defaultBlockSettings);
 
-practiceBlock.conditions = ['m', 'n'];
+practiceBlock.conditions = ["m", "n"];
 practiceBlock.repeats_per_condition = 1;
 
 practiceBlock.is_practice = true;
