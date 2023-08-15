@@ -1,6 +1,6 @@
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import { lang } from '../config/main';
-import { baseStimulus } from '../lib/markup/stimuli';
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import { lang } from "../config/main";
+import { baseStimulus } from "../lib/markup/stimuli";
 
 const adjustVolume = () => {
   const stimulus = baseStimulus(
@@ -15,7 +15,7 @@ const adjustVolume = () => {
   return {
     type: htmlKeyboardResponse,
     stimulus,
-    prompt: lang.prompt.continue.press,
+    prompt: lang.prompts.continue.press,
     response_ends_trial: true,
   };
 };

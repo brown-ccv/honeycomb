@@ -2,8 +2,10 @@
 
 # Dependencies
 /node_modules
+Brewfile.lock.json
 /.pnp
 .pnp.js
+Brewfile.lock.json
 
 # Testing
 /coverage

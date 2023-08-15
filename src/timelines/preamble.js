@@ -1,27 +1,25 @@
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import htmlButtonResponse from '@jspsych/plugin-html-button-response';
-import { showMessage } from '@brown-ccv/behavioral-task-trials';
-import holdUpMarker from '../trials/holdUpMarker';
-import startCode from '../trials/startCode';
-import { lang, config } from '../config/main';
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-const timeline = [
-  showMessage(config, {
-    responseType: htmlButtonResponse,
-    message: lang.task.name,
-    responseEndsTrial: true,
-    buttons: [lang.prompt.continue.button],
-  }),
-];
+import { config } from "../config/main";
+
+import { enterFullscreen } from "../trials/fullscreen";
+import holdUpMarker from "../trials/holdUpMarker";
+import startCode from "../trials/startCode";
+import { showName, showWelcome } from "../trials/welcome";
+
+/**
+ * Timeline of initial trials used for setup and instructions
+ */
+const timeline = [showName, enterFullscreen, showWelcome];
+
+// Add photodiode trials
 if (config.USE_PHOTODIODE) {
   timeline.push(holdUpMarker());
   timeline.push(startCode());
 }
 
-const preamble = {
+export const preamble = {
   type: htmlKeyboardResponse,
-  stimulus: '',
+  stimulus: "",
   timeline,
 };
-
-export default preamble;

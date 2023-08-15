@@ -1,8 +1,8 @@
-import htmlButtonResponse from '@jspsych/plugin-html-button-response';
-import { lang } from '../config/main';
-import { photodiodeGhostBox } from '../lib/markup/photodiode';
-import { baseStimulus } from '../lib/markup/stimuli';
-import eventMarkerMessage from '../lib/markup/eventMarkerMessage';
+import htmlButtonResponse from "@jspsych/plugin-html-button-response";
+import { lang } from "../config/main";
+import { photodiodeGhostBox } from "../lib/markup/photodiode";
+import { baseStimulus } from "../lib/markup/stimuli";
+import eventMarkerMessage from "../lib/markup/eventMarkerMessage";
 
 const holdUpMarker = () => {
   const stimulus = baseStimulus("<div><h2 id='usb-alert'></h2></div>", true) + photodiodeGhostBox();
@@ -10,11 +10,11 @@ const holdUpMarker = () => {
   return {
     type: htmlButtonResponse,
     stimulus,
-    prompt: [`<br><h3>${lang.prompt.focus}</h3>`],
-    choices: [lang.prompt.continue.button],
+    prompt: [`<br><h3>${lang.prompts.focus}</h3>`],
+    choices: [lang.prompts.continue.button],
     on_load: () =>
       eventMarkerMessage().then((s) => {
-        document.getElementById('usb-alert').innerHTML = s;
+        document.getElementById("usb-alert").innerHTML = s;
       }),
   };
 };

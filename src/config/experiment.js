@@ -1,5 +1,5 @@
-import { defaultBlockSettings } from './main';
-import { deepCopy } from '../lib/utils';
+import { defaultBlockSettings } from "./main";
+import { deepCopy } from "../lib/utils";
 
 // FIRST EXPERIMENT BLOCK SETTINGS
 
@@ -13,7 +13,7 @@ exptBlock1.repeats_per_condition = 2;
 // create copy of default settings
 const exptBlock2 = deepCopy(defaultBlockSettings);
 
-exptBlock2.conditions = ['e', 'f'];
+exptBlock2.conditions = ["e", "f"];
 exptBlock2.repeats_per_condition = 2;
 
 export { exptBlock1, exptBlock2 };
