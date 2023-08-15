@@ -344,7 +344,7 @@ app.on("will-quit", () => {
       fs.mkdirSync(savePath, { recursive: true });
       fs.copyFileSync(preSavePath, fullPath);
     } catch (e) {
-      console.error('Unable to save file: ', fullPath);
+      console.error("Unable to save file: ", fullPath);
       console.error(e);
       log.error(e);
     }
