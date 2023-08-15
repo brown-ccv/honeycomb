@@ -68,10 +68,9 @@ function JsPsychExperiment({
   }
 
   useEffect(() => {
-    // TODO 193: useLayoutEffect callbacks might be even more similar.
     window.addEventListener("keyup", handleKeyEvent, true);
     window.addEventListener("keydown", handleKeyEvent, true);
-    jsPsych.run(timeline); // This will be passed to the package
+    jsPsych.run(timeline);
 
     return () => {
       window.removeEventListener("keyup", handleKeyEvent, true);
