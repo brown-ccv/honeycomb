@@ -3,7 +3,7 @@
 brew "git"
 brew "nvm"
 cask "github"
-cask "oracle-jdk"
+brew "openjdk"
 cask "visual-studio-code"
 
 # TODO: Python management (miniconda)?
