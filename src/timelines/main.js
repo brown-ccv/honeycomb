@@ -1,13 +1,16 @@
-import { lang, config } from "../config/main";
-import preamble from "./preamble";
-import taskBlock from "./taskBlock";
 import { countdown, showMessage } from "@brown-ccv/behavioral-task-trials";
-import { cameraStart, cameraEnd } from "../trials/camera";
+
+import { exptBlock1, exptBlock2 } from "../config/experiment";
+import { config, lang } from "../config/main";
 import { practiceBlock } from "../config/practice";
 import { tutorialBlock } from "../config/tutorial";
-import { exptBlock1, exptBlock2 } from "../config/experiment";
 
-import { ageCheck, sliderCheck, demographics, iusSurvey, debrief } from "../trials/quizTrials";
+import { cameraEnd, cameraStart } from "../trials/camera";
+import { preamble } from "./preamble";
+import taskBlock from "./taskBlock";
+
+import { ageCheck, debrief, demographics, iusSurvey, sliderCheck } from "../trials/quizTrials";
+import { exitFullscreen } from "../trials/fullscreen";
 
 // Add your jsPsych options here.
 // Honeycomb will combine these custom options with other options needed by Honyecomb.
@@ -47,9 +50,10 @@ const buildPrimaryTimeline = (jsPsych) => {
   primaryTimeline.push(
     showMessage(config, {
       duration: 5000,
-      message: lang.task.end,
+      message: lang.end,
     })
   );
+  primaryTimeline.push(exitFullscreen);
 
   return primaryTimeline;
 };
@@ -62,9 +66,10 @@ const mturkTimeline = [
   taskBlock(exptBlock2),
   showMessage(config, {
     duration: 5000,
-    message: lang.task.end,
+    message: lang.finish.end,
   }),
+  exitFullscreen,
 ];
 
 // Honeycomb, please include these options, and please get the timeline from this function.
-export { jsPsychOptions, buildTimeline };
+export { buildTimeline, jsPsychOptions };

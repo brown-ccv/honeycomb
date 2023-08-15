@@ -15,7 +15,7 @@ const adjustVolume = () => {
   return {
     type: htmlKeyboardResponse,
     stimulus,
-    prompt: lang.prompt.continue.press,
+    prompt: lang.prompts.continue.press,
     response_ends_trial: true,
   };
 };

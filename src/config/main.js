@@ -2,12 +2,12 @@
 // This is the main configuration file where universal and default settings should be placed.
 // These settins can then be imported anywhere in the app as they are exported at the botom of the file.
 
-import { initJsPsych } from "jspsych";
-import _ from "lodash";
-import { eventCodes } from "./trigger";
 import { init } from "@brown-ccv/behavioral-task-trials";
-import { getProlificId } from "../lib/utils";
+import { initJsPsych } from "jspsych";
+
 import packageInfo from "../../package.json";
+import { getProlificId } from "../lib/utils";
+import { eventCodes } from "./trigger";
 
 // Access package name and version so we can store these as facts with task data.
 const taskName = packageInfo.name;
@@ -60,11 +60,6 @@ const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_EL
 
 // get language file
 const lang = require("../language/en_us.json");
-if (!USE_ELECTRON) {
-  // if this is mturk, merge in the mturk specific language
-  const mlang = require("../language/en_us.mturk.json");
-  _.merge(lang, mlang);
-}
 
 const defaultBlockSettings = {
   conditions: ["a", "b", "c"],
@@ -87,13 +82,13 @@ const config = init({
 });
 
 export {
+  audioCodes,
+  config,
+  defaultBlockSettings,
+  eventCodes,
+  keys,
+  lang,
   taskName,
   taskVersion,
-  keys,
-  defaultBlockSettings,
-  lang,
-  eventCodes,
-  config,
-  audioCodes,
   turkUniqueId,
 };

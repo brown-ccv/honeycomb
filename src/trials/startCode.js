@@ -5,7 +5,7 @@ import { baseStimulus } from "../lib/markup/stimuli";
 import { beep } from "../lib/utils";
 
 const startCode = () => {
-  const stimulus = baseStimulus(`<h1>${lang.prompt.setting_up}</h1>`, true) + photodiodeGhostBox();
+  const stimulus = baseStimulus(`<h1>${lang.prompts.setting_up}</h1>`, true) + photodiodeGhostBox();
 
   return {
     type: htmlKeyboardResponse,
