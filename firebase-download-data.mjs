@@ -1,16 +1,15 @@
 /**
- * Connect to Firestore using a service account, and download participant response data.
+ * Connect to Firestore and download participant response data.
  *
  *
  * Before using this you must set up a Firebase Service account: https://brown-ccv.github.io/honeycomb-docs/docs/firebase#setting-up-a-service-account
  * For additional details about running the script: https://brown-ccv.github.io/honeycomb-docs/docs/firebase#using-the-download-script
  */
 
-// import fs from "fs-extra";
-// import firebase from "firebase-admin";
 import { Command } from "commander";
-import { getFirestore } from "firebase-admin/firestore";
 import { cert, initializeApp } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
+import fs from "fs-extra";
 
 // TODO: Refactor to modular format for firebase-admin
 // TODO: Add option for passing a custom service account
@@ -26,18 +25,15 @@ program
   .argument("<participantID>", "The ID of a given participant on the study")
   .argument(
     "[sessionNumber]",
-    "Optional number used to select which session to download",
+    "Optional number used to select which session to download, defaults to latest session"
     // TODO: Just default to 0? Is that the most recent session?
-    "latest"
+    // "-1"
   )
   .argument("[outputRoot]", "Optional path to the folder where data should be saved", ".")
 
   .showHelpAfterError()
   .action(async (studyID, participantID, sessionNumber, outputRoot) => {
     console.log(`Loading data for participant "${participantID}" on study "${studyID}"`);
-
-    // TODO: What is the "latest" equivalent? That should be the default value
-    if (sessionNumber !== "latest") sessionNumber = parseInt(sessionNumber);
 
     // Initialize Firestore
     try {
@@ -57,21 +53,17 @@ program
     const participantDataRef = FIRESTORE.collection(
       `participant_responses/${studyID}/participants/${participantID}/data`
     );
-    const experiments = getParticipantData(participantDataRef);
+    const experiments = await getExperiments(participantDataRef);
 
-    const experimentData = await getExperimentData(experiments, sessionNumber);
-    // TODO: save experiment data
-    try {
-      await saveExperimentData(experimentData, outputRoot);
-    } catch (error) {
-      console.error("There was an error saving the data:");
-      console.error(error);
-    }
+    const experimentDoc = await getExperiment(experiments, sessionNumber);
+    const trialsData = await getTrialsData(participantDataRef, experimentDoc);
+
+    await saveExperimentData(experimentDoc, trialsData, studyID, participantID, outputRoot);
   })
   .parseAsync();
 
 // Query Firestore for the participantID on the given studyID
-async function getParticipantData(dataRef) {
+async function getExperiments(dataRef) {
   const dataSnapshot = await dataRef.get();
   const experiments = dataSnapshot.docs;
 
@@ -88,14 +80,47 @@ async function getParticipantData(dataRef) {
   return experiments;
 }
 
-async function getExperimentData(experiments, sessionNumber) {
+async function getExperiment(experiments, sessionNumber) {
   // TODO 172: Convert to new regex check for ID?
-  if (isNaN(sessionNumber) || sessionNumber > experiments.length - 1) {
-    console.log("Invalid session number, retrieving latest session");
+  // TODO: Retrieve all sessions if sessionNumber isn't given?
+
+  if (sessionNumber == undefined) {
+    console.log("Retrieving latest session");
     return experiments[experiments.length - 1];
-  } else return experiments[sessionNumber];
+  } else if (isNaN(sessionNumber) || sessionNumber > experiments.length - 1) {
+    console.error("Invalid session number:", sessionNumber);
+    process.exit();
+  } else {
+    console.log("Loading session", sessionNumber);
+    return experiments[sessionNumber];
+  }
 }
 
-async function saveExperimentData(experimentData, outputRoot) {
-  console.log("saving", experimentData, outputRoot);
+async function getTrialsData(participantDataRef, experimentDoc) {
+  const id = experimentDoc.id;
+
+  // Merge the experiment's trials' data into a single array
+  const trialsSnapshot = await FIRESTORE.collection(`${participantDataRef.path}/${id}/trials`)
+    .orderBy("trial_index")
+    .get();
+  return trialsSnapshot.docs.map((trial) => trial.data());
+}
+
+async function saveExperimentData(experimentDoc, trialsData, studyID, participantID, outputRoot) {
+  // Add the trials' data to the experiment's data as "results" array
+  const experimentData = experimentDoc.data();
+  experimentData.results = trialsData;
+
+  // Save the session to a unique JSON file. (":" are replaced to prevent issues with invalid file names)
+  const outputFile =
+    `${outputRoot}/participant_responses/` +
+    `${studyID}/${participantID}/${experimentDoc.id}.json`.replaceAll(":", "_");
+
+  // TODO 172: Check for overwriting file?
+  try {
+    fs.outputJson(outputFile, experimentData, { spaces: 2 });
+    console.log("Data saved to disk at", outputFile);
+  } catch (error) {
+    throw new Error("There was an error saving the data:\n\n" + error.stack);
+  }
 }
