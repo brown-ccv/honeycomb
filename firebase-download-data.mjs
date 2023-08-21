@@ -26,8 +26,6 @@ program
   .argument(
     "[sessionNumber]",
     "Optional number used to select which session to download, defaults to latest session"
-    // TODO: Just default to 0? Is that the most recent session?
-    // "-1"
   )
   .argument("[outputRoot]", "Optional path to the folder where data should be saved", ".")
 
