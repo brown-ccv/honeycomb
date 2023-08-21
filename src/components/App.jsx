@@ -29,7 +29,7 @@ function App() {
   // ? Will just be DEPLOYMENT?
   // Deployment object itself is the import module
   // const [deployment, setDeployment] = useState("download");
-  const [deployment, setDeployment] = useState(null);
+  const [deployment, setDeployment] = useState();
 
   // Manage user data
   const [participantID, setParticipantID] = useState("");
