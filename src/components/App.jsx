@@ -33,8 +33,6 @@ function App() {
   // Deployment object itself is the import module
   const [deployment, setDeployment] = useState();
 
-  console.log("RENDER", deployment);
-
   /**
    * This effect is called once, on the first render of the application
    * It uses the environment variables to initialize the above state variables
