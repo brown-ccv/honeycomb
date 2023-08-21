@@ -25,15 +25,16 @@ function App() {
   // TODO: Refactor to be the error message itself or null
   const [isError, setIsError] = useState(false);
 
-  // Manage the method state of the app ("download", "local", "firebase", "psiturk")
-  // ? Will just be DEPLOYMENT?
-  // Deployment object itself is the import module
-  // const [deployment, setDeployment] = useState("download");
-  const [deployment, setDeployment] = useState();
-
   // Manage user data
   const [participantID, setParticipantID] = useState("");
   const [studyID, setStudyID] = useState("");
+
+  // Manage the method state of the app ("download", "local", "firebase", "psiturk")
+  // ? Will just be DEPLOYMENT?
+  // Deployment object itself is the import module
+  const [deployment, setDeployment] = useState();
+
+  console.log("RENDER", deployment);
 
   /**
    * This effect is called once, on the first render of the application
@@ -48,6 +49,7 @@ function App() {
     // TODO: Refactor to switch
     if (LOCATION === "clinic") {
       // Running in an Electron process
+      // TODO: Check against isElectron utility function
       let renderer;
       try {
         // Load the Electron renderer process and psiturk based on MTURK config variable
@@ -76,21 +78,19 @@ function App() {
     }
 
     async function loadDeploymentFunctions() {
-      const temp = await getDeployment(deployment);
-      console.log(deployment, temp);
-
       switch (DEPLOYMENT) {
+        // TODO: These cases can be consolidated
         case "download":
           // Data is downloaded as a CSV file at the end of the experiment
-          setDeployment("download");
+          setDeployment(await getDeployment("download"));
           break;
         case "local":
           // Save to a local JSON file with Honeycomb/studyID/participantID/[startDate] folder structure
-          setDeployment("local");
+          setDeployment(await getDeployment("local"));
           break;
         case "firebase":
           // Data is saved in Firebase's Firestore database
-          setDeployment("firebase");
+          setDeployment(await getDeployment("firebase"));
           break;
         case "prolific": {
           // TODO: Prolific will be deleted
@@ -99,7 +99,7 @@ function App() {
           handleLogin("prolific", pID);
 
           // Prolific currently uses the Firebase CRUD functions
-          setDeployment("firebase");
+          setDeployment(await getDeployment("firebase"));
           break;
         }
         case "psiturk":
@@ -111,7 +111,7 @@ function App() {
 
             // Logs with with studyID as psiturk and participantID as <pID>
             handleLogin("psiturk", turkUniqueId);
-            setDeployment("psiturk");
+            setDeployment(await getDeployment("psiturk"));
             /* eslint-enable */
           }
           break;
@@ -125,7 +125,6 @@ function App() {
       }
     }
     loadDeploymentFunctions();
-    // eslint-disable-next-line
   }, []);
 
   // Update the study/participant data when they log in
@@ -144,18 +143,20 @@ function App() {
         studyID={studyID}
         participantID={participantID}
         taskVersion={TASK_VERSION}
-        // dataUpdateFunction={DEPLOYMENT_FUNCTIONS.update[deployment]}
-        // dataFinishFunction={DEPLOYMENT_FUNCTIONS.finish[deployment]}
+        // JsPsych functions
+        dataUpdateFunction={deployment?.on_data_update}
+        dataFinishFunction={deployment?.on_finish}
       />
     ) : (
       // Not logged in - display login screen
+      // TODO: Typing in the login page is causing the screen to re-render?
       <Login
         studyID={studyID}
         setStudyID={setStudyID}
         participantID={participantID}
         setParticipantID={setParticipantID}
         handleLogin={handleLogin}
-        // validationFunction={DEPLOYMENT_FUNCTIONS.validation[deployment]}
+        validationFunction={deployment?.validate_login}
       />
     );
   }

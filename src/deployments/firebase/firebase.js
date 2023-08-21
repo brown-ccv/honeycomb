@@ -36,7 +36,6 @@ export async function on_data_update(data) {
  *  Do nothing
  * @param {object} data The JsPsych data object
  */
-// TODO: Delete?
 export function on_finish(data) {
   console.log("Experiment finished: ", data);
   return;
