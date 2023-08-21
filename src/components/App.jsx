@@ -28,7 +28,8 @@ function App() {
   // Manage the method state of the app ("download", "local", "firebase", "psiturk")
   // ? Will just be DEPLOYMENT?
   // Deployment object itself is the import module
-  const [deployment, setDeployment] = useState("download");
+  // const [deployment, setDeployment] = useState("download");
+  const [deployment, setDeployment] = useState(null);
 
   // Manage user data
   const [participantID, setParticipantID] = useState("");
