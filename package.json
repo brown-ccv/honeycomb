@@ -73,7 +73,6 @@
     "rebuild": "electron-rebuild",
     "firebase:emulators:start": "firebase emulators:start --import emulator_data",
     "firebase:emulators:save": "firebase emulators:export emulator_data",
-    "RM-firebase:download": "dotenv -e env/.env.firebase-download node download-response-data.js",
     "firebase-download-data": "node firebase-download-data.mjs",
     "firebase-delete-data": "node firebase-delete-data.mjs",
     "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
