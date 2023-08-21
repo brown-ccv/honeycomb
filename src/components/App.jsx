@@ -9,7 +9,7 @@ import Login from "./Login";
 import { DEPLOYMENT, LOCATION, NODE_ENV, OLD_CONFIG } from "../constants";
 import { getQueryVariable } from "../utils";
 import { TASK_VERSION } from "../JsPsych/constants";
-import { DEPLOYMENT_FUNCTIONS } from "../deployments/deploymentFunctions";
+import { getDeployment } from "../deployments";
 
 /** Top-level React component for Honeycomb.
  *
@@ -27,7 +27,8 @@ function App() {
 
   // Manage the method state of the app ("download", "local", "firebase", "psiturk")
   // ? Will just be DEPLOYMENT?
-  const [currentMethod, setMethod] = useState("download");
+  // Deployment object itself is the import module
+  const [deployment, setDeployment] = useState("download");
 
   // Manage user data
   const [participantID, setParticipantID] = useState("");
@@ -73,50 +74,56 @@ function App() {
       setParticipantID(query.get("participantID") || "");
     }
 
-    switch (DEPLOYMENT) {
-      case "download":
-        // Data is downloaded as a CSV file at the end of the experiment
-        setMethod("download");
-        break;
-      case "local":
-        // Save to a local JSON file with Honeycomb/studyID/participantID/[startDate] folder structure
-        setMethod("local");
-        break;
-      case "firebase":
-        // Data is saved in Firebase's Firestore database
-        setMethod("firebase");
-        break;
-      case "prolific": {
-        // TODO: Prolific will be deleted
-        // Logs with with studyID as prolific and participantID as <pID>
-        const pID = getQueryVariable("PROLIFIC_PID");
-        handleLogin("prolific", pID);
+    async function loadDeploymentFunctions() {
+      const temp = await getDeployment(deployment);
+      console.log(deployment, temp);
 
-        // Prolific currently uses the Firebase CRUD functions
-        setMethod("firebase");
-        break;
-      }
-      case "psiturk":
-        {
-          /* eslint-disable */
-          // ? This is using all the JavaScript min files?
-          window.lodash = _.noConflict();
-          setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
+      switch (DEPLOYMENT) {
+        case "download":
+          // Data is downloaded as a CSV file at the end of the experiment
+          setDeployment("download");
+          break;
+        case "local":
+          // Save to a local JSON file with Honeycomb/studyID/participantID/[startDate] folder structure
+          setDeployment("local");
+          break;
+        case "firebase":
+          // Data is saved in Firebase's Firestore database
+          setDeployment("firebase");
+          break;
+        case "prolific": {
+          // TODO: Prolific will be deleted
+          // Logs with with studyID as prolific and participantID as <pID>
+          const pID = getQueryVariable("PROLIFIC_PID");
+          handleLogin("prolific", pID);
 
-          // Logs with with studyID as psiturk and participantID as <pID>
-          handleLogin("psiturk", turkUniqueId);
-          setMethod("psiturk");
-          /* eslint-enable */
+          // Prolific currently uses the Firebase CRUD functions
+          setDeployment("firebase");
+          break;
         }
-        break;
-      // TODO: Add XAMPP support and instructions https://www.jspsych.org/7.3/overview/data/#storing-data-permanently-as-a-file
-      // TODO: Add MySQL support and instructions https://www.jspsych.org/7.3/overview/data/#storing-data-permanently-in-a-mysql-database
-      case "custom": // TODO: User will have to provide the data functions to <Honeycomb />
-      default:
-        setIsError(true);
-        console.error("process.env.DEPLOYMENT is invalid or not set: ");
-        break;
+        case "psiturk":
+          {
+            /* eslint-disable */
+            // ? This is using all the JavaScript min files?
+            window.lodash = _.noConflict();
+            setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
+
+            // Logs with with studyID as psiturk and participantID as <pID>
+            handleLogin("psiturk", turkUniqueId);
+            setDeployment("psiturk");
+            /* eslint-enable */
+          }
+          break;
+        // TODO: Add XAMPP support and instructions https://www.jspsych.org/7.3/overview/data/#storing-data-permanently-as-a-file
+        // TODO: Add MySQL support and instructions https://www.jspsych.org/7.3/overview/data/#storing-data-permanently-in-a-mysql-database
+        case "custom": // TODO: User will have to provide the data functions to <Honeycomb />
+        default:
+          setIsError(true);
+          console.error("process.env.DEPLOYMENT is invalid or not set: ");
+          break;
+      }
     }
+    loadDeploymentFunctions();
     // eslint-disable-next-line
   }, []);
 
@@ -136,8 +143,8 @@ function App() {
         studyID={studyID}
         participantID={participantID}
         taskVersion={TASK_VERSION}
-        dataUpdateFunction={DEPLOYMENT_FUNCTIONS.update[currentMethod]}
-        dataFinishFunction={DEPLOYMENT_FUNCTIONS.finish[currentMethod]}
+        // dataUpdateFunction={DEPLOYMENT_FUNCTIONS.update[deployment]}
+        // dataFinishFunction={DEPLOYMENT_FUNCTIONS.finish[deployment]}
       />
     ) : (
       // Not logged in - display login screen
@@ -147,7 +154,7 @@ function App() {
         participantID={participantID}
         setParticipantID={setParticipantID}
         handleLogin={handleLogin}
-        validationFunction={DEPLOYMENT_FUNCTIONS.validation[currentMethod]}
+        // validationFunction={DEPLOYMENT_FUNCTIONS.validation[deployment]}
       />
     );
   }
