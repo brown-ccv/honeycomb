@@ -1,6 +1,6 @@
 /**
  *
- * @param {string} deployment The name of a given deployment
+ * @param {string} deployment The name of a given deployment ("download", "local", "firebase", "psiturk")
  * @returns
  */
 // TODO: Logic for if isElectron()

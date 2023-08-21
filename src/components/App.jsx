@@ -30,7 +30,6 @@ function App() {
   const [studyID, setStudyID] = useState("");
 
   // Manage the method state of the app ("download", "local", "firebase", "psiturk")
-  // ? Will just be DEPLOYMENT?
   // Deployment object itself is the import module
   const [deployment, setDeployment] = useState();
 
@@ -93,13 +92,14 @@ function App() {
           setDeployment(await getDeployment("firebase"));
           break;
         case "prolific": {
+          // Prolific currently uses the Firebase CRUD functions
+          setDeployment(await getDeployment("firebase"));
+
           // TODO: Prolific will be deleted
           // Logs with with studyID as prolific and participantID as <pID>
           const pID = getQueryVariable("PROLIFIC_PID");
           handleLogin("prolific", pID);
 
-          // Prolific currently uses the Firebase CRUD functions
-          setDeployment(await getDeployment("firebase"));
           break;
         }
         case "psiturk":
@@ -109,9 +109,10 @@ function App() {
             window.lodash = _.noConflict();
             setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
 
+            setDeployment(await getDeployment("psiturk"));
+
             // Logs with with studyID as psiturk and participantID as <pID>
             handleLogin("psiturk", turkUniqueId);
-            setDeployment(await getDeployment("psiturk"));
             /* eslint-enable */
           }
           break;
@@ -134,6 +135,7 @@ function App() {
     setLoggedIn(true);
   }, []);
 
+  // TODO: Loading JSX if deployment is undefined?
   if (isError) {
     return <Error />;
   } else {
@@ -150,6 +152,7 @@ function App() {
     ) : (
       // Not logged in - display login screen
       // TODO: Typing in the login page is causing the screen to re-render?
+      // App.jsx should have a "handleSubmit" callback, not update on every letter
       <Login
         studyID={studyID}
         setStudyID={setStudyID}
