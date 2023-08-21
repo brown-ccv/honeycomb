@@ -30,7 +30,7 @@ export function getQueryVariable(variable) {
 
 /**
  * Determine if the code is being run in an Electron process
- * https://github.com/electron/electron/issues/2288
+ * https://github.com/cheton/is-electron/blob/master/index.js
  * @returns {boolean}
  */
 export function isElectron() {
