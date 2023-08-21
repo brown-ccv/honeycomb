@@ -27,3 +27,39 @@ export function getQueryVariable(variable) {
     if (decodeURIComponent(pair[0]) === variable) return decodeURIComponent(pair[1]);
   }
 }
+
+/**
+ * Determine if the code is being run in an Electron process
+ * https://github.com/electron/electron/issues/2288
+ * @returns {boolean}
+ */
+export function isElectron() {
+  // Renderer process
+  if (
+    typeof window !== "undefined" &&
+    typeof window.process === "object" &&
+    window.process.type === "renderer"
+  ) {
+    return true;
+  }
+
+  // Main process
+  if (
+    typeof process !== "undefined" &&
+    typeof process.versions === "object" &&
+    !!process.versions.electron
+  ) {
+    return true;
+  }
+
+  // Detect the user agent when the `nodeIntegration` option is set to false
+  if (
+    typeof navigator === "object" &&
+    typeof navigator.userAgent === "string" &&
+    navigator.userAgent.indexOf("Electron") >= 0
+  ) {
+    return true;
+  }
+
+  return false;
+}
