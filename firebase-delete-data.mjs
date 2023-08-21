@@ -8,7 +8,6 @@
 import { Command } from "commander";
 import { cert, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import { prompt } from "inquirer";
 
 let FIRESTORE;
 
@@ -82,4 +81,5 @@ async function deleteExperiment(experiments, sessionNumber) {
   }
 
   console.log(toDelete.length);
+  // Prompt user to allow deletion
 }
