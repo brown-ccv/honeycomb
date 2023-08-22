@@ -1,8 +1,15 @@
 import { select, Separator } from "@inquirer/prompts";
+import { cert, initializeApp } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
 
-// TODO: User should be able to pass command line arguments OR inquirer (especially for task)
+/** -------------------- GLOBALS -------------------- */
+
+let FIRESTORE; // reference to Firestore for the Honeycomb project (from Firebase Admin)
+
+/** -------------------- MAIN -------------------- */
 
 async function main() {
+  // TODO: User should be able to pass command line arguments OR inquirer (especially for task)
   // const [, , ...args] = process.argv;
 
   const task = await select({
@@ -38,13 +45,34 @@ main();
 async function downloadData() {
   const deployment = await deploymentPrompt();
   console.log("Downloading data", deployment);
+  switch (deployment) {
+    case "firebase":
+      await downloadDataFirebase();
+      break;
+  }
+}
+
+async function downloadDataFirebase() {
+  initializeFirestore();
+  console.log("downloadDataFirebase");
 }
 
 /** -------------------- DELETE -------------------- */
 
 async function deleteData() {
   const deployment = await deploymentPrompt();
+
   console.log("Deleting data", deployment);
+  switch (deployment) {
+    case "firebase":
+      await deleteDataFirebase();
+      break;
+  }
+}
+
+async function deleteDataFirebase() {
+  initializeFirestore();
+  console.log("deleteDataFirebase");
 }
 
 /** -------------------- HELPERS -------------------- */
@@ -64,7 +92,6 @@ async function deploymentPrompt() {
         name: "",
         value: "",
         description: "Data is saved on your local machine",
-
         disabled: "Working with local data is not yet supported",
       },
     ],
@@ -72,4 +99,22 @@ async function deploymentPrompt() {
 
   // TODO: Instantiate Firebase if using Firebase
   return deployment;
+}
+
+/** -------------------- FIRESTORE HELPERS -------------------- */
+
+function initializeFirestore() {
+  // Initialize Firestore
+  try {
+    const app = initializeApp({ credential: cert("firebase-service-account.json") });
+    FIRESTORE = getFirestore(app);
+  } catch (error) {
+    throw new Error(
+      "Unable to connect to Firebase\n\n" +
+        'Your secret key must be called "firebase-service-account.json" ' +
+        "and stored in the root of your repository.\n" +
+        "More information: https://firebase.google.com/support/guides/service-accounts\n\n" +
+        error.stack
+    );
+  }
 }
