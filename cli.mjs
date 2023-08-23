@@ -8,12 +8,13 @@ import { getFirestore } from "firebase-admin/firestore";
 /** -------------------- GLOBALS -------------------- */
 
 let FIRESTORE; // Reference to Firestore for the Honeycomb project (from Firebase Admin)
-// TODO: Remove these
 let ACTION; // The action the user is attempting to complete
 let DEPLOYMENT; // The deployment tool the user is using
 let STUDY_ID; // The unique ID of a given study in the user's database
-let PARTICIPANT_ID; // The ID of a given participant in the user's database
-let EXPERIMENT_ID; // The ID of a given experiment in the user's database
+let PARTICIPANT_IDS; // The ID of a given participant in the user's database
+let EXPERIMENT_IDS; // The ID of a given experiment in the user's database
+
+const INVALID_DEPLOYMENT_ERROR = new Error("Invalid deployment: " + DEPLOYMENT);
 
 /** -------------------- MAIN -------------------- */
 
@@ -24,8 +25,8 @@ async function main() {
   ACTION = await actionPrompt();
   DEPLOYMENT = await deploymentPrompt();
   STUDY_ID = await studyIDPrompt();
-  PARTICIPANT_ID = await participantIDPrompt();
-  EXPERIMENT_ID = await experimentIDPrompt();
+  PARTICIPANT_IDS = await participantIDPrompt();
+  EXPERIMENT_IDS = await experimentIDPrompt();
 
   switch (ACTION) {
     case "download":
@@ -34,8 +35,7 @@ async function main() {
           await downloadDataFirebase();
           break;
         default:
-          // TODO: Custom error? This is used all over the place?
-          throw new Error("Invalid deployment: " + DEPLOYMENT);
+          throw INVALID_DEPLOYMENT_ERROR;
       }
       break;
     case "delete":
@@ -44,7 +44,7 @@ async function main() {
           await deleteDataFirebase();
           break;
         default:
-          throw new Error("Invalid deployment: " + DEPLOYMENT);
+          throw INVALID_DEPLOYMENT_ERROR;
       }
       break;
     default:
@@ -56,18 +56,19 @@ main();
 /** -------------------- DOWNLOAD ACTION -------------------- */
 
 async function downloadDataFirebase() {
-  console.log("Downloading data: ", DEPLOYMENT, STUDY_ID, PARTICIPANT_ID, EXPERIMENT_ID);
-  // switch (DEPLOYMENT) {
-  //   case "firebase":
-  //     await downloadDataFirebase();
-  //     break;
-  // }
+  console.log("Downloading data firebase: ", STUDY_ID, PARTICIPANT_IDS, EXPERIMENT_IDS);
+
+  // TODO: Enable downloading all study data at once
+  const participants = PARTICIPANT_IDS;
+
+  // Get list of participants to download
+  // Get list of studies on each participant to download
 }
 
 /** -------------------- DELETE ACTION -------------------- */
 
 async function deleteDataFirebase() {
-  console.log("Deleting data: ", DEPLOYMENT, STUDY_ID, PARTICIPANT_ID, EXPERIMENT_ID);
+  console.log("Deleting data: ", DEPLOYMENT, STUDY_ID, PARTICIPANT_IDS, EXPERIMENT_IDS);
   // switch (DEPLOYMENT) {
   //   case "firebase":
   //     await deleteDataFirebase();
@@ -155,7 +156,7 @@ async function studyIDPrompt() {
         case "firebase":
           return validateStudyFirebase(input);
         default:
-          throw new Error("Invalid deployment: " + DEPLOYMENT);
+          throw INVALID_DEPLOYMENT_ERROR;
       }
     },
   });
@@ -170,9 +171,11 @@ async function participantIDPrompt() {
     return studyIDCollections.find((c) => c.id === DATA_COL) ? true : invalidMessage;
   };
 
+  // TODO: Enable downloading all study data at once
   return await input({
-    message: "Select a participant (* selects all ):", // ? Do we need the stuff in parentheses?
-    default: "*",
+    // message: "Select a participant (* selects all ):", // ? Do we need the stuff in parentheses?
+    message: "Select a participant: ",
+    // default: "*",
     validate: async (input) => {
       const invalid = "Please enter a valid participant from your Firestore database";
       if (!input) return invalid;
@@ -182,26 +185,23 @@ async function participantIDPrompt() {
         case "firebase":
           return validateParticipantFirebase(input);
         default:
-          throw new Error("Invalid deployment: " + DEPLOYMENT);
+          throw INVALID_DEPLOYMENT_ERROR;
       }
     },
   });
 }
 
+/** Prompt the user to select one or more experiments of the PARTICIPANT_IDS on STUDY_ID */
 async function experimentIDPrompt() {
-  if (PARTICIPANT_ID === "*") return ["*"]; // Download all experiments for all participants
+  // if (PARTICIPANT_IDS === "*") return "*"; // Download all experiments for all participants
 
-  // Get all
-  const dataSnapshot = await getDataRef(STUDY_ID, PARTICIPANT_ID).get();
+  const dataSnapshot = await getDataRef(STUDY_ID, PARTICIPANT_IDS).get();
   const experiments = dataSnapshot.docs;
-  const choices = [
-    { name: `${ACTION} all`, value: "*" },
-    ...experiments.map(({ id }) => ({ name: id, value: id })),
-  ];
+  const choices = [...experiments.map(({ id }) => ({ name: id, value: id }))];
 
   return await checkbox({
     // TODO: What's the right word for this? Trial?
-    message: `Select the experiments you would like to ${ACTION}`,
+    message: `Select the experiments you would like to ${ACTION}:`,
     choices: choices,
   });
 }
@@ -219,5 +219,8 @@ const getStudyRef = (studyID) => FIRESTORE.collection(RESPONSES_COL).doc(studyID
 const getParticipantRef = (studyID, participantID) =>
   getStudyRef(studyID).collection(PARTICIPANTS_COL).doc(participantID);
 
+// Get a reference to a participant's data collection in Firestore
 const getDataRef = (studyID, participantID) =>
   getStudyRef(studyID).collection(PARTICIPANTS_COL).doc(participantID).collection(DATA_COL);
+
+/** -------------------- UTILS -------------------- */
