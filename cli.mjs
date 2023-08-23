@@ -33,6 +33,7 @@ async function main() {
           await downloadDataFirebase();
           break;
         default:
+          // TODO: Custom error? This is used all over the place?
           throw new Error("Invalid deployment: " + DEPLOYMENT);
       }
       break;
@@ -139,8 +140,7 @@ async function deploymentPrompt() {
 async function studyIDPrompt() {
   const invalidMessage = "Please enter a valid study from your Firestore database";
   const validateStudyFirebase = async (input) => {
-    // participants subcollection is programmatically generated
-    // if it doesn't exist then input must not be a valid studyID
+    // subcollection is programmatically generated, if it doesn't exist then input must not be a valid studyID
     const studyIDCollections = await getStudyRef(input).listCollections();
     return studyIDCollections.find((c) => c.id === PARTICIPANTS_COL) ? true : invalidMessage;
   };
@@ -149,9 +149,12 @@ async function studyIDPrompt() {
     message: "Select a study:",
     validate: async (input) => {
       if (!input) return invalidMessage;
+
       switch (DEPLOYMENT) {
         case "firebase":
           return validateStudyFirebase(input);
+        default:
+          throw new Error("Invalid deployment: " + DEPLOYMENT);
       }
     },
   });
@@ -161,8 +164,7 @@ async function studyIDPrompt() {
 async function participantIDPrompt() {
   const invalidMessage = `Please enter a valid participant on the study "${STUDY_ID}"`;
   const validateParticipantFirebase = async (input) => {
-    // data subcollection is programmatically generated
-    // if it doesn't exist then input must not be a valid participantID
+    // subcollection is programmatically generated, if it doesn't exist then input must not be a valid participantID
     const studyIDCollections = await getParticipantRef(STUDY_ID, input).listCollections();
     return studyIDCollections.find((c) => c.id === DATA_COL) ? true : invalidMessage;
   };
@@ -170,14 +172,16 @@ async function participantIDPrompt() {
   return await input({
     message: "Select a participant (* selects all ):", // ? Do we need the stuff in parentheses?
     default: "*",
-    description: "this is a etst",
     validate: async (input) => {
       const invalid = "Please enter a valid participant from your Firestore database";
       if (!input) return invalid;
       else if (input === "*") return true;
+
       switch (DEPLOYMENT) {
         case "firebase":
           return validateParticipantFirebase(input);
+        default:
+          throw new Error("Invalid deployment: " + DEPLOYMENT);
       }
     },
   });
