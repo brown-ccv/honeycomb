@@ -1,16 +1,16 @@
-import { countdown, showMessage } from "@brown-ccv/behavioral-task-trials";
+import {
+  // countdown,
+  showMessage,
+} from "@brown-ccv/behavioral-task-trials";
 
-import { exptBlock1, exptBlock2 } from "../config/experiment";
 import { config, lang } from "../config/main";
-import { practiceBlock } from "../config/practice";
-import { tutorialBlock } from "../config/tutorial";
+// import { practiceBlock } from "../config/practice";
+// import { tutorialBlock } from "../config/tutorial";
 
 import { cameraEnd, cameraStart } from "../trials/camera";
-import { preamble } from "./preamble";
-import taskBlock from "./taskBlock";
 
-import { ageCheck, debrief, demographics, iusSurvey, sliderCheck } from "../trials/quizTrials";
-import { exitFullscreen } from "../trials/fullscreen";
+// import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
+import { welcomeTrial, instructionsTrial } from "./example";
 
 // Add your jsPsych options here.
 // Honeycomb will combine these custom options with other options needed by Honyecomb.
@@ -29,17 +29,13 @@ const buildTimeline = (jsPsych) =>
   config.USE_MTURK ? mturkTimeline : buildPrimaryTimeline(jsPsych);
 
 const buildPrimaryTimeline = (jsPsych) => {
+  // TODO: Add a practice and/or tutorial block?
+
   const primaryTimeline = [
-    preamble,
-    ageCheck,
-    sliderCheck,
-    countdown({ message: lang.countdown.message1 }),
-    taskBlock(practiceBlock),
-    countdown({ message: lang.countdown.message2 }),
-    taskBlock(exptBlock1),
-    demographics,
-    iusSurvey,
-    debrief,
+    // TODO: Enter fullscreen
+    welcomeTrial,
+    // enterFullscreen,
+    instructionsTrial,
   ];
 
   if (config.USE_CAMERA) {
@@ -50,25 +46,27 @@ const buildPrimaryTimeline = (jsPsych) => {
   primaryTimeline.push(
     showMessage(config, {
       duration: 5000,
-      message: lang.end,
+      message: lang.finish.end,
     })
   );
-  primaryTimeline.push(exitFullscreen);
+  // primaryTimeline.push(exitFullscreen);
+
+  console.log(primaryTimeline);
 
   return primaryTimeline;
 };
 
 const mturkTimeline = [
-  preamble,
-  countdown({ message: lang.countdown.message1 }),
-  taskBlock(tutorialBlock),
-  countdown({ message: lang.countdown.message2 }),
-  taskBlock(exptBlock2),
-  showMessage(config, {
-    duration: 5000,
-    message: lang.finish.end,
-  }),
-  exitFullscreen,
+  // preamble,
+  // countdown({ message: lang.countdown.message1 }),
+  // taskBlock(tutorialBlock),
+  // countdown({ message: lang.countdown.message2 }),
+  // taskBlock(exptBlock2),
+  // showMessage(config, {
+  //   duration: 5000,
+  //   message: lang.finish.end,
+  // }),
+  // exitFullscreen,
 ];
 
 // Honeycomb, please include these options, and please get the timeline from this function.

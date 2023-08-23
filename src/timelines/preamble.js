@@ -1,4 +1,4 @@
-import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
 import { config } from "../config/main";
 
@@ -19,7 +19,7 @@ if (config.USE_PHOTODIODE) {
 }
 
 export const preamble = {
-  type: htmlKeyboardResponse,
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: "",
   timeline,
 };

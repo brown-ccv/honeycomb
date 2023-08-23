@@ -1,4 +1,4 @@
-import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import { showMessage, fixation } from "@brown-ccv/behavioral-task-trials";
 import { config, eventCodes } from "../config/main";
 
@@ -28,7 +28,7 @@ const taskTrial = (blockSettings, blockDetails, condition) => {
   ];
 
   return {
-    type: htmlKeyboardResponse,
+    type: jsPsychHtmlKeyboardResponse,
     timeline,
   };
 };

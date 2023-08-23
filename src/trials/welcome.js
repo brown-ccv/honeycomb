@@ -1,6 +1,6 @@
 import { showMessage } from "@brown-ccv/behavioral-task-trials";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
-import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
 import { config, lang } from "../config/main";
 import { photodiodeGhostBox } from "../lib/markup/photodiode";
@@ -16,7 +16,7 @@ export const showName = showMessage(config, {
 
 // TODO: Turn into jsPsych instruction trial
 export const showWelcome = {
-  type: htmlKeyboardResponse,
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: baseStimulus(`<h1>${lang.prompts.welcome}</h1>`, true) + photodiodeGhostBox(),
   prompt: lang.prompts.continue.press,
   response_ends_trial: true,
