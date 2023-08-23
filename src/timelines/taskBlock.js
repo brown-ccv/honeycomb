@@ -1,5 +1,5 @@
-import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import taskTrial from "./exampleTrial";
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import taskTrial from "./exampleTrials";
 import { generateStartingOpts } from "../lib/taskUtils";
 
 const taskBlock = (blockSettings) => {
@@ -18,7 +18,7 @@ const taskBlock = (blockSettings) => {
   );
 
   const blockStart = {
-    type: jsPsychHtmlKeyboardResponse,
+    type: htmlKeyboardResponse,
     stimulus: "",
     trial_duration: 1,
     on_finish: (data) => {
@@ -29,7 +29,7 @@ const taskBlock = (blockSettings) => {
   timeline.unshift(blockStart);
 
   return {
-    type: jsPsychHtmlKeyboardResponse,
+    type: htmlKeyboardResponse,
     timeline,
   };
 };

@@ -1,7 +1,4 @@
-import {
-  // countdown,
-  showMessage,
-} from "@brown-ccv/behavioral-task-trials";
+import { showMessage } from "@brown-ccv/behavioral-task-trials";
 
 import { config, lang } from "../config/main";
 // import { practiceBlock } from "../config/practice";
@@ -10,7 +7,7 @@ import { config, lang } from "../config/main";
 import { cameraEnd, cameraStart } from "../trials/camera";
 
 // import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
-import { blueTrial, orangeTrial, welcomeTrial, instructionsTrial } from "./exampleTrial";
+import { blueTrial, instructionsTrial, orangeTrial, welcomeTrial } from "./exampleTrials";
 
 // Add your jsPsych options here.
 // Honeycomb will combine these custom options with other options needed by Honyecomb.

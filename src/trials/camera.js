@@ -1,4 +1,4 @@
-import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import { lang, taskName, config } from "../config/main";
 import { photodiodeGhostBox } from "../lib/markup/photodiode";
@@ -114,7 +114,7 @@ const cameraEnd = (duration) => {
   const stimulus = baseStimulus(`<h1>${lang.task.recording_end}</h1>`, true) + photodiodeGhostBox();
 
   return {
-    type: jsPsychHtmlKeyboardResponse,
+    type: htmlKeyboardResponse,
     stimulus,
     trial_duration: duration,
     on_load: () => {

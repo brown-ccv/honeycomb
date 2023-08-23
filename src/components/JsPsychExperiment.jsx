@@ -11,8 +11,6 @@ function JsPsychExperiment({
   taskVersion,
   dataUpdateFunction,
   dataFinishFunction,
-  height = "100%",
-  width = "100%",
 }) {
   // This will be the div in the dom that holds the experiment.
   // We reference it explicitly here so we can do some plumbing with react, jspsych, and events.
@@ -79,11 +77,7 @@ function JsPsychExperiment({
     };
   });
 
-  return (
-    <div className="App">
-      <div id={experimentDivId} style={{ height, width }} ref={experimentDiv} />
-    </div>
-  );
+  return <div id={experimentDivId} ref={experimentDiv} className="App" />;
 }
 
 export default JsPsychExperiment;

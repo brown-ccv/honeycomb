@@ -1,6 +1,6 @@
-import jsPsychImageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
-import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import jsPsychInstructionsResponse from "@jspsych/plugin-instructions";
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
+import instructionsResponse from "@jspsych/plugin-instructions";
 
 // TODO: Pull text into language file
 
@@ -8,7 +8,7 @@ import jsPsychInstructionsResponse from "@jspsych/plugin-instructions";
  * Trial that displays a welcome message and waits for the participant to press a key
  */
 const welcomeTrial = {
-  type: jsPsychHtmlKeyboardResponse,
+  type: htmlKeyboardResponse,
   stimulus: "Welcome to the experiment. Press any key to begin.",
 };
 
@@ -21,36 +21,36 @@ const welcomeTrial = {
  */
 // TODO: Should instructions be in its own file?
 const instructionsTrial = {
-  type: jsPsychInstructionsResponse,
+  type: instructionsResponse,
   pages: [
     // TODO: Pull text into language file
     "Please read the following instructions carefully.",
     "In this experiment, a circle will appear in the center of the screen.",
     `If the circle is <strong>blue</strong>, press the letter <strong>F</strong> on the keyboard as fast as you can.
     <br />
-    <img src="./src/assets/images/blue_circle.png" />`,
+    <img src="images/blue.png" />`,
     `If the circle is <strong>orange</strong>, press the letter <strong>J</strong> as fast as you can.
     <br />
-    <img src="./src/assets/images/orange_circle.png" />`,
+    <img src="images/orange.png" />`,
     "Click next to begin.",
   ],
   show_clickable_nav: true,
-  post_trial_gap: 2000,
+  post_trial_gap: 1000,
 };
 
 const blueTrial = {
-  type: jsPsychImageKeyboardResponse,
+  type: imageKeyboardResponse,
   stimulus: "images/blue.png",
   choices: ["f", "j"],
 };
 
 const orangeTrial = {
-  type: jsPsychImageKeyboardResponse,
+  type: imageKeyboardResponse,
   stimulus: "images/orange.png",
   choices: ["f", "j"],
 };
 
-export { blueTrial, orangeTrial, welcomeTrial, instructionsTrial };
+export { blueTrial, instructionsTrial, orangeTrial, welcomeTrial };
 
 // import { showMessage, fixation } from "@brown-ccv/behavioral-task-trials";
 // import { config, eventCodes } from "../config/main";
@@ -77,7 +77,7 @@ export { blueTrial, orangeTrial, welcomeTrial, instructionsTrial };
 //   ];
 
 //   return {
-//     type: jsPsychHtmlKeyboardResponse,
+//     type: htmlKeyboardResponse,
 //     timeline,
 //   };
 // };
