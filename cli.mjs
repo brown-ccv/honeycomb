@@ -1,4 +1,4 @@
-import { input, select, Separator } from "@inquirer/prompts";
+import { checkbox, input, select } from "@inquirer/prompts";
 import { cert, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 
@@ -25,6 +25,7 @@ async function main() {
   DEPLOYMENT = await deploymentPrompt();
   STUDY_ID = await studyIDPrompt();
   PARTICIPANT_ID = await participantIDPrompt();
+  EXPERIMENT_ID = await experimentIDPrompt();
 
   switch (ACTION) {
     case "download":
@@ -55,7 +56,7 @@ main();
 /** -------------------- DOWNLOAD ACTION -------------------- */
 
 async function downloadDataFirebase() {
-  console.log("Downloading data", DEPLOYMENT);
+  console.log("Downloading data: ", DEPLOYMENT, STUDY_ID, PARTICIPANT_ID, EXPERIMENT_ID);
   // switch (DEPLOYMENT) {
   //   case "firebase":
   //     await downloadDataFirebase();
@@ -66,7 +67,7 @@ async function downloadDataFirebase() {
 /** -------------------- DELETE ACTION -------------------- */
 
 async function deleteDataFirebase() {
-  console.log("Deleting data", DEPLOYMENT);
+  console.log("Deleting data: ", DEPLOYMENT, STUDY_ID, PARTICIPANT_ID, EXPERIMENT_ID);
   // switch (DEPLOYMENT) {
   //   case "firebase":
   //     await deleteDataFirebase();
@@ -187,6 +188,24 @@ async function participantIDPrompt() {
   });
 }
 
+async function experimentIDPrompt() {
+  if (PARTICIPANT_ID === "*") return ["*"]; // Download all experiments for all participants
+
+  // Get all
+  const dataSnapshot = await getDataRef(STUDY_ID, PARTICIPANT_ID).get();
+  const experiments = dataSnapshot.docs;
+  const choices = [
+    { name: `${ACTION} all`, value: "*" },
+    ...experiments.map(({ id }) => ({ name: id, value: id })),
+  ];
+
+  return await checkbox({
+    // TODO: What's the right word for this? Trial?
+    message: `Select the experiments you would like to ${ACTION}`,
+    choices: choices,
+  });
+}
+
 /** -------------------- FIRESTORE HELPERS -------------------- */
 
 const RESPONSES_COL = "participant_responses";
@@ -199,3 +218,6 @@ const getStudyRef = (studyID) => FIRESTORE.collection(RESPONSES_COL).doc(studyID
 // Get a reference to a participant document in Firestore
 const getParticipantRef = (studyID, participantID) =>
   getStudyRef(studyID).collection(PARTICIPANTS_COL).doc(participantID);
+
+const getDataRef = (studyID, participantID) =>
+  getStudyRef(studyID).collection(PARTICIPANTS_COL).doc(participantID).collection(DATA_COL);
