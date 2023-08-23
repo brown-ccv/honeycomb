@@ -3,7 +3,7 @@ import { fixation } from "@brown-ccv/behavioral-task-trials";
 
 import { config } from "../config/main";
 
-function createHoneycombBlock(jsPsych) {
+function createHoneycombBlock(jsPsych, repetitions) {
   // Possible stimuli values to be displayed
   const stimuli = [{ stimulus: "images/blue.png" }, { stimulus: "images/orange.png" }];
 
@@ -20,6 +20,8 @@ function createHoneycombBlock(jsPsych) {
   const taskBlock = {
     timeline: [fixationTrial, taskTrial],
     timeline_variables: stimuli,
+    randomize_order: true,
+    repetitions: repetitions,
   };
   return taskBlock;
 }

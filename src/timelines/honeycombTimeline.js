@@ -12,9 +12,8 @@ import { endTrial, instructionsTrial, welcomeTrial } from "./honeycombTrials";
 // TODO: Add practice/tutorial block?
 
 function createHoneycombTimeline(jsPsych) {
-  const block1 = createHoneycombBlock(jsPsych);
+  const block1 = createHoneycombBlock(jsPsych, 5); // The first block repeats 5 times
 
-  console.log(jsPsych, block1);
   const timeline = [
     welcomeTrial,
     // enterFullscreen,
