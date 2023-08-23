@@ -18,17 +18,16 @@ const jsPsychOptions = {
 // Honeycomb will call this function for us after the subject logs in, and run the resulting timeline.
 // The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
 function buildTimeline(jsPsych) {
-  // TODO: Add a practice and/or tutorial block?
   const primaryTimeline = createHoneycombTimeline(jsPsych);
 
   if (config.USE_CAMERA) {
+    // Add cameraStart after welcome trial
     primaryTimeline.splice(1, 0, cameraStart(jsPsych));
+    // Add cameraEnd as the last trial
     primaryTimeline.push(cameraEnd(5000));
   }
 
-  console.log(primaryTimeline);
   return primaryTimeline;
 }
 
-// Honeycomb, please include these options, and please get the timeline from this function.
 export { buildTimeline, jsPsychOptions };
