@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import "@fortawesome/fontawesome-free/css/all.css";
 import "bootstrap/dist/css/bootstrap.css";
+import "jspsych/css/jspsych.css";
 import "./App.css";
 
 import JsPsychExperiment from "./components/JsPsychExperiment";
@@ -65,9 +66,9 @@ function App() {
       if (config.USE_MTURK) {
         /* eslint-disable */
         window.lodash = _.noConflict();
-        setPsiturk(new PsiTurk(turkUniqueId, '/complete'));
-        setMethod('mturk');
-        handleLogin('mturk', turkUniqueId);
+        setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
+        setMethod("mturk");
+        handleLogin("mturk", turkUniqueId);
         /* eslint-enable */
       } else if (config.USE_PROLIFIC) {
         const pID = getProlificId();
