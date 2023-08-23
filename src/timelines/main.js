@@ -10,7 +10,7 @@ import { config, lang } from "../config/main";
 import { cameraEnd, cameraStart } from "../trials/camera";
 
 // import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
-import { welcomeTrial, instructionsTrial } from "./example";
+import { blueTrial, orangeTrial, welcomeTrial, instructionsTrial } from "./exampleTrial";
 
 // Add your jsPsych options here.
 // Honeycomb will combine these custom options with other options needed by Honyecomb.
@@ -36,6 +36,8 @@ const buildPrimaryTimeline = (jsPsych) => {
     welcomeTrial,
     // enterFullscreen,
     instructionsTrial,
+    blueTrial,
+    orangeTrial,
   ];
 
   if (config.USE_CAMERA) {

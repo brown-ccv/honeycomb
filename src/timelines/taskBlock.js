@@ -1,5 +1,5 @@
 import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import taskTrial from "./taskTrial";
+import taskTrial from "./exampleTrial";
 import { generateStartingOpts } from "../lib/taskUtils";
 
 const taskBlock = (blockSettings) => {
