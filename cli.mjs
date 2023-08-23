@@ -99,10 +99,7 @@ async function deleteDataFirebase() {
   if (confirmation) {
     await Promise.all(
       EXPERIMENT_IDS.map(async (experimentID) => {
-        // Get the data out of the experiment document
         const experimentRef = getExperimentRef(STUDY_ID, PARTICIPANT_ID, experimentID);
-
-        // TODO 172: Check for overwriting file?
         try {
           FIRESTORE.recursiveDelete(experimentRef);
         } catch (error) {
