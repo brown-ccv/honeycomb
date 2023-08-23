@@ -1,4 +1,4 @@
-import { checkbox, input, select } from "@inquirer/prompts";
+import { checkbox, input, select, confirm } from "@inquirer/prompts";
 import { cert, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import fsExtra from "fs-extra";
@@ -77,7 +77,7 @@ async function downloadDataFirebase() {
 
       // Save the session to a unique JSON file. (":" are replaced to prevent issues with invalid file names)
       const outputFile =
-        `${OUTPUT_ROOT}/participant_responses/` +
+        `${OUTPUT_ROOT}/${RESPONSES_COL}/` +
         `${STUDY_ID}/${PARTICIPANT_ID}/${experimentID}.json`.replaceAll(":", "_");
 
       // TODO 172: Check for overwriting file?
@@ -95,15 +95,25 @@ async function downloadDataFirebase() {
 /** -------------------- DELETE ACTION -------------------- */
 
 async function deleteDataFirebase() {
-  console.log("Deleting data: ", DEPLOYMENT, STUDY_ID, PARTICIPANT_ID, EXPERIMENT_IDS);
-  // switch (DEPLOYMENT) {
-  //   case "firebase":
-  //     await deleteDataFirebase();
-  //     break;
-  //   default:
-  //     console.error("Invalid deployment:", DEPLOYMENT);
-  //     process.exit();
-  // }
+  const confirmation = await confirmDeletionPrompt();
+  if (confirmation) {
+    await Promise.all(
+      EXPERIMENT_IDS.map(async (experimentID) => {
+        // Get the data out of the experiment document
+        const experimentRef = getExperimentRef(STUDY_ID, PARTICIPANT_ID, experimentID);
+
+        // TODO 172: Check for overwriting file?
+        try {
+          FIRESTORE.recursiveDelete(experimentRef);
+        } catch (error) {
+          console.error("There was an error deleting", experimentRef.id);
+          // TODO: Do we need to display more error information that this?
+        }
+      })
+    );
+  } else {
+    console.log("Skipping deletion");
+  }
 }
 
 /** -------------------- PROMPTS -------------------- */
@@ -224,12 +234,27 @@ async function experimentIDPrompt() {
   // if (PARTICIPANT_ID === "*") return "*"; // Download all experiments for all participants
 
   const dataSnapshot = await getDataRef(STUDY_ID, PARTICIPANT_ID).get();
-  const choices = [...dataSnapshot.docs.map(({ id }) => ({ name: id, value: id }))];
+
+  // Sort experiment choices by most recent first
+  const choices = dataSnapshot.docs
+    .sort()
+    .reverse()
+    .map(({ id }) => ({ name: id, value: id }));
 
   return await checkbox({
     // TODO: What's the right word for this? Trial?
     message: `Select the experiments you would like to ${ACTION}:`,
     choices: choices,
+  });
+}
+
+async function confirmDeletionPrompt() {
+  const numExperiments = EXPERIMENT_IDS.length;
+  return confirm({
+    message: `Continue? (${numExperiments} ${
+      numExperiments !== 1 ? "experiments" : "experiment"
+    } will be deleted)`,
+    default: false,
   });
 }
 
