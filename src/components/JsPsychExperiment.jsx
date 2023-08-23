@@ -22,7 +22,11 @@ function JsPsychExperiment({
     ...jsPsychOptions,
     display_element: experimentDivId,
     on_data_update: (data) => dataUpdateFunction(data),
-    on_finish: (data) => dataFinishFunction(data),
+    on_finish: (data) => {
+      // Save and display the data
+      dataFinishFunction(data);
+      jsPsych.data.displayData();
+    },
   };
 
   // Create the instance of jsPsych that we'll reuse within the scope of this JsPsychExperiment component.
