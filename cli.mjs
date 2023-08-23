@@ -1,6 +1,7 @@
 import { checkbox, input, select } from "@inquirer/prompts";
 import { cert, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
+import fsExtra from "fs-extra";
 
 // TODO: Handling importing code from inside Honeycomb?
 // ? TODO: Some of the prompt messages could use some flushing out?
@@ -11,8 +12,9 @@ let FIRESTORE; // Reference to Firestore for the Honeycomb project (from Firebas
 let ACTION; // The action the user is attempting to complete
 let DEPLOYMENT; // The deployment tool the user is using
 let STUDY_ID; // The unique ID of a given study in the user's database
-let PARTICIPANT_IDS; // The ID of a given participant in the user's database
+let PARTICIPANT_ID; // The ID of a given participant in the user's database
 let EXPERIMENT_IDS; // The ID of a given experiment in the user's database
+let OUTPUT_ROOT; // The root in which data is saved
 
 const INVALID_DEPLOYMENT_ERROR = new Error("Invalid deployment: " + DEPLOYMENT);
 
@@ -25,11 +27,13 @@ async function main() {
   ACTION = await actionPrompt();
   DEPLOYMENT = await deploymentPrompt();
   STUDY_ID = await studyIDPrompt();
-  PARTICIPANT_IDS = await participantIDPrompt();
+  PARTICIPANT_ID = await participantIDPrompt();
   EXPERIMENT_IDS = await experimentIDPrompt();
 
   switch (ACTION) {
     case "download":
+      // TODO: Ask OUTPUT_ROOT question
+      OUTPUT_ROOT = ".";
       switch (DEPLOYMENT) {
         case "firebase":
           await downloadDataFirebase();
@@ -56,19 +60,42 @@ main();
 /** -------------------- DOWNLOAD ACTION -------------------- */
 
 async function downloadDataFirebase() {
-  console.log("Downloading data firebase: ", STUDY_ID, PARTICIPANT_IDS, EXPERIMENT_IDS);
+  await Promise.all(
+    EXPERIMENT_IDS.map(async (experimentID) => {
+      // Get the data out of the experiment document
+      const experimentRef = getExperimentRef(STUDY_ID, PARTICIPANT_ID, experimentID);
+      const experimentSnapshot = await experimentRef.get();
+      const experimentData = experimentSnapshot.data();
 
-  // TODO: Enable downloading all study data at once
-  const participants = PARTICIPANT_IDS;
+      // Merge the experiment's trials' data into a single array
+      const trialsRef = experimentRef.collection(TRIALS_COL);
+      const trialsSnapshot = await trialsRef.orderBy("trial_index").get();
+      const trialsData = trialsSnapshot.docs.map((trial) => trial.data());
 
-  // Get list of participants to download
-  // Get list of studies on each participant to download
+      // Add the trials' data to the experiment's data as "results" array
+      experimentData["results"] = trialsData;
+
+      // Save the session to a unique JSON file. (":" are replaced to prevent issues with invalid file names)
+      const outputFile =
+        `${OUTPUT_ROOT}/participant_responses/` +
+        `${STUDY_ID}/${PARTICIPANT_ID}/${experimentID}.json`.replaceAll(":", "_");
+
+      // TODO 172: Check for overwriting file?
+      try {
+        fsExtra.outputJSONSync(outputFile, experimentData, { spaces: 2 });
+        console.log("Data saved successfully: ", outputFile);
+      } catch (error) {
+        console.error("There was an error saving ", outputFile);
+        // TODO: Do we need to display more error information that this?
+      }
+    })
+  );
 }
 
 /** -------------------- DELETE ACTION -------------------- */
 
 async function deleteDataFirebase() {
-  console.log("Deleting data: ", DEPLOYMENT, STUDY_ID, PARTICIPANT_IDS, EXPERIMENT_IDS);
+  console.log("Deleting data: ", DEPLOYMENT, STUDY_ID, PARTICIPANT_ID, EXPERIMENT_IDS);
   // switch (DEPLOYMENT) {
   //   case "firebase":
   //     await deleteDataFirebase();
@@ -191,13 +218,13 @@ async function participantIDPrompt() {
   });
 }
 
-/** Prompt the user to select one or more experiments of the PARTICIPANT_IDS on STUDY_ID */
+/** Prompt the user to select one or more experiments of the PARTICIPANT_ID on STUDY_ID */
 async function experimentIDPrompt() {
-  // if (PARTICIPANT_IDS === "*") return "*"; // Download all experiments for all participants
+  // TODO: Enable downloading all study data at once
+  // if (PARTICIPANT_ID === "*") return "*"; // Download all experiments for all participants
 
-  const dataSnapshot = await getDataRef(STUDY_ID, PARTICIPANT_IDS).get();
-  const experiments = dataSnapshot.docs;
-  const choices = [...experiments.map(({ id }) => ({ name: id, value: id }))];
+  const dataSnapshot = await getDataRef(STUDY_ID, PARTICIPANT_ID).get();
+  const choices = [...dataSnapshot.docs.map(({ id }) => ({ name: id, value: id }))];
 
   return await checkbox({
     // TODO: What's the right word for this? Trial?
@@ -211,6 +238,7 @@ async function experimentIDPrompt() {
 const RESPONSES_COL = "participant_responses";
 const PARTICIPANTS_COL = "participants";
 const DATA_COL = "data";
+const TRIALS_COL = "trials";
 
 // Get a reference to a study document in Firestore
 const getStudyRef = (studyID) => FIRESTORE.collection(RESPONSES_COL).doc(studyID);
@@ -221,6 +249,10 @@ const getParticipantRef = (studyID, participantID) =>
 
 // Get a reference to a participant's data collection in Firestore
 const getDataRef = (studyID, participantID) =>
-  getStudyRef(studyID).collection(PARTICIPANTS_COL).doc(participantID).collection(DATA_COL);
+  getParticipantRef(studyID, participantID).collection(DATA_COL);
+
+// Get a reference to a participant's specific experiment data document in Firestore
+const getExperimentRef = (studyID, participantID, experimentID) =>
+  getDataRef(studyID, participantID).doc(experimentID);
 
 /** -------------------- UTILS -------------------- */
