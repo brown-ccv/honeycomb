@@ -3,18 +3,84 @@ import { cert, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 
 // TODO: Handling importing code from inside Honeycomb?
+// ? TODO: Some of the prompt messages could use some flushing out?
 
 /** -------------------- GLOBALS -------------------- */
 
-let FIRESTORE; // reference to Firestore for the Honeycomb project (from Firebase Admin)
+let FIRESTORE; // Reference to Firestore for the Honeycomb project (from Firebase Admin)
+// TODO: Remove these
+let ACTION; // The action the user is attempting to complete
+let DEPLOYMENT; // The deployment tool the user is using
+let STUDY_ID; // The unique ID of a given study in the user's database
+let PARTICIPANT_ID; // The ID of a given participant in the user's database
+let EXPERIMENT_ID; // The ID of a given experiment in the user's database
 
 /** -------------------- MAIN -------------------- */
 
 async function main() {
-  // TODO: User should be able to pass command line arguments OR inquirer (especially for task)
+  // TODO: User should be able to pass command line arguments OR inquirer (especially for action)
   // const [, , ...args] = process.argv;
 
-  const action = await select({
+  ACTION = await actionPrompt();
+  DEPLOYMENT = await deploymentPrompt();
+  STUDY_ID = await studyIDPrompt();
+  PARTICIPANT_ID = await participantIDPrompt();
+
+  switch (ACTION) {
+    case "download":
+      switch (DEPLOYMENT) {
+        case "firebase":
+          await downloadDataFirebase();
+          break;
+        default:
+          throw new Error("Invalid deployment: " + DEPLOYMENT);
+      }
+      break;
+    case "delete":
+      switch (DEPLOYMENT) {
+        case "firebase":
+          await deleteDataFirebase();
+          break;
+        default:
+          throw new Error("Invalid deployment: " + DEPLOYMENT);
+      }
+      break;
+    default:
+      throw new Error("Invalid action: " + ACTION);
+  }
+}
+main();
+
+/** -------------------- DOWNLOAD ACTION -------------------- */
+
+async function downloadDataFirebase() {
+  console.log("Downloading data", DEPLOYMENT);
+  // switch (DEPLOYMENT) {
+  //   case "firebase":
+  //     await downloadDataFirebase();
+  //     break;
+  // }
+}
+
+/** -------------------- DELETE ACTION -------------------- */
+
+async function deleteDataFirebase() {
+  console.log("Deleting data", DEPLOYMENT);
+  // switch (DEPLOYMENT) {
+  //   case "firebase":
+  //     await deleteDataFirebase();
+  //     break;
+  //   default:
+  //     console.error("Invalid deployment:", DEPLOYMENT);
+  //     process.exit();
+  // }
+}
+
+/** -------------------- PROMPTS -------------------- */
+
+/** Prompt the user for the action they are trying to complete */
+async function actionPrompt() {
+  return await select({
     message: "What would you like to do?",
     choices: [
       {
@@ -27,58 +93,9 @@ async function main() {
       },
     ],
   });
-
-  switch (action) {
-    case "download":
-      await downloadData();
-      break;
-    case "delete":
-      await deleteData();
-      break;
-  }
-}
-main();
-
-// `Enter participant id: (* to download all data for the study "${studyID}`)
-// Same for sessions on a participant
-
-/** -------------------- DOWNLOAD ACTION -------------------- */
-
-async function downloadData() {
-  const deployment = await deploymentPrompt();
-  console.log("Downloading data", deployment);
-  switch (deployment) {
-    case "firebase":
-      await downloadDataFirebase();
-      break;
-  }
 }
 
-async function downloadDataFirebase() {
-  const studyID = await studyIDPrompt("download");
-  // console.log("downloadDataFirebase", studyID);
-}
-
-/** -------------------- DELETE ACTION -------------------- */
-
-async function deleteData() {
-  const deployment = await deploymentPrompt();
-
-  console.log("Deleting data", deployment);
-  switch (deployment) {
-    case "firebase":
-      await deleteDataFirebase();
-      break;
-  }
-}
-
-async function deleteDataFirebase() {
-  const studyID = await studyIDPrompt("delete");
-  console.log("deleteDataFirebase", studyID);
-}
-
-/** -------------------- PROMPTS -------------------- */
-
+/** Prompt the user for the deployment they are trying to access */
 async function deploymentPrompt() {
   const response = await select({
     message: "Which deployment are you using?",
@@ -88,19 +105,19 @@ async function deploymentPrompt() {
         value: "firebase",
         description: "Data is saved on the Firestore database",
       },
-      new Separator(),
       // TODO: Add other deployments!
-      {
-        name: "",
-        value: "",
-        description: "Data is saved on your local machine",
-        disabled: "Working with local data is not yet supported",
-      },
+      // {
+      //   // Note that downloading local data will never make sense - conditionally add prompt
+      //   name: "Local data",
+      //   value: "local",
+      //   description: "Data is saved on your local machine",
+      //   disabled: "(Working with local data is not yet supported)",
+      // },
     ],
   });
 
+  // Initialize Firestore
   if (response === "firebase") {
-    // Initialize Firestore
     try {
       const app = initializeApp({ credential: cert("firebase-service-account.json") });
       FIRESTORE = getFirestore(app);
@@ -118,37 +135,63 @@ async function deploymentPrompt() {
   return response;
 }
 
-async function studyIDPrompt(action) {
-  const response = await input({
-    message: `Which study would you like to ${action}?`,
-    // TODO: Validate studyID is in Firestore
-    validate: async (value) => {
-      const invalid = "Please enter a valid study from your Firestore database";
-      if (!value) return invalid;
-      // TODO: Add validation for studyID existing in Firestore
-      // TODO: Currently an empty document so it doesn't actually exist in the database
-      return true;
+/** Prompt the user to enter the ID of a study */
+async function studyIDPrompt() {
+  const invalidMessage = "Please enter a valid study from your Firestore database";
+  const validateStudyFirebase = async (input) => {
+    // participants subcollection is programmatically generated
+    // if it doesn't exist then input must not be a valid studyID
+    const studyIDCollections = await getStudyRef(input).listCollections();
+    return studyIDCollections.find((c) => c.id === PARTICIPANTS_COL) ? true : invalidMessage;
+  };
+
+  return await input({
+    message: "Select a study:",
+    validate: async (input) => {
+      if (!input) return invalidMessage;
+      switch (DEPLOYMENT) {
+        case "firebase":
+          return validateStudyFirebase(input);
+      }
     },
   });
-
-  return response;
 }
 
-async function participantIDPrompt(action) {
-  const response = await input({
-    message: `Which participant would you like to ${action}?`,
-    // TODO: Validate studyID is in Firestore
-    // TODO: Customize validation message
-    validate: async (value) => {
-      const invalid = "Please enter a valid study from your Firestore database";
-      if (!value) return invalid;
-      // TODO: Add validation for studyID existing in Firestore
-      // TODO: Currently an empty document so it doesn't actually exist in the database
-      return true;
+/** Prompt the user to enter the ID of a participant on the STUDY_ID study */
+async function participantIDPrompt() {
+  const invalidMessage = `Please enter a valid participant on the study "${STUDY_ID}"`;
+  const validateParticipantFirebase = async (input) => {
+    // data subcollection is programmatically generated
+    // if it doesn't exist then input must not be a valid participantID
+    const studyIDCollections = await getParticipantRef(STUDY_ID, input).listCollections();
+    return studyIDCollections.find((c) => c.id === DATA_COL) ? true : invalidMessage;
+  };
+
+  return await input({
+    message: "Select a participant (* selects all ):", // ? Do we need the stuff in parentheses?
+    default: "*",
+    description: "this is a etst",
+    validate: async (input) => {
+      const invalid = "Please enter a valid participant from your Firestore database";
+      if (!input) return invalid;
+      else if (input === "*") return true;
+      switch (DEPLOYMENT) {
+        case "firebase":
+          return validateParticipantFirebase(input);
+      }
     },
   });
-
-  return response;
 }
 
 /** -------------------- FIRESTORE HELPERS -------------------- */
+
+const RESPONSES_COL = "participant_responses";
+const PARTICIPANTS_COL = "participants";
+const DATA_COL = "data";
+
+// Get a reference to a study document in Firestore
+const getStudyRef = (studyID) => FIRESTORE.collection(RESPONSES_COL).doc(studyID);
+
+// Get a reference to a participant document in Firestore
+const getParticipantRef = (studyID, participantID) =>
+  getStudyRef(studyID).collection(PARTICIPANTS_COL).doc(participantID);
