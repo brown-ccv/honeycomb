@@ -3,11 +3,11 @@ import { fixation } from "@brown-ccv/behavioral-task-trials";
 
 import { config } from "../config/main";
 
-function createExampleTaskBlock(jsPsych) {
+function createHoneycombBlock(jsPsych) {
   // Possible stimuli values to be displayed
   const stimuli = [{ stimulus: "images/blue.png" }, { stimulus: "images/orange.png" }];
 
-  // Note that Honeycomb has a custom implementation of the fixation trial
+  // Note that we use a custom implementation of the fixation trial
   const fixationTrial = fixation(config, { duration: 650 });
 
   const taskTrial = {
@@ -24,4 +24,4 @@ function createExampleTaskBlock(jsPsych) {
   return taskBlock;
 }
 
-export { createExampleTaskBlock };
+export { createHoneycombBlock };

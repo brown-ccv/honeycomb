@@ -2,7 +2,7 @@ import { config } from "../config/main";
 
 import { cameraEnd, cameraStart } from "../trials/camera";
 
-import { createExampleTimeline } from "./example";
+import { createHoneycombTimeline } from "./honeycombTimeline";
 
 // Add your jsPsych options here.
 // Honeycomb will combine these custom options with other options needed by Honyecomb.
@@ -19,7 +19,7 @@ const jsPsychOptions = {
 // The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
 function buildTimeline(jsPsych) {
   // TODO: Add a practice and/or tutorial block?
-  const primaryTimeline = createExampleTimeline(jsPsych);
+  const primaryTimeline = createHoneycombTimeline(jsPsych);
 
   if (config.USE_CAMERA) {
     primaryTimeline.splice(1, 0, cameraStart(jsPsych));

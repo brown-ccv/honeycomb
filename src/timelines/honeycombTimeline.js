@@ -1,6 +1,6 @@
 // import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
-import { createExampleTaskBlock } from "./exampleBlock";
-import { endTrial, instructionsTrial, welcomeTrial } from "./exampleTrials";
+import { createHoneycombBlock } from "./honeycombBlock";
+import { endTrial, instructionsTrial, welcomeTrial } from "./honeycombTrials";
 
 /**
  * This timeline builds the example reaction time task from the jsPsych tutorial.
@@ -11,8 +11,8 @@ import { endTrial, instructionsTrial, welcomeTrial } from "./exampleTrials";
 
 // TODO: Add practice/tutorial block?
 
-function createExampleTimeline(jsPsych) {
-  const block1 = createExampleTaskBlock(jsPsych);
+function createHoneycombTimeline(jsPsych) {
+  const block1 = createHoneycombBlock(jsPsych);
 
   console.log(jsPsych, block1);
   const timeline = [
@@ -27,4 +27,4 @@ function createExampleTimeline(jsPsych) {
   return timeline;
 }
 
-export { createExampleTimeline };
+export { createHoneycombTimeline };
