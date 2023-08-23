@@ -28,7 +28,6 @@
     "execa": "^5.0.0",
     "firebase": "^10.1.0",
     "fs-extra": "^8.1.0",
-    "inquirer": "^9.2.10",
     "jquery": "^3.4.1",
     "jspsych": "^7.2.3",
     "lodash": "^4.17.19",
