@@ -28,10 +28,10 @@ const instructionsTrial = {
     "In this experiment, a circle will appear in the center of the screen.",
     `If the circle is <strong>blue</strong>, press the letter <strong>F</strong> on the keyboard as fast as you can.
     <br />
-    <img src="src/assets/images/blue_circle.png" />`,
+    <img src="./src/assets/images/blue_circle.png" />`,
     `If the circle is <strong>orange</strong>, press the letter <strong>J</strong> as fast as you can.
     <br />
-    <img src="src/assets/images/orange_circle.png" />`,
+    <img src="./src/assets/images/orange_circle.png" />`,
     "Click next to begin.",
   ],
   show_clickable_nav: true,

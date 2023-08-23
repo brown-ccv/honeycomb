@@ -1,5 +1,3 @@
-import requireContext from "require-context.macro";
-
 const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
@@ -49,23 +47,6 @@ const startKeypressListener = (jsPsych) => {
   return keyboardListener;
 };
 
-// Discover and import images in src/assets/images.
-// This produces an object that maps friendly image file names to obscure webpack path names.
-// For example:
-//   {
-//     image1.png: '/static/media/image1.5dca7a2a50fb8b633fd5.png',
-//     image2.png: '/static/media/image2.5dca7a2a50fb8b633fd5.png'
-//   }
-const importAll = (r) => {
-  const importImageByName = (allImages, imageName) => {
-    const friendlyName = imageName.replace("./", "");
-    return { ...allImages, [friendlyName]: r(imageName) };
-  };
-  return r.keys().reduce(importImageByName, {});
-};
-
-const images = importAll(requireContext("../assets/images", false, /\.(png|jpe?g|svg)$/));
-
 const getQueryVariable = (variable) => {
   const query = window.location.search.substring(1);
   const vars = query.split("&");
@@ -103,7 +84,6 @@ export {
   deepCopy,
   formatDollars,
   generateWaitSet,
-  images,
   startKeypressListener,
   getProlificId,
   beep,
