@@ -1,6 +1,10 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
+
 import instructionsResponse from "@jspsych/plugin-instructions";
+import preloadResponse from "@jspsych/plugin-preload";
+import { showMessage } from "@brown-ccv/behavioral-task-trials";
+
+import { config, lang } from "../config/main";
 
 // TODO: Pull text into language file
 
@@ -35,51 +39,18 @@ const instructionsTrial = {
     "Click next to begin.",
   ],
   show_clickable_nav: true,
-  post_trial_gap: 1000,
+  post_trial_gap: 500,
 };
 
-const blueTrial = {
-  type: imageKeyboardResponse,
-  stimulus: "images/blue.png",
-  choices: ["f", "j"],
+// TODO: Function for preloading all files in public/images?
+const preloadTrial = {
+  type: preloadResponse,
+  images: ["images/blue.png", "images/orange.png"],
 };
 
-const orangeTrial = {
-  type: imageKeyboardResponse,
-  stimulus: "images/orange.png",
-  choices: ["f", "j"],
-};
+const endTrial = showMessage(config, {
+  duration: 5000,
+  message: lang.finish.end,
+});
 
-export { blueTrial, instructionsTrial, orangeTrial, welcomeTrial };
-
-// import { showMessage, fixation } from "@brown-ccv/behavioral-task-trials";
-// import { config, eventCodes } from "../config/main";
-
-// const taskTrial = (blockSettings, blockDetails, condition) => {
-//   // timeline
-//   const timeline = [
-//     // fixation
-//     fixation(config, { duration: 650 }),
-//     // show condition
-//     showMessage(config, {
-//       message: condition,
-//       onstart: true,
-//       taskCode: eventCodes.evidence,
-//     }),
-//     fixation(config, {
-//       duration: 650,
-//     }),
-//     // end the trial
-//     showMessage(config, {
-//       stimulus: earningsDisplay(Math.random()),
-//       taskCode: eventCodes.show_earnings,
-//     }),
-//   ];
-
-//   return {
-//     type: htmlKeyboardResponse,
-//     timeline,
-//   };
-// };
-
-// export default taskTrial;
+export { instructionsTrial, preloadTrial, welcomeTrial, endTrial };
