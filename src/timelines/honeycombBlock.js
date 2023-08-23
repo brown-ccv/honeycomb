@@ -5,7 +5,10 @@ import { config } from "../config/main";
 
 function createHoneycombBlock(jsPsych, repetitions) {
   // Possible stimuli values to be displayed
-  const stimuli = [{ stimulus: "images/blue.png" }, { stimulus: "images/orange.png" }];
+  const stimuli = [
+    { stimulus: "images/blue.png", correct_response: "f" },
+    { stimulus: "images/orange.png", correct_response: "j" },
+  ];
 
   // TODO: Pull fixation trial into Honeycomb directly
   // Create a fixation trial where the duration is of one of the values in trialDurations
@@ -19,6 +22,14 @@ function createHoneycombBlock(jsPsych, repetitions) {
     type: imageKeyboardResponse,
     stimulus: jsPsych.timelineVariable("stimulus"),
     choices: ["f", "j"],
+    data: {
+      task: "response",
+      correct_response: jsPsych.timelineVariable("correct_response"),
+    },
+    // Add a "correct" boolean to the data if the user entered the correct response
+    on_finish: ({ data }) => {
+      data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+    },
   };
 
   // Create a nested timeline containing the fixation and task trials
