@@ -27,7 +27,7 @@ function createHoneycombBlock(jsPsych, repetitions) {
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
     // Add a "correct" boolean to the data if the user entered the correct response
-    on_finish: ({ data }) => {
+    on_finish: (data) => {
       data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
     },
   };

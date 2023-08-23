@@ -1,5 +1,4 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-
 import instructionsResponse from "@jspsych/plugin-instructions";
 import preloadResponse from "@jspsych/plugin-preload";
 import { showMessage } from "@brown-ccv/behavioral-task-trials";

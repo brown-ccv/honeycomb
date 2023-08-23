@@ -1,4 +1,6 @@
-// import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+
+import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
 import { createHoneycombBlock } from "./honeycombBlock";
 import { endTrial, instructionsTrial, welcomeTrial } from "./honeycombTrials";
 
@@ -12,15 +14,31 @@ import { endTrial, instructionsTrial, welcomeTrial } from "./honeycombTrials";
 // TODO: Add practice/tutorial block?
 
 function createHoneycombTimeline(jsPsych) {
-  const block1 = createHoneycombBlock(jsPsych, 5); // The first block repeats 5 times
+  const block1 = createHoneycombBlock(jsPsych, 1); // The first block repeats 5 times
+
+  // Note that we need the jsPsych instance to aggregate the data
+  const debriefTrial = {
+    type: htmlKeyboardResponse,
+    stimulus: function () {
+      const responseTrials = jsPsych.data.get().filter({ task: "response" });
+      const correct_trials = responseTrials.filter({ correct: true });
+      const accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
+      const averageReactionTime = Math.round(correct_trials.select("rt").mean());
+
+      return `<p>You responded correctly on ${accuracy}% of the trials.</p>
+          <p>Your average response time was ${averageReactionTime}ms.</p>
+          <p>Press any key to complete the experiment. Thank you!</p>`;
+    },
+  };
 
   const timeline = [
     welcomeTrial,
-    // enterFullscreen,
+    enterFullscreen,
     instructionsTrial,
     block1,
+    debriefTrial,
     endTrial,
-    // exitFullscreen,
+    exitFullscreen,
   ];
 
   return timeline;
