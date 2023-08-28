@@ -53,7 +53,7 @@ function App() {
       const { ipcRenderer } = window.require("electron");
       setIpcRenderer(ipcRenderer);
 
-      // TODO: I don't think this is using the ipcRenderer from state? Is that okay?
+      // TODO 279: I don't think this is using the ipcRenderer from state? Is that okay?
       ipcRenderer.send("updateEnvironmentVariables", config);
       // Fill in login fields based on environment variables (may still be blank)
       const credentials = ipcRenderer.sendSync("syncCredentials");

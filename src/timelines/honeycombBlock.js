@@ -10,7 +10,7 @@ function createHoneycombBlock(jsPsych, repetitions) {
     { stimulus: "images/orange.png", correct_response: "j" },
   ];
 
-  // TODO: Pull fixation trial into Honeycomb directly
+  // TODO 280: Pull fixation trial into Honeycomb directly
   // Create a fixation trial where the duration is of one of the values in trialDurations
   const trialDurations = [250, 500, 750, 1000, 1250, 1500, 1750, 2000];
   const fixationTrial = fixation(config, {

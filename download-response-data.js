@@ -50,7 +50,6 @@ try {
     "Unable to connect to Firebase\n\n" +
       'Your secret key must be called "firebase-service-account.json" ' +
       "and stored in the root of your repository.\n" +
-      // TODO 42d: Add Firebase Service Account info to docs
       "More information: https://firebase.google.com/support/guides/service-accounts\n\n" +
       error.stack
   );

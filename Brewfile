@@ -5,4 +5,4 @@ cask "github"
 brew "openjdk"
 cask "visual-studio-code"
 
-# TODO: Python management (miniconda)?
+# TODO 278: Python management (miniconda)?

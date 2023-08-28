@@ -41,7 +41,7 @@ const instructionsTrial = {
   post_trial_gap: 500,
 };
 
-// TODO: Function for preloading all files in public/images?
+// TODO 281: Function for preloading all files in public/images?
 const preloadTrial = {
   type: preloadResponse,
   images: ["images/blue.png", "images/orange.png"],
