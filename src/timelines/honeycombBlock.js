@@ -2,6 +2,7 @@ import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 import { fixation } from "@brown-ccv/behavioral-task-trials";
 
 import { config } from "../config/main";
+import { interleave } from "../lib/utils";
 
 function createHoneycombBlock(jsPsych, repetitions) {
   // Possible stimuli values to be displayed
@@ -34,7 +35,8 @@ function createHoneycombBlock(jsPsych, repetitions) {
 
   // Create a nested timeline containing the fixation and task trials
   const taskBlock = {
-    timeline: [fixationTrial, taskTrial],
+    // timeline: [fixationTrial, taskTrial],
+    timeline: interleave([taskTrial], fixationTrial),
     timeline_variables: stimuli,
     randomize_order: true,
     repetitions: repetitions,

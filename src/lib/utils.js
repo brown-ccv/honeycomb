@@ -76,15 +76,27 @@ const beep = (audioCodes) => {
   o.stop(context.currentTime + 0.4);
 };
 
+/**
+ * Interleave a value before/after every element in an array
+ * @param {Array<any>} arr The original array
+ * @param {any} val The value to interleave inside the array
+ * @param {boolean} addBefore Whether to add val before or after each element in array
+ * @returns The original array with val interleaved between every element
+ */
+function interleave(arr, val, addBefore = true) {
+  return [].concat(...arr.map((n) => (addBefore ? [val, n] : [n, val])));
+}
+
 export {
-  sleep,
-  jitter,
-  jitter50,
-  randomTrue,
+  beep,
   deepCopy,
   formatDollars,
   generateWaitSet,
-  startKeypressListener,
   getProlificId,
-  beep,
+  interleave,
+  jitter,
+  jitter50,
+  randomTrue,
+  sleep,
+  startKeypressListener,
 };
