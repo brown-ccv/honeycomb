@@ -35,7 +35,6 @@ function createHoneycombBlock(jsPsych, repetitions) {
 
   // Create a nested timeline containing the fixation and task trials
   const taskBlock = {
-    // timeline: [fixationTrial, taskTrial],
     timeline: interleave([taskTrial], fixationTrial),
     timeline_variables: stimuli,
     randomize_order: true,
