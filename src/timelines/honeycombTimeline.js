@@ -12,9 +12,7 @@ import { endTrial, instructionsTrial, welcomeTrial } from "./honeycombTrials";
  */
 
 // TODO: Add practice/tutorial block?
-
 function createHoneycombTimeline(jsPsych) {
-  // TODO: Move block settings into config.json
   const honeycomb = createHoneycombBlock(jsPsych); // The first block repeats 5 times
 
   // Note that we need the jsPsych instance to aggregate the data

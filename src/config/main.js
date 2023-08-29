@@ -10,8 +10,6 @@ import { getProlificId } from "../lib/utils";
 import { eventCodes } from "./trigger";
 
 // Access package name and version so we can store these as facts with task data.
-
-// TODO: Make constants ALL CAPS
 const taskName = packageInfo.name;
 const taskVersion = packageInfo.version;
 
