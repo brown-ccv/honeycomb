@@ -4,6 +4,7 @@ import {
   createDebriefTrial,
   finishTrial,
   instructionsTrial,
+  preloadTrial,
   welcomeTrial,
 } from "./honeycombTrials";
 
@@ -22,6 +23,7 @@ function createHoneycombTimeline(jsPsych) {
 
   const timeline = [
     welcomeTrial,
+    preloadTrial,
     // enterFullscreen,
     instructionsTrial,
     honeycomb,
