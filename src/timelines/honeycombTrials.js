@@ -1,18 +1,18 @@
+import { showMessage } from "@brown-ccv/behavioral-task-trials";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import instructionsResponse from "@jspsych/plugin-instructions";
 import preloadResponse from "@jspsych/plugin-preload";
-import { showMessage } from "@brown-ccv/behavioral-task-trials";
 
-import { config, language } from "../config/main";
+import { config, language, taskSettings } from "../config/main";
 
-// TODO: Pull text into language file
+const honeycombLanguage = language.trials.honeycomb;
 
 /**
  * Trial that displays a welcome message and waits for the participant to press a key
  */
 const welcomeTrial = {
   type: htmlKeyboardResponse,
-  stimulus: "Welcome to the experiment. Press any key to begin.",
+  stimulus: honeycombLanguage.welcome,
 };
 
 /**
@@ -22,35 +22,53 @@ const welcomeTrial = {
  * Instructions have been altered from the original tutorial to match the instructions plugin:
  * https://www.jspsych.org/7.3/plugins/instructions/#including-images
  */
-// TODO: Should instructions be in its own file?
 const instructionsTrial = {
   type: instructionsResponse,
   pages: [
-    // TODO: Pull text into language file
-    "Please read the following instructions carefully.",
-    "In this experiment, a circle will appear in the center of the screen.",
-    `If the circle is <strong>blue</strong>, press the letter <strong>F</strong> on the keyboard as fast as you can.
-    <br />
-    <img src="images/blue.png" />`,
-    `If the circle is <strong>orange</strong>, press the letter <strong>J</strong> as fast as you can.
-    <br />
-    <img src="images/orange.png" />`,
-    "Click next to begin.",
+    honeycombLanguage.instructions.read,
+    honeycombLanguage.instructions.circle,
+    // Add a page for very possible stimuli - displays the image and the correct response
+    ...taskSettings.honeycomb.timeline_variables.map(({ stimulus, correct_response }) => {
+      const color = stimulus.substring(stimulus.lastIndexOf("/") + 1, stimulus.indexOf(".")); // Pull the color out of the file name
+      return `${honeycombLanguage.instructions.example.start} <strong>${color}</strong>
+      ${honeycombLanguage.instructions.example.middle} <strong>${correct_response}</strong> 
+      ${honeycombLanguage.instructions.example.end}
+      <br />
+      <img src=${stimulus} />`;
+    }),
+    honeycombLanguage.instructions.next,
   ],
   show_clickable_nav: true,
   post_trial_gap: 500,
 };
 
 // TODO 281: Function for preloading all files in public/images?
-// TODO: Add language.prompt.settingUp language?
+// Preload all of the stimulus images
 const preloadTrial = {
   type: preloadResponse,
-  images: ["images/blue.png", "images/orange.png"],
+  message: `<p>${language.prompts.settingUp}</p>`,
+  images: taskSettings.honeycomb.timeline_variables.map(({ stimulus }) => stimulus),
 };
 
-const endTrial = showMessage(config, {
-  duration: 5000,
-  message: language.trials.honeycomb.end,
+const createDebriefTrial = (jsPsych) => ({
+  type: htmlKeyboardResponse,
+  stimulus: function () {
+    // Note that we need the jsPsych instance to aggregate the data
+    const responseTrials = jsPsych.data.get().filter({ task: "response" });
+    const correct_trials = responseTrials.filter({ correct: true });
+    const accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
+    const reactionTime = Math.round(correct_trials.select("rt").mean());
+
+    const trialLanguage = honeycombLanguage.debrief;
+    return `<p>${trialLanguage.accuracy.start} ${accuracy}${trialLanguage.accuracy.end}</p>
+    <p>${trialLanguage.reactionTime.start} ${reactionTime}${trialLanguage.reactionTime.end}</p>
+    <p>${trialLanguage.complete}</p>`;
+  },
 });
 
-export { instructionsTrial, preloadTrial, welcomeTrial, endTrial };
+const finishTrial = showMessage(config, {
+  duration: 5000,
+  message: honeycombLanguage.finish,
+});
+
+export { createDebriefTrial, finishTrial, instructionsTrial, preloadTrial, welcomeTrial };
