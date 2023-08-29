@@ -201,7 +201,8 @@ async function participantIDPrompt() {
   // TODO: Enable downloading all study data at once
   return await input({
     // message: "Select a participant (* selects all ):", // ? Do we need the stuff in parentheses?
-    message: "Select a participant: ",
+    message: "Select a participant:",
+
     // default: "*",
     validate: async (input) => {
       const invalid = "Please enter a valid participant from your Firestore database";
