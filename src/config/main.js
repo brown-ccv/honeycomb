@@ -6,6 +6,7 @@ import { initJsPsych } from "jspsych";
 import _ from "lodash";
 
 import packageInfo from "../../package.json";
+import language from "./language.json";
 import { getProlificId } from "../lib/utils";
 import { eventCodes } from "./trigger";
 
@@ -70,9 +71,6 @@ const config = init({
   USE_FIREBASE,
 });
 
-// Get the language file
-const lang = require("../language/en_us.json");
-
 // Get task settings
 let taskSettings = {
   fixation: {
@@ -95,7 +93,7 @@ export {
   taskSettings,
   eventCodes,
   keys,
-  lang,
+  language,
   taskName,
   taskVersion,
   turkUniqueId,

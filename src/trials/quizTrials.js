@@ -1,50 +1,50 @@
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import surveyMultiselect from "@jspsych/plugin-survey-multi-select";
-import { lang, config } from "../config/main";
+import { language, config } from "../config/main";
 import { survey, slider, multiSurvey, showMessage } from "@brown-ccv/behavioral-task-trials";
 
 // Age Check
-const ask = lang.quiz.ask.age;
-const res = lang.quiz.answer.age;
+const ask = language.quiz.ask.age;
+const res = language.quiz.answer.age;
 const stmAge = `<div class='instructions'><h1>${ask}<br><b>${res}</b></div>`;
 
 const ageCheck = survey({ stimulus: stmAge });
 
 // Slider Check
-const stmSl = lang.quiz.direction.slider.right;
+const stmSl = language.quiz.direction.slider.right;
 
 const sliderCheck = slider(stmSl);
 
-const abstain = `${lang.quiz.answer.abstain}`; // give people choice to abstain
+const abstain = `${language.quiz.answer.abstain}`; // give people choice to abstain
 // Survey page headers
-const surveyPreamble1 = lang.quiz.prompt.preamble.survey_1;
-const surveyPreamble2 = lang.quiz.prompt.ius.preamble;
+const surveyPreamble1 = language.quiz.prompt.preamble.survey_1;
+const surveyPreamble2 = language.quiz.prompt.ius.preamble;
 
 // Intolerance of Uncertainty (IUS) Scale
 const iusOptions = {
   options: [
-    `${lang.quiz.answer.ius.not}`,
-    `${lang.quiz.answer.ius.little}`,
-    `${lang.quiz.answer.ius.somewhat}`,
-    `${lang.quiz.answer.ius.very}`,
-    `${lang.quiz.answer.ius.entirely}`,
+    `${language.quiz.answer.ius.not}`,
+    `${language.quiz.answer.ius.little}`,
+    `${language.quiz.answer.ius.somewhat}`,
+    `${language.quiz.answer.ius.very}`,
+    `${language.quiz.answer.ius.entirely}`,
     abstain,
   ],
 };
 
 const iusPrompts = [
-  `${lang.quiz.prompt.ius.upset}`,
-  `${lang.quiz.prompt.ius.frustration}`,
-  `${lang.quiz.prompt.ius.full_life}`,
-  `${lang.quiz.prompt.ius.surprise_avoid}`,
-  `${lang.quiz.prompt.ius.unforeseen_spoil}`,
-  `${lang.quiz.prompt.ius.uncertainty_paralysis}`,
-  `${lang.quiz.prompt.ius.uncertainty_malfunction}`,
-  `${lang.quiz.prompt.ius.future}`,
-  `${lang.quiz.prompt.ius.surprise_intolerance}`,
-  `${lang.quiz.prompt.ius.doubt_paralysis}`,
-  `${lang.quiz.prompt.ius.organize}`,
-  `${lang.quiz.prompt.ius.escape}`,
+  `${language.quiz.prompt.ius.upset}`,
+  `${language.quiz.prompt.ius.frustration}`,
+  `${language.quiz.prompt.ius.full_life}`,
+  `${language.quiz.prompt.ius.surprise_avoid}`,
+  `${language.quiz.prompt.ius.unforeseen_spoil}`,
+  `${language.quiz.prompt.ius.uncertainty_paralysis}`,
+  `${language.quiz.prompt.ius.uncertainty_malfunction}`,
+  `${language.quiz.prompt.ius.future}`,
+  `${language.quiz.prompt.ius.surprise_intolerance}`,
+  `${language.quiz.prompt.ius.doubt_paralysis}`,
+  `${language.quiz.prompt.ius.organize}`,
+  `${language.quiz.prompt.ius.escape}`,
 ];
 
 const iusSurvey = multiSurvey({
@@ -54,7 +54,7 @@ const iusSurvey = multiSurvey({
 });
 
 // Debrief Page (non-mTurk)
-const debriefOptions = lang.quiz.answer.debriefing.confirm_completion;
+const debriefOptions = language.quiz.answer.debriefing.confirm_completion;
 const debrief = showMessage(config, {
   responseType: htmlButtonResponse,
   responseEndsTrial: true,
@@ -62,10 +62,10 @@ const debrief = showMessage(config, {
 });
 
 // START of Demographics Questionnaires
-const demographicsAge = lang.quiz.ask.demographics_age;
-const demographicsPreamble1 = lang.quiz.prompt.preamble.demo_1;
-const demographicsPreamble2 = lang.quiz.prompt.preamble.demo_2;
-const demographicsPreamble3 = lang.quiz.prompt.preamble.demo_3;
+const demographicsAge = language.quiz.ask.demographics_age;
+const demographicsPreamble1 = language.quiz.prompt.preamble.demo_1;
+const demographicsPreamble2 = language.quiz.prompt.preamble.demo_2;
+const demographicsPreamble3 = language.quiz.prompt.preamble.demo_3;
 
 const openAnswerQuestions = survey({
   preamble: demographicsPreamble1,
@@ -75,30 +75,33 @@ const openAnswerQuestions = survey({
 // multi_choice_questions
 const demoMultiChoiceOptions = {
   ethnicity: [
-    lang.quiz.answer.demographics_ethnicity.hispanic_latino,
-    lang.quiz.answer.demographics_ethnicity.no_hispanic_latino,
+    language.quiz.answer.demographics_ethnicity.hispanic_latino,
+    language.quiz.answer.demographics_ethnicity.no_hispanic_latino,
   ],
   race: [
-    `${lang.quiz.answer.demographics_race.asian}`,
-    `${lang.quiz.answer.demographics_race.african_american}`,
-    `${lang.quiz.answer.demographics_race.caucasian}`,
-    `${lang.quiz.answer.demographics_race.native_american_alaskan}`,
-    `${lang.quiz.answer.demographics_race.native_hawaiian_pacific_islander}`,
-    `${lang.quiz.answer.demographics_race.other}`,
+    `${language.quiz.answer.demographics_race.asian}`,
+    `${language.quiz.answer.demographics_race.african_american}`,
+    `${language.quiz.answer.demographics_race.caucasian}`,
+    `${language.quiz.answer.demographics_race.native_american_alaskan}`,
+    `${language.quiz.answer.demographics_race.native_hawaiian_pacific_islander}`,
+    `${language.quiz.answer.demographics_race.other}`,
   ],
-  yesNo: [lang.quiz.answer.demographics_binary.yes, lang.quiz.answer.demographics_binary.no],
+  yesNo: [
+    language.quiz.answer.demographics_binary.yes,
+    language.quiz.answer.demographics_binary.no,
+  ],
   gender: [
-    lang.quiz.answer.demographics_gender.female,
-    lang.quiz.answer.demographics_gender.male,
-    lang.quiz.answer.demographics_gender.other,
+    language.quiz.answer.demographics_gender.female,
+    language.quiz.answer.demographics_gender.male,
+    language.quiz.answer.demographics_gender.other,
   ],
 };
 
 const demoMultiChoicePrompts = [
-  `${lang.quiz.ask.demographics_ethnicity}`,
-  `${lang.quiz.ask.demographics_race}`,
-  `${lang.quiz.ask.demographics_english}`,
-  `${lang.quiz.ask.demographics_gender}`,
+  `${language.quiz.ask.demographics_ethnicity}`,
+  `${language.quiz.ask.demographics_race}`,
+  `${language.quiz.ask.demographics_english}`,
+  `${language.quiz.ask.demographics_gender}`,
 ];
 
 const multiChoiceQuestions = multiSurvey({
@@ -108,15 +111,15 @@ const multiChoiceQuestions = multiSurvey({
 });
 
 // multi_select_questions
-const diagnosesQuestions = lang.quiz.ask.diagnoses;
+const diagnosesQuestions = language.quiz.ask.diagnoses;
 
 const diagnosesOptions = {
   diagnoses: [
-    lang.quiz.answer.demographics_diagnoses.no,
-    lang.quiz.answer.demographics_diagnoses.parkinsons,
-    lang.quiz.answer.demographics_diagnoses.schizophrenia,
-    lang.quiz.answer.demographics_diagnoses.ocd,
-    lang.quiz.answer.demographics_diagnoses.depression,
+    language.quiz.answer.demographics_diagnoses.no,
+    language.quiz.answer.demographics_diagnoses.parkinsons,
+    language.quiz.answer.demographics_diagnoses.schizophrenia,
+    language.quiz.answer.demographics_diagnoses.ocd,
+    language.quiz.answer.demographics_diagnoses.depression,
   ],
 };
 

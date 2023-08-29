@@ -3,7 +3,7 @@ import instructionsResponse from "@jspsych/plugin-instructions";
 import preloadResponse from "@jspsych/plugin-preload";
 import { showMessage } from "@brown-ccv/behavioral-task-trials";
 
-import { config, lang } from "../config/main";
+import { config, language } from "../config/main";
 
 // TODO: Pull text into language file
 
@@ -49,7 +49,7 @@ const preloadTrial = {
 
 const endTrial = showMessage(config, {
   duration: 5000,
-  message: lang.finish.end,
+  message: language.finish.end,
 });
 
 export { instructionsTrial, preloadTrial, welcomeTrial, endTrial };
