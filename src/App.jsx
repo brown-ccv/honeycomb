@@ -8,7 +8,7 @@ import "./App.css";
 import JsPsychExperiment from "./components/JsPsychExperiment";
 import Login from "./components/Login";
 
-import { config, taskVersion, turkUniqueId } from "./config/main";
+import { config, taskSettings, taskVersion, turkUniqueId } from "./config/main";
 import { addToFirebase, validateParticipant } from "./firebase";
 import { getProlificId } from "./lib/utils";
 
@@ -47,6 +47,7 @@ function App() {
   useEffect(() => {
     // For testing and debugging purposes
     console.log(config);
+    console.log(taskSettings);
 
     // If on desktop
     if (config.USE_ELECTRON) {
