@@ -1,8 +1,13 @@
 {
-  "randomize_order": true,
-  "repetitions": 5,
-  "timeline_variables": [
-    { "stimulus": "images/blue.png", "correct_response": "f" },
-    { "stimulus": "images/orange.png", "correct_response": "j" }
-  ]
+  "fixation": {
+    "randomize_duration": true
+  },
+  "honeycomb": {
+    "randomize_order": true,
+    "repetitions": 5,
+    "timeline_variables": [
+      { "stimulus": "images/blue.png", "correct_response": "f" },
+      { "stimulus": "images/orange.png", "correct_response": "j" }
+    ]
+  }
 }

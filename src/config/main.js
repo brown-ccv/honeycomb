@@ -3,6 +3,7 @@
 
 import { init } from "@brown-ccv/behavioral-task-trials";
 import { initJsPsych } from "jspsych";
+import _ from "lodash";
 
 import packageInfo from "../../package.json";
 import { getProlificId } from "../lib/utils";
@@ -71,25 +72,23 @@ const config = init({
   USE_FIREBASE,
 });
 
-// get language file
+// Get the language file
 const lang = require("../language/en_us.json");
 
 // Get task settings
-let taskSettings;
+let taskSettings = {
+  fixation: {
+    durations: [250, 500, 750, 1000, 1250, 1500, 1750, 2000],
+    default_duration: 1000,
+    randomize_duration: false,
+  },
+};
 try {
-  // Load task settings from the config file
-  taskSettings = require("./config.json");
+  // Override default task settings from the config file
+  taskSettings = _.merge(taskSettings, require("./config.json"));
 } catch (error) {
-  console.warn("Unable to load task settings from config.json, using defaults");
-  // Default task settings to fallback to
-  taskSettings = {
-    randomize_order: false,
-    repetitions: 1,
-    timeline_variables: [
-      { stimulus: "images/blue.png", correct_response: "f" },
-      { stimulus: "images/orange.png", correct_response: "j" },
-    ],
-  };
+  // Try will fail if require doesn't find the json file
+  console.warn("Unable to load task settings from config.json");
 }
 
 export {
