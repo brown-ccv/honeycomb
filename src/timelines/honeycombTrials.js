@@ -42,6 +42,7 @@ const instructionsTrial = {
 };
 
 // TODO 281: Function for preloading all files in public/images?
+// TODO: Add language.prompt.settingUp language?
 const preloadTrial = {
   type: preloadResponse,
   images: ["images/blue.png", "images/orange.png"],
@@ -49,7 +50,7 @@ const preloadTrial = {
 
 const endTrial = showMessage(config, {
   duration: 5000,
-  message: language.finish.end,
+  message: language.trials.honeycomb.end,
 });
 
 export { instructionsTrial, preloadTrial, welcomeTrial, endTrial };

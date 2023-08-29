@@ -29,7 +29,7 @@ const cameraStart = (jsPsych) => {
   document.title = taskName;
   const markup = `
   <div class="d-flex flex-column align-items-center">
-  <p>${language.instructions.camera}</p>
+  <p>${language.trials.camera}</p>
   <video id="camera" width="640" height="480" autoplay></video>
   </div>
   `;

@@ -17,7 +17,7 @@ export const showName = showMessage(config, {
 // TODO: Turn into jsPsych instruction trial
 export const showWelcome = {
   type: htmlKeyboardResponse,
-  stimulus: baseStimulus(`<h1>${language.prompts.welcome}</h1>`, true) + photodiodeGhostBox(),
-  prompt: language.prompts.continue.press,
+  stimulus: baseStimulus(`<h1>${language.trials.welcome}</h1>`, true) + photodiodeGhostBox(),
+  prompt: language.prompts.continue.prompt,
   response_ends_trial: true,
 };

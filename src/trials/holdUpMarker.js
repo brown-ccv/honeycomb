@@ -10,7 +10,7 @@ const holdUpMarker = () => {
   return {
     type: htmlButtonResponse,
     stimulus,
-    prompt: [`<br><h3>${language.prompts.focus}</h3>`],
+    prompt: [`<br><h3>${language.trials.holdUpMarker}</h3>`],
     choices: [language.prompts.continue.button],
     on_load: () =>
       eventMarkerMessage().then((s) => {

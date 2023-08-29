@@ -6,7 +6,7 @@ const adjustVolume = () => {
   const stimulus = baseStimulus(
     `
     <div class='instructions'>
-    <h1>${language.instructions.adjust_volume}</h1>
+    <h1>${language.trials.adjustVolume}</h1>
     </div>
     `,
     true
@@ -15,7 +15,7 @@ const adjustVolume = () => {
   return {
     type: htmlKeyboardResponse,
     stimulus,
-    prompt: language.prompts.continue.press,
+    prompt: language.prompts.continue.prompt,
     response_ends_trial: true,
   };
 };
