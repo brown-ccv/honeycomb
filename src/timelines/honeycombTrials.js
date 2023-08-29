@@ -12,7 +12,7 @@ const honeycombLanguage = language.trials.honeycomb;
  */
 const welcomeTrial = {
   type: htmlKeyboardResponse,
-  stimulus: honeycombLanguage.welcome,
+  stimulus: `<p>${honeycombLanguage.welcome}</p>`,
 };
 
 /**
@@ -25,18 +25,18 @@ const welcomeTrial = {
 const instructionsTrial = {
   type: instructionsResponse,
   pages: [
-    honeycombLanguage.instructions.read,
-    honeycombLanguage.instructions.circle,
+    `<p>${honeycombLanguage.instructions.read}</p>`,
+    `<p>${honeycombLanguage.instructions.circle}</p>`,
     // Add a page for very possible stimuli - displays the image and the correct response
     ...taskSettings.honeycomb.timeline_variables.map(({ stimulus, correct_response }) => {
       const color = stimulus.substring(stimulus.lastIndexOf("/") + 1, stimulus.indexOf(".")); // Pull the color out of the file name
-      return `${honeycombLanguage.instructions.example.start} <strong>${color}</strong>
+      return `<p>${honeycombLanguage.instructions.example.start} <strong>${color}</strong>
       ${honeycombLanguage.instructions.example.middle} <strong>${correct_response}</strong> 
-      ${honeycombLanguage.instructions.example.end}
+      ${honeycombLanguage.instructions.example.end}</p>
       <br />
       <img src=${stimulus} />`;
     }),
-    honeycombLanguage.instructions.next,
+    `<p>${honeycombLanguage.instructions.next}</p>`,
   ],
   show_clickable_nav: true,
   post_trial_gap: 500,
@@ -46,7 +46,7 @@ const instructionsTrial = {
 // Preload all of the stimulus images
 const preloadTrial = {
   type: preloadResponse,
-  message: `<p>${language.prompts.settingUp}</p>`,
+  message: `<p>${language.prompts.settingUp}<p>`,
   images: taskSettings.honeycomb.timeline_variables.map(({ stimulus }) => stimulus),
 };
 

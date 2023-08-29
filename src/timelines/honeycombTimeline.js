@@ -23,7 +23,6 @@ function createHoneycombTimeline(jsPsych) {
 
   const timeline = [
     welcomeTrial,
-
     enterFullscreen,
     preloadTrial,
     instructionsTrial,
