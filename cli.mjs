@@ -83,9 +83,9 @@ async function downloadDataFirebase() {
       // TODO 172: Check for overwriting file?
       try {
         fsExtra.outputJSONSync(outputFile, experimentData, { spaces: 2 });
-        console.log("Data saved successfully:", outputFile);
+        console.log(`Data saved successfully: ${outputFile}`);
       } catch (error) {
-        console.error("There was an error saving", outputFile);
+        console.error(`There was an error saving ${outputFile}`);
         // TODO: Do we need to display more error information that this?
       }
     })
