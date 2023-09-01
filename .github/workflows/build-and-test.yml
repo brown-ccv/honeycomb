@@ -26,13 +26,13 @@ jobs:
       - name: 🔬 Lint
         run: npm run lint
 
-  # Build and test the project for [home/clinic] use on [windows/macOS/ubuntu]
+  # Build and test the project for [online/clinic] use on [windows/macOS/ubuntu]
   build_and_test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
-        location: [home, clinic]
+        location: [online, clinic]
         # TODO: Add deployment to the matrix
 
     steps:
