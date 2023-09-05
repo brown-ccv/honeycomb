@@ -58,8 +58,6 @@ function App() {
         const credentials = renderer.sendSync("syncCredentials");
         setParticipantID(credentials.participantID || "");
         setStudyID(credentials.studyID || "");
-
-        // setIpcRenderer(renderer);
       } catch (e) {
         console.error("Unable to instantiate the Electron process", e);
       }
