@@ -8,7 +8,7 @@ on:
       - "*"
 
 jobs:
-  # Package the electron application [home/clinic] in [windows/macOS/ubuntu]
+  # Package the electron application [online/clinic] in [windows/macOS/ubuntu]
   release:
     runs-on: ${{ matrix.os }}
 
@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         # TODO: Home doesn't make sense here?
-        location: ["home", "clinic"]
+        location: ["online", "clinic"]
         os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:

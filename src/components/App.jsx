@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 
 import Error from "./Error";
-import JsPsychExperiment from "./JsPsychExperiment";
+import Experiment from "./Experiment";
 import Login from "./Login";
 
 import { DEPLOYMENT, LOCATION, NODE_ENV, OLD_CONFIG } from "../constants";
@@ -136,7 +136,7 @@ function App() {
     return <Error />;
   } else {
     return loggedIn ? (
-      <JsPsychExperiment
+      <Experiment
         config={OLD_CONFIG}
         studyID={studyID}
         participantID={participantID}

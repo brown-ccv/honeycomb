@@ -6,7 +6,7 @@ export const NODE_ENV = process.env.REACT_APP_NODE_ENV; // "development" | "prod
 /**
  * The physical location in which the application is running
  */
-export const LOCATION = process.env.REACT_APP_LOCATION; // "home" | "clinic"
+export const LOCATION = process.env.REACT_APP_LOCATION; // "online" | "clinic"
 
 // TODO: Will be passed into the <Honeycomb /> component directly?
 // ? xampp and mysql from JsPsych docs https://www.jspsych.org/7.0/overview/data/#storing-data-permanently-as-a-file
