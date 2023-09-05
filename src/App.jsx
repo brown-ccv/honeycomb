@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 
 import "@fortawesome/fontawesome-free/css/all.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -11,6 +11,7 @@ import Login from "./components/Login";
 import { config, taskSettings, taskVersion, turkUniqueId } from "./config/main";
 import { addToFirebase, validateParticipant } from "./firebase";
 import { getProlificId } from "./lib/utils";
+import Error from "./components/Error";
 
 /**
  * The top-level React component for Honeycomb. App handles initiating the jsPsych component when the participant
@@ -21,30 +22,30 @@ import { getProlificId } from "./lib/utils";
  * about functional vs. class components here: https://reactjs.org/docs/components-and-props.html. It is recommended
  * to use functional components.
  */
-function App() {
+export default function App() {
   // Manage if a user is currently logged in
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(false);
   // Manage error state of the app
-  const [isError, setIsError] = useState(false);
+  const [isError, setIsError] = React.useState(false);
 
   // Manage the electron renderer
-  const [ipcRenderer, setIpcRenderer] = useState();
+  const [ipcRenderer, setIpcRenderer] = React.useState();
   // Manage the psiturk object
-  const [psiturk, setPsiturk] = useState(false);
+  const [psiturk, setPsiturk] = React.useState(false);
 
   // Manage the data used in the experiment
-  const [participantID, setParticipantID] = useState("");
-  const [studyID, setStudyID] = useState("");
+  const [participantID, setParticipantID] = React.useState("");
+  const [studyID, setStudyID] = React.useState("");
 
   // Manage the method type being used ("desktop", "firebase", "mturk", or "default")
-  const [currentMethod, setMethod] = useState("default");
+  const [currentMethod, setMethod] = React.useState("default");
 
   /**
    * This effect is called once, on the first render of the application
    * It checks the environment variables to initialize needed state variables
    * And determines which methods to be using
    */
-  useEffect(() => {
+  React.useEffect(() => {
     // For testing and debugging purposes
     console.log({
       "Honeycomb Configuration": config,
@@ -109,6 +110,7 @@ function App() {
 
   /** DATA WRITE FUNCTIONS */
 
+  // Default to no operation
   const defaultFunction = () => {};
   // Add trial data to Firestore
   const firebaseUpdateFunction = (data) => {
@@ -118,6 +120,7 @@ function App() {
   const desktopUpdateFunction = (data) => {
     ipcRenderer.send("data", data);
   };
+  // Save the trial data to PsiTurk
   const psiturkUpdateFunction = (data) => {
     psiturk.recordTrialData(data);
   };
@@ -132,6 +135,7 @@ function App() {
   const desktopFinishFunction = () => {
     ipcRenderer.send("end", "true");
   };
+  // Complete the PsiTurk experiment
   const psiturkFinishFunction = () => {
     const completePsiturk = async () => {
       psiturk.saveData({
@@ -142,63 +146,59 @@ function App() {
     completePsiturk();
   };
 
-  // Update the study/participant data when they log in
-  const handleLogin = useCallback((studyId, participantId) => {
+  /**
+   * Callback function executed when the user logs in.
+   *
+   * The study and participant IDs are updated and loggedIn is set to true.
+   */
+  const handleLogin = React.useCallback((studyId, participantId) => {
     setStudyID(studyId);
     setParticipantID(participantId);
     setLoggedIn(true);
   }, []);
 
   if (isError) {
-    return (
-      <div className="centered-h-v">
-        <div className="width-50 alert alert-danger">
-          Please ask your task provider to enable firebase.
-        </div>
-      </div>
-    );
+    return <Error />;
   } else {
-    return (
-      <>
-        {loggedIn ? (
-          <JsPsychExperiment
-            studyId={studyID}
-            participantId={participantID}
-            taskVersion={taskVersion}
-            dataUpdateFunction={
-              {
-                desktop: desktopUpdateFunction,
-                firebase: firebaseUpdateFunction,
-                mturk: psiturkUpdateFunction,
-                default: defaultFunction,
-              }[currentMethod]
-            }
-            dataFinishFunction={
-              {
-                desktop: desktopFinishFunction,
-                mturk: psiturkFinishFunction,
-                firebase: defaultFunction,
-                default: defaultFinishFunction,
-              }[currentMethod]
-            }
-          />
-        ) : (
-          <Login
-            validationFunction={
-              {
-                desktop: defaultValidation,
-                default: defaultValidation,
-                firebase: firebaseValidation,
-              }[currentMethod]
-            }
-            initialStudyID={studyID}
-            initialParticipantID={participantID}
-            handleLogin={handleLogin}
-          />
-        )}
-      </>
-    );
+    if (loggedIn) {
+      return (
+        <JsPsychExperiment
+          studyId={studyID}
+          participantId={participantID}
+          taskVersion={taskVersion}
+          dataUpdateFunction={
+            {
+              desktop: desktopUpdateFunction,
+              firebase: firebaseUpdateFunction,
+              mturk: psiturkUpdateFunction,
+              default: defaultFunction,
+            }[currentMethod]
+          }
+          dataFinishFunction={
+            {
+              desktop: desktopFinishFunction,
+              mturk: psiturkFinishFunction,
+              firebase: defaultFunction,
+              default: defaultFinishFunction,
+            }[currentMethod]
+          }
+        />
+      );
+    } else {
+      return (
+        <Login
+          validationFunction={
+            {
+              desktop: defaultValidation,
+              default: defaultValidation,
+              firebase: firebaseValidation,
+            }[currentMethod]
+          }
+          initialStudyID={studyID}
+          initialParticipantID={participantID}
+          handleLogin={handleLogin}
+        />
+      );
+    }
   }
 }
-
-export default App;

@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-function Login({ handleLogin, initialParticipantID, initialStudyID, validationFunction }) {
+export default function Login({
+  handleLogin,
+  initialParticipantID,
+  initialStudyID,
+  validationFunction,
+}) {
   // State variables for login screen
   const [participantId, setParticipant] = useState(initialParticipantID);
   const [studyId, setStudy] = useState(initialStudyID);
@@ -58,5 +63,3 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     </div>
   );
 }
-
-export default Login;

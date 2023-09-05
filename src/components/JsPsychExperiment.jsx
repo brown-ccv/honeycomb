@@ -5,7 +5,7 @@ import { config } from "../config/main";
 import { initParticipant } from "../firebase";
 import { buildTimeline, jsPsychOptions } from "../timelines/main";
 
-function JsPsychExperiment({
+export default function JsPsychExperiment({
   studyId,
   participantId,
   taskVersion,
@@ -83,5 +83,3 @@ function JsPsychExperiment({
 
   return <div id={experimentDivId} ref={experimentDiv} className="App" />;
 }
-
-export default JsPsychExperiment;
