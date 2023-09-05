@@ -46,8 +46,10 @@ function App() {
    */
   useEffect(() => {
     // For testing and debugging purposes
-    console.log(config);
-    console.log(taskSettings);
+    console.log({
+      "Honeycomb Configuration": config,
+      "Task Settings": taskSettings,
+    });
 
     // If on desktop
     if (config.USE_ELECTRON) {
