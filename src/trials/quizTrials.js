@@ -17,10 +17,10 @@ const stmSl = QUIZ_LANGUAGE.direction.slider.right;
 
 const sliderCheck = slider(stmSl);
 
-const abstain = `${QUIZ_LANGUAGE.answer.abstain}`; // give people choice to abstain
+const abstain = QUIZ_LANGUAGE.answer.abstain; // give people choice to abstain
 // Survey page headers
-const surveyPreamble1 = QUIZ_LANGUAGE.prompt.preamble.survey_1;
-const surveyPreamble2 = QUIZ_LANGUAGE.prompt.ius.preamble;
+const surveyPreamble1 = `<h1>${QUIZ_LANGUAGE.prompt.preamble.survey_1}</h1>`;
+const surveyPreamble2 = `${QUIZ_LANGUAGE.prompt.ius.preamble.start}<br />${QUIZ_LANGUAGE.prompt.ius.preamble.middle}<br />${QUIZ_LANGUAGE.prompt.ius.preamble.end}`;
 
 // Intolerance of Uncertainty (IUS) Scale
 const iusOptions = {
@@ -64,10 +64,10 @@ const debrief = showMessage(config, {
 });
 
 // START of Demographics Questionnaires
-const demographicsAge = QUIZ_LANGUAGE.ask.demographics_age;
-const demographicsPreamble1 = QUIZ_LANGUAGE.prompt.preamble.demo_1;
-const demographicsPreamble2 = QUIZ_LANGUAGE.prompt.preamble.demo_2;
-const demographicsPreamble3 = QUIZ_LANGUAGE.prompt.preamble.demo_3;
+const demographicsAge = `<p>${QUIZ_LANGUAGE.ask.demographics_age}</p>`;
+const demographicsPreamble1 = `<h1>${QUIZ_LANGUAGE.prompt.preamble.demo_1}</h1`;
+const demographicsPreamble2 = `<h1>${QUIZ_LANGUAGE.prompt.preamble.demo_2}</h1`;
+const demographicsPreamble3 = `<h1>${QUIZ_LANGUAGE.prompt.preamble.demo_3}</h1`;
 
 const openAnswerQuestions = survey({
   preamble: demographicsPreamble1,
@@ -100,10 +100,10 @@ const demoMultiChoiceOptions = {
 };
 
 const demoMultiChoicePrompts = [
-  `${QUIZ_LANGUAGE.ask.demographics_ethnicity}`,
-  `${QUIZ_LANGUAGE.ask.demographics_race}`,
-  `${QUIZ_LANGUAGE.ask.demographics_english}`,
-  `${QUIZ_LANGUAGE.ask.demographics_gender}`,
+  `<p>${QUIZ_LANGUAGE.ask.demographics_ethnicity}</p>`,
+  `<p>${QUIZ_LANGUAGE.ask.demographics_race}</p>`,
+  `<p>${QUIZ_LANGUAGE.ask.demographics_english}</p>`,
+  `<p>${QUIZ_LANGUAGE.ask.demographics_gender}</p>`,
 ];
 
 const multiChoiceQuestions = multiSurvey({
@@ -113,7 +113,7 @@ const multiChoiceQuestions = multiSurvey({
 });
 
 // multi_select_questions
-const diagnosesQuestions = QUIZ_LANGUAGE.ask.diagnoses;
+const diagnosesQuestions = `<p>${QUIZ_LANGUAGE.ask.diagnoses}</p>`;
 
 const diagnosesOptions = {
   diagnoses: [
