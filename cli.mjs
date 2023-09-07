@@ -60,6 +60,7 @@ main();
 
 async function downloadDataFirebase() {
   await Promise.all(
+    // TODO 172: Confirm dialog when overwriting files
     EXPERIMENT_IDS.map(async (experimentID) => {
       // Get the data out of the experiment document
       const experimentRef = getExperimentRef(STUDY_ID, PARTICIPANT_ID, experimentID);
