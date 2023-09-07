@@ -32,10 +32,7 @@ async function main() {
 
   switch (ACTION) {
     case "download":
-      // TODO: Ask OUTPUT_ROOT question
-      // OUTPUT_ROOT = ".";
       OUTPUT_ROOT = await savePathPrompt();
-      console.log(OUTPUT_ROOT);
       switch (DEPLOYMENT) {
         case "firebase":
           await downloadDataFirebase();
@@ -253,7 +250,7 @@ async function experimentIDPrompt() {
 
 /** Prompts the user for a file path */
 async function savePathPrompt() {
-  const invalidMessage = "Please enter a valid path";
+  const invalidMessage = "Path does not exist";
   return await input({
     message: "Where would you like to save the data?",
     default: ".",
