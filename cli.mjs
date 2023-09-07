@@ -33,7 +33,9 @@ async function main() {
   switch (ACTION) {
     case "download":
       // TODO: Ask OUTPUT_ROOT question
-      OUTPUT_ROOT = ".";
+      // OUTPUT_ROOT = ".";
+      OUTPUT_ROOT = await savePathPrompt();
+      console.log(OUTPUT_ROOT);
       switch (DEPLOYMENT) {
         case "firebase":
           await downloadDataFirebase();
@@ -135,24 +137,26 @@ async function actionPrompt() {
 
 /** Prompt the user for the deployment they are trying to access */
 async function deploymentPrompt() {
-  const response = await select({
-    message: "Which deployment are you using?",
-    choices: [
-      {
-        name: "Firebase",
-        value: "firebase",
-        description: "Data is saved on the Firestore database",
-      },
-      // TODO: Add other deployments!
-      // {
-      //   // Note that downloading local data will never make sense - conditionally add prompt
-      //   name: "Local data",
-      //   value: "local",
-      //   description: "Data is saved on your local machine",
-      //   disabled: "(Working with local data is not yet supported)",
-      // },
-    ],
-  });
+  // TODO: Add other deployments!
+  const response = "firebase";
+  // const response = await select({
+  //   message: "Which deployment are you using?",
+  //   choices: [
+  //     {
+  //       name: "Firebase",
+  //       value: "firebase",
+  //       description: "Data is saved on the Firestore database",
+  //     },
+
+  //     {
+  //       // Note that downloading local data will never make sense - conditionally add prompt
+  //       name: "Local data",
+  //       value: "local",
+  //       description: "Data is saved on your local machine",
+  //       disabled: "(Working with local data is not yet supported)",
+  //     },
+  //   ],
+  // });
 
   // Initialize Firestore
   if (response === "firebase") {
@@ -247,6 +251,25 @@ async function experimentIDPrompt() {
   });
 }
 
+/** Prompts the user for a file path */
+async function savePathPrompt() {
+  const invalidMessage = "Please enter a valid path";
+  return await input({
+    message: "Where would you like to save the data?",
+    default: ".",
+    validate: async (input) => {
+      try {
+        const maybePath = fsExtra.statSync(input);
+        if (!maybePath.isDirectory()) return invalidMessage;
+      } catch (e) {
+        return invalidMessage;
+      }
+      return true;
+    },
+  });
+}
+
+/** Prompts the user to confirm continuation of the CLI */
 async function confirmDeletionPrompt() {
   const numExperiments = EXPERIMENT_IDS.length;
   return confirm({
