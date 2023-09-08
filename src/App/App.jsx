@@ -9,8 +9,9 @@ import Error from "./components/Error";
 import JsPsychExperiment from "./components/JsPsychExperiment";
 import Login from "./components/Login";
 
+import { addToFirebase, validateParticipant } from "./deployments/firebase";
+
 import { config, taskSettings, taskVersion, turkUniqueId } from "../config/main";
-import { addToFirebase, validateParticipant } from "../firebase";
 import { getProlificId } from "../lib/utils";
 
 /**
