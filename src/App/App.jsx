@@ -5,13 +5,13 @@ import "bootstrap/dist/css/bootstrap.css";
 import "jspsych/css/jspsych.css";
 import "./App.css";
 
+import Error from "./components/Error";
 import JsPsychExperiment from "./components/JsPsychExperiment";
 import Login from "./components/Login";
 
-import { config, taskSettings, taskVersion, turkUniqueId } from "./config/main";
-import { addToFirebase, validateParticipant } from "./firebase";
-import { getProlificId } from "./lib/utils";
-import Error from "./components/Error";
+import { config, taskSettings, taskVersion, turkUniqueId } from "../config/main";
+import { addToFirebase, validateParticipant } from "../firebase";
+import { getProlificId } from "../lib/utils";
 
 /**
  * The top-level React component for Honeycomb. App handles initiating the jsPsych component when the participant
