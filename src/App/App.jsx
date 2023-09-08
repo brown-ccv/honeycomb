@@ -1,14 +1,18 @@
 import React from "react";
 
+// Import css styling
 import "@fortawesome/fontawesome-free/css/all.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "jspsych/css/jspsych.css";
+import "./index.css";
 import "./App.css";
 
+// Import React components
 import Error from "./components/Error";
 import JsPsychExperiment from "./components/JsPsychExperiment";
 import Login from "./components/Login";
 
+// Import deployment functions
 import { addToFirebase, validateParticipant } from "./deployments/firebase";
 
 import { config, taskSettings, taskVersion, turkUniqueId } from "../config/main";
