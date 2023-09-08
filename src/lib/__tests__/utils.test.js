@@ -1,6 +1,7 @@
-const assert = require("chai").assert;
-import * as util from "../lib/utils";
+import { assert } from "chai";
 import _ from "lodash";
+
+import * as util from "../utils";
 
 describe("generic utility functions", function () {
   it("should jitter an integer", function () {
