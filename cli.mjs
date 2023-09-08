@@ -100,8 +100,8 @@ async function downloadDataFirebase() {
       shouldDownload = true;
     }
 
-    // Save the session to a unique JSON file.
     if (overwriteAll || shouldDownload) {
+      // Save the session to a unique JSON file.
       try {
         fsExtra.outputJSONSync(outputFile, experimentData, { spaces: 2 });
         console.log(`Data saved successfully: ${outputFile}`);
@@ -128,9 +128,7 @@ async function deleteDataFirebase() {
         }
       })
     );
-  } else {
-    console.log("Skipping deletion");
-  }
+  } else console.log("Skipping deletion");
 }
 
 /** -------------------- PROMPTS -------------------- */
