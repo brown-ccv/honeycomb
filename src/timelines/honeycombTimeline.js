@@ -14,8 +14,6 @@ import {
  *
  * See the jsPsych documentation for more: https://www.jspsych.org/7.3/tutorials/rt-task/
  */
-
-// TODO: Add practice/tutorial block?
 function createHoneycombTimeline(jsPsych) {
   const honeycomb = createHoneycombBlock(jsPsych); // The first block repeats 5 times
 
