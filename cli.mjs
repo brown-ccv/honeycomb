@@ -1,10 +1,7 @@
-import { checkbox, input, select, confirm } from "@inquirer/prompts";
+import { checkbox, input, select, confirm, expand } from "@inquirer/prompts";
 import { cert, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import fsExtra from "fs-extra";
-
-// TODO: Handling importing code from inside Honeycomb?
-// ? TODO: Some of the prompt messages could use some flushing out?
 
 /** -------------------- GLOBALS -------------------- */
 
@@ -59,37 +56,60 @@ main();
 /** -------------------- DOWNLOAD ACTION -------------------- */
 
 async function downloadDataFirebase() {
-  await Promise.all(
-    // TODO 172: Confirm dialog when overwriting files
-    EXPERIMENT_IDS.map(async (experimentID) => {
-      // Get the data out of the experiment document
-      const experimentRef = getExperimentRef(STUDY_ID, PARTICIPANT_ID, experimentID);
-      const experimentSnapshot = await experimentRef.get();
-      const experimentData = experimentSnapshot.data();
+  let overwriteAll = false;
 
-      // Merge the experiment's trials' data into a single array
-      const trialsRef = experimentRef.collection(TRIALS_COL);
-      const trialsSnapshot = await trialsRef.orderBy("trial_index").get();
-      const trialsData = trialsSnapshot.docs.map((trial) => trial.data());
+  // Download the files asynchronously, but sequentially
+  for (const experimentID of EXPERIMENT_IDS) {
+    // Get the data out of the experiment document
+    const experimentRef = getExperimentRef(STUDY_ID, PARTICIPANT_ID, experimentID);
+    const experimentSnapshot = await experimentRef.get();
+    const experimentData = experimentSnapshot.data();
 
-      // Add the trials' data to the experiment's data as "results" array
-      experimentData["results"] = trialsData;
+    // Merge the experiment's trials' data into a single array
+    const trialsRef = experimentRef.collection(TRIALS_COL);
+    const trialsSnapshot = await trialsRef.orderBy("trial_index").get();
+    const trialsData = trialsSnapshot.docs.map((trial) => trial.data());
 
-      // Save the session to a unique JSON file. (":" are replaced to prevent issues with invalid file names)
-      const outputFile =
-        `${OUTPUT_ROOT}/${RESPONSES_COL}/` +
-        `${STUDY_ID}/${PARTICIPANT_ID}/${experimentID}.json`.replaceAll(":", "_");
+    // Add the trials' data to the experiment's data as "results" array
+    experimentData["results"] = trialsData;
 
-      // TODO 172: Check for overwriting file?
+    // Get the path of the file to be saved
+    const outputFile =
+      `${OUTPUT_ROOT}/${RESPONSES_COL}/` +
+      `${STUDY_ID}/${PARTICIPANT_ID}/${experimentID}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names)
+
+    // Determine if the file should be saved
+    let shouldDownload;
+    if (fsExtra.existsSync(outputFile)) {
+      // File exists, check if user wants to overwrite
+      const answer = await confirmOverwritePrompt(outputFile, overwriteAll);
+      switch (answer) {
+        case "all":
+          overwriteAll = true;
+          shouldDownload = true;
+          break;
+        case "yes":
+          shouldDownload = true;
+          break;
+        default:
+          shouldDownload = false;
+          break;
+      }
+    } else {
+      // File doesn't exist locally - safe to download
+      shouldDownload = true;
+    }
+
+    // Save the session to a unique JSON file.
+    if (overwriteAll || shouldDownload) {
       try {
         fsExtra.outputJSONSync(outputFile, experimentData, { spaces: 2 });
         console.log(`Data saved successfully: ${outputFile}`);
       } catch (error) {
         console.error(`There was an error saving ${outputFile}`);
-        // TODO: Do we need to display more error information that this?
       }
-    })
-  );
+    } else console.log("Skipping download");
+  }
 }
 
 /** -------------------- DELETE ACTION -------------------- */
@@ -105,7 +125,6 @@ async function deleteDataFirebase() {
           console.log("Successfully deleted:", experimentRef.id);
         } catch (error) {
           console.error("There was an error deleting", experimentRef.id);
-          // TODO: Do we need to display more error information that this?
         }
       })
     );
@@ -208,9 +227,9 @@ async function participantIDPrompt() {
     return studyIDCollections.find((c) => c.id === DATA_COL) ? true : invalidMessage;
   };
 
-  // TODO: Enable downloading all study data at once
   return await input({
-    // message: "Select a participant (* selects all ):", // ? Do we need the stuff in parentheses?
+    // TODO: Enable downloading all study data at once
+    // message: "Select a participant (* selects all ):",
     message: "Select a participant:",
 
     // default: "*",
@@ -243,8 +262,7 @@ async function experimentIDPrompt() {
     .map(({ id }) => ({ name: id, value: id }));
 
   return await checkbox({
-    // TODO: What's the right word for this? Trial?
-    message: `Select the experiments you would like to ${ACTION}:`,
+    message: `Select the sessions you would like to ${ACTION}:`,
     choices: choices,
   });
 }
@@ -278,7 +296,44 @@ async function confirmDeletionPrompt() {
   });
 }
 
+/**
+ * Prompts the user to confirm continuation of the CLI, including future conflicts
+ * @param {string} outputFile
+ * @param {boolean} overwriteAll Whether or not all was already selected
+ * @returns
+ */
+async function confirmOverwritePrompt(file, overwriteAll) {
+  if (overwriteAll) return "yes"; // User already confirmed overwrite of all files
+
+  // TODO: Show the file that has the issue
+  const answer = await expand({
+    message: `${file} already exists. Overwrite?`,
+    default: "n",
+    expanded: true,
+    choices: [
+      {
+        key: "y",
+        name: "Overwrite this file",
+        value: "yes",
+      },
+      {
+        key: "a",
+        name: "Overwrite all files",
+        value: "all",
+      },
+      {
+        key: "n",
+        name: "Skip this file",
+        value: "no",
+      },
+    ],
+  });
+  return answer;
+}
+
 /** -------------------- FIRESTORE HELPERS -------------------- */
+
+// TODO: How to import this code from inside Honeycomb?
 
 const RESPONSES_COL = "participant_responses";
 const PARTICIPANTS_COL = "participants";
@@ -299,5 +354,3 @@ const getDataRef = (studyID, participantID) =>
 // Get a reference to a participant's specific experiment data document in Firestore
 const getExperimentRef = (studyID, participantID, experimentID) =>
   getDataRef(studyID, participantID).doc(experimentID);
-
-/** -------------------- UTILS -------------------- */
