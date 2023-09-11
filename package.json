@@ -64,9 +64,9 @@
     "wait-on": "^7.0.1"
   },
   "scripts": {
+    "postinstall": "node version.js && npm run rebuild",
     "cli": "node ./cli.mjs",
     "commit": "git-cz",
-    "postinstall": "node version.js && npm run rebuild",
     "lint": "eslint .",
     "format": "eslint --fix .",
     "test": "react-scripts test",
@@ -75,9 +75,8 @@
     "firebase:emulators:save": "firebase emulators:export emulator_data",
     "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
     "start:browser": "cross-env IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
-    "electron": "electron .",
-    "electron-dev": "wait-on http://127.0.0.1:3000 && cross-env ELECTRON_START_URL=\"http://127.0.0.1:3000\" electron .",
-    "dev": "concurrently -k npm:start npm:electron-dev",
+    "start:electron": "wait-on http://127.0.0.1:3000 && cross-env ELECTRON_START_URL=\"http://127.0.0.1:3000\" electron .",
+    "dev": "concurrently -k npm:start npm:start:electron",
     "dev:firebase": "dotenv -e env/.env.firebase npm run start:browser",
     "dev:home": "dotenv -e env/.env.home npm run dev",
     "dev:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run dev",
