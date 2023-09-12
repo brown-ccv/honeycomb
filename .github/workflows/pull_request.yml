@@ -1,4 +1,4 @@
-name: 🧪 Build and Test
+name: Pull Request
 
 # TODO: Run a lint here too (different jobs?)
 
@@ -16,7 +16,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-test:
+    name: 🧪 Build and Test
     runs-on: ${{ matrix.os }}
 
     # Run action for [home/clinic] with video [on/off] in [windows/macOS/ubuntu]

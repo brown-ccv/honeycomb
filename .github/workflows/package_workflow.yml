@@ -1,4 +1,4 @@
-name: package
+name: Package Workflow
 
 # Workflow dispatch for packaging an electron executable
 on:
