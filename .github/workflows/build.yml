@@ -1,4 +1,6 @@
-name: build
+name: 🧪 Build and Test
+
+# TODO: Run a lint here too (different jobs?)
 
 # Runs the build scripts on PR and when PR is merged to main
 on:
