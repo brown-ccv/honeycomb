@@ -85,16 +85,6 @@ jobs:
           asset_name: ${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_${{ matrix.setting }}_amd64.deb
           tag: ${{ github.ref }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-
-      # TODO: Use seperate job for this
-      # Update github pages - linux only
-      # if your deployment fails try https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-first-deployment-with-github_token
-      # - name: Deploy to GH Pages
-      #   if: startsWith(matrix.os, 'ubuntu')
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./build
   deploy-gh-pages:
     name: Deploy to GH Pages
     runs-on: ubuntu-latest

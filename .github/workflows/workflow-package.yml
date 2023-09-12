@@ -83,14 +83,17 @@ jobs:
         with:
           name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
           path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }} Setup.exe
-      - name: ⬆ Upload installer - Mac
-        uses: actions/upload-artifact@v2
+
+      # - name: ⬆ Upload installer - Mac
+      # uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v2
         if: startsWith(matrix.os, 'mac')
         with:
           name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
           path: out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-x64.dmg
-      - name: ⬆ Upload installer - Linux
-        uses: actions/upload-artifact@v2
+      # - name: ⬆ Upload installer - Linux
+      # uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v2
         if: startsWith(matrix.os, 'ubuntu')
         with:
           name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
