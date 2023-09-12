@@ -4,9 +4,6 @@ name: package
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        type: environment
-        description: Select the environment
       setting:
         type: choice
         options:
