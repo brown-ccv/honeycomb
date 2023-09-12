@@ -13,27 +13,11 @@ jobs:
     name: 🧪 Build and Test
     runs-on: ${{ matrix.os }}
 
-    # Run action for [home/clinic] with video [on/off] in [windows/macOS/ubuntu]
+    # Run action for [home/clinic] with in [windows/macOS/ubuntu]
     strategy:
       matrix:
         setting: [home, clinic]
-        video: [on, off]
         os: [windows-latest, macOS-latest, ubuntu-latest]
-        # TODO: Remove video from matrix, add include for the video on home
-        exclude:
-          # Exclude video on in Ubuntu and macOS
-          - os: ubuntu-latest
-            setting: clinic
-            video: on
-          - os: ubuntu-latest
-            setting: home
-            video: on
-          - os: macOS-latest
-            setting: clinic
-            video: on
-          - os: macOS-latest
-            setting: home
-            video: on
       fail-fast: false # A failed build will not end the other matrix jobs
 
     steps:
@@ -54,12 +38,6 @@ jobs:
         with:
           path: ./env
           mode: ${{matrix.setting}}
-      - name: 🔃 Load .env file (.env.video)
-        if: matrix.video=='on'
-        uses: xom9ikk/dotenv@v2
-        with:
-          path: ./env
-          mode: video
 
       # Build and test the app
       - name: ⚒ Run Build

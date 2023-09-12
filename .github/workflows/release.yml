@@ -1,11 +1,6 @@
 name: Release
 
 # Runs the build and package scripts when a new tagged release is created
-# TODO: Run on release, new tag doesn't matter
-# on:
-#   push:
-#     tags:
-#       - "*"
 on: release
 
 concurrency:
@@ -17,7 +12,7 @@ permissions:
 
 jobs:
   package-and-upload:
-    name: "Package and Upload: ${{ matrix.os }}"
+    name: Package and Upload
     runs-on: ${{ matrix.os }}
 
     # Run build script for [home/clinic] in [windows/macOS/ubuntu]
