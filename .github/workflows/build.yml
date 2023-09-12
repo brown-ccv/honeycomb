@@ -60,12 +60,12 @@ jobs:
         run: |
           npm config set "//npm.pkg.github.com/:_authToken" ${{ secrets.GITHUB_TOKEN }}
           npm install
-      - name: Load .env file (.env.${{matrix.setting}})
+      - name: 🔃 Load .env file (.env.${{matrix.setting}})
         uses: xom9ikk/dotenv@v1.0.2
         with:
           path: ./env
           mode: ${{matrix.setting}}
-      - name: Load .env file (.env.video)
+      - name: 🔃 Load .env file (.env.video)
         if: matrix.video=='on'
         uses: xom9ikk/dotenv@v1.0.2
         with:
