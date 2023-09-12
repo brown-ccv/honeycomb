@@ -1,4 +1,5 @@
 name: Package Workflow
+# TODO: Rename file as workflow-package
 
 # Workflow dispatch for packaging an electron executable
 on:
