@@ -1,5 +1,4 @@
-# name: Package Workflow
-name: package
+name: Package Workflow
 
 # Workflow dispatch for packaging an electron executable
 on:
@@ -14,10 +13,6 @@ on:
         required: true
         description: Package the app for 'home' or 'clinic' use
       os:
-        # TODO: Make a multi-select dropdown?
-        # description: Which OS to target - 'win', 'mac', 'linux', 'all'
-        # required: true
-        # default: "win"
         type: choice
         options:
           - "All"
