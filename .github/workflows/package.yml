@@ -6,7 +6,7 @@ on:
     inputs:
       setting:
         # TODO: Make a dropdown
-        description: Build for 'home' or 'clinic' example
+        description: Build for 'home' or 'clinic'
         required: true
         default: "home"
       os:
