@@ -63,8 +63,8 @@
     "wait-on": "^7.0.1"
   },
   "scripts": {
-    "postinstall": "node version.js && npm run rebuild",
-    "cli": "node ./cli.mjs",
+    "postinstall": "node version.mjs && npm run rebuild",
+    "cli": "node cli.mjs",
     "commit": "git-cz",
     "lint": "eslint .",
     "format": "eslint --fix .",
