@@ -3,14 +3,7 @@ name: Pull Request
 # TODO: Run a lint here too (different jobs?)
 
 # Runs the build and test scripts on PR
-on:
-  pull_request:
-    # Only re-run job when certain files have been changed in the PR
-    paths:
-      - "src/**"
-      - "public/**"
-      - ".github/workflows/build.yml"
-
+on: pull_request
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true

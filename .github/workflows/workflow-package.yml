@@ -29,7 +29,7 @@ on:
 
 jobs:
   package-and-upload:
-    name: "Package and Upload: ${{ matrix.os }}"
+    name: Package and Upload
     runs-on: ${{ matrix.os }}
 
     # Run action for [home/clinic] in [windows/macOS/ubuntu] based on user input
