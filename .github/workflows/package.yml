@@ -5,10 +5,12 @@ on:
   workflow_dispatch:
     inputs:
       setting:
-        description: Build for 'home' or 'clinic'
+        # TODO: Make a dropdown
+        description: Build for 'home' or 'clinic' example
         required: true
         default: "home"
       os:
+        # TODO: Make a multi-select dropdown?
         description: Which OS to target - 'win', 'mac', 'linux', 'all'
         required: true
         default: "win"
