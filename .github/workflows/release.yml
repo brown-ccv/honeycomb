@@ -1,10 +1,7 @@
-name: Publish
+name: Release
 
 # Runs the build and package scripts when a new tagged release is created
-on:
-  push:
-    tags:
-      - "*"
+on: release
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
