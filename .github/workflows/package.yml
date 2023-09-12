@@ -33,10 +33,6 @@ jobs:
       fail-fast: false # A failed build will not end the other matrix jobs
 
     steps:
-      # # Rewrite "git:" repo urls to use "https:" instead, since GitHub Actions blocks port 9418 (as of Jan 2022).
-      # - name: Rewrite "git:" repo urls to use "https:" instead.
-      #   run: git config --global url."https://github.com/".insteadOf "git://github.com/"
-
       # Set up Node
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
@@ -45,6 +41,9 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: npm
+      - name: Set package version and name
+        uses: brown-ccv/gh-actions/get-package-info@main
+        id: package_info
 
       # Install dependencies and set up environment
       - name: 📥 Install Dependencies
