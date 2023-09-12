@@ -29,7 +29,7 @@ on:
 
 jobs:
   package-and-upload:
-    name: "Packagea and upload a Honeycomb installer"
+    name: "Package and Upload: ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
 
     # Run action for [home/clinic] in [windows/macOS/ubuntu] based on user input
@@ -49,13 +49,8 @@ jobs:
       - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
-          node-version-file: ".nvmrc"
+          node-version-file: .nvmrc
           cache: npm
-      # TODO: Test if this works? Easier way to get name and version?
-      # TODO: This action is super out of date - update?
-      - name: Set package version and name
-        uses: brown-ccv/gh-actions/get-package-info@main
-        id: package_info
 
       # Install dependencies and set up environment
       - name: 📥 Install Dependencies
@@ -70,38 +65,43 @@ jobs:
       - name: ⚒ Run Build
         run: npm run build
 
-      # Build electron app package installers
+      # Package the app installers
       - name: 📦 Package app installer - Windows
         if: startsWith(matrix.os, 'windows')
         run: npm run package:windows
-      - name: 📦 Package app installer - Linux
-        if: startsWith(matrix.os, 'ubuntu')
-        run: npm run package:linux
       - name: 📦 Package app installer - Mac
         if: startsWith(matrix.os, 'mac')
         run: npm run package:mac
+      - name: 📦 Package app installer - Linux
+        if: startsWith(matrix.os, 'ubuntu')
+        run: npm run package:linux
 
       # Upload installers to github action
-      - name: ⬆ Upload Installer - Windows
-        uses: actions/upload-artifact@master
+      - name: Set package version and name
+        # TODO: This needs to be updated in its own repo
+        uses: brown-ccv/gh-actions/get-package-info@main
+        id: package_info
+      - name: ⬆ Upload installer - Windows
+        uses: actions/upload-artifact@v2
         if: startsWith(matrix.os, 'windows')
         with:
           name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
           path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }} Setup.exe
-      - name: ⬆ Upload  Installer - Linux
-        uses: actions/upload-artifact@master
-        if: startsWith(matrix.os, 'ubuntu')
-        with:
-          name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
-      - name: ⬆ Upload Installer - Mac
-        uses: actions/upload-artifact@master
+      - name: ⬆ Upload installer - Mac
+        uses: actions/upload-artifact@v2
         if: startsWith(matrix.os, 'mac')
         with:
           name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
           path: out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-x64.dmg
+      - name: ⬆ Upload installer - Linux
+        uses: actions/upload-artifact@v2
+        if: startsWith(matrix.os, 'ubuntu')
+        with:
+          name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
+          path: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
 
       # Package with PsiTurk (Linux only)
+      # TODO: Use a seperate job for this
       - name: Set up Python 3.7
         if: startsWith(matrix.os, 'ubuntu')
         uses: actions/setup-python@v1
@@ -116,7 +116,7 @@ jobs:
           cd psiturkit
           ./psiturk-it -p ${{ steps.package_info.outputs.package_name }}-psiturk
       - name: Upload PsiTurk Build
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v2
         if: startsWith(matrix.os, 'ubuntu')
         with:
           name: psiturk-build
