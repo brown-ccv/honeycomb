@@ -21,6 +21,7 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+
     # Run action for [home/clinic] in [windows/macOS/ubuntu] based on user input
     strategy:
       matrix:
@@ -49,7 +50,7 @@ jobs:
       - name: 📥 Install Dependencies
         run: npm ci
       - name: 🔃 Load .env file (.env.${{github.event.inputs.setting}})
-        uses: xom9ikk/dotenv@v1.0.2
+        uses: xom9ikk/dotenv@v2
         with:
           path: ./env
           mode: ${{github.event.inputs.setting}}
