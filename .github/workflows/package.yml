@@ -14,22 +14,31 @@ on:
         description: Package the app for 'home' or 'clinic' use
       os:
         # TODO: Make a multi-select dropdown?
-        description: Which OS to target - 'win', 'mac', 'linux', 'all'
+        # description: Which OS to target - 'win', 'mac', 'linux', 'all'
+        # required: true
+        # default: "win"
+        type: choice
+        options:
+          - "All"
+          - "Windows"
+          - "macOS"
+          - "Linux"
+        default: "All"
         required: true
-        default: "win"
+        description: Which OS to package
 
 jobs:
-  build:
+  package-and-upload:
     runs-on: ${{ matrix.os }}
 
     # Run action for [home/clinic] in [windows/macOS/ubuntu] based on user input
     strategy:
       matrix:
         os: ${{
-          (github.event.inputs.os == 'all' && fromJSON('["ubuntu-latest", "macOS-latest", "windows-latest"]')) ||
-          (github.event.inputs.os == 'win' && fromJSON('["windows-latest"]')) ||
-          (github.event.inputs.os == 'mac' && fromJSON('["macOS-latest"]')) ||
-          (github.event.inputs.os == 'linux' && fromJSON('["ubuntu-latest"]')) }}
+          (github.event.inputs.os == 'All' && fromJSON('["ubuntu-latest", "macOS-latest", "windows-latest"]')) ||
+          (github.event.inputs.os == 'Windows' && fromJSON('["windows-latest"]')) ||
+          (github.event.inputs.os == 'macOS' && fromJSON('["macOS-latest"]')) ||
+          (github.event.inputs.os == 'Linux' && fromJSON('["ubuntu-latest"]')) }}
       fail-fast: false # A failed build will not end the other matrix jobs
 
     steps:
@@ -41,6 +50,8 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: npm
+      # TODO: Test if this works? Easier way to get name and version?
+      # TODO: This action is super out of date - update?
       - name: Set package version and name
         uses: brown-ccv/gh-actions/get-package-info@main
         id: package_info
@@ -54,12 +65,11 @@ jobs:
           path: ./env
           mode: ${{github.event.inputs.setting}}
 
-      # Build and the app
+      # Build the app
       - name: ⚒ Run Build
         run: npm run build
 
       # Build electron app package installers
-      # TODO: Nested steps? Package app that picks the version as needed?
       - name: 📦 Package app installer - Windows
         if: startsWith(matrix.os, 'windows')
         run: npm run package:windows
