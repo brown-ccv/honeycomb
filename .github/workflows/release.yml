@@ -85,6 +85,7 @@ jobs:
           asset_name: ${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_${{ matrix.setting }}_amd64.deb
           tag: ${{ github.ref }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
+
   deploy-gh-pages:
     name: Deploy to GH Pages
     runs-on: ubuntu-latest
