@@ -27,6 +27,7 @@ jobs:
         setting: [home, clinic]
         video: [on, off]
         os: [ubuntu-latest, macOS-latest, windows-latest]
+        # TODO: Remove video from matrix, add include for the video on home
         exclude:
           # Exclude video on in Ubuntu and macOS
           - os: ubuntu-latest
@@ -41,6 +42,7 @@ jobs:
           - os: macOS-latest
             setting: home
             video: on
+      fail-fast: false # A failed build will not end the other matrix jobs
 
     steps:
       # Rewrite "git:" repo urls to use "https:" instead, since GitHub Actions blocks port 9418 (as of Jan 2022).
