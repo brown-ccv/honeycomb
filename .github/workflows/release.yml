@@ -2,10 +2,11 @@ name: release
 
 # Runs the build and package scripts when a new tagged release is created
 # TODO: Run on release, new tag doesn't matter
-on:
-  push:
-    tags:
-      - "*"
+# on:
+#   push:
+#     tags:
+#       - "*"
+on: release
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
