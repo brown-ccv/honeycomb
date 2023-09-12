@@ -4,10 +4,6 @@ name: 🧪 Build and Test
 
 # Runs the build scripts on PR and when PR is merged to main
 on:
-  # TODO: Don't need to run this on push to main?
-  push:
-    branches:
-      - main
   pull_request:
     # Only re-run job when certain files have been changed in the PR
     paths:
