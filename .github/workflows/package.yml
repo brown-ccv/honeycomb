@@ -5,10 +5,13 @@ on:
   workflow_dispatch:
     inputs:
       setting:
-        # TODO: Make a dropdown
-        description: Build for 'home' or 'clinic'
-        required: true
+        type: choice
+        options:
+          - "home"
+          - "clinic"
         default: "home"
+        required: true
+        description: Package the app for 'home' or 'clinic' use
       os:
         # TODO: Make a multi-select dropdown?
         description: Which OS to target - 'win', 'mac', 'linux', 'all'
