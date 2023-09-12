@@ -97,25 +97,3 @@ jobs:
         with:
           name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
           path: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
-
-      # Package with PsiTurk (Linux only)
-      # TODO: Use a seperate job for this
-      - name: Set up Python 3.7
-        if: startsWith(matrix.os, 'ubuntu')
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.7
-      - name: Install PsiTurk
-        if: startsWith(matrix.os, 'ubuntu')
-        run: pip install psiturk
-      - name: Create Psiturk Build
-        if: startsWith(matrix.os, 'ubuntu')
-        run: |
-          cd psiturkit
-          ./psiturk-it -p ${{ steps.package_info.outputs.package_name }}-psiturk
-      - name: Upload PsiTurk Build
-        uses: actions/upload-artifact@v2
-        if: startsWith(matrix.os, 'ubuntu')
-        with:
-          name: psiturk-build
-          path: psiturkit/${{ steps.package_info.outputs.package_name }}-psiturk

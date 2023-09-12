@@ -112,3 +112,45 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
+
+  package-psiturk:
+    name: Package for PsiTurk
+    runs-on: ubuntu-latest
+    steps:
+      # Set up Node
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # Install dependencies
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      # Build the app
+      - name: ⚒ Run Build
+        run: npm run build
+
+      # Package on PsiTurk
+      - name: Set package version and name
+        # TODO: This needs to be updated in its own repo
+        uses: brown-ccv/gh-actions/get-package-info@main
+        id: package_info
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.7
+      - name: 📥 Install PsiTurk
+        run: pip install psiturk
+      - name: 📦 Create Psiturk Build
+        run: |
+          cd psiturkit
+          ./psiturk-it -p ${{ steps.package_info.outputs.package_name }}-psiturk
+      - name: ⬆ Upload PsiTurk Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: psiturk-build
+          path: psiturkit/${{ steps.package_info.outputs.package_name }}-psiturk
