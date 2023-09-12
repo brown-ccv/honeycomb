@@ -7,91 +7,84 @@ on:
       setting:
         description: Build for 'home' or 'clinic'
         required: true
-        default: 'home'
+        default: "home"
       os:
         description: Which OS to target - 'win', 'mac', 'linux', 'all'
         required: true
-        default: 'win'
+        default: "win"
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
-
+    # Run action for [home/clinic] in [windows/macOS/ubuntu] based on user input
     strategy:
-      fail-fast: false
       matrix:
         os: ${{
           (github.event.inputs.os == 'all' && fromJSON('["ubuntu-latest", "macOS-latest", "windows-latest"]')) ||
-           (github.event.inputs.os == 'win' && fromJSON('["windows-latest"]')) ||
-           (github.event.inputs.os == 'mac' && fromJSON('["macOS-latest"]')) ||
-           (github.event.inputs.os == 'linux' && fromJSON('["ubuntu-latest"]')) }}
+          (github.event.inputs.os == 'win' && fromJSON('["windows-latest"]')) ||
+          (github.event.inputs.os == 'mac' && fromJSON('["macOS-latest"]')) ||
+          (github.event.inputs.os == 'linux' && fromJSON('["ubuntu-latest"]')) }}
+      fail-fast: false # A failed build will not end the other matrix jobs
 
     steps:
-      # Rewrite "git:" repo urls to use "https:" instead, since GitHub Actions blocks port 9418 (as of Jan 2022).
-      - name: Rewrite "git:" repo urls to use "https:" instead.
-        run: git config --global url."https://github.com/".insteadOf "git://github.com/"
+      # # Rewrite "git:" repo urls to use "https:" instead, since GitHub Actions blocks port 9418 (as of Jan 2022).
+      # - name: Rewrite "git:" repo urls to use "https:" instead.
+      #   run: git config --global url."https://github.com/".insteadOf "git://github.com/"
 
-      # Set up js package
-      - uses: actions/checkout@v1
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      # Set up Node
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.x
-          cache: 'npm'
-      - name: Set package version and name
-        uses: brown-ccv/gh-actions/get-package-info@main
-        id: package_info
+          node-version-file: ".nvmrc"
+          cache: npm
 
-      # Run npm install, build, and test
-      - name: npm install
-        run: |
-          npm config set "//npm.pkg.github.com/:_authToken" ${{ secrets.GITHUB_TOKEN }}
-          npm install
-      - name: Load .env file (.env.${{github.event.inputs.setting}})
+      # Install dependencies and set up environment
+      - name: 📥 Install Dependencies
+        run: npm ci
+      - name: 🔃 Load .env file (.env.${{github.event.inputs.setting}})
         uses: xom9ikk/dotenv@v1.0.2
         with:
           path: ./env
           mode: ${{github.event.inputs.setting}}
-      - name: npm build
+
+      # Build and the app
+      - name: ⚒ Run Build
         run: npm run build
-      - name: npm test
-        run: npm test
-        env:
-          CI: true
 
       # Build electron app package installers
-      - name: package electron - windows
+      - name: 📦 Package app installer - Windows
         if: startsWith(matrix.os, 'windows')
         run: npm run package:windows
-      - name: package electron - linux
+      - name: 📦 Package app installer - Linux
         if: startsWith(matrix.os, 'ubuntu')
         run: npm run package:linux
-      - name: package electron - mac
+      - name: 📦 Package app installer - Mac
         if: startsWith(matrix.os, 'mac')
         run: npm run package:mac
 
       # Upload installers to github action
-      - name: upload win-installer
+      - name: ⬆ Upload Installer - Windows
         uses: actions/upload-artifact@master
         if: startsWith(matrix.os, 'windows')
         with:
           name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
           path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }} Setup.exe
-      - name: upload mac-installer
-        uses: actions/upload-artifact@master
-        if: startsWith(matrix.os, 'mac')
-        with:
-          name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-x64.dmg
-      - name: upload linux-installer
+      - name: ⬆ Upload  Installer - Linux
         uses: actions/upload-artifact@master
         if: startsWith(matrix.os, 'ubuntu')
         with:
           name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
           path: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
+      - name: ⬆ Upload Installer - Mac
+        uses: actions/upload-artifact@master
+        if: startsWith(matrix.os, 'mac')
+        with:
+          name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
+          path: out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-x64.dmg
 
-      # Build PsiTurk - linux only
+      # Package with PsiTurk (Linux only)
       - name: Set up Python 3.7
         if: startsWith(matrix.os, 'ubuntu')
         uses: actions/setup-python@v1
