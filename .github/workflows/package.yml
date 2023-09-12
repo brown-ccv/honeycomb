@@ -4,6 +4,9 @@ name: package
 on:
   workflow_dispatch:
     inputs:
+      environment:
+        type: environment
+        description: Select the environment
       setting:
         type: choice
         options:
@@ -59,6 +62,7 @@ jobs:
         run: npm run build
 
       # Build electron app package installers
+      # TODO: Nested steps? Package app that picks the version as needed?
       - name: 📦 Package app installer - Windows
         if: startsWith(matrix.os, 'windows')
         run: npm run package:windows
