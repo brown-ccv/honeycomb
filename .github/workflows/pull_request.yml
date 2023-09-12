@@ -1,7 +1,5 @@
 name: Pull Request
 
-# TODO: Run a lint here too (different jobs?)
-
 # Runs the build and test scripts on PR
 on: pull_request
 concurrency:

@@ -137,7 +137,6 @@ jobs:
 
       # Package on PsiTurk
       - name: Set package version and name
-        # TODO: This needs to be updated in its own repo
         uses: brown-ccv/gh-actions/get-package-info@main
         id: package_info
       - name: 🐍 Set up Python

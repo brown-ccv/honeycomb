@@ -1,5 +1,4 @@
 name: Package Workflow
-# TODO: Rename file as workflow-package
 
 # Workflow dispatch for packaging an electron executable
 on:
@@ -75,7 +74,6 @@ jobs:
 
       # Upload installers to github action
       - name: Set package version and name
-        # TODO: This needs to be updated in its own repo
         uses: brown-ccv/gh-actions/get-package-info@main
         id: package_info
       - name: ⬆ Upload installer - Windows
