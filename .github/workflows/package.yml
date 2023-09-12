@@ -29,6 +29,7 @@ on:
 
 jobs:
   package-and-upload:
+    name: "Packagea and upload a Honeycomb installer"
     runs-on: ${{ matrix.os }}
 
     # Run action for [home/clinic] in [windows/macOS/ubuntu] based on user input
