@@ -2,7 +2,7 @@ name: 🧪 Build and Test
 
 # TODO: Run a lint here too (different jobs?)
 
-# Runs the build scripts on PR and when PR is merged to main
+# Runs the build and test scripts on PR
 on:
   pull_request:
     # Only re-run job when certain files have been changed in the PR
