@@ -2,57 +2,61 @@ name: build
 
 # Runs the build scripts on PR and when PR is merged to main
 on:
+  # TODO: Don't need to run this on push to main?
   push:
     branches:
       - main
   pull_request:
     # Only re-run job when certain files have been changed in the PR
     paths:
-      - 'src/**'
-      - 'public/**'
-      - '.github/workflows/build.yml'
+      - "src/**"
+      - "public/**"
+      - ".github/workflows/build.yml"
 
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    
-    # Run build script for [home/clinic] with video [on/off] in [windows/macOS/ubuntu]
+
+    # Run action for [home/clinic] with video [on/off] in [windows/macOS/ubuntu]
     strategy:
       matrix:
         setting: [home, clinic]
         video: [on, off]
         os: [ubuntu-latest, macOS-latest, windows-latest]
-        exclude: 
+        exclude:
           # Exclude video on in Ubuntu and macOS
           - os: ubuntu-latest
             setting: clinic
-            video: on 
+            video: on
           - os: ubuntu-latest
             setting: home
             video: on
           - os: macOS-latest
             setting: clinic
-            video: on 
+            video: on
           - os: macOS-latest
             setting: home
             video: on
 
     steps:
       # Rewrite "git:" repo urls to use "https:" instead, since GitHub Actions blocks port 9418 (as of Jan 2022).
+      # TODO: This can be removed?
       - name: Rewrite "git:" repo urls to use "https:" instead.
         run: git config --global url."https://github.com/".insteadOf "git://github.com/"
 
-      # Set up js package
-      # TODO: Update these versions? @v3 (all workflows)
-      - uses: actions/checkout@v1
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      # Set up Node
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.x
-          cache: 'npm'
+          node-version: 18
+          cache: npm
+          cache-dependency-path: ./package.json
 
-      # Run npm install, build, and test
-      - name: npm install
+      # Install dependencies and environment
+      # TODO: npm ci not npm install
+      - name: 📥 Install Dependencies
         run: |
           npm config set "//npm.pkg.github.com/:_authToken" ${{ secrets.GITHUB_TOKEN }}
           npm install
@@ -67,9 +71,11 @@ jobs:
         with:
           path: ./env
           mode: video
-      - name: npm build
+
+      # Build and test the app
+      - name: ⚒ Run Build
         run: npm run build
-      - name: npm test
+      - name: 🧪 Run Test
         run: npm test
         env:
           CI: true
