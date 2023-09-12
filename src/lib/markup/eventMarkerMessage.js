@@ -1,7 +1,8 @@
-import { lang } from "../../config/main";
+import { language } from "../../config/main";
 
+// TODO: Change based on whether or not the event marker is found?
 const eventMarkerMessage = async () => {
-  return `<span style="color: green;">${lang.eventMarker.found}</span>`;
+  return `<span style="color: green;">${language.trials.eventMarker.found}</span>`;
 };
 
 export default eventMarkerMessage;

@@ -1,22 +1,18 @@
-// config/main.js
 // This is the main configuration file where universal and default settings should be placed.
-// These settins can then be imported anywhere in the app as they are exported at the botom of the file.
+// These setting can then be imported anywhere in the app as they are exported at the bottom of the file.
 
 import { init } from "@brown-ccv/behavioral-task-trials";
 import { initJsPsych } from "jspsych";
+import _ from "lodash";
 
 import packageInfo from "../../package.json";
+import language from "./language.json";
 import { getProlificId } from "../lib/utils";
 import { eventCodes } from "./trigger";
 
 // Access package name and version so we can store these as facts with task data.
 const taskName = packageInfo.name;
 const taskVersion = packageInfo.version;
-
-// As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
-// The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
-// The actual task and related utils will use a different instance of jsPsych created after login.
-const jsPsych = initJsPsych();
 
 // mapping of letters to key codes
 const keys = {
@@ -33,6 +29,11 @@ const audioCodes = {
   frequency: 100 * (eventCodes.open_task - 9),
   type: "sine",
 };
+
+// As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
+// The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
+// The actual task and related utils will use a different instance of jsPsych created after login.
+const jsPsych = initJsPsych();
 
 // is this mechanical turk?
 const turkInfo = jsPsych.turk.turkInfo();
@@ -58,17 +59,6 @@ const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON;
 // whether or not the photodiode is in use
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON;
 
-// get language file
-const lang = require("../language/en_us.json");
-
-const defaultBlockSettings = {
-  conditions: ["a", "b", "c"],
-  repeats_per_condition: 1, // number of times every condition is repeated
-  is_practice: false,
-  is_tutorial: false,
-  photodiode_active: false,
-};
-
 // setting config for trials
 const config = init({
   USE_PHOTODIODE,
@@ -81,13 +71,29 @@ const config = init({
   USE_FIREBASE,
 });
 
+// Get task settings
+let taskSettings = {
+  fixation: {
+    durations: [250, 500, 750, 1000, 1250, 1500, 1750, 2000],
+    default_duration: 1000,
+    randomize_duration: false,
+  },
+};
+try {
+  // Override default task settings from the config file
+  taskSettings = _.merge(taskSettings, require("./config.json"));
+} catch (error) {
+  // Try will fail if require doesn't find the json file
+  console.warn("Unable to load task settings from config.json");
+}
+
 export {
   audioCodes,
   config,
-  defaultBlockSettings,
+  taskSettings,
   eventCodes,
   keys,
-  lang,
+  language,
   taskName,
   taskVersion,
   turkUniqueId,

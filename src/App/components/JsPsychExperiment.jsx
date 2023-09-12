@@ -1,18 +1,16 @@
 import { initJsPsych } from "jspsych";
 import React, { useEffect, useMemo, useRef } from "react";
 
-import { config } from "../config/main";
-import { initParticipant } from "../firebase";
-import { buildTimeline, jsPsychOptions } from "../timelines/main";
+import { config } from "../../config/main";
+import { initParticipant } from "../deployments/firebase";
+import { buildTimeline, jsPsychOptions } from "../../timelines/main";
 
-function JsPsychExperiment({
+export default function JsPsychExperiment({
   studyId,
   participantId,
   taskVersion,
   dataUpdateFunction,
   dataFinishFunction,
-  height = "100%",
-  width = "100%",
 }) {
   // This will be the div in the dom that holds the experiment.
   // We reference it explicitly here so we can do some plumbing with react, jspsych, and events.
@@ -24,7 +22,11 @@ function JsPsychExperiment({
     ...jsPsychOptions,
     display_element: experimentDivId,
     on_data_update: (data) => dataUpdateFunction(data),
-    on_finish: (data) => dataFinishFunction(data),
+    on_finish: (data) => {
+      // Save and display the data
+      dataFinishFunction(data);
+      jsPsych.data.displayData();
+    },
   };
 
   // Create the instance of jsPsych that we'll reuse within the scope of this JsPsychExperiment component.
@@ -79,11 +81,5 @@ function JsPsychExperiment({
     };
   });
 
-  return (
-    <div className="App">
-      <div id={experimentDivId} style={{ height, width }} ref={experimentDiv} />
-    </div>
-  );
+  return <div id={experimentDivId} ref={experimentDiv} className="App" />;
 }
-
-export default JsPsychExperiment;
