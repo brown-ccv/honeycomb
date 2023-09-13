@@ -49,8 +49,9 @@ function cameraStart(jsPsych) {
           if (config.USE_ELECTRON) {
             const electron = window.require("electron");
             ipcRenderer = electron.ipcRenderer;
-          } else throw new Error("cameraStart trial is only available when running in Electron");
-
+          } else {
+            throw new Error("cameraStart trial is only available when running inside Electron");
+          }
           // Save the data
           const reader = new FileReader(); // eslint-disable-line no-undef
           const fileName = `pid_${participantID}_${recorder}_${Date.now()}.webm`;
@@ -74,7 +75,9 @@ function cameraStart(jsPsych) {
       if (config.USE_ELECTRON) {
         const electron = window.require("electron");
         desktopCapturer = electron.desktopCapturer;
-      } else throw new Error("cameraStart trial is only available when running in Electron");
+      } else {
+        throw new Error("cameraStart trial is only available when running inside Electron");
+      }
 
       desktopCapturer.getSources({ types: ["window"] }).then(async (sources) => {
         for (const source of sources) {

@@ -1,5 +1,5 @@
-import { cameraEnd, cameraStart } from "../trials/camera";
 import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
+import holdUpMarker from "../trials/holdUpMarker";
 import { createHoneycombBlock } from "./honeycombBlock";
 import {
   createDebriefTrial,
@@ -20,9 +20,7 @@ function createHoneycombTimeline(jsPsych) {
   const debriefTrial = createDebriefTrial(jsPsych);
 
   const timeline = [
-    welcomeTrial,
-    cameraStart(jsPsych),
-    cameraEnd(500),
+    holdUpMarker(),
     welcomeTrial,
     enterFullscreen,
     preloadTrial,
