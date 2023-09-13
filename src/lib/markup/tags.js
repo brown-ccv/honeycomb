@@ -14,6 +14,7 @@ function tag(tag, children, attributes = {}) {
   const attributesString = Object.entries(attributes)
     .map(([key, value]) => `${key}="${value}"`)
     .join(" ");
+
   return `<${tag} ${attributesString}>${children}</${tag}>`;
 }
 
@@ -57,6 +58,40 @@ function p(children, attributes = {}) {
   return tag("p", children, attributes);
 }
 
-// TODO: Add bold, italics
+/**
+ * Wraps a given string in an strong tag
+ * @param {string} children The children of the HTML tag
+ * @param {object} attributes HTML attributes to add to the tag
+ * @returns {string} A string containing static HTML
+ */
+function strong(children, attributes = {}) {
+  return tag("strong", children, attributes);
+}
 
-export { tag, div, span, h1, p };
+/**
+ * Wraps a given string in an em tag
+ * @param {string} children The children of the HTML tag
+ * @param {object} attributes HTML attributes to add to the tag
+ * @returns {string} A string containing static HTML
+ */
+function em(children, attributes = {}) {
+  return tag("em", children, attributes);
+}
+
+/**
+ * Creates an image tag
+ * @param {object} attributes HTML attributes to add to the tag
+ * @returns {string} A string containing static HTML
+ */
+function image(attributes = {}) {
+  return tag("img", "", attributes);
+}
+
+/**
+ * Returns a break tag
+ */
+function br() {
+  return "<br />";
+}
+
+export { tag, div, span, h1, p, br, strong, em, image };

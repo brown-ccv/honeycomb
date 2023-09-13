@@ -25,9 +25,9 @@
         "read": "Please read the following instructions carefully.",
         "circle": "In this experiment, a circle will appear in the center of the screen.",
         "example": {
-          "start": "If the circle is",
-          "middle": ", press the letter",
-          "end": "on the keyboard as fast as you can."
+          "start": "If the circle is ",
+          "middle": ", press the letter ",
+          "end": " on the keyboard as fast as you can."
         },
         "next": "Click next to begin."
       },
