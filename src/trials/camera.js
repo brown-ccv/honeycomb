@@ -14,8 +14,8 @@ function cameraStart(jsPsych) {
   document.title = taskName;
 
   const videoMarkup = tag("video", "", { id: "camera", width: 640, height: 480, autoplay: true });
-  const cameraStartMessage = p(language.trials.camera.start);
-  const markup = div(cameraStartMessage + videoMarkup, {
+  const cameraStartMarkup = p(language.trials.camera.start);
+  const markup = div(cameraStartMarkup + videoMarkup, {
     class: "d-flex flex-column align-items-center",
   });
 
@@ -121,11 +121,11 @@ function cameraStart(jsPsych) {
  * @returns
  */
 function cameraEnd(duration) {
-  const recordingEndMessage = h1(language.trials.camera.start);
+  const recordingEndMarkup = h1(language.trials.camera.start);
 
   return {
     type: htmlKeyboardResponse,
-    stimulus: baseStimulus(recordingEndMessage, true) + photodiodeGhostBox(),
+    stimulus: baseStimulus(recordingEndMarkup, true) + photodiodeGhostBox(),
     trial_duration: duration,
     on_load: () => {
       // Finish the camera recording when the trial first loads

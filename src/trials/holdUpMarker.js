@@ -7,11 +7,11 @@ import { h1, p } from "../lib/markup/tags";
 
 // TODO: Actually check to see if USB is connected? This isn't testing anything?
 function holdUpMarker() {
-  const eventMarkerMessage = h1(language.trials.eventMarker.connected, { style: "color: green;" });
+  const eventMarkerMarkup = h1(language.trials.eventMarker.connected, { style: "color: green;" });
 
   return {
     type: htmlButtonResponse,
-    stimulus: baseStimulus(eventMarkerMessage, true) + photodiodeGhostBox(),
+    stimulus: baseStimulus(eventMarkerMarkup, true) + photodiodeGhostBox(),
     prompt: [p(language.trials.holdUpMarker)],
     choices: [language.prompts.continue.button],
   };

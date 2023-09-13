@@ -19,10 +19,10 @@ function showName() {
 
 // TODO: Turn into jsPsych instruction trial
 function showWelcome() {
-  const welcomeMessage = h1(language.trials.welcome);
+  const welcomeMarkup = h1(language.trials.welcome);
   return {
     type: htmlKeyboardResponse,
-    stimulus: baseStimulus(welcomeMessage, true) + photodiodeGhostBox(),
+    stimulus: baseStimulus(welcomeMarkup, true) + photodiodeGhostBox(),
     prompt: language.prompts.continue.prompt,
     response_ends_trial: true,
   };

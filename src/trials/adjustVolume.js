@@ -4,11 +4,11 @@ import { baseStimulus } from "../lib/markup/stimuli";
 import { h1 } from "../lib/markup/tags";
 
 function adjustVolume() {
-  const adjustVolumeMessage = h1(language.trials.adjustVolume);
+  const adjustVolumeMarkup = h1(language.trials.adjustVolume);
 
   return {
     type: htmlKeyboardResponse,
-    stimulus: baseStimulus(adjustVolumeMessage, true),
+    stimulus: baseStimulus(adjustVolumeMarkup, true),
     prompt: language.prompts.continue.prompt,
     response_ends_trial: true,
   };
