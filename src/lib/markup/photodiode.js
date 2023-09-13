@@ -21,7 +21,7 @@ function photodiodeSpot(taskCode) {
     ipcRenderer = electron.ipcRenderer;
   } else throw new Error("photodiodeSpot trial is only available when running inside Electron");
 
-  // Pulse the spot color frim black to white
+  // Pulse the spot color from black to white
   function pulseFor(ms, callback) {
     $(".photodiode-spot").css({ "background-color": "black" });
     setTimeout(() => {
