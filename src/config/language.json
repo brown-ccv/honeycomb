@@ -34,7 +34,10 @@
       "welcome": "Welcome to the experiment. Press any key to begin."
     },
     "adjustVolume": "Set tablet volume to 50/100.",
-    "camera": "Make sure the camera is pointing to you and your face is within the camera area.",
+    "camera": {
+      "start": "Make sure the camera is pointing to you and your face is within the camera area.",
+      "end": "The camera recording has ended"
+    },
     "eventMarker": {
       "connected": "Event marker connected.",
       "not_connected": "No event marker connected."

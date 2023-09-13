@@ -3,69 +3,65 @@ import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import { language, taskName, config } from "../config/main";
 import { photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
+import { div, h1, p, tag } from "../lib/markup/tags";
 
-let ipcRenderer = false;
-if (config.USE_ELECTRON) {
-  const electron = window.require("electron");
-  ipcRenderer = electron.ipcRenderer;
-}
-
-function saveBlob(blob, media, participantId) {
-  const reader = new FileReader(); // eslint-disable-line no-undef
-  const fileName = `pid_${participantId}_${media}_${Date.now()}.webm`;
-  reader.onload = function () {
-    if (reader.readyState === 2) {
-      const buffer = Buffer.from(reader.result); // eslint-disable-line no-undef
-      ipcRenderer.send("save_video", fileName, buffer);
-      console.log(`Saving ${JSON.stringify({ fileName, size: blob.size })}`);
-    }
-  };
-  reader.readAsArrayBuffer(blob);
-}
-
-// As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
-// The jsPsych instance passed in here should be the same one used for the running task.
-const cameraStart = (jsPsych) => {
+/**
+ * A trial that begins recording the participant using their computer's default camera
+ * @param {Object} jsPsych The jsPsych instance being used to run the task
+ * @returns
+ */
+function cameraStart(jsPsych) {
   document.title = taskName;
-  const markup = `
-  <div class="d-flex flex-column align-items-center">
-  <p>${language.trials.camera}</p>
-  <video id="camera" width="640" height="480" autoplay></video>
-  </div>
-  `;
-  const stimulus = baseStimulus(markup, true) + photodiodeGhostBox();
+
+  const videoMarkup = tag("video", "", { id: "camera", width: 640, height: 480, autoplay: true });
+  const cameraStartMessage = p(language.trials.camera.start);
+  const markup = div(cameraStartMessage + videoMarkup, {
+    class: "d-flex flex-column align-items-center",
+  });
 
   return {
     type: htmlButtonResponse,
-    stimulus,
+    stimulus: baseStimulus(markup, true) + photodiodeGhostBox(),
     choices: [language.prompts.continue.button],
     response_ends_trial: true,
     on_load: () => {
-      // Grab elements, create settings, etc.
-      // Elements for taking the snapshot
-      const participantId = jsPsych.data.get().values()[0].participant_id;
-
-      const camera = document.getElementById("camera");
+      const participantID = jsPsych.data.get().values()[0].participant_id;
+      const camera = document.getElementById("camera"); // Get the HTML object containing the camera
 
       const handleEvents = function (stream, recorder) {
         console.log(stream);
-        if (recorder === "cameraCapture") {
-          camera.srcObject = stream;
-        }
+        if (recorder === "cameraCapture") camera.srcObject = stream;
 
         const options = { mimeType: "video/webm" };
         const recordedChunks = [];
         window[recorder] = new MediaRecorder(stream, options); // eslint-disable-line no-undef
 
-        window[recorder].addEventListener("dataavailable", function (e) {
-          if (e.data.size > 0) {
-            recordedChunks.push(e.data);
-          }
+        window[recorder].addEventListener("dataavailable", (e) => {
+          if (e.data.size > 0) recordedChunks.push(e.data);
         });
 
-        window[recorder].addEventListener("stop", function () {
+        // Saves a blob of the raw data feed from the participants camera.
+        window[recorder].addEventListener("stop", () => {
           const blob = new Blob(recordedChunks); // eslint-disable-line no-undef
-          saveBlob(blob, recorder, participantId);
+
+          // Conditionally load electron based on config variable
+          let ipcRenderer = false;
+          if (config.USE_ELECTRON) {
+            const electron = window.require("electron");
+            ipcRenderer = electron.ipcRenderer;
+          } else throw new Error("cameraStart trial is only available when running in Electron");
+
+          // Save the data
+          const reader = new FileReader(); // eslint-disable-line no-undef
+          const fileName = `pid_${participantID}_${recorder}_${Date.now()}.webm`;
+          reader.onload = function () {
+            if (reader.readyState === 2) {
+              const buffer = Buffer.from(reader.result); // eslint-disable-line no-undef
+              ipcRenderer.send("save_video", fileName, buffer);
+              console.log(`Saving ${JSON.stringify({ fileName, size: blob.size })}`);
+            }
+          };
+          reader.readAsArrayBuffer(blob);
         });
       };
 
@@ -73,7 +69,12 @@ const cameraStart = (jsPsych) => {
         .getUserMedia({ video: true })
         .then((stream) => handleEvents(stream, "cameraCapture"));
 
-      const { desktopCapturer } = window.require("electron");
+      // Conditionally load electron based on config variable
+      let desktopCapturer = false;
+      if (config.USE_ELECTRON) {
+        const electron = window.require("electron");
+        desktopCapturer = electron.desktopCapturer;
+      } else throw new Error("cameraStart trial is only available when running in Electron");
 
       desktopCapturer.getSources({ types: ["window"] }).then(async (sources) => {
         for (const source of sources) {
@@ -108,28 +109,34 @@ const cameraStart = (jsPsych) => {
       }
     },
   };
-};
+}
 
-const cameraEnd = (duration) => {
-  const stimulus =
-    baseStimulus(`<h1>${language.task.recording_end}</h1>`, true) + photodiodeGhostBox();
+/**
+ * A trial that finishes recording the participant using their computer's default camera
+ *
+ * @param {Number} duration How long to show the trial for
+ * @returns
+ */
+function cameraEnd(duration) {
+  const recordingEndMessage = h1(language.trials.camera.start);
 
   return {
     type: htmlKeyboardResponse,
-    stimulus,
+    stimulus: baseStimulus(recordingEndMessage, true) + photodiodeGhostBox(),
     trial_duration: duration,
     on_load: () => {
+      // Finish the camera recording when the trial first loads
       if (config.USE_CAMERA) {
-        console.log("finished");
         try {
           window.cameraCapture.stop();
           window.screenCapture.stop();
         } catch (error) {
           window.alert("Your video recording was not saved");
         }
+        console.log("Recording finished");
       }
     },
   };
-};
+}
 
 export { cameraStart, cameraEnd };

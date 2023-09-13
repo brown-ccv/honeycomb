@@ -13,6 +13,7 @@ function startCode() {
     stimulus: baseStimulus(startCodeMessage, true) + photodiodeGhostBox(),
     trial_duration: 2000,
     on_load: () => {
+      // Displays the photodiode spot and plays an audible beep when the trial first loads
       pdSpotEncode(eventCodes.open_task);
       beep(audioCodes);
     },

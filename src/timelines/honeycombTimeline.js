@@ -1,4 +1,4 @@
-import adjustVolume from "../trials/adjustVolume";
+import { cameraEnd, cameraStart } from "../trials/camera";
 import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
 import { createHoneycombBlock } from "./honeycombBlock";
 import {
@@ -20,7 +20,9 @@ function createHoneycombTimeline(jsPsych) {
   const debriefTrial = createDebriefTrial(jsPsych);
 
   const timeline = [
-    adjustVolume(),
+    welcomeTrial,
+    cameraStart(jsPsych),
+    cameraEnd(500),
     welcomeTrial,
     enterFullscreen,
     preloadTrial,
