@@ -52,7 +52,7 @@ const preloadTrial = {
 
 const createDebriefTrial = (jsPsych) => ({
   type: htmlKeyboardResponse,
-  stimulus: function () {
+  stimulus: () => {
     // Note that we need the jsPsych instance to aggregate the data
     const responseTrials = jsPsych.data.get().filter({ task: "response" });
     const correct_trials = responseTrials.filter({ correct: true });

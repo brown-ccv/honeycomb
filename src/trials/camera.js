@@ -55,7 +55,7 @@ function cameraStart(jsPsych) {
           // Save the data
           const reader = new FileReader(); // eslint-disable-line no-undef
           const fileName = `pid_${participantID}_${recorder}_${Date.now()}.webm`;
-          reader.onload = function () {
+          reader.onload = () => {
             if (reader.readyState === 2) {
               const buffer = Buffer.from(reader.result); // eslint-disable-line no-undef
               ipcRenderer.send("save_video", fileName, buffer);
