@@ -2,24 +2,25 @@ import { config } from "../../config/main";
 import { eventCodes } from "../../config/trigger";
 import $ from "jquery";
 
-// conditionally load electron and psiturk based on MTURK config variable
-let ipcRenderer = false;
-if (config.USE_ELECTRON) {
-  const electron = window.require("electron");
-  ipcRenderer = electron.ipcRenderer;
-}
-
 // Relies on styling in App.css, generate PD spot
+// TODO: Make a constant, not function
 const photodiodeGhostBox = () => {
   const class_ = config.USE_PHOTODIODE ? "visible" : "invisible";
 
   const markup = `<div class="photodiode-box ${class_}" id="photodiode-box">
-      <span id="photodiode-spot" class="photodiode-spot"></span>
+      <span id="photodiode-spot" class="photodiode-spot" />
     </div>`;
   return markup;
 };
 
 const pdSpotEncode = (taskCode) => {
+  // Conditionally load electron based on config variable
+  let ipcRenderer = false;
+  if (config.USE_ELECTRON) {
+    const electron = window.require("electron");
+    ipcRenderer = electron.ipcRenderer;
+  }
+
   function pulseFor(ms, callback) {
     $(".photodiode-spot").css({ "background-color": "black" });
     setTimeout(() => {

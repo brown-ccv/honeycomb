@@ -36,8 +36,8 @@
     "adjustVolume": "Set tablet volume to 50/100.",
     "camera": "Make sure the camera is pointing to you and your face is within the camera area.",
     "eventMarker": {
-      "found": "Note: event marker found.",
-      "not_found": "Note: no event marker found."
+      "connected": "Event marker connected.",
+      "not_connected": "No event marker connected."
     },
     "holdUpMarker": "Make sure the photodiode is covering the spot and any external recordings have begun before continuing.",
     "quiz": {

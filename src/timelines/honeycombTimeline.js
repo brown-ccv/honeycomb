@@ -1,4 +1,5 @@
 import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
+import holdUpMarker from "../trials/holdUpMarker";
 import { createHoneycombBlock } from "./honeycombBlock";
 import {
   createDebriefTrial,
@@ -19,7 +20,12 @@ function createHoneycombTimeline(jsPsych) {
 
   const debriefTrial = createDebriefTrial(jsPsych);
 
+  // TODO: Check preamble here?
+  const hum = holdUpMarker();
+  console.log(hum);
+
   const timeline = [
+    hum,
     welcomeTrial,
     enterFullscreen,
     preloadTrial,
