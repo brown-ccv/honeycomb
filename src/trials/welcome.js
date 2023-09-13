@@ -8,15 +8,17 @@ import { baseStimulus } from "../lib/markup/stimuli";
 import { h1 } from "../lib/markup/tags";
 
 // TODO: Turn into jsPsych instruction trial (config is only used for task name)
-export const showName = showMessage(config, {
-  responseType: htmlButtonResponse,
-  message: language.name,
-  responseEndsTrial: true,
-  buttons: [language.prompts.continue.button],
-});
+function showName() {
+  return showMessage(config, {
+    responseType: htmlButtonResponse,
+    message: language.name,
+    responseEndsTrial: true,
+    buttons: [language.prompts.continue.button],
+  });
+}
 
 // TODO: Turn into jsPsych instruction trial
-export const showWelcome = () => {
+function showWelcome() {
   const welcomeMessage = h1(language.trials.welcome);
   return {
     type: htmlKeyboardResponse,
@@ -24,4 +26,6 @@ export const showWelcome = () => {
     prompt: language.prompts.continue.prompt,
     response_ends_trial: true,
   };
-};
+}
+
+export { showName, showWelcome };
