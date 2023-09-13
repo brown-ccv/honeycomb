@@ -1,26 +1,32 @@
+import { multiSurvey, showMessage, slider, survey } from "@brown-ccv/behavioral-task-trials";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import surveyMultiselect from "@jspsych/plugin-survey-multi-select";
-import { language, config } from "../config/main";
-import { survey, slider, multiSurvey, showMessage } from "@brown-ccv/behavioral-task-trials";
+
+import { config, language } from "../config/main";
+import { b, br, div, h1, p } from "../lib/markup/tags";
 
 const QUIZ_LANGUAGE = language.trials.quiz;
 
 // Age Check
 const ask = QUIZ_LANGUAGE.ask.age;
 const res = QUIZ_LANGUAGE.answer.age;
-const stmAge = `<div class='instructions'><h1>${ask}<br><b>${res}</b></div>`;
 
-const ageCheck = survey({ stimulus: stmAge });
+const ageMarkup = div(h1(ask) + br() + b(res), { class: "instructions" });
+
+const ageCheck = survey({ stimulus: ageMarkup });
 
 // Slider Check
 const stmSl = QUIZ_LANGUAGE.direction.slider.right;
-
 const sliderCheck = slider(stmSl);
 
 const abstain = QUIZ_LANGUAGE.answer.abstain; // give people choice to abstain
+
 // Survey page headers
-const surveyPreamble1 = `<h1>${QUIZ_LANGUAGE.prompt.preamble.survey_1}</h1>`;
-const surveyPreamble2 = `${QUIZ_LANGUAGE.prompt.ius.preamble.start}<br />${QUIZ_LANGUAGE.prompt.ius.preamble.middle}<br />${QUIZ_LANGUAGE.prompt.ius.preamble.end}`;
+const surveyPreamble1 = h1(QUIZ_LANGUAGE.prompt.preamble.survey_1);
+const surveyPreamble2 =
+  p(QUIZ_LANGUAGE.prompt.ius.preamble.start) +
+  p(QUIZ_LANGUAGE.prompt.ius.preamble.middle) +
+  p(QUIZ_LANGUAGE.prompt.ius.preamble.end);
 
 // Intolerance of Uncertainty (IUS) Scale
 const iusOptions = {
@@ -64,10 +70,10 @@ const debrief = showMessage(config, {
 });
 
 // START of Demographics Questionnaires
-const demographicsAge = `<p>${QUIZ_LANGUAGE.ask.demographics_age}</p>`;
-const demographicsPreamble1 = `<h1>${QUIZ_LANGUAGE.prompt.preamble.demo_1}</h1`;
-const demographicsPreamble2 = `<h1>${QUIZ_LANGUAGE.prompt.preamble.demo_2}</h1`;
-const demographicsPreamble3 = `<h1>${QUIZ_LANGUAGE.prompt.preamble.demo_3}</h1`;
+const demographicsAge = p(QUIZ_LANGUAGE.ask.demographics_age);
+const demographicsPreamble1 = h1(QUIZ_LANGUAGE.prompt.preamble.demo_1);
+const demographicsPreamble2 = h1(QUIZ_LANGUAGE.prompt.preamble.demo_2);
+const demographicsPreamble3 = h1(QUIZ_LANGUAGE.prompt.preamble.demo_3);
 
 const openAnswerQuestions = survey({
   preamble: demographicsPreamble1,
@@ -100,10 +106,10 @@ const demoMultiChoiceOptions = {
 };
 
 const demoMultiChoicePrompts = [
-  `<p>${QUIZ_LANGUAGE.ask.demographics_ethnicity}</p>`,
-  `<p>${QUIZ_LANGUAGE.ask.demographics_race}</p>`,
-  `<p>${QUIZ_LANGUAGE.ask.demographics_english}</p>`,
-  `<p>${QUIZ_LANGUAGE.ask.demographics_gender}</p>`,
+  p(QUIZ_LANGUAGE.ask.demographics_ethnicity),
+  p(QUIZ_LANGUAGE.ask.demographics_race),
+  p(QUIZ_LANGUAGE.ask.demographics_english),
+  p(QUIZ_LANGUAGE.ask.demographics_gender),
 ];
 
 const multiChoiceQuestions = multiSurvey({
@@ -113,7 +119,7 @@ const multiChoiceQuestions = multiSurvey({
 });
 
 // multi_select_questions
-const diagnosesQuestions = `<p>${QUIZ_LANGUAGE.ask.diagnoses}</p>`;
+const diagnosesQuestions = p(QUIZ_LANGUAGE.ask.diagnoses);
 
 const diagnosesOptions = {
   diagnoses: [
@@ -141,4 +147,4 @@ const demographics = {
   ],
 };
 
-export { ageCheck, sliderCheck, iusSurvey, debrief, demographics };
+export { ageCheck, debrief, demographics, iusSurvey, sliderCheck };

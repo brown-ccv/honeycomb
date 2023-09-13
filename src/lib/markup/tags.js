@@ -59,13 +59,13 @@ function p(children, attributes = {}) {
 }
 
 /**
- * Wraps a given string in an strong tag
+ * Wraps a given string in an b tag
  * @param {string} children The children of the HTML tag
  * @param {object} attributes HTML attributes to add to the tag
  * @returns {string} A string containing static HTML
  */
-function strong(children, attributes = {}) {
-  return tag("strong", children, attributes);
+function b(children, attributes = {}) {
+  return tag("b", children, attributes);
 }
 
 /**
@@ -74,8 +74,8 @@ function strong(children, attributes = {}) {
  * @param {object} attributes HTML attributes to add to the tag
  * @returns {string} A string containing static HTML
  */
-function em(children, attributes = {}) {
-  return tag("em", children, attributes);
+function i(children, attributes = {}) {
+  return tag("i", children, attributes);
 }
 
 /**
@@ -94,4 +94,4 @@ function br() {
   return "<br />";
 }
 
-export { tag, div, span, h1, p, br, strong, em, image };
+export { b, br, div, h1, i, image, p, span, tag };

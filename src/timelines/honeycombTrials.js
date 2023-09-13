@@ -4,7 +4,7 @@ import instructionsResponse from "@jspsych/plugin-instructions";
 import preloadResponse from "@jspsych/plugin-preload";
 
 import { config, language, taskSettings } from "../config/main";
-import { div, image, p, strong } from "../lib/markup/tags";
+import { div, image, p, b } from "../lib/markup/tags";
 
 const honeycombLanguage = language.trials.honeycomb;
 
@@ -36,9 +36,9 @@ const instructionsTrial = {
       // Build the instructions and image elements
       const instructionsMarkup = p(
         honeycombLanguage.instructions.example.start +
-          strong(color) +
+          b(color) +
           honeycombLanguage.instructions.example.middle +
-          strong(correct_response) +
+          b(correct_response) +
           honeycombLanguage.instructions.example.end
       );
       const imageMarkup = image({ src: stimulus });

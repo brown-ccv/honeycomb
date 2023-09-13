@@ -56,7 +56,7 @@
       "prompt": {
         "ius": {
           "preamble": {
-            "start": "This questionnaire is designed to measure intolerance of uncertainty. ",
+            "start": "This questionnaire is designed to measure intolerance of uncertainty.",
             "middle": "Please answer the following questions as honestly as you can.",
             "end": "There are no right or wrong answers, and there are no trick questions."
           },
