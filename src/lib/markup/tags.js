@@ -57,4 +57,6 @@ function p(children, attributes = {}) {
   return tag("p", children, attributes);
 }
 
+// TODO: Add bold, italics
+
 export { tag, div, span, h1, p };
