@@ -18,6 +18,26 @@ function tag(tag, children, attributes = {}) {
 }
 
 /**
+ * Wraps a given string in an div tag
+ * @param {string} children The children of the HTML tag
+ * @param {object} attributes HTML attributes to add to the tag
+ * @returns {string} A string containing static HTML
+ */
+function div(children, attributes = {}) {
+  return tag("div", children, attributes);
+}
+
+/**
+ * Wraps a given string in an span tag
+ * @param {string} children The children of the HTML tag
+ * @param {object} attributes HTML attributes to add to the tag
+ * @returns {string} A string containing static HTML
+ */
+function span(children, attributes = {}) {
+  return tag("span", children, attributes);
+}
+
+/**
  * Wraps a given string in an h1 tag
  * @param {string} children The children of the HTML tag
  * @param {object} attributes HTML attributes to add to the tag
@@ -37,4 +57,4 @@ function p(children, attributes = {}) {
   return tag("p", children, attributes);
 }
 
-export { tag, h1, p };
+export { tag, div, span, h1, p };
