@@ -1,5 +1,5 @@
+import adjustVolume from "../trials/adjustVolume";
 import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
-import holdUpMarker from "../trials/holdUpMarker";
 import { createHoneycombBlock } from "./honeycombBlock";
 import {
   createDebriefTrial,
@@ -16,21 +16,16 @@ import {
  * See the jsPsych documentation for more: https://www.jspsych.org/7.3/tutorials/rt-task/
  */
 function createHoneycombTimeline(jsPsych) {
-  const honeycomb = createHoneycombBlock(jsPsych); // The first block repeats 5 times
-
+  const honeycombTrials = createHoneycombBlock(jsPsych); // The first block repeats 5 times
   const debriefTrial = createDebriefTrial(jsPsych);
 
-  // TODO: Check preamble here?
-  const hum = holdUpMarker();
-  console.log(hum);
-
   const timeline = [
-    hum,
+    adjustVolume(),
     welcomeTrial,
     enterFullscreen,
     preloadTrial,
     instructionsTrial,
-    honeycomb,
+    honeycombTrials,
     debriefTrial,
     finishTrial,
     exitFullscreen,
