@@ -13,13 +13,13 @@ let PARTICIPANT_ID; // The ID of a given participant in the user's database
 let EXPERIMENT_IDS; // The ID of a given experiment in the user's database
 let OUTPUT_ROOT; // The root in which data is saved
 
+const INVALID_ACTION_ERROR = new Error("Invalid action: " + ACTION);
 const INVALID_DEPLOYMENT_ERROR = new Error("Invalid deployment: " + DEPLOYMENT);
 
 /** -------------------- MAIN -------------------- */
 
 async function main() {
-  // TODO: User should be able to pass command line arguments OR inquirer (especially for action)
-  // const [, , ...args] = process.argv;
+  // TODO 289: User should be able to pass command line arguments OR inquirer (especially for action)
 
   ACTION = await actionPrompt();
   DEPLOYMENT = await deploymentPrompt();
@@ -48,7 +48,7 @@ async function main() {
       }
       break;
     default:
-      throw new Error("Invalid action: " + ACTION);
+      throw INVALID_ACTION_ERROR;
   }
 }
 main();
@@ -152,26 +152,8 @@ async function actionPrompt() {
 
 /** Prompt the user for the deployment they are trying to access */
 async function deploymentPrompt() {
-  // TODO: Add other deployments!
+  // TODO 290: Add other deployments!
   const response = "firebase";
-  // const response = await select({
-  //   message: "Which deployment are you using?",
-  //   choices: [
-  //     {
-  //       name: "Firebase",
-  //       value: "firebase",
-  //       description: "Data is saved on the Firestore database",
-  //     },
-
-  //     {
-  //       // Note that downloading local data will never make sense - conditionally add prompt
-  //       name: "Local data",
-  //       value: "local",
-  //       description: "Data is saved on your local machine",
-  //       disabled: "(Working with local data is not yet supported)",
-  //     },
-  //   ],
-  // });
 
   // Initialize Firestore
   if (response === "firebase") {
@@ -226,11 +208,8 @@ async function participantIDPrompt() {
   };
 
   return await input({
-    // TODO: Enable downloading all study data at once
-    // message: "Select a participant (* selects all ):",
+    // TODO 291: Enable downloading all study data at once
     message: "Select a participant:",
-
-    // default: "*",
     validate: async (input) => {
       const invalid = "Please enter a valid participant from your Firestore database";
       if (!input) return invalid;
@@ -248,9 +227,7 @@ async function participantIDPrompt() {
 
 /** Prompt the user to select one or more experiments of the PARTICIPANT_ID on STUDY_ID */
 async function experimentIDPrompt() {
-  // TODO: Enable downloading all study data at once
-  // if (PARTICIPANT_ID === "*") return "*"; // Download all experiments for all participants
-
+  // TODO 291: Enable downloading all participant data at once
   const dataSnapshot = await getDataRef(STUDY_ID, PARTICIPANT_ID).get();
 
   // Sort experiment choices by most recent first
@@ -303,7 +280,6 @@ async function confirmDeletionPrompt() {
 async function confirmOverwritePrompt(file, overwriteAll) {
   if (overwriteAll) return "yes"; // User already confirmed overwrite of all files
 
-  // TODO: Show the file that has the issue
   const answer = await expand({
     message: `${file} already exists. Overwrite?`,
     default: "n",
@@ -330,8 +306,6 @@ async function confirmOverwritePrompt(file, overwriteAll) {
 }
 
 /** -------------------- FIRESTORE HELPERS -------------------- */
-
-// TODO: How to import this code from inside Honeycomb?
 
 const RESPONSES_COL = "participant_responses";
 const PARTICIPANTS_COL = "participants";

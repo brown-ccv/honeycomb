@@ -6,7 +6,7 @@ import { config, language } from "../config/main";
 import { photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
 
-// TODO: Turn into jsPsych instruction trial (config is only used for task name)
+// TODO 292: Turn into jsPsych instruction trial (config is only used for task name)
 export const showName = showMessage(config, {
   responseType: htmlButtonResponse,
   message: language.name,
@@ -14,7 +14,7 @@ export const showName = showMessage(config, {
   buttons: [language.prompts.continue.button],
 });
 
-// TODO: Turn into jsPsych instruction trial
+// TODO 292: Turn into jsPsych instruction trial
 export const showWelcome = {
   type: htmlKeyboardResponse,
   stimulus: baseStimulus(`<h1>${language.trials.welcome}</h1>`, true) + photodiodeGhostBox(),
