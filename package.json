@@ -21,7 +21,6 @@
     "@jspsych/plugin-image-keyboard-response": "^1.1.1",
     "@jspsych/plugin-survey-multi-select": "^1.1.1",
     "bootstrap": "^5.2.0-beta1",
-    "commander": "^11.0.0",
     "electron-log": "^4.4.8",
     "electron-squirrel-startup": "^1.0.0",
     "event-marker": "git+https://github.com/brown-ccv/event-marker.git",
