@@ -9,4 +9,4 @@ winget install -e --id ojdkbuild.ojdkbuild
 winget install -e --id Microsoft.VisualStudioCode;
 winget install -e --id Microsoft.VisualStudio.2022.Community --override "--add Microsoft.VisualStudio.Workload.NativeDesktop --add Microsoft.VisualStudio.Component.VC.ATLMFC --includeRecommended"
 
-# TODO: Python management (miniconda)?
+# TODO 278: Python management (miniconda)?

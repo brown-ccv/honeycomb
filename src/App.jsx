@@ -52,7 +52,7 @@ function App() {
       const { ipcRenderer } = window.require("electron");
       setIpcRenderer(ipcRenderer);
 
-      // TODO: I don't think this is using the ipcRenderer from state? Is that okay?
+      // TODO 279, 283: I don't think this is using the ipcRenderer from state? Is that okay?
       ipcRenderer.send("updateEnvironmentVariables", config);
       // Fill in login fields based on environment variables (may still be blank)
       const credentials = ipcRenderer.sendSync("syncCredentials");
@@ -65,9 +65,9 @@ function App() {
       if (config.USE_MTURK) {
         /* eslint-disable */
         window.lodash = _.noConflict();
-        setPsiturk(new PsiTurk(turkUniqueId, '/complete'));
-        setMethod('mturk');
-        handleLogin('mturk', turkUniqueId);
+        setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
+        setMethod("mturk");
+        handleLogin("mturk", turkUniqueId);
         /* eslint-enable */
       } else if (config.USE_PROLIFIC) {
         const pID = getProlificId();
