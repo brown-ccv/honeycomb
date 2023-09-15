@@ -27,7 +27,7 @@ const generateWaitSet = (trial, waitTime) => {
   return [waitTrial, trial];
 };
 
-// As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
+// As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
 // The jsPsych instance passed in here should be the same one used for the running task.
 const startKeypressListener = (jsPsych) => {
   const keypressResponse = (info) => {

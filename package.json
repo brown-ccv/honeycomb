@@ -39,6 +39,7 @@
     "wait-on": "^7.0.1"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@electron-forge/cli": "^6.0.0-beta.64",
     "@electron-forge/maker-deb": "^6.0.0-beta.64",
     "@electron-forge/maker-dmg": "^6.0.0-beta.64",
