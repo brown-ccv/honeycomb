@@ -18,7 +18,7 @@ const INVALID_DEPLOYMENT_ERROR = new Error("Invalid deployment: " + DEPLOYMENT);
 /** -------------------- MAIN -------------------- */
 
 async function main() {
-  // TODO: User should be able to pass command line arguments OR inquirer (especially for action)
+  // TODO 289: User should be able to pass command line arguments OR inquirer (especially for action)
   // const [, , ...args] = process.argv;
 
   ACTION = await actionPrompt();
@@ -152,7 +152,7 @@ async function actionPrompt() {
 
 /** Prompt the user for the deployment they are trying to access */
 async function deploymentPrompt() {
-  // TODO: Add other deployments!
+  // TODO 290: Add other deployments!
   const response = "firebase";
   // const response = await select({
   //   message: "Which deployment are you using?",
@@ -226,7 +226,7 @@ async function participantIDPrompt() {
   };
 
   return await input({
-    // TODO: Enable downloading all study data at once
+    // TODO 291: Enable downloading all study data at once
     // message: "Select a participant (* selects all ):",
     message: "Select a participant:",
 
@@ -248,7 +248,7 @@ async function participantIDPrompt() {
 
 /** Prompt the user to select one or more experiments of the PARTICIPANT_ID on STUDY_ID */
 async function experimentIDPrompt() {
-  // TODO: Enable downloading all study data at once
+  // TODO 291: Enable downloading all study data at once
   // if (PARTICIPANT_ID === "*") return "*"; // Download all experiments for all participants
 
   const dataSnapshot = await getDataRef(STUDY_ID, PARTICIPANT_ID).get();
@@ -303,7 +303,6 @@ async function confirmDeletionPrompt() {
 async function confirmOverwritePrompt(file, overwriteAll) {
   if (overwriteAll) return "yes"; // User already confirmed overwrite of all files
 
-  // TODO: Show the file that has the issue
   const answer = await expand({
     message: `${file} already exists. Overwrite?`,
     default: "n",
@@ -330,8 +329,6 @@ async function confirmOverwritePrompt(file, overwriteAll) {
 }
 
 /** -------------------- FIRESTORE HELPERS -------------------- */
-
-// TODO: How to import this code from inside Honeycomb?
 
 const RESPONSES_COL = "participant_responses";
 const PARTICIPANTS_COL = "participants";
