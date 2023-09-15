@@ -13,6 +13,7 @@ let PARTICIPANT_ID; // The ID of a given participant in the user's database
 let EXPERIMENT_IDS; // The ID of a given experiment in the user's database
 let OUTPUT_ROOT; // The root in which data is saved
 
+const INVALID_ACTION_ERROR = new Error("Invalid action: " + ACTION);
 const INVALID_DEPLOYMENT_ERROR = new Error("Invalid deployment: " + DEPLOYMENT);
 
 /** -------------------- MAIN -------------------- */
@@ -48,7 +49,7 @@ async function main() {
       }
       break;
     default:
-      throw new Error("Invalid action: " + ACTION);
+      throw INVALID_ACTION_ERROR;
   }
 }
 main();
@@ -154,24 +155,6 @@ async function actionPrompt() {
 async function deploymentPrompt() {
   // TODO 290: Add other deployments!
   const response = "firebase";
-  // const response = await select({
-  //   message: "Which deployment are you using?",
-  //   choices: [
-  //     {
-  //       name: "Firebase",
-  //       value: "firebase",
-  //       description: "Data is saved on the Firestore database",
-  //     },
-
-  //     {
-  //       // Note that downloading local data will never make sense - conditionally add prompt
-  //       name: "Local data",
-  //       value: "local",
-  //       description: "Data is saved on your local machine",
-  //       disabled: "(Working with local data is not yet supported)",
-  //     },
-  //   ],
-  // });
 
   // Initialize Firestore
   if (response === "firebase") {
