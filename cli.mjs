@@ -20,7 +20,6 @@ const INVALID_DEPLOYMENT_ERROR = new Error("Invalid deployment: " + DEPLOYMENT);
 
 async function main() {
   // TODO 289: User should be able to pass command line arguments OR inquirer (especially for action)
-  // const [, , ...args] = process.argv;
 
   ACTION = await actionPrompt();
   DEPLOYMENT = await deploymentPrompt();
@@ -210,10 +209,7 @@ async function participantIDPrompt() {
 
   return await input({
     // TODO 291: Enable downloading all study data at once
-    // message: "Select a participant (* selects all ):",
     message: "Select a participant:",
-
-    // default: "*",
     validate: async (input) => {
       const invalid = "Please enter a valid participant from your Firestore database";
       if (!input) return invalid;
@@ -231,9 +227,7 @@ async function participantIDPrompt() {
 
 /** Prompt the user to select one or more experiments of the PARTICIPANT_ID on STUDY_ID */
 async function experimentIDPrompt() {
-  // TODO 291: Enable downloading all study data at once
-  // if (PARTICIPANT_ID === "*") return "*"; // Download all experiments for all participants
-
+  // TODO 291: Enable downloading all participant data at once
   const dataSnapshot = await getDataRef(STUDY_ID, PARTICIPANT_ID).get();
 
   // Sort experiment choices by most recent first
