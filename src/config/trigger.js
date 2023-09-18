@@ -1,4 +1,7 @@
-// NOTE - these event codes must match what is in public/config/trigger.js
+/**
+ * Custom codes for specific task events - used to parse the EEG data
+ * NOTE - these event codes must match what is in public/config/trigger.js
+ */
 const eventCodes = {
   fixation: 1,
   evidence: 5,
@@ -7,7 +10,6 @@ const eventCodes = {
   open_task: 18,
 };
 
-// this is module.exports isntead of just exports as it is also imported into the electron app
-module.exports = {
-  eventCodes,
-};
+// Note that this is module.exports so it can be imported into the electron app
+// TODO: Do this for the firebase functions too?
+module.exports = { eventCodes };
