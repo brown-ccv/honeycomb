@@ -1,19 +1,11 @@
-import { countdown, showMessage } from "@brown-ccv/behavioral-task-trials";
-
-import { exptBlock1, exptBlock2 } from "../config/experiment";
-import { config, lang } from "../config/main";
-import { practiceBlock } from "../config/practice";
-import { tutorialBlock } from "../config/tutorial";
-
+import { config } from "../config/main";
 import { cameraEnd, cameraStart } from "../trials/camera";
-import { preamble } from "./preamble";
-import taskBlock from "./taskBlock";
+import { createHoneycombTimeline } from "./honeycombTimeline";
 
-import { ageCheck, debrief, demographics, iusSurvey, sliderCheck } from "../trials/quizTrials";
-import { exitFullscreen } from "../trials/fullscreen";
-
-// Add your jsPsych options here.
-// Honeycomb will combine these custom options with other options needed by Honyecomb.
+/**
+ * Experiment-wide settings for jsPsych: https://www.jspsych.org/7.3/overview/experiment-options/
+ * Note that Honeycomb combines these with other options required for Honeycomb to operate correctly
+ */
 const jsPsychOptions = {
   on_trial_finish: function (data) {
     console.log("A trial just ended, here are the latest data:");
@@ -22,54 +14,23 @@ const jsPsychOptions = {
   default_iti: 250,
 };
 
-// Add your jsPsych timeline here.
-// Honeycomb will call this function for us after the subject logs in, and run the resulting timeline.
-// The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
-const buildTimeline = (jsPsych) =>
-  config.USE_MTURK ? mturkTimeline : buildPrimaryTimeline(jsPsych);
+/**
+ * Builds the experiment's timeline that jsPsych will run
+ * The instance of jsPsych passed in will include jsPsychOptions from above
+ * @param {Object} jsPsych The jsPsych instance that is running the experiment
+ */
+function buildTimeline(jsPsych) {
+  const timeline = createHoneycombTimeline(jsPsych);
 
-const buildPrimaryTimeline = (jsPsych) => {
-  const primaryTimeline = [
-    preamble,
-    ageCheck,
-    sliderCheck,
-    countdown({ message: lang.countdown.message1 }),
-    taskBlock(practiceBlock),
-    countdown({ message: lang.countdown.message2 }),
-    taskBlock(exptBlock1),
-    demographics,
-    iusSurvey,
-    debrief,
-  ];
-
+  // Dynamically adds the camera trials to the experiment if config.USE_CAMERA
   if (config.USE_CAMERA) {
-    primaryTimeline.splice(1, 0, cameraStart(jsPsych));
-    primaryTimeline.push(cameraEnd(5000));
+    // Add cameraStart after welcome trial
+    timeline.splice(1, 0, cameraStart(jsPsych));
+    // Add cameraEnd as the last trial
+    timeline.push(cameraEnd(5000));
   }
 
-  primaryTimeline.push(
-    showMessage(config, {
-      duration: 5000,
-      message: lang.end,
-    })
-  );
-  primaryTimeline.push(exitFullscreen);
+  return timeline;
+}
 
-  return primaryTimeline;
-};
-
-const mturkTimeline = [
-  preamble,
-  countdown({ message: lang.countdown.message1 }),
-  taskBlock(tutorialBlock),
-  countdown({ message: lang.countdown.message2 }),
-  taskBlock(exptBlock2),
-  showMessage(config, {
-    duration: 5000,
-    message: lang.finish.end,
-  }),
-  exitFullscreen,
-];
-
-// Honeycomb, please include these options, and please get the timeline from this function.
 export { buildTimeline, jsPsychOptions };

@@ -1,42 +1,81 @@
-import requireContext from "require-context.macro";
-
-const sleep = (ms) => {
+/**
+ * Pauses program execution for a given amount of time
+ * @param {number} ms The number of milliseconds to sleep for
+ * @returns A resolved promise after ms milliseconds
+ */
+function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
-};
+}
 
-// add a random number between 0 and offset to the base number
-const jitter = (base, offset) => base + Math.floor(Math.random() * Math.floor(offset));
+/**
+ * Add a random number between 0 and offset to the base number
+ * @param {number} base The starting number
+ * @param {number} offset The maximum addition to base
+ * @returns The base number jittered by the offset
+ */
+function jitter(base, offset) {
+  return base + Math.floor(Math.random() * Math.floor(offset));
+}
 
-// add a random number between 0 and 50 to the base number
-const jitter50 = (base) => jitter(base, 50);
+/**
+ * Add a random number between 0 and 50 to the base number
+ * @param {number} base The starting number
+ * @returns The base number jittered by 50
+ */
+function jitter50(base) {
+  return jitter(base, 50);
+}
 
-// flip a coin
-const randomTrue = () => Math.random() > 0.5;
+/**
+ * Flips a coin
+ * @returns Returns true or false randomly
+ */
+function randomTrue() {
+  return Math.random() > 0.5;
+}
 
-// deeply copy an object
-const deepCopy = (obj) => JSON.parse(JSON.stringify(obj));
+/**
+ * Deeply copies an object
+ * @param {Object} obj The starting object
+ * @returns An exact copy of obj
+ */
+function deepCopy(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
 
-// format a number as a dollar amount
-const formatDollars = (amount) => "$" + parseFloat(amount).toFixed(2);
+/**
+ * Format a number as a US dollar amount
+ * @param {number} amount Dollar amount
+ * @returns The string representation of amount in USD
+ */
+function formatDollars(amount) {
+  return "$" + parseFloat(amount).toFixed(2);
+}
 
-// create a pre-trial wait period
-const generateWaitSet = (trial, waitTime) => {
+/**
+ * Adds a wait period before a trial begins
+ * @param {Object} trial The trial to add a wait period to
+ * @param {number} waitTime The amount of time to wait by
+ * @returns The given trial with a waiting period before it
+ */
+// TODO 162: This should be a trial not a utility? It"s adding a separate trial in and of itself
+// TODO 162: JsPsych has a property for the wait time before moving to the next trial
+function generateWaitSet(trial, waitTime) {
   const waitTrial = Object.assign({}, trial);
   waitTrial.trial_duration = waitTime;
   waitTrial.response_ends_trial = false;
   waitTrial.prompt = "-";
 
   return [waitTrial, trial];
-};
+}
 
-// As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
-// The jsPsych instance passed in here should be the same one used for the running task.
-const startKeypressListener = (jsPsych) => {
+/**
+ * Starts the JsPsych keyboard response listener
+ * @param  jsPsych The jsPsych instance running the task.
+ */
+function startKeypressListener(jsPsych) {
   const keypressResponse = (info) => {
-    const data = {
-      key_press: info.key,
-    };
-
+    const data = { key_press: info.key };
     jsPsych.finishTrial(data);
   };
 
@@ -47,26 +86,14 @@ const startKeypressListener = (jsPsych) => {
   });
 
   return keyboardListener;
-};
+}
 
-// Discover and import images in src/assets/images.
-// This produces an object that maps friendly image file names to obscure webpack path names.
-// For example:
-//   {
-//     image1.png: '/static/media/image1.5dca7a2a50fb8b633fd5.png',
-//     image2.png: '/static/media/image2.5dca7a2a50fb8b633fd5.png'
-//   }
-const importAll = (r) => {
-  const importImageByName = (allImages, imageName) => {
-    const friendlyName = imageName.replace("./", "");
-    return { ...allImages, [friendlyName]: r(imageName) };
-  };
-  return r.keys().reduce(importImageByName, {});
-};
-
-const images = importAll(requireContext("../assets/images", false, /\.(png|jpe?g|svg)$/));
-
-const getQueryVariable = (variable) => {
+/**
+ * Gets the value of a given variable from the URL search parameters
+ * @param {any} variable The key of the variable in the search parameters
+ * @returns The value of variable in the search parameters
+ */
+function getQueryVariable(variable) {
   const query = window.location.search.substring(1);
   const vars = query.split("&");
   for (let i = 0; i < vars.length; i++) {
@@ -75,14 +102,22 @@ const getQueryVariable = (variable) => {
       return decodeURIComponent(pair[1]);
     }
   }
-};
+}
 
-const getProlificId = () => {
+/**
+ * Gets the ID of a prolific user from the URL search parameters
+ * @returns
+ */
+function getProlificId() {
   const prolificId = getQueryVariable("PROLIFIC_PID");
   return prolificId;
-};
+}
 
-const beep = (audioCodes) => {
+/**
+ * Emits an audible beep
+ * @param {Object} audioCodes The type/frequency of the beep
+ */
+function beep(audioCodes) {
   const context = new AudioContext(); // eslint-disable-line no-undef
   const o = context.createOscillator();
   const g = context.createGain();
@@ -93,7 +128,7 @@ const beep = (audioCodes) => {
   g.connect(context.destination);
   o.start();
   o.stop(context.currentTime + 0.4);
-};
+}
 
 /**
  * Interleave a value before/after every element in an array
@@ -112,7 +147,6 @@ export {
   formatDollars,
   generateWaitSet,
   getProlificId,
-  images,
   interleave,
   jitter,
   jitter50,

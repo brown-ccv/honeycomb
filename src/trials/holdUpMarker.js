@@ -1,5 +1,5 @@
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
-import { lang } from "../config/main";
+import { language } from "../config/main";
 import { photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
 import eventMarkerMessage from "../lib/markup/eventMarkerMessage";
@@ -10,8 +10,8 @@ const holdUpMarker = () => {
   return {
     type: htmlButtonResponse,
     stimulus,
-    prompt: [`<br><h3>${lang.prompts.focus}</h3>`],
-    choices: [lang.prompts.continue.button],
+    prompt: [`<br><h3>${language.trials.holdUpMarker}</h3>`],
+    choices: [language.prompts.continue.button],
     on_load: () =>
       eventMarkerMessage().then((s) => {
         document.getElementById("usb-alert").innerHTML = s;
