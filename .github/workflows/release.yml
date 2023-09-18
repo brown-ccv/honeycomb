@@ -1,99 +1,158 @@
-name: release
+name: Release
 
-# Runs the build and package scripts when a new tagged release is created
+# Runs the build and package scripts when a new tagged release is publishe, created or edited
+# Note that this runs for both releases and pre-releases: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#release
 on:
-  push:
-    tags:
-      - '*'
+  release:
+    types: [created, edited, published]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: write
 
 jobs:
-  build:
+  package-and-upload:
+    name: Package and Upload
     runs-on: ${{ matrix.os }}
 
     # Run build script for [home/clinic] in [windows/macOS/ubuntu]
     strategy:
-      fail-fast: false
       matrix:
-        setting: ['home', 'clinic' ]
-        os: [ubuntu-latest, macOS-latest, windows-latest]
-
+        setting: [home, clinic]
+        os: [windows-latest, macOS-latest, ubuntu-latest]
+      fail-fast: true # A failed build will not end the other matrix jobs
 
     steps:
-      # Rewrite "git:" repo urls to use "https:" instead, since GitHub Actions blocks port 9418 (as of Jan 2022).
-      - name: Rewrite "git:" repo urls to use "https:" instead.
-        run: git config --global url."https://github.com/".insteadOf "git://github.com/"
-
-      # Set up js package
-      - uses: actions/checkout@v1
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      # Set up Node
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.x
-          cache: 'npm'
-      - name: Set package version and name
-        uses: brown-ccv/gh-actions/get-package-info@main
-        id: package_info
+          node-version-file: .nvmrc
+          cache: npm
 
-      # Run npm install, build, and test
-      - name: npm install
-        run: |
-          npm config set "//npm.pkg.github.com/:_authToken" ${{ secrets.GITHUB_TOKEN }}
-          npm install
-      - name: Load .env file (.env.${{matrix.setting}})
-        uses: xom9ikk/dotenv@v1.0.2
+      # Install dependencies and set up environment
+      - name: 📥 Install Dependencies
+        run: npm ci
+      - name: 🔃 Load .env file (.env.${{matrix.setting}})
+        uses: xom9ikk/dotenv@v2
         with:
           path: ./env
           mode: ${{matrix.setting}}
-      - name: npm build
-        run: npm run build
-      - name: npm test
-        run: npm test
-        env:
-          CI: true
 
-      # Build electron app package installers
-      - name: package electron - windows
+      # Build the app
+      - name: ⚒ Run Build
+        run: npm run build
+
+      # Package the app installers
+      - name: 📦 Package app installer - Windows
         if: startsWith(matrix.os, 'windows')
         run: npm run package:windows
-      - name: package electron - linux
-        if: startsWith(matrix.os, 'ubuntu')
-        run: npm run package:linux
-      - name: package electron - mac
+      - name: 📦 Package app installer - Mac
         if: startsWith(matrix.os, 'mac')
         run: npm run package:mac
+      - name: 📦 Package app installer - Linux
+        if: startsWith(matrix.os, 'ubuntu')
+        run: npm run package:linux
 
       # Upload installers to github release
-      - name: Upload app to release - windows
+      # TODO: Can these be combined based on matrix.os???
+      - name: Set package version and name
+        uses: brown-ccv/gh-actions/get-package-info@main
+        id: package_info
+      - name: ⬆ Upload installer to release - Windows
         if: startsWith(matrix.os, 'windows')
         uses: svenstaro/upload-release-action@v2
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }} Setup.exe
           asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.setting }}-setup.exe
           tag: ${{ github.ref }}
-      - name: Upload app to release - linux
-        if: startsWith(matrix.os, 'ubuntu')
-        uses: svenstaro/upload-release-action@v2
-        with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
-          asset_name: ${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_${{ matrix.setting }}_amd64.deb
-          tag: ${{ github.ref }}
-      - name: Upload app to release - mac
+      - name: ⬆ Upload installer to release - macOS
         if: startsWith(matrix.os, 'mac')
         uses: svenstaro/upload-release-action@v2
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-x64.dmg
           asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-${{ matrix.setting }}.dmg
           tag: ${{ github.ref }}
-
-      # TODO: Remove GH pages? Can now point user to Firebase deployment
-      # Update github pages - linux only
-      # if your deployment fails try https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-first-deployment-with-github_token
-      - name: Deploy to GH Pages
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: ⬆ Upload installer to release - Linux
         if: startsWith(matrix.os, 'ubuntu')
+        uses: svenstaro/upload-release-action@v2
+        with:
+          file: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
+          asset_name: ${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_${{ matrix.setting }}_amd64.deb
+          tag: ${{ github.ref }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-gh-pages:
+    name: Deploy to GH Pages
+    runs-on: ubuntu-latest
+    steps:
+      # Set up Node
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # Install dependencies
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      # Build the app
+      - name: ⚒ Run Build
+        run: npm run build
+
+      # Deploy the app to GitHub Pages
+      - name: 🚀 Deploy to GH Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
+
+  package-psiturk:
+    name: Package for PsiTurk
+    runs-on: ubuntu-latest
+    steps:
+      # Set up Node
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # Install dependencies
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      # Build the app
+      - name: ⚒ Run Build
+        run: npm run build
+
+      # Package on PsiTurk
+      - name: Set package version and name
+        uses: brown-ccv/gh-actions/get-package-info@main
+        id: package_info
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.7
+      - name: 📥 Install PsiTurk
+        run: pip install psiturk
+      - name: 📦 Create Psiturk Build
+        run: |
+          cd psiturkit
+          ./psiturk-it -p ${{ steps.package_info.outputs.package_name }}-psiturk
+      - name: ⬆ Upload PsiTurk Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: psiturk-build
+          path: psiturkit/${{ steps.package_info.outputs.package_name }}-psiturk

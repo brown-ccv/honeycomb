@@ -1,0 +1,48 @@
+name: Pull Request
+
+# Runs the build and test scripts on PR
+on: pull_request
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: 🧪 Build and Test
+    runs-on: ${{ matrix.os }}
+
+    # Run action for [home/clinic] with in [windows/macOS/ubuntu]
+    strategy:
+      matrix:
+        setting: [home, clinic]
+        os: [windows-latest, macOS-latest, ubuntu-latest]
+      fail-fast: false # A failed build will not end the other matrix jobs
+
+    steps:
+      # Set up Node
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # Install dependencies and set up environment
+      - name: 📥 Install Dependencies
+        run: npm ci
+      - name: 🔃 Load .env file (.env.${{matrix.setting}})
+        uses: xom9ikk/dotenv@v2
+        with:
+          path: ./env
+          mode: ${{matrix.setting}}
+
+      # Test and build the app
+      - name: 🧪 Run Lint
+        run: npm test
+        env:
+          CI: true
+      - name: 🔬 Lint
+        run: npm run lint
+      - name: ⚒ Run Build
+        run: npm run build

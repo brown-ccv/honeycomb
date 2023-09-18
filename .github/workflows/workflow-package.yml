@@ -1,0 +1,97 @@
+name: Package Workflow
+
+# Workflow dispatch for packaging an electron executable
+on:
+  workflow_dispatch:
+    inputs:
+      setting:
+        type: choice
+        options:
+          - "home"
+          - "clinic"
+        default: "home"
+        required: true
+        description: Package the app for 'home' or 'clinic' use
+      os:
+        type: choice
+        options:
+          - "All"
+          - "Windows"
+          - "macOS"
+          - "Linux"
+        default: "All"
+        required: true
+        description: Which OS to package
+
+jobs:
+  package-and-upload:
+    name: Package and Upload
+    runs-on: ${{ matrix.os }}
+
+    # Run action for [home/clinic] in [windows/macOS/ubuntu] based on user input
+    strategy:
+      matrix:
+        os: ${{
+          (github.event.inputs.os == 'All' && fromJSON('["ubuntu-latest", "macOS-latest", "windows-latest"]')) ||
+          (github.event.inputs.os == 'Windows' && fromJSON('["windows-latest"]')) ||
+          (github.event.inputs.os == 'macOS' && fromJSON('["macOS-latest"]')) ||
+          (github.event.inputs.os == 'Linux' && fromJSON('["ubuntu-latest"]')) }}
+      fail-fast: false # A failed build will not end the other matrix jobs
+
+    steps:
+      # Set up Node
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # Install dependencies and set up environment
+      - name: 📥 Install Dependencies
+        run: npm ci
+      - name: 🔃 Load .env file (.env.${{github.event.inputs.setting}})
+        uses: xom9ikk/dotenv@v2
+        with:
+          path: ./env
+          mode: ${{github.event.inputs.setting}}
+
+      # Build the app
+      - name: ⚒ Run Build
+        run: npm run build
+
+      # Package the app installers
+      - name: 📦 Package app installer - Windows
+        if: startsWith(matrix.os, 'windows')
+        run: npm run package:windows
+      - name: 📦 Package app installer - Mac
+        if: startsWith(matrix.os, 'mac')
+        run: npm run package:mac
+      - name: 📦 Package app installer - Linux
+        if: startsWith(matrix.os, 'ubuntu')
+        run: npm run package:linux
+
+      # Upload installers to github action
+      - name: Set package version and name
+        uses: brown-ccv/gh-actions/get-package-info@main
+        id: package_info
+      - name: ⬆ Upload installer - Windows
+        uses: actions/upload-artifact@v2
+        if: startsWith(matrix.os, 'windows')
+        with:
+          name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
+          path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }} Setup.exe
+
+      - name: ⬆ Upload installer - Mac
+        uses: actions/upload-artifact@v2
+        if: startsWith(matrix.os, 'mac')
+        with:
+          name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
+          path: out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-x64.dmg
+      - name: ⬆ Upload installer - Linux
+        uses: actions/upload-artifact@v2
+        if: startsWith(matrix.os, 'ubuntu')
+        with:
+          name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
+          path: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
