@@ -69,15 +69,17 @@ const createDebriefTrial = (jsPsych) => ({
     const accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
     const reactionTime = Math.round(correct_trials.select("rt").mean());
 
-    const trialLanguage = honeycombLanguage.debrief;
+    const debriefLanguage = honeycombLanguage.debrief;
 
     const accuracyMarkup = p(
-      `${trialLanguage.accuracy.start} ${accuracy}${trialLanguage.accuracy.end}`
+      debriefLanguage.accuracy.start + accuracy + debriefLanguage.accuracy.end
     );
     const reactionTimeMarkup = p(
-      `${trialLanguage.reactionTime.start} ${reactionTime}${trialLanguage.reactionTime.end}`
+      debriefLanguage.reactionTime.start + reactionTime + debriefLanguage.reactionTime.end
     );
-    const completeMarkup = p(trialLanguage.complete);
+    const completeMarkup = p(debriefLanguage.complete);
+
+    // Display the accuracy, reaction time, and complete message as 3 paragraphs in a row
     return accuracyMarkup + reactionTimeMarkup + completeMarkup;
   },
 });
