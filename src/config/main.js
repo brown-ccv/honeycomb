@@ -16,17 +16,8 @@ import { eventCodes } from "./trigger";
 const taskName = packageInfo.name;
 const taskVersion = packageInfo.version;
 
-// mapping of letters to key codes
-const keys = {
-  A: 65,
-  B: 66,
-  C: 67,
-  F: 70,
-  J: 74,
-  space: 32,
-};
-
 // audio codes
+/** Audio code of a basic "beep" sine wave */
 const audioCodes = {
   frequency: 100 * (eventCodes.open_task - 9),
   type: "sine",
@@ -39,8 +30,8 @@ const jsPsych = initJsPsych();
 
 // Whether or not the experiment is running on mechanical turk
 const turkInfo = jsPsych.turk.turkInfo();
-const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`;
 const USE_MTURK = !turkInfo.outsideTurk;
+const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`; // ID of the user in mechanical turk
 
 // Whether or not the experiment is running in Electron (local app)
 let USE_ELECTRON = true;
@@ -74,7 +65,7 @@ const config = init({
 
 /** Determine the task settings to be used   */
 
-// Default task settings
+// Honeycomb's default task settings
 let taskSettings = {
   fixation: {
     durations: [250, 500, 750, 1000, 1250, 1500, 1750, 2000],
@@ -83,8 +74,12 @@ let taskSettings = {
   },
 };
 try {
-  // Override default task settings from the config file
-  taskSettings = _.merge(taskSettings, require("./config.json"));
+  taskSettings = _.merge(
+    // Honeycomb's default task settings
+    taskSettings,
+    // Override default task settings with settings from the config file
+    require("./config.json")
+  );
 } catch (error) {
   // Try will fail if require doesn't find the json file
   console.warn("Unable to load task settings from config.json");
@@ -95,7 +90,6 @@ export {
   audioCodes,
   config,
   eventCodes,
-  keys,
   language,
   taskName,
   taskSettings,
