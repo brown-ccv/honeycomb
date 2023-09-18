@@ -6,7 +6,7 @@ import { div } from "./tags";
 // TODO: The child container is why the photodiodeGhostBox isn't sitting in the correct place
 // TODO: Full vh/vw is "jspsych-content-wrapper"
 /**
- *
+ * Base container for stimuli that takes up 100% of the height and width of the viewport
  * @param {string} children The children of the HTML tag
  * @param {boolean} prompt Whether or not the children are a prompt
  * @param {boolean} centered Whether or not the children should be centered on the container

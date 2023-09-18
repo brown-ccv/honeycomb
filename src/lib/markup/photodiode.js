@@ -1,6 +1,6 @@
+import $ from "jquery";
 import { config } from "../../config/main";
 import { eventCodes } from "../../config/trigger";
-import $ from "jquery";
 import { div, span } from "./tags";
 
 function photodiodeGhostBox() {
