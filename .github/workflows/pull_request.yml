@@ -2,6 +2,7 @@ name: Pull Request
 
 # Runs the build and test scripts on PR
 on: pull_request
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
