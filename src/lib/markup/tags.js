@@ -10,7 +10,6 @@
  * @param {object} attributes HTML attributes to add to the tag
  * @returns {string} A string containing static HTML
  */
-// TODO: Remove empty space when no attributes
 function tag(tag, children, attributes = {}) {
   let attributesString;
   if (Object.keys(attributes).length === 0) {
