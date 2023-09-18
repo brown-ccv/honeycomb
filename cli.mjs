@@ -1,10 +1,7 @@
-import { checkbox, input, select, confirm } from "@inquirer/prompts";
+import { checkbox, confirm, expand, input, select } from "@inquirer/prompts";
 import { cert, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import fsExtra from "fs-extra";
-
-// TODO: Handling importing code from inside Honeycomb?
-// ? TODO: Some of the prompt messages could use some flushing out?
 
 /** -------------------- GLOBALS -------------------- */
 
@@ -16,13 +13,13 @@ let PARTICIPANT_ID; // The ID of a given participant in the user's database
 let EXPERIMENT_IDS; // The ID of a given experiment in the user's database
 let OUTPUT_ROOT; // The root in which data is saved
 
+const INVALID_ACTION_ERROR = new Error("Invalid action: " + ACTION);
 const INVALID_DEPLOYMENT_ERROR = new Error("Invalid deployment: " + DEPLOYMENT);
 
 /** -------------------- MAIN -------------------- */
 
 async function main() {
-  // TODO: User should be able to pass command line arguments OR inquirer (especially for action)
-  // const [, , ...args] = process.argv;
+  // TODO 289: User should be able to pass command line arguments OR inquirer (especially for action)
 
   ACTION = await actionPrompt();
   DEPLOYMENT = await deploymentPrompt();
@@ -32,8 +29,7 @@ async function main() {
 
   switch (ACTION) {
     case "download":
-      // TODO: Ask OUTPUT_ROOT question
-      OUTPUT_ROOT = ".";
+      OUTPUT_ROOT = await savePathPrompt();
       switch (DEPLOYMENT) {
         case "firebase":
           await downloadDataFirebase();
@@ -52,7 +48,7 @@ async function main() {
       }
       break;
     default:
-      throw new Error("Invalid action: " + ACTION);
+      throw INVALID_ACTION_ERROR;
   }
 }
 main();
@@ -60,36 +56,60 @@ main();
 /** -------------------- DOWNLOAD ACTION -------------------- */
 
 async function downloadDataFirebase() {
-  await Promise.all(
-    EXPERIMENT_IDS.map(async (experimentID) => {
-      // Get the data out of the experiment document
-      const experimentRef = getExperimentRef(STUDY_ID, PARTICIPANT_ID, experimentID);
-      const experimentSnapshot = await experimentRef.get();
-      const experimentData = experimentSnapshot.data();
+  let overwriteAll = false;
 
-      // Merge the experiment's trials' data into a single array
-      const trialsRef = experimentRef.collection(TRIALS_COL);
-      const trialsSnapshot = await trialsRef.orderBy("trial_index").get();
-      const trialsData = trialsSnapshot.docs.map((trial) => trial.data());
+  // Download the files asynchronously, but sequentially
+  for (const experimentID of EXPERIMENT_IDS) {
+    // Get the data out of the experiment document
+    const experimentRef = getExperimentRef(STUDY_ID, PARTICIPANT_ID, experimentID);
+    const experimentSnapshot = await experimentRef.get();
+    const experimentData = experimentSnapshot.data();
 
-      // Add the trials' data to the experiment's data as "results" array
-      experimentData["results"] = trialsData;
+    // Merge the experiment's trials' data into a single array
+    const trialsRef = experimentRef.collection(TRIALS_COL);
+    const trialsSnapshot = await trialsRef.orderBy("trial_index").get();
+    const trialsData = trialsSnapshot.docs.map((trial) => trial.data());
 
-      // Save the session to a unique JSON file. (":" are replaced to prevent issues with invalid file names)
-      const outputFile =
-        `${OUTPUT_ROOT}/${RESPONSES_COL}/` +
-        `${STUDY_ID}/${PARTICIPANT_ID}/${experimentID}.json`.replaceAll(":", "_");
+    // Add the trials' data to the experiment's data as "results" array
+    experimentData["results"] = trialsData;
 
-      // TODO 172: Check for overwriting file?
+    // Get the path of the file to be saved
+    const outputFile =
+      `${OUTPUT_ROOT}/${RESPONSES_COL}/` +
+      `${STUDY_ID}/${PARTICIPANT_ID}/${experimentID}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names)
+
+    // Determine if the file should be saved
+    let shouldDownload;
+    if (fsExtra.existsSync(outputFile)) {
+      // File exists, check if user wants to overwrite
+      const answer = await confirmOverwritePrompt(outputFile, overwriteAll);
+      switch (answer) {
+        case "all":
+          overwriteAll = true;
+          shouldDownload = true;
+          break;
+        case "yes":
+          shouldDownload = true;
+          break;
+        default:
+          shouldDownload = false;
+          break;
+      }
+    } else {
+      // File doesn't exist locally - safe to download
+      shouldDownload = true;
+    }
+
+    if (overwriteAll || shouldDownload) {
+      // Save the session to a unique JSON file.
       try {
         fsExtra.outputJSONSync(outputFile, experimentData, { spaces: 2 });
         console.log(`Data saved successfully: ${outputFile}`);
       } catch (error) {
         console.error(`There was an error saving ${outputFile}`);
-        // TODO: Do we need to display more error information that this?
       }
-    })
-  );
+    } else console.log("Skipping download");
+  }
 }
 
 /** -------------------- DELETE ACTION -------------------- */
@@ -105,13 +125,10 @@ async function deleteDataFirebase() {
           console.log("Successfully deleted:", experimentRef.id);
         } catch (error) {
           console.error("There was an error deleting", experimentRef.id);
-          // TODO: Do we need to display more error information that this?
         }
       })
     );
-  } else {
-    console.log("Skipping deletion");
-  }
+  } else console.log("Skipping deletion");
 }
 
 /** -------------------- PROMPTS -------------------- */
@@ -135,24 +152,8 @@ async function actionPrompt() {
 
 /** Prompt the user for the deployment they are trying to access */
 async function deploymentPrompt() {
-  const response = await select({
-    message: "Which deployment are you using?",
-    choices: [
-      {
-        name: "Firebase",
-        value: "firebase",
-        description: "Data is saved on the Firestore database",
-      },
-      // TODO: Add other deployments!
-      // {
-      //   // Note that downloading local data will never make sense - conditionally add prompt
-      //   name: "Local data",
-      //   value: "local",
-      //   description: "Data is saved on your local machine",
-      //   disabled: "(Working with local data is not yet supported)",
-      // },
-    ],
-  });
+  // TODO 290: Add other deployments!
+  const response = "firebase";
 
   // Initialize Firestore
   if (response === "firebase") {
@@ -206,12 +207,9 @@ async function participantIDPrompt() {
     return studyIDCollections.find((c) => c.id === DATA_COL) ? true : invalidMessage;
   };
 
-  // TODO: Enable downloading all study data at once
   return await input({
-    // message: "Select a participant (* selects all ):", // ? Do we need the stuff in parentheses?
+    // TODO 291: Enable downloading all study data at once
     message: "Select a participant:",
-
-    // default: "*",
     validate: async (input) => {
       const invalid = "Please enter a valid participant from your Firestore database";
       if (!input) return invalid;
@@ -229,9 +227,7 @@ async function participantIDPrompt() {
 
 /** Prompt the user to select one or more experiments of the PARTICIPANT_ID on STUDY_ID */
 async function experimentIDPrompt() {
-  // TODO: Enable downloading all study data at once
-  // if (PARTICIPANT_ID === "*") return "*"; // Download all experiments for all participants
-
+  // TODO 291: Enable downloading all participant data at once
   const dataSnapshot = await getDataRef(STUDY_ID, PARTICIPANT_ID).get();
 
   // Sort experiment choices by most recent first
@@ -241,12 +237,30 @@ async function experimentIDPrompt() {
     .map(({ id }) => ({ name: id, value: id }));
 
   return await checkbox({
-    // TODO: What's the right word for this? Trial?
-    message: `Select the experiments you would like to ${ACTION}:`,
+    message: `Select the sessions you would like to ${ACTION}:`,
     choices: choices,
   });
 }
 
+/** Prompts the user for a file path */
+async function savePathPrompt() {
+  const invalidMessage = "Path does not exist";
+  return await input({
+    message: "Where would you like to save the data?",
+    default: ".",
+    validate: async (input) => {
+      try {
+        const maybePath = fsExtra.statSync(input);
+        if (!maybePath.isDirectory()) return invalidMessage;
+      } catch (e) {
+        return invalidMessage;
+      }
+      return true;
+    },
+  });
+}
+
+/** Prompts the user to confirm continuation of the CLI */
 async function confirmDeletionPrompt() {
   const numExperiments = EXPERIMENT_IDS.length;
   return confirm({
@@ -255,6 +269,40 @@ async function confirmDeletionPrompt() {
     } will be deleted)`,
     default: false,
   });
+}
+
+/**
+ * Prompts the user to confirm continuation of the CLI, including future conflicts
+ * @param {string} outputFile
+ * @param {boolean} overwriteAll Whether or not all was already selected
+ * @returns
+ */
+async function confirmOverwritePrompt(file, overwriteAll) {
+  if (overwriteAll) return "yes"; // User already confirmed overwrite of all files
+
+  const answer = await expand({
+    message: `${file} already exists. Overwrite?`,
+    default: "n",
+    expanded: true,
+    choices: [
+      {
+        key: "y",
+        name: "Overwrite this file",
+        value: "yes",
+      },
+      {
+        key: "a",
+        name: "Overwrite all files",
+        value: "all",
+      },
+      {
+        key: "n",
+        name: "Skip this file",
+        value: "no",
+      },
+    ],
+  });
+  return answer;
 }
 
 /** -------------------- FIRESTORE HELPERS -------------------- */
@@ -278,5 +326,3 @@ const getDataRef = (studyID, participantID) =>
 // Get a reference to a participant's specific experiment data document in Firestore
 const getExperimentRef = (studyID, participantID, experimentID) =>
   getDataRef(studyID, participantID).doc(experimentID);
-
-/** -------------------- UTILS -------------------- */

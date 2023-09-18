@@ -1,12 +1,10 @@
 import { config } from "../config/main";
-
 import { cameraEnd, cameraStart } from "../trials/camera";
-
 import { createHoneycombTimeline } from "./honeycombTimeline";
 
 /**
- * Add your jsPsych options here.
- * Honeycomb will combine these custom options with other options needed by Honyecomb.
+ * Experiment-wide settings for jsPsych: https://www.jspsych.org/7.3/overview/experiment-options/
+ * Note that Honeycomb combines these with other options required for Honeycomb to operate correctly
  */
 const jsPsychOptions = {
   on_trial_finish: function (data) {
@@ -17,13 +15,14 @@ const jsPsychOptions = {
 };
 
 /**
- * Add your jsPsych timeline here.
- * Honeycomb will call this function for us after the subject logs in, and run the resulting timeline.
- * The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
+ * Builds the experiment's timeline that jsPsych will run
+ * The instance of jsPsych passed in will include jsPsychOptions from above
+ * @param {Object} jsPsych The jsPsych instance that is running the experiment
  */
 function buildTimeline(jsPsych) {
   const timeline = createHoneycombTimeline(jsPsych);
 
+  // Dynamically adds the camera trials to the experiment if config.USE_CAMERA
   if (config.USE_CAMERA) {
     timeline.unshift(cameraStart(jsPsych)); // Add cameraStart as the first trial
     timeline.push(cameraEnd(5000)); // Add cameraEnd as the last trial

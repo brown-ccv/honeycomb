@@ -52,13 +52,14 @@ const instructionsTrial = {
 };
 
 // TODO 281: Function for preloading all files in public/images?
-// Preload all of the stimulus images
+/** Trial that loads all of the stimulus images */
 const preloadTrial = {
   type: preloadResponse,
   message: p(language.prompts.settingUp),
   images: taskSettings.honeycomb.timeline_variables.map(({ stimulus }) => stimulus),
 };
 
+/** Trial that calculates and displays some results of the session  */
 const createDebriefTrial = (jsPsych) => ({
   type: htmlKeyboardResponse,
   stimulus: () => {
@@ -81,6 +82,7 @@ const createDebriefTrial = (jsPsych) => ({
   },
 });
 
+/** Trial that displays a completion message for 5 seconds */
 const finishTrial = showMessage(config, {
   duration: 5000,
   message: honeycombLanguage.finish,
