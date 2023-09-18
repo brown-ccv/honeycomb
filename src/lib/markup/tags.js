@@ -12,11 +12,20 @@
  */
 // TODO: Remove empty space when no attributes
 function tag(tag, children, attributes = {}) {
-  const attributesString = Object.entries(attributes)
-    .map(([key, value]) => `${key}="${value}"`)
-    .join(" ");
+  let attributesString;
+  if (Object.keys(attributes).length === 0) {
+    // No attributes
+    attributesString = "";
+  } else {
+    attributesString =
+      " " + // Prepend an empty space to separate attributes from tag
+      Object.entries(attributes)
+        .map(([key, value]) => `${key}="${value}"`)
+        .join(" ");
+  }
+  console.log(attributes, attributesString, `<${tag}${attributesString}>${children}</${tag}>`);
 
-  return `<${tag} ${attributesString}>${children}</${tag}>`;
+  return `<${tag}${attributesString}>${children}</${tag}>`;
 }
 
 /**
