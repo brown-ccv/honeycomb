@@ -23,7 +23,6 @@ function tag(tag, children, attributes = {}) {
         .map(([key, value]) => `${key}="${value}"`)
         .join(" ");
   }
-  console.log(attributes, attributesString, `<${tag}${attributesString}>${children}</${tag}>`);
 
   return `<${tag}${attributesString}>${children}</${tag}>`;
 }
