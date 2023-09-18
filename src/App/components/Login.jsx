@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Form } from "react-bootstrap";
 
 export default function Login({
@@ -8,11 +8,11 @@ export default function Login({
   validationFunction,
 }) {
   // State variables for login screen
-  const [participantId, setParticipant] = useState(initialParticipantID);
-  const [studyId, setStudy] = useState(initialStudyID);
-  const [isError, setIsError] = useState(false);
+  const [participantId, setParticipant] = React.useState(initialParticipantID);
+  const [studyId, setStudy] = React.useState(initialStudyID);
+  const [isError, setIsError] = React.useState(false);
 
-  // Function to log in participant
+  // Function used to validate and log in participant
   function handleSubmit(e) {
     e.preventDefault();
     // Logs user in if a valid participant/study id combination is given
