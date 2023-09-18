@@ -12,8 +12,8 @@ import { div } from "./tags";
  * @param {boolean} centered Whether or not the children should be centered on the container
  * @returns
  */
-const baseStimulus = (children, prompt = false, centered = false) => {
+function baseStimulus(children, prompt = false, centered = false) {
   return div(children, { class: centered ? "center_container" : prompt ? "main-prompt" : "main" });
-};
+}
 
 export { baseStimulus };
