@@ -1,11 +1,11 @@
 import { config } from "../config/main";
-
 import { cameraEnd, cameraStart } from "../trials/camera";
-
 import { createHoneycombTimeline } from "./honeycombTimeline";
 
-// Add your jsPsych options here.
-// Honeycomb will combine these custom options with other options needed by Honyecomb.
+/**
+ * Experiment-wide settings for jsPsych: https://www.jspsych.org/7.3/overview/experiment-options/
+ * Note that Honeycomb combines these with other options required for Honeycomb to operate correctly
+ */
 const jsPsychOptions = {
   on_trial_finish: function (data) {
     console.log("A trial just ended, here are the latest data:");
@@ -14,20 +14,23 @@ const jsPsychOptions = {
   default_iti: 250,
 };
 
-// Add your jsPsych timeline here.
-// Honeycomb will call this function for us after the subject logs in, and run the resulting timeline.
-// The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
+/**
+ * Builds the experiment's timeline that jsPsych will run
+ * The instance of jsPsych passed in will include jsPsychOptions from above
+ * @param {Object} jsPsych The jsPsych instance that is running the experiment
+ */
 function buildTimeline(jsPsych) {
-  const primaryTimeline = createHoneycombTimeline(jsPsych);
+  const timeline = createHoneycombTimeline(jsPsych);
 
+  // Dynamically adds the camera trials to the experiment if config.USE_CAMERA
   if (config.USE_CAMERA) {
     // Add cameraStart after welcome trial
-    primaryTimeline.splice(1, 0, cameraStart(jsPsych));
+    timeline.splice(1, 0, cameraStart(jsPsych));
     // Add cameraEnd as the last trial
-    primaryTimeline.push(cameraEnd(5000));
+    timeline.push(cameraEnd(5000));
   }
 
-  return primaryTimeline;
+  return timeline;
 }
 
 export { buildTimeline, jsPsychOptions };
