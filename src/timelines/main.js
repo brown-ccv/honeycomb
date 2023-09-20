@@ -24,10 +24,8 @@ function buildTimeline(jsPsych) {
 
   // Dynamically adds the camera trials to the experiment if config.USE_CAMERA
   if (config.USE_CAMERA) {
-    // Add cameraStart after welcome trial
-    timeline.splice(1, 0, cameraStart(jsPsych));
-    // Add cameraEnd as the last trial
-    timeline.push(cameraEnd(5000));
+    timeline.unshift(cameraStart(jsPsych)); // Add cameraStart as the first trial
+    timeline.push(cameraEnd(5000)); // Add cameraEnd as the last trial
   }
 
   return timeline;

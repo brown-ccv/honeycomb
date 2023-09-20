@@ -9,35 +9,38 @@
   },
   "trials": {
     "honeycomb": {
-      "debrief": {
-        "accuracy": {
-          "start": "You responded correctly on",
-          "end": "% of the trials."
-        },
-        "reactionTime": {
-          "start": "Your average response time was",
-          "end": "ms."
-        },
-        "complete": "Press any key to complete the experiment. Thank you!"
-      },
-      "finish": "This experiment has ended.",
+      "welcome": "Welcome to the experiment. Press any key to begin.",
       "instructions": {
         "read": "Please read the following instructions carefully.",
         "circle": "In this experiment, a circle will appear in the center of the screen.",
         "example": {
-          "start": "If the circle is",
-          "middle": ", press the letter",
-          "end": "on the keyboard as fast as you can."
+          "start": "If the circle is ",
+          "middle": ", press the letter ",
+          "end": " on the keyboard as fast as you can."
         },
         "next": "Click next to begin."
       },
-      "welcome": "Welcome to the experiment. Press any key to begin."
+      "debrief": {
+        "accuracy": {
+          "start": "You responded correctly on ",
+          "end": "% of the trials."
+        },
+        "reactionTime": {
+          "start": "Your average response time was ",
+          "end": "ms."
+        },
+        "complete": "Press any key to complete the experiment. Thank you!"
+      },
+      "finish": "This experiment has ended."
     },
     "adjustVolume": "Set tablet volume to 50/100.",
-    "camera": "Make sure the camera is pointing to you and your face is within the camera area.",
+    "camera": {
+      "start": "Make sure the camera is pointing to you and your face is within the camera area.",
+      "end": "The camera recording has ended"
+    },
     "eventMarker": {
-      "found": "Note: event marker found.",
-      "not_found": "Note: no event marker found."
+      "connected": "Event marker connected.",
+      "not_connected": "No event marker connected."
     },
     "holdUpMarker": "Make sure the photodiode is covering the spot and any external recordings have begun before continuing.",
     "quiz": {
@@ -53,7 +56,7 @@
       "prompt": {
         "ius": {
           "preamble": {
-            "start": "This questionnaire is designed to measure intolerance of uncertainty. ",
+            "start": "This questionnaire is designed to measure intolerance of uncertainty.",
             "middle": "Please answer the following questions as honestly as you can.",
             "end": "There are no right or wrong answers, and there are no trick questions."
           },

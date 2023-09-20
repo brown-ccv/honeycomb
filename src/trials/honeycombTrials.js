@@ -4,6 +4,7 @@ import instructionsResponse from "@jspsych/plugin-instructions";
 import preloadResponse from "@jspsych/plugin-preload";
 
 import { config, language, taskSettings } from "../config/main";
+import { div, image, p, b } from "../lib/markup/tags";
 
 const honeycombLanguage = language.trials.honeycomb;
 
@@ -12,7 +13,7 @@ const honeycombLanguage = language.trials.honeycomb;
  */
 const welcomeTrial = {
   type: htmlKeyboardResponse,
-  stimulus: `<p>${honeycombLanguage.welcome}</p>`,
+  stimulus: p(honeycombLanguage.welcome),
 };
 
 /**
@@ -25,18 +26,26 @@ const welcomeTrial = {
 const instructionsTrial = {
   type: instructionsResponse,
   pages: [
-    `<p>${honeycombLanguage.instructions.read}</p>`,
-    `<p>${honeycombLanguage.instructions.circle}</p>`,
+    p(honeycombLanguage.instructions.read),
+    p(honeycombLanguage.instructions.circle),
     // Add a page for very possible stimuli - displays the image and the correct response
     ...taskSettings.honeycomb.timeline_variables.map(({ stimulus, correct_response }) => {
-      const color = stimulus.substring(stimulus.lastIndexOf("/") + 1, stimulus.indexOf(".")); // Pull the color out of the file name
-      return `<p>${honeycombLanguage.instructions.example.start} <strong>${color}</strong>
-      ${honeycombLanguage.instructions.example.middle} <strong>${correct_response}</strong> 
-      ${honeycombLanguage.instructions.example.end}</p>
-      <br />
-      <img src=${stimulus} />`;
+      // Pull the color out of the file name
+      const color = stimulus.substring(stimulus.lastIndexOf("/") + 1, stimulus.indexOf("."));
+
+      // Build the instructions and image elements
+      const instructionsMarkup = p(
+        honeycombLanguage.instructions.example.start +
+          b(color) +
+          honeycombLanguage.instructions.example.middle +
+          b(correct_response) +
+          honeycombLanguage.instructions.example.end
+      );
+      const imageMarkup = image({ src: stimulus });
+
+      return div(instructionsMarkup + imageMarkup);
     }),
-    `<p>${honeycombLanguage.instructions.next}</p>`,
+    p(honeycombLanguage.instructions.next),
   ],
   show_clickable_nav: true,
   post_trial_gap: 500,
@@ -46,24 +55,32 @@ const instructionsTrial = {
 /** Trial that loads all of the stimulus images */
 const preloadTrial = {
   type: preloadResponse,
-  message: `<p>${language.prompts.settingUp}<p>`,
+  message: p(language.prompts.settingUp),
   images: taskSettings.honeycomb.timeline_variables.map(({ stimulus }) => stimulus),
 };
 
 /** Trial that calculates and displays some results of the session  */
 const createDebriefTrial = (jsPsych) => ({
   type: htmlKeyboardResponse,
-  stimulus: function () {
+  stimulus: () => {
     // Note that we need the jsPsych instance to aggregate the data
     const responseTrials = jsPsych.data.get().filter({ task: "response" });
     const correct_trials = responseTrials.filter({ correct: true });
     const accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
     const reactionTime = Math.round(correct_trials.select("rt").mean());
 
-    const trialLanguage = honeycombLanguage.debrief;
-    return `<p>${trialLanguage.accuracy.start} ${accuracy}${trialLanguage.accuracy.end}</p>
-    <p>${trialLanguage.reactionTime.start} ${reactionTime}${trialLanguage.reactionTime.end}</p>
-    <p>${trialLanguage.complete}</p>`;
+    const debriefLanguage = honeycombLanguage.debrief;
+
+    const accuracyMarkup = p(
+      debriefLanguage.accuracy.start + accuracy + debriefLanguage.accuracy.end
+    );
+    const reactionTimeMarkup = p(
+      debriefLanguage.reactionTime.start + reactionTime + debriefLanguage.reactionTime.end
+    );
+    const completeMarkup = p(debriefLanguage.complete);
+
+    // Display the accuracy, reaction time, and complete message as 3 paragraphs in a row
+    return accuracyMarkup + reactionTimeMarkup + completeMarkup;
   },
 });
 
