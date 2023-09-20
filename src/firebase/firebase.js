@@ -15,31 +15,20 @@ if (window.location.hostname === "localhost") db.useEmulator("localhost", 8080);
 
 // Get a reference to the Firebase document at
 // "/participant_responses/{studyID}/participants/{participantID}"
-function getParticipantRef(studyID, participantID) {
+export function getParticipantRef(studyID, participantID) {
   return db.doc(`participant_responses/${studyID}/participants/${participantID}`);
 }
 
-// Get a reference to the Firebase document at
-// "/participant_responses/{studyID}/participants/{participantID}/data/{startDate}"
-function getExperimentRef(studyID, participantID, startDate) {
-  return db.doc(`${getParticipantRef(studyID, participantID).path}/data/${startDate}`);
-}
-
 /**
- * Validate the given studyID & participantID combo
- * @param {string} studyID The ID of a given study in Firebase
- * @param {string} participantID The ID of a given participant inside the studyID
- * @returns true if the given studyID & participantID combo is in Firebase, false otherwise
+ * Get a reference to the Firebase document at
+ * "/participant_responses/{studyID}/participants/{participantID}/data/{startDate}"
+ * @param {string} studyID
+ * @param {string} participantID
+ * @param {Date} startDate The starting date-time of the experiment
+ * @returns {DocumentReference} A reference to the document in Firestore
  */
-export async function validateParticipant(studyID, participantID) {
-  try {
-    // .get() will fail on an invalid path
-    await getParticipantRef(studyID, participantID).get();
-    return true;
-  } catch (error) {
-    console.error("Unable to validate the experiment:\n", error);
-    return false;
-  }
+export function getExperimentRef(studyID, participantID, startDate) {
+  return db.doc(`${getParticipantRef(studyID, participantID).path}/data/${startDate}`);
 }
 
 /**
@@ -65,23 +54,5 @@ export async function initParticipant(studyID, participantID, startDate) {
   } catch (error) {
     console.error("Unable to initialize the experiment:\n", error);
     return false;
-  }
-}
-
-/**
- * Adds a JsPsych trial to Firebase.
- * Each trial is its own document in the "trials" subcollection
- * @param {any} data The JsPsych data object from a single trial
- */
-export async function addToFirebase(data) {
-  const studyID = data.study_id;
-  const participantID = data.participant_id;
-  const startDate = data.start_date;
-
-  try {
-    const experiment = getExperimentRef(studyID, participantID, startDate);
-    await experiment.collection("trials").add(data);
-  } catch (error) {
-    console.error("Unable to add trial:\n", error);
   }
 }

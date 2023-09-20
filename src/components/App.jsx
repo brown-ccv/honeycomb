@@ -2,19 +2,14 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import "bootstrap/dist/css/bootstrap.css";
 
-import { addToFirebase, validateParticipant } from "../firebase";
-
+import Error from "./Error";
 import Experiment from "./Experiment";
 import Login from "./Login";
-import Error from "./Error";
 
-import { OLD_CONFIG, LOCATION, DEPLOYMENT, NODE_ENV } from "../constants";
+import { DEPLOYMENT, LOCATION, NODE_ENV, OLD_CONFIG } from "../constants";
 import { getQueryVariable } from "../utils";
-
 import { TASK_VERSION } from "../JsPsych/constants";
-
-// Additional options passed by the user
-import { JSPSYCH_OPTIONS } from "../JsPsych/timeline";
+import { getDeployment } from "../deployments";
 
 /** Top-level React component for Honeycomb.
  *
@@ -22,6 +17,7 @@ import { JSPSYCH_OPTIONS } from "../JsPsych/timeline";
  * This lets us determine what the app is running on (Electron, Firebase, PsiTurk, or MTurk).
  * It also lets us pass data between <Login> and <JsPsychExperiment />
  */
+// More information about the arrow function syntax can be found here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
 function App() {
   // Manage user state of the app
   const [loggedIn, setLoggedIn] = useState(false);
@@ -29,18 +25,13 @@ function App() {
   // TODO: Refactor to be the error message itself or null
   const [isError, setIsError] = useState(false);
 
-  // Manage the method state of the app ("csv", "local", "firebase", "mturk")
-  // TODO: Will just be DEPLOYMENT?
-  const [currentMethod, setMethod] = useState("csv");
-
-  // Manage the electron renderer
-  const [ipcRenderer, setIpcRenderer] = useState();
-  // Manage the psiturk object
-  const [psiturk, setPsiturk] = useState();
-
   // Manage user data
   const [participantID, setParticipantID] = useState("");
   const [studyID, setStudyID] = useState("");
+
+  // Manage the method state of the app ("download", "local", "firebase", "psiturk")
+  // Deployment object itself is the import module
+  const [deployment, setDeployment] = useState();
 
   /**
    * This effect is called once, on the first render of the application
@@ -55,6 +46,7 @@ function App() {
     // TODO: Refactor to switch
     if (LOCATION === "clinic") {
       // Running in an Electron process
+      // TODO: Check against isElectron utility function
       let renderer;
       try {
         // Load the Electron renderer process and psiturk based on MTURK config variable
@@ -66,8 +58,6 @@ function App() {
         const credentials = renderer.sendSync("syncCredentials");
         setParticipantID(credentials.participantID || "");
         setStudyID(credentials.studyID || "");
-
-        setIpcRenderer(renderer);
       } catch (e) {
         console.error("Unable to instantiate the Electron process", e);
       }
@@ -82,108 +72,57 @@ function App() {
       setParticipantID(query.get("participantID") || "");
     }
 
-    switch (DEPLOYMENT) {
-      case "csv":
-        // Data is downloaded as a CSV file at the end of the experiment
-        setMethod("csv");
-        break;
-      case "local":
-        // Save to a local JSON file with Honeycomb/studyID/participantID/[startDate] folder structure
-        break;
-      case "firebase": {
-        // Data is saved in Firebase's Firestore database
-        setMethod("firebase");
-        break;
-      }
-      case "prolific": {
-        // TODO: Prolific will be deleted
-        // Logs with with studyID as prolific and participantID as <pID>
-        const pID = getQueryVariable("PROLIFIC_PID");
-        handleLogin("prolific", pID);
+    async function loadDeploymentFunctions() {
+      switch (DEPLOYMENT) {
+        // TODO: These cases can be consolidated
+        case "download":
+          // Data is downloaded as a CSV file at the end of the experiment
+          setDeployment(await getDeployment("download"));
+          break;
+        case "local":
+          // Save to a local JSON file with Honeycomb/studyID/participantID/[startDate] folder structure
+          setDeployment(await getDeployment("local"));
+          break;
+        case "firebase":
+          // Data is saved in Firebase's Firestore database
+          setDeployment(await getDeployment("firebase"));
+          break;
+        case "prolific": {
+          // Prolific currently uses the Firebase CRUD functions
+          setDeployment(await getDeployment("firebase"));
 
-        // Prolific currently uses the Firebase CRUD functions
-        setMethod("firebase");
-        break;
-      }
-      case "psiturk":
-        {
-          /* eslint-disable */
-          // ? This is using all the JavaScript min files?
-          window.lodash = _.noConflict();
-          setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
+          // TODO: Prolific will be deleted
+          // Logs with with studyID as prolific and participantID as <pID>
+          const pID = getQueryVariable("PROLIFIC_PID");
+          handleLogin("prolific", pID);
 
-          // Logs with with studyID as mturk and participantID as <pID>
-          handleLogin("mturk", turkUniqueId);
-          setMethod("mturk");
-          /* eslint-enable */
+          break;
         }
-        break;
-      // TODO: Add XAMPP support and instructions https://www.jspsych.org/7.3/overview/data/#storing-data-permanently-as-a-file
-      // TODO: Add MySQL support and instructions https://www.jspsych.org/7.3/overview/data/#storing-data-permanently-in-a-mysql-database
-      case "custom": // TODO: User will have to provide the data functions to <Honeycomb />
-      default:
-        setIsError(true);
-        console.error("process.env.DEPLOYMENT is invalid or not set: ");
-        break;
+        case "psiturk":
+          {
+            /* eslint-disable */
+            // ? This is using all the JavaScript min files?
+            window.lodash = _.noConflict();
+            setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
+
+            setDeployment(await getDeployment("psiturk"));
+
+            // Logs with with studyID as psiturk and participantID as <pID>
+            handleLogin("psiturk", turkUniqueId);
+            /* eslint-enable */
+          }
+          break;
+        // TODO: Add XAMPP support and instructions https://www.jspsych.org/7.3/overview/data/#storing-data-permanently-as-a-file
+        // TODO: Add MySQL support and instructions https://www.jspsych.org/7.3/overview/data/#storing-data-permanently-in-a-mysql-database
+        case "custom": // TODO: User will have to provide the data functions to <Honeycomb />
+        default:
+          setIsError(true);
+          console.error("process.env.DEPLOYMENT is invalid or not set: ");
+          break;
+      }
     }
-    // eslint-disable-next-line
+    loadDeploymentFunctions();
   }, []);
-
-  /** VALIDATION FUNCTIONS */
-
-  // More information about the arrow function syntax can be found here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
-
-  // Default to valid
-  async function defaultValidation() {
-    return true;
-  }
-  // Validate participant/study against Firestore rules
-  function firebaseValidation(studyID, participantID) {
-    return validateParticipant(studyID, participantID);
-  }
-
-  /** DATA WRITE FUNCTIONS */
-
-  // TODO 157: Separate file for update/finish functions
-  // TODO 157: Have an object of functions, accessed by the config variable
-  // Do nothing
-  function defaultFunction() {
-    return;
-  }
-
-  // Add trial data to Firestore
-  function firebaseUpdateFunction(data) {
-    addToFirebase(data);
-  }
-  // Execute the "data" callback function (see public/electron.js)
-  function desktopUpdateFunction(data) {
-    ipcRenderer.send("data", data);
-  }
-  // Add trial data to psiturk
-  function psiturkUpdateFunction(data) {
-    psiturk.recordTrialData(data);
-  }
-
-  /** EXPERIMENT FINISH FUNCTIONS */
-
-  // Save the experiment data on the desktop
-  function defaultFinishFunction(data) {
-    data.localSave("csv", "honeycomb.csv");
-  }
-
-  // Execute the "end" callback function (see public/electron.js)
-  function desktopFinishFunction() {
-    ipcRenderer.send("end", "true");
-  }
-  function psiturkFinishFunction() {
-    const completePsiturk = async () => {
-      psiturk.saveData({
-        success: () => psiturk.completeHIT(),
-        error: () => setIsError(true),
-      });
-    };
-    completePsiturk();
-  }
 
   // Update the study/participant data when they log in
   const handleLogin = useCallback((studyID, participantID) => {
@@ -192,47 +131,31 @@ function App() {
     setLoggedIn(true);
   }, []);
 
-  if (isError) return <Error />;
-  else {
+  // TODO: Loading JSX if deployment is undefined?
+  if (isError) {
+    return <Error />;
+  } else {
     return loggedIn ? (
       <Experiment
         config={OLD_CONFIG}
         studyID={studyID}
         participantID={participantID}
         taskVersion={TASK_VERSION}
-        dataUpdateFunction={
-          {
-            desktop: desktopUpdateFunction,
-            firebase: firebaseUpdateFunction,
-            mturk: psiturkUpdateFunction,
-            default: defaultFunction,
-          }[currentMethod]
-        }
-        dataFinishFunction={
-          {
-            desktop: desktopFinishFunction,
-            mturk: psiturkFinishFunction,
-            firebase: defaultFunction,
-            default: defaultFinishFunction,
-          }[currentMethod]
-        }
-        jsPsychOptions={JSPSYCH_OPTIONS}
+        // JsPsych functions
+        dataUpdateFunction={deployment?.on_data_update}
+        dataFinishFunction={deployment?.on_finish}
       />
     ) : (
       // Not logged in - display login screen
+      // TODO: Typing in the login page is causing the screen to re-render?
+      // App.jsx should have a "handleSubmit" callback, not update on every letter
       <Login
         studyID={studyID}
         setStudyID={setStudyID}
         participantID={participantID}
         setParticipantID={setParticipantID}
         handleLogin={handleLogin}
-        validationFunction={
-          {
-            desktop: defaultValidation,
-            default: defaultValidation,
-            firebase: firebaseValidation,
-          }[currentMethod]
-        }
+        validationFunction={deployment?.validate_login}
       />
     );
   }

@@ -19,7 +19,6 @@ export function useOldConfig(newConfig) {
  * @param {*} variable The key to parse
  */
 // TODO 199: Can this just use URLSearchParams?
-// TODO: MOve this out of JsPsych
 export function getQueryVariable(variable) {
   const query = window.location.search.substring(1);
   const vars = query.split("&");
@@ -27,4 +26,40 @@ export function getQueryVariable(variable) {
     const pair = vars[i].split("=");
     if (decodeURIComponent(pair[0]) === variable) return decodeURIComponent(pair[1]);
   }
+}
+
+/**
+ * Determine if the code is being run in an Electron process
+ * https://github.com/cheton/is-electron/blob/master/index.js
+ * @returns {boolean}
+ */
+export function isElectron() {
+  // Renderer process
+  if (
+    typeof window !== "undefined" &&
+    typeof window.process === "object" &&
+    window.process.type === "renderer"
+  ) {
+    return true;
+  }
+
+  // Main process
+  if (
+    typeof process !== "undefined" &&
+    typeof process.versions === "object" &&
+    !!process.versions.electron
+  ) {
+    return true;
+  }
+
+  // Detect the user agent when the `nodeIntegration` option is set to false
+  if (
+    typeof navigator === "object" &&
+    typeof navigator.userAgent === "string" &&
+    navigator.userAgent.indexOf("Electron") >= 0
+  ) {
+    return true;
+  }
+
+  return false;
 }

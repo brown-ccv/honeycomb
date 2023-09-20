@@ -6,3 +6,4 @@ export * from "./LargeWindow";
 export * from "./Preamble";
 export * from "./Slider";
 export * from "./WelcomeMessage";
+export * from "./fullscreen";
