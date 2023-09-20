@@ -31,28 +31,28 @@ const surveyPreamble2 =
 // Intolerance of Uncertainty (IUS) Scale
 const iusOptions = {
   options: [
-    `${QUIZ_LANGUAGE.answer.ius.not}`,
-    `${QUIZ_LANGUAGE.answer.ius.little}`,
-    `${QUIZ_LANGUAGE.answer.ius.somewhat}`,
-    `${QUIZ_LANGUAGE.answer.ius.very}`,
-    `${QUIZ_LANGUAGE.answer.ius.entirely}`,
+    QUIZ_LANGUAGE.answer.ius.not,
+    QUIZ_LANGUAGE.answer.ius.little,
+    QUIZ_LANGUAGE.answer.ius.somewhat,
+    QUIZ_LANGUAGE.answer.ius.very,
+    QUIZ_LANGUAGE.answer.ius.entirely,
     abstain,
   ],
 };
 
 const iusPrompts = [
-  `${QUIZ_LANGUAGE.prompt.ius.upset}`,
-  `${QUIZ_LANGUAGE.prompt.ius.frustration}`,
-  `${QUIZ_LANGUAGE.prompt.ius.full_life}`,
-  `${QUIZ_LANGUAGE.prompt.ius.surprise_avoid}`,
-  `${QUIZ_LANGUAGE.prompt.ius.unforeseen_spoil}`,
-  `${QUIZ_LANGUAGE.prompt.ius.uncertainty_paralysis}`,
-  `${QUIZ_LANGUAGE.prompt.ius.uncertainty_malfunction}`,
-  `${QUIZ_LANGUAGE.prompt.ius.future}`,
-  `${QUIZ_LANGUAGE.prompt.ius.surprise_intolerance}`,
-  `${QUIZ_LANGUAGE.prompt.ius.doubt_paralysis}`,
-  `${QUIZ_LANGUAGE.prompt.ius.organize}`,
-  `${QUIZ_LANGUAGE.prompt.ius.escape}`,
+  QUIZ_LANGUAGE.prompt.ius.upset,
+  QUIZ_LANGUAGE.prompt.ius.frustration,
+  QUIZ_LANGUAGE.prompt.ius.full_life,
+  QUIZ_LANGUAGE.prompt.ius.surprise_avoid,
+  QUIZ_LANGUAGE.prompt.ius.unforeseen_spoil,
+  QUIZ_LANGUAGE.prompt.ius.uncertainty_paralysis,
+  QUIZ_LANGUAGE.prompt.ius.uncertainty_malfunction,
+  QUIZ_LANGUAGE.prompt.ius.future,
+  QUIZ_LANGUAGE.prompt.ius.surprise_intolerance,
+  QUIZ_LANGUAGE.prompt.ius.doubt_paralysis,
+  QUIZ_LANGUAGE.prompt.ius.organize,
+  QUIZ_LANGUAGE.prompt.ius.escape,
 ];
 
 const iusSurvey = multiSurvey({
@@ -87,12 +87,12 @@ const demoMultiChoiceOptions = {
     QUIZ_LANGUAGE.answer.demographics_ethnicity.no_hispanic_latino,
   ],
   race: [
-    `${QUIZ_LANGUAGE.answer.demographics_race.asian}`,
-    `${QUIZ_LANGUAGE.answer.demographics_race.african_american}`,
-    `${QUIZ_LANGUAGE.answer.demographics_race.caucasian}`,
-    `${QUIZ_LANGUAGE.answer.demographics_race.native_american_alaskan}`,
-    `${QUIZ_LANGUAGE.answer.demographics_race.native_hawaiian_pacific_islander}`,
-    `${QUIZ_LANGUAGE.answer.demographics_race.other}`,
+    QUIZ_LANGUAGE.answer.demographics_race.asian,
+    QUIZ_LANGUAGE.answer.demographics_race.african_american,
+    QUIZ_LANGUAGE.answer.demographics_race.caucasian,
+    QUIZ_LANGUAGE.answer.demographics_race.native_american_alaskan,
+    QUIZ_LANGUAGE.answer.demographics_race.native_hawaiian_pacific_islander,
+    QUIZ_LANGUAGE.answer.demographics_race.other,
   ],
   yesNo: [
     QUIZ_LANGUAGE.answer.demographics_binary.yes,

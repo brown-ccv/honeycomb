@@ -1,8 +1,11 @@
+import $ from "jquery";
 import { config } from "../../config/main";
 import { eventCodes } from "../../config/trigger";
-import $ from "jquery";
 import { div, span } from "./tags";
 
+/**
+ * Displays a box in the bottom right corner of the screen with the id "photodiode-spot"
+ */
 function photodiodeGhostBox() {
   const spot = span("", { id: "photodiode-spot", class: "photodiode-spot" });
   return div(spot, {
@@ -12,7 +15,9 @@ function photodiodeGhostBox() {
   });
 }
 
-// TODO: Rename as photodiodeSpot
+/**
+ * Conditionally flashes a spot inside the photodiodeGhostBox
+ */
 function photodiodeSpot(taskCode) {
   // Conditionally load electron based on config variable
   let ipcRenderer = false;
@@ -30,6 +35,7 @@ function photodiodeSpot(taskCode) {
     }, ms);
   }
 
+  // Repeat pulseFor i times
   function repeatPulseFor(ms, i) {
     if (i > 0) {
       pulseFor(ms, () => {

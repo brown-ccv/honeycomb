@@ -1,12 +1,12 @@
 import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
-import { createHoneycombBlock } from "./honeycombBlock";
 import {
   createDebriefTrial,
   finishTrial,
   instructionsTrial,
   preloadTrial,
   welcomeTrial,
-} from "./honeycombTrials";
+} from "../trials/honeycombTrials";
+import { createHoneycombBlock } from "./honeycombBlock";
 
 /**
  * This timeline builds the example reaction time task from the jsPsych tutorial.

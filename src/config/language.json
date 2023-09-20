@@ -9,18 +9,7 @@
   },
   "trials": {
     "honeycomb": {
-      "debrief": {
-        "accuracy": {
-          "start": "You responded correctly on",
-          "end": "% of the trials."
-        },
-        "reactionTime": {
-          "start": "Your average response time was",
-          "end": "ms."
-        },
-        "complete": "Press any key to complete the experiment. Thank you!"
-      },
-      "finish": "This experiment has ended.",
+      "welcome": "Welcome to the experiment. Press any key to begin.",
       "instructions": {
         "read": "Please read the following instructions carefully.",
         "circle": "In this experiment, a circle will appear in the center of the screen.",
@@ -31,7 +20,18 @@
         },
         "next": "Click next to begin."
       },
-      "welcome": "Welcome to the experiment. Press any key to begin."
+      "debrief": {
+        "accuracy": {
+          "start": "You responded correctly on ",
+          "end": "% of the trials."
+        },
+        "reactionTime": {
+          "start": "Your average response time was ",
+          "end": "ms."
+        },
+        "complete": "Press any key to complete the experiment. Thank you!"
+      },
+      "finish": "This experiment has ended."
     },
     "adjustVolume": "Set tablet volume to 50/100.",
     "camera": {
