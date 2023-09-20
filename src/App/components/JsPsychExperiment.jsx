@@ -22,11 +22,7 @@ export default function JsPsychExperiment({
     ...jsPsychOptions,
     display_element: experimentDivId,
     on_data_update: (data) => dataUpdateFunction(data),
-    on_finish: (data) => {
-      // Save and display the data when the experiment finishes
-      dataFinishFunction(data);
-      jsPsych.data.displayData();
-    },
+    on_finish: (data) => dataFinishFunction(data),
   };
 
   /**
