@@ -25,7 +25,7 @@
     "bootstrap": "^5.2.0-beta1",
     "electron-log": "^4.4.8",
     "electron-squirrel-startup": "^1.0.0",
-    "event-marker": "git+https://github.com/brown-ccv/event-marker.git",
+    "event-marker": "github:brown-ccv/event-marker",
     "execa": "^8.0.1",
     "firebase": "^10.1.0",
     "fs-extra": "^11.1.1",
@@ -39,11 +39,14 @@
     "wait-on": "^7.0.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.22.20",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@electron-forge/cli": "^6.0.0-beta.64",
-    "@electron-forge/maker-deb": "^6.0.0-beta.64",
-    "@electron-forge/maker-dmg": "^6.0.0-beta.64",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
+    "@electron-forge/cli": "^6.2.1",
+    "@electron-forge/maker-deb": "^6.2.1",
+    "@electron-forge/maker-dmg": "^6.2.1",
+    "@electron-forge/maker-squirrel": "^6.2.1",
+    "@electron-forge/maker-zip": "^6.2.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
     "@inquirer/prompts": "^3.0.3",
     "chai": "^4.2.0",
     "concurrently": "^8.2.1",
@@ -108,37 +111,8 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
-    },
-    "forge": {
-      "packagerConfig": {
-        "asar": true
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {
-            "icon": "./assets/icons/mac/icon.icns"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-dmg",
-          "config": {
-            "icon": "./assets/icons/mac/icon.icns",
-            "overwrite": true
-          },
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "iconUrl": "https://raw.githubusercontent.com/brown-ccv/honeycomb/main/assets/icons/win/icon.ico"
-          }
-        }
-      ]
     }
-  },
+   },
   "lint-staged": {
     "**/*.{js,jsx}": [
       "eslint --fix"
