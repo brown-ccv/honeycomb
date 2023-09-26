@@ -18,8 +18,12 @@ const jsPsychOptions = {
  * Builds the experiment's timeline that jsPsych will run
  * The instance of jsPsych passed in will include jsPsychOptions from above
  * @param {Object} jsPsych The jsPsych instance that is running the experiment
+ * @param {*} studyID The ID of the study that was just logged into
+ * @param {*} participantID The ID of the participant that was just logged in
+ * @returns The timeline for JsPsych to run
  */
-function buildTimeline(jsPsych) {
+function buildTimeline(jsPsych, studyID, participantID) {
+  console.log(`Building timeline for ${participantID} on study ${studyID}`);
   const timeline = createHoneycombTimeline(jsPsych);
 
   // Dynamically adds the camera trials to the experiment if config.USE_CAMERA

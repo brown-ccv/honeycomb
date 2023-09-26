@@ -168,8 +168,8 @@ export default function App() {
     if (loggedIn) {
       return (
         <JsPsychExperiment
-          studyId={studyID}
-          participantId={participantID}
+          studyID={studyID}
+          participantID={participantID}
           taskVersion={taskVersion}
           dataUpdateFunction={
             {
