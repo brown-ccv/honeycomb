@@ -6,8 +6,8 @@ import { initParticipant } from "../deployments/firebase";
 import { buildTimeline, jsPsychOptions } from "../../timelines/main";
 
 export default function JsPsychExperiment({
-  studyId,
-  participantId,
+  studyID,
+  participantID,
   taskVersion,
   dataUpdateFunction,
   dataFinishFunction,
@@ -26,7 +26,7 @@ export default function JsPsychExperiment({
   };
 
   /**
-   * Create the instance of JsPsych whenever the studyId, participantId, or taskVersion changes,
+   * Create the instance of JsPsych whenever the studyID, participantID, or taskVersion changes,
    * which occurs then the user logs in.
    *
    * This instance of jsPsych is passed to any trials that need it when the timeline is built.
@@ -37,21 +37,21 @@ export default function JsPsychExperiment({
     const startDate = new Date().toISOString();
 
     // Write the initial record to Firestore
-    if (config.USE_FIREBASE) initParticipant(studyId, participantId, startDate);
+    if (config.USE_FIREBASE) initParticipant(studyID, participantID, startDate);
 
     const jsPsych = initJsPsych(combinedOptions);
     // Add experiment properties into jsPsych directly
     jsPsych.data.addProperties({
-      study_id: studyId,
-      participant_id: participantId,
+      study_id: studyID,
+      participant_id: participantID,
       start_date: startDate,
       task_version: taskVersion,
     });
     return jsPsych;
-  }, [studyId, participantId, taskVersion]);
+  }, [studyID, participantID, taskVersion]);
 
   // Build the experiment timeline
-  const timeline = buildTimeline(jsPsych);
+  const timeline = buildTimeline(jsPsych, studyID, participantID);
 
   /**
    * Callback function used to set up event and lifecycle callbacks to start and stop jspsych.
