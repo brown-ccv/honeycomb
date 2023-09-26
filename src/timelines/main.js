@@ -7,10 +7,7 @@ import { createHoneycombTimeline } from "./honeycombTimeline";
  * Note that Honeycomb combines these with other options required for Honeycomb to operate correctly
  */
 const jsPsychOptions = {
-  on_trial_finish: function (data) {
-    console.log("A trial just ended, here are the latest data:");
-    console.log(data);
-  },
+  on_trial_finish: (data) => console.log("A trial just ended, here are the latest data:", data),
   default_iti: 250,
 };
 
@@ -23,7 +20,7 @@ const jsPsychOptions = {
  * @returns The timeline for JsPsych to run
  */
 function buildTimeline(jsPsych, studyID, participantID) {
-  console.log(`Building timeline for ${participantID} on study ${studyID}`);
+  console.log(`Building timeline for participant ${participantID} on study ${studyID}`);
   const timeline = createHoneycombTimeline(jsPsych);
 
   // Dynamically adds the camera trials to the experiment if config.USE_CAMERA
