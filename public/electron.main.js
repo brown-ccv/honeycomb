@@ -1,58 +1,55 @@
-/**
- * Main electron renderer processes
- */
-const { app, BrowserWindow } = require("electron");
+/** MAIN ELECTRON RENDERER PROCESS */
+
+const { app, BrowserWindow, protocol } = require("electron");
 const path = require("node:path");
-// const log = require("electron-log");
+const url = require("url");
 
-/** Whether or not Electron the app is in development mode */
-const IS_DEV = process.env.ELECTRON_START_URL ? true : false;
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let MAIN_WINDOW;
+/** Creates a new Electron window. */
+function createWindow() {
+  const mainWindow = new BrowserWindow({
+    width: 1500,
+    height: 900,
+    icon: "./favicon.ico",
+    webPreferences: {
+      preload: path.join(__dirname, "electron.preload.js"),
+    },
+  });
+
+  /**
+   * Load the app into the Electron window
+   * In production it loads the local bundle created by the build process
+   * In development we use ELECTRON_START_URL (This allows hot-reloading)
+   */
+  const appURL = app.isPackaged
+    ? url.format({
+        pathname: path.join(__dirname, "index.html"),
+        protocol: "file:",
+        slashes: true,
+      })
+    : process.env.ELECTRON_START_URL;
+  mainWindow.loadURL(appURL);
+
+  // Maximize the window in production
+  if (app.isisPackaged) mainWindow.maximize();
+  // Open the dev tools in development
+  else mainWindow.webContents.openDevTools();
+}
 
 /**
- * Creates a new Electron window.
- * The window is created differently based on IS_DEV
+ * Set up a local proxy to adjust the paths of requested files
+ * when loading them from the production bundle (e.g. local fonts, etc...).
  */
-function createWindow() {
-  // Create the browser window.
-  if (IS_DEV) {
-    // Create a new window in development mode
-    console.log("Creating a window in development mode");
-    MAIN_WINDOW = new BrowserWindow({
-      width: 1500,
-      height: 900,
-      icon: "./favicon.ico",
-      webPreferences: {
-        // nodeIntegration: true,
-        // contextIsolation: false,
-      },
-    });
-  } else {
-    // Create a new browser window in production mode
-    MAIN_WINDOW = new BrowserWindow({
-      // TODO: These are the navbar things? I want the "traffic lights" but nothing else?
-      // TODO: Open maximized but not fullscreen? https://www.electronjs.org/docs/latest/tutorial/window-customization#create-frameless-windows
-      // fullscreen: true,
-      frame: false,
-      icon: "./favicon.ico",
-      webPreferences: {
-        // nodeIntegration: true,
-        // webSecurity: true,
-        // contextIsolation: false,
-      },
-    });
-  }
-
-  // Load the app.
-  const url =
-    process.env.ELECTRON_START_URL || `file://${path.join(__dirname, "../build/index.html")}`;
-  // log.info(url);
-  MAIN_WINDOW.loadURL(url);
-
-  // Open the DevTools if running in development mode
-  if (IS_DEV) MAIN_WINDOW.webContents.openDevTools();
+function setupLocalFilesNormalizerProxy() {
+  protocol.registerHttpProtocol(
+    "file",
+    (request, callback) => {
+      const url = request.url.substr(8);
+      callback({ path: path.normalize(`${__dirname}/${url}`) });
+    },
+    (error) => {
+      if (error) console.error("Failed to register protocol");
+    }
+  );
 }
 
 /************ EVENT HANDLERS ***********/
@@ -64,6 +61,7 @@ function createWindow() {
  */
 app.whenReady().then(() => {
   createWindow();
+  setupLocalFilesNormalizerProxy();
 
   /**
    * Executed when the app is launched (e.g. clicked on from the taskbar)
@@ -83,3 +81,16 @@ app.whenReady().then(() => {
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
+
+/** Prevents navigation outside of known pages */
+// TODO: This is super useful but end user will have to enter their live website?
+// const allowedNavigationDestinations = "https://my-electron-app.com";
+// app.on("web-contents-created", (event, contents) => {
+//   contents.on("will-navigate", (event, navigationUrl) => {
+//     const parsedUrl = new URL(navigationUrl);
+
+//     if (!allowedNavigationDestinations.includes(parsedUrl.origin)) {
+//       event.preventDefault();
+//     }
+//   });
+// });
