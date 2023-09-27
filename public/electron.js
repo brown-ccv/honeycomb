@@ -1,4 +1,5 @@
 // TODO 151: Can't use ES7 import statements here?
+// TODO: Can I pull this out of the public folder?
 
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, dialog } = require("electron");
