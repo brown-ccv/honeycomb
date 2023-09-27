@@ -1,15 +1,8 @@
-/** ELECTRON PRELOAD PROCESS
- *
- * Note this process has access to bot renderer globals (window and document)
- */
+/** ELECTRON PRELOAD PROCESS */
 const { contextBridge } = require("electron");
 
-// As an example, here we use the exposeInMainWorld API to expose the browsers
-// and node versions to the main window.
-// They'll be accessible at "window.versions".
+/** Load bridges between the main and renderer processes when the preload process is first loaded */
 process.once("loaded", () => {
-  contextBridge.exposeInMainWorld("versions", process.versions);
-  contextBridge.exposeInMainWorld("electron", {
-    desktop: true, // Note that we're running in desktop mode
-  });
+  // Tell renderer we're running in electron (window.IN_ELECTRON)
+  contextBridge.exposeInMainWorld("IN_ELECTRON", true);
 });

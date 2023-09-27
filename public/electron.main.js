@@ -53,7 +53,7 @@ function setupLocalFilesNormalizerProxy() {
   );
 }
 
-/************ EVENT HANDLERS ***********/
+/************ APP LIFECYCLE ***********/
 
 /**
  * Executed when the app is initialized
@@ -95,3 +95,5 @@ app.on("window-all-closed", () => {
 //     }
 //   });
 // });
+
+/************ APP LIFECYCLE ***********/
