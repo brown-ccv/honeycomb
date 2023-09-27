@@ -6,6 +6,7 @@ const url = require("url");
 
 /** Creates a new Electron window. */
 function createWindow() {
+  console.log("Runnning as a package?", app.isPackaged, process.env.ELECTRON_START_URL);
   const mainWindow = new BrowserWindow({
     width: 1500,
     height: 900,
@@ -20,6 +21,7 @@ function createWindow() {
    * In production it loads the local bundle created by the build process
    * In development we use ELECTRON_START_URL (This allows hot-reloading)
    */
+  // TODO: I'm not sure this isPackaged is returning true/false correctly?
   const appURL = app.isPackaged
     ? url.format({
         pathname: path.join(__dirname, "index.html"),
