@@ -32,7 +32,7 @@ if (activeProductId) {
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
-
+// !DONE
 function createWindow() {
   // Create the browser window.
   if (process.env.ELECTRON_START_URL) {
@@ -312,6 +312,7 @@ process.on("uncaughtException", (error) => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+// ! DONE
 app.on("ready", () => {
   createWindow();
 });
