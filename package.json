@@ -89,9 +89,9 @@
     "build:firebase": "dotenv -e env/.env.firebase npm run build",
     "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build",
     "rebuild": "electron-rebuild",
-    "package:windows": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
-    "package:linux": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-deb",
-    "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg"
+    "package:windows": "npm run build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
+    "package:linux": "npm run build && electron-forge make --arch x64 --targets @electron-forge/maker-deb",
+    "package:mac": "npm run build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg"
   },
   "browserslist": {
     "production": [
@@ -100,6 +100,7 @@
       "not op_mini all"
     ],
     "development": [
+      "last 1 electron version",
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
