@@ -55,7 +55,6 @@ export default function App() {
     console.log({
       "Honeycomb Configuration": config,
       "Task Settings": taskSettings,
-      "In electron?": window.IN_ELECTRON, // TODO: This is either true in electron or undefined in the browser, a utility function would still be useful
     });
 
     // If on desktop

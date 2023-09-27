@@ -5,4 +5,5 @@ const { contextBridge } = require("electron");
 process.once("loaded", () => {
   // Tell renderer we're running in electron (window.IN_ELECTRON)
   contextBridge.exposeInMainWorld("IN_ELECTRON", true);
+  // TODO: Expose ipcRenderer calls here? Don't want to use window.require("electron")
 });
