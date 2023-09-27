@@ -8,6 +8,8 @@ const { contextBridge } = require("electron");
 // and node versions to the main window.
 // They'll be accessible at "window.versions".
 process.once("loaded", () => {
-  console.log("ONCE");
   contextBridge.exposeInMainWorld("versions", process.versions);
+  contextBridge.exposeInMainWorld("electron", {
+    desktop: true, // Note that we're running in desktop mode
+  });
 });

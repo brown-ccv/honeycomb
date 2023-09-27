@@ -1,4 +1,4 @@
-/** MAIN ELECTRON RENDERER PROCESS */
+/** ELECTRON MAIN PROCESS */
 
 const { app, BrowserWindow, protocol } = require("electron");
 const path = require("node:path");
@@ -6,7 +6,6 @@ const url = require("url");
 
 /** Creates a new Electron window. */
 function createWindow() {
-  console.log("Runnning as a package?", app.isPackaged, process.env.ELECTRON_START_URL);
   const mainWindow = new BrowserWindow({
     width: 1500,
     height: 900,
