@@ -1,8 +1,11 @@
 /** ELECTRON MAIN PROCESS */
 
-const { app, BrowserWindow, protocol } = require("electron");
+const { app, BrowserWindow } = require("electron");
 const path = require("node:path");
 const url = require("url");
+
+// Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
+if (require("electron-squirrel-startup")) app.quit();
 
 /** Creates a new Electron window. */
 function createWindow() {
@@ -11,7 +14,7 @@ function createWindow() {
     height: 900,
     icon: "./favicon.ico",
     webPreferences: {
-      preload: path.join(__dirname, "electron.preload.js"),
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
@@ -40,17 +43,18 @@ function createWindow() {
  * Set up a local proxy to adjust the paths of requested files
  * when loading them from the production bundle (e.g. local fonts, etc...).
  */
+// TODO: This is deprecated but needed to load the min files?
 function setupLocalFilesNormalizerProxy() {
-  protocol.registerHttpProtocol(
-    "file",
-    (request, callback) => {
-      const url = request.url.substr(8);
-      callback({ path: path.normalize(`${__dirname}/${url}`) });
-    },
-    (error) => {
-      if (error) console.error("Failed to register protocol");
-    }
-  );
+  // protocol.registerHttpProtocol(
+  //   "file",
+  //   (request, callback) => {
+  //     const url = request.url.substr(8);
+  //     callback({ path: path.normalize(`${__dirname}/${url}`) });
+  //   },
+  //   (error) => {
+  //     if (error) console.error("Failed to register protocol");
+  //   }
+  // );
 }
 
 /************ APP LIFECYCLE ***********/

@@ -9,7 +9,7 @@
   "version": "3.2.1",
   "license": "MIT",
   "private": true,
-  "main": "public/electron.main.js",
+  "main": "public/electron/main.js",
   "homepage": ".",
   "repository": "https://github.com/brown-ccv/honeycomb",
   "dependencies": {
