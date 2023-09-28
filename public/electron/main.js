@@ -19,8 +19,9 @@ let CONFIG; // Honeycomb configuration object
  * @mac Builds the Electron window
  */
 app.whenReady().then(() => {
-  // Handle ipcRenderer events
-  ipcMain.handle("setConfig", handleSetConfig);
+  // Handle ipcRenderer events (on is renderer -> main, handle is renderer <--> main)
+  ipcMain.on("setConfig", handleSetConfig);
+  ipcMain.handle("getCredentials", handleGetCredentials);
 
   setupLocalFilesNormalizerProxy();
 
@@ -113,7 +114,19 @@ function setupLocalFilesNormalizerProxy() {
 
 /*********** RENDERER EVENT HANDLERS ***********/
 
+/**
+ * Receives the Honeycomb config settings and passes them to the CONFIG global in this file
+ * @param {Event} event The Electron renderer event
+ * @param {Object} config The current Honeycomb configuration
+ */
 function handleSetConfig(event, config) {
   CONFIG = config;
   console.log(CONFIG); // TEMP
+}
+
+function handleGetCredentials() {
+  return {
+    studyID: process.env.REACT_APP_STUDY_ID,
+    participantID: process.env.REACT_APP_PARTICIPANT_ID,
+  };
 }

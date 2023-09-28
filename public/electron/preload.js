@@ -6,6 +6,7 @@ process.once("loaded", () => {
   // Expose an electronAPI for inter-process communication
   contextBridge.exposeInMainWorld("electronAPI", {
     USE_ELECTRON: true,
-    setConfig: (config) => ipcRenderer.invoke("setConfig", config),
+    setConfig: (config) => ipcRenderer.send("setConfig", config),
+    getCredentials: () => ipcRenderer.invoke("getCredentials"),
   });
 });

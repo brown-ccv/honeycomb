@@ -16,7 +16,6 @@ import Login from "./components/Login";
 import { addToFirebase, validateParticipant } from "./deployments/firebase";
 
 import { config, taskSettings, taskVersion, turkUniqueId } from "../config/main";
-import trigger from "../config/trigger";
 import { getProlificId } from "../lib/utils";
 
 /**
@@ -34,8 +33,6 @@ export default function App() {
   // Manage error state of the app
   const [isError, setIsError] = React.useState(false);
 
-  // Manage the electron renderer
-  const [ipcRenderer, setIpcRenderer] = React.useState();
   // Manage the psiturk object
   const [psiturk, setPsiturk] = React.useState(false);
 
@@ -52,59 +49,57 @@ export default function App() {
    * And determines which methods to be using
    */
   React.useEffect(() => {
-    // For testing and debugging purposes
-    console.log({
-      "Honeycomb Configuration": config,
-      "Task Settings": taskSettings,
-    });
+    async function setUpHoneycomb() {
+      // For testing and debugging purposes
+      console.log({
+        "Honeycomb Configuration": config,
+        "Task Settings": taskSettings,
+      });
 
-    // If on desktop
-    if (config.USE_ELECTRON) {
-      // TODO: Delete this
-      // const { ipcRenderer } = window.require("electron");
-      // setIpcRenderer(ipcRenderer);
-      setIpcRenderer(undefined);
+      // If on desktop
+      if (config.USE_ELECTRON) {
+        await window.electronAPI.setConfig(config); // Pass config to Electron ipcMain
+        // TODO: Pass trigger to Electron ipcMain
 
-      window.electronAPI.setConfig(config); // Pass config to Electron ipcMain
-      window.electronAPI.setTrigger(trigger); // Pass trigger to Electron ipcMain
+        // Fill in login fields based on environment variables (may still be blank)
+        const credentials = await window.electronAPI.getCredentials();
+        if (credentials.participantID) setParticipantID(credentials.participantID);
+        if (credentials.studyID) setStudyID(credentials.studyID);
 
-      // Fill in login fields based on environment variables (may still be blank)
-      const credentials = ipcRenderer.sendSync("syncCredentials");
-      if (credentials.participantID) setParticipantID(credentials.participantID);
-      if (credentials.studyID) setStudyID(credentials.studyID);
-
-      setMethod("desktop");
-    } else {
-      // If MTURK
-      if (config.USE_MTURK) {
-        /* eslint-disable */
-        window.lodash = _.noConflict();
-        setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
-        setMethod("mturk");
-        handleLogin("mturk", turkUniqueId);
-        /* eslint-enable */
-      } else if (config.USE_PROLIFIC) {
-        const pID = getProlificId();
-        if (config.USE_FIREBASE && pID) {
-          setMethod("firebase");
-          handleLogin("prolific", pID);
-        } else {
-          // Error - Prolific must be used with Firebase
-          setIsError(true);
-        }
-      } else if (config.USE_FIREBASE) {
-        // Fill in login fields based on query parameters (may still be blank)
-        const query = new URLSearchParams(window.location.search);
-        const studyId = query.get("studyID");
-        const participantId = query.get("participantID");
-        if (studyId) setStudyID(studyId);
-        if (participantId) setParticipantID(participantId);
-
-        setMethod("firebase");
+        setMethod("desktop");
       } else {
-        setMethod("default");
+        // If MTURK
+        if (config.USE_MTURK) {
+          /* eslint-disable */
+          window.lodash = _.noConflict();
+          setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
+          setMethod("mturk");
+          handleLogin("mturk", turkUniqueId);
+          /* eslint-enable */
+        } else if (config.USE_PROLIFIC) {
+          const pID = getProlificId();
+          if (config.USE_FIREBASE && pID) {
+            setMethod("firebase");
+            handleLogin("prolific", pID);
+          } else {
+            // Error - Prolific must be used with Firebase
+            setIsError(true);
+          }
+        } else if (config.USE_FIREBASE) {
+          // Fill in login fields based on query parameters (may still be blank)
+          const query = new URLSearchParams(window.location.search);
+          const studyId = query.get("studyID");
+          const participantId = query.get("participantID");
+          if (studyId) setStudyID(studyId);
+          if (participantId) setParticipantID(participantId);
+
+          setMethod("firebase");
+        } else {
+          setMethod("default");
+        }
       }
     }
+    setUpHoneycomb();
 
     // eslint-disable-next-line
   }, []);
@@ -127,8 +122,10 @@ export default function App() {
     addToFirebase(data);
   };
   // Execute the 'data' callback function (see public/electron.js)
-  const desktopUpdateFunction = (data) => {
-    ipcRenderer.send("data", data);
+  const desktopUpdateFunction = async (data) => {
+    // ipcRenderer.send("data", data);
+    // TODO
+    window.electronAPI.send("end", data);
   };
   // Save the trial data to PsiTurk
   const psiturkUpdateFunction = (data) => {
@@ -142,8 +139,10 @@ export default function App() {
     data.localSave("csv", "neuro-task.csv");
   };
   // Execute the 'end' callback function (see public/electron.js)
-  const desktopFinishFunction = () => {
-    ipcRenderer.send("end", "true");
+  const desktopFinishFunction = async () => {
+    // ipcRenderer.send("end", "true");
+    // TODO
+    window.electronAPI.send("end");
   };
   // Complete the PsiTurk experiment
   const psiturkFinishFunction = () => {
