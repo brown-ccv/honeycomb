@@ -2,14 +2,23 @@
 
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("node:path");
+const fs = require("node:fs");
 const url = require("url");
 
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 if (require("electron-squirrel-startup")) app.quit();
 
 /************ GLOBALS ***********/
-let CONFIG; // Honeycomb configuration object
+
 // TODO: Handle trigger.js config in the same way as this, delete from public folder
+// TODO: Handle data writing to desktop in a utility process?
+let CONFIG; // Honeycomb configuration object
+let OUT_FILE; // The data file being written to
+let WRITE_STREAM; // Writeable file stream for the data
+
+console.log("TEMP LOG", CONFIG);
+
+const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../config/version.json")));
 
 /************ APP LIFECYCLE ***********/
 
@@ -22,6 +31,8 @@ app.whenReady().then(() => {
   // Handle ipcRenderer events (on is renderer -> main, handle is renderer <--> main)
   ipcMain.on("setConfig", handleSetConfig);
   ipcMain.handle("getCredentials", handleGetCredentials);
+  ipcMain.on("onDataUpdate", handleOnDataUpdate);
+  ipcMain.on("onFinish", handleOnFinish);
 
   setupLocalFilesNormalizerProxy();
 
@@ -121,12 +132,42 @@ function setupLocalFilesNormalizerProxy() {
  */
 function handleSetConfig(event, config) {
   CONFIG = config;
-  console.log(CONFIG); // TEMP
 }
 
+/**
+ * Checks for REACT_APP_STUDY_ID and REACT_APP_PARTICIPANT_ID environment variables
+ * Note that studyID and participantID are undefined when the environment variables are not given
+ * @returns An object containing a studyID and participantID
+ */
 function handleGetCredentials() {
   return {
     studyID: process.env.REACT_APP_STUDY_ID,
     participantID: process.env.REACT_APP_PARTICIPANT_ID,
   };
 }
+
+function handleOnDataUpdate(event, data) {
+  const { participant_id, study_id, start_date } = data;
+  // TODO: We should probably initialize file on login? That's how Firebase handles it
+  if (OUT_FILE == undefined) {
+    const desktop = app.getPath("desktop");
+    const appName = app.getName();
+    const fileName = `${start_date}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names);
+    const savePath = path.resolve(desktop, appName, study_id, participant_id, fileName);
+
+    // Initialize the writeable stream
+    // TODO: Need to create and write to the file on the desktop
+    // TODO: It may be easier to write to the temp folder like before
+    WRITE_STREAM = fs.createWriteStream(savePath, { flags: "ax+" });
+    WRITE_STREAM.write("{");
+
+    // Write
+    WRITE_STREAM.write(`version: ${GIT_VERSION}`);
+  }
+
+  // Temp - write ending
+  WRITE_STREAM.write("}");
+  WRITE_STREAM.end();
+}
+
+function handleOnFinish() {}

@@ -8,5 +8,7 @@ process.once("loaded", () => {
     USE_ELECTRON: true,
     setConfig: (config) => ipcRenderer.send("setConfig", config),
     getCredentials: () => ipcRenderer.invoke("getCredentials"),
+    on_data_update: (data) => ipcRenderer.send("onDataUpdate", data),
+    on_finish: () => ipcRenderer.send("onFinish"),
   });
 });

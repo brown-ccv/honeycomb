@@ -123,9 +123,7 @@ export default function App() {
   };
   // Execute the 'data' callback function (see public/electron.js)
   const desktopUpdateFunction = async (data) => {
-    // ipcRenderer.send("data", data);
-    // TODO
-    window.electronAPI.send("end", data);
+    await window.electronAPI.on_data_update(data);
   };
   // Save the trial data to PsiTurk
   const psiturkUpdateFunction = (data) => {
@@ -140,9 +138,7 @@ export default function App() {
   };
   // Execute the 'end' callback function (see public/electron.js)
   const desktopFinishFunction = async () => {
-    // ipcRenderer.send("end", "true");
-    // TODO
-    window.electronAPI.send("end");
+    await window.electronAPI.on_finish();
   };
   // Complete the PsiTurk experiment
   const psiturkFinishFunction = () => {
