@@ -1,3 +1,4 @@
+// TODO: Put this in src/config/trigger, pass to Electron in setConfig
 // Event trigger settings - used in both the react app (renderer) and the electron app (main)
 // teensyduino
 const vendorId = "16c0";

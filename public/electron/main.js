@@ -1,11 +1,65 @@
 /** ELECTRON MAIN PROCESS */
 
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("node:path");
 const url = require("url");
 
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 if (require("electron-squirrel-startup")) app.quit();
+
+/************ GLOBALS ***********/
+let CONFIG; // Honeycomb configuration object
+// TODO: Handle trigger.js config in the same way as this, delete from public folder
+
+/************ APP LIFECYCLE ***********/
+
+/**
+ * Executed when the app is initialized
+ * @windows Builds the Electron window
+ * @mac Builds the Electron window
+ */
+app.whenReady().then(() => {
+  // Handle ipcRenderer events
+  ipcMain.handle("setConfig", handleSetConfig);
+
+  setupLocalFilesNormalizerProxy();
+
+  // Create the Electron window
+  createWindow();
+
+  /**
+   * Executed when the app is launched (e.g. clicked on from the taskbar)
+   * @windows Creates a new window if there are none (note this shouldn't happen because the app is quit when there are no Windows)
+   * @mac Creates a new window if there are none
+   */
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+});
+
+/**
+ * Executed when all app windows are closed
+ * @windows Quits the application
+ * @mac Closes the window, app remains running in the Dock
+ */
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") app.quit();
+});
+
+/** Prevents navigation outside of known pages */
+// TODO: This is super useful but end user will have to enter their live website?
+// const allowedNavigationDestinations = "https://my-electron-app.com";
+// app.on("web-contents-created", (event, contents) => {
+//   contents.on("will-navigate", (event, navigationUrl) => {
+//     const parsedUrl = new URL(navigationUrl);
+
+//     if (!allowedNavigationDestinations.includes(parsedUrl.origin)) {
+//       event.preventDefault();
+//     }
+//   });
+// });
+
+/********** HELPERS **********/
 
 /** Creates a new Electron window. */
 function createWindow() {
@@ -57,47 +111,9 @@ function setupLocalFilesNormalizerProxy() {
   // );
 }
 
-/************ APP LIFECYCLE ***********/
+/*********** RENDERER EVENT HANDLERS ***********/
 
-/**
- * Executed when the app is initialized
- * @windows Builds the Electron window
- * @mac Builds the Electron window
- */
-app.whenReady().then(() => {
-  createWindow();
-  setupLocalFilesNormalizerProxy();
-
-  /**
-   * Executed when the app is launched (e.g. clicked on from the taskbar)
-   * @windows Creates a new window if there are none (note this shouldn't happen because the app is quit when there are no Windows)
-   * @mac Creates a new window if there are none
-   */
-  app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
-});
-
-/**
- * Executed when all app windows are closed
- * @windows Quits the application
- * @mac Closes the window, app remains running in the Dock
- */
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
-});
-
-/** Prevents navigation outside of known pages */
-// TODO: This is super useful but end user will have to enter their live website?
-// const allowedNavigationDestinations = "https://my-electron-app.com";
-// app.on("web-contents-created", (event, contents) => {
-//   contents.on("will-navigate", (event, navigationUrl) => {
-//     const parsedUrl = new URL(navigationUrl);
-
-//     if (!allowedNavigationDestinations.includes(parsedUrl.origin)) {
-//       event.preventDefault();
-//     }
-//   });
-// });
-
-/************ APP LIFECYCLE ***********/
+function handleSetConfig(event, config) {
+  CONFIG = config;
+  console.log(CONFIG); // TEMP
+}
