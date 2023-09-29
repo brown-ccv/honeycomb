@@ -4,7 +4,7 @@
   },
   "honeycomb": {
     "randomize_order": true,
-    "repetitions": 1,
+    "repetitions": 5,
     "timeline_variables": [
       {
         "stimulus": "assets/blue.png",
