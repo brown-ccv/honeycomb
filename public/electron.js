@@ -289,6 +289,7 @@ ipc.on("end", () => {
 });
 
 // Error state sent from front end to back end (e.g. wrong number of images)
+// ! Never used (errors are handled in React)
 ipc.on("error", (event, args) => {
   log.error(args);
   const buttons = ["OK"];
@@ -306,7 +307,6 @@ ipc.on("error", (event, args) => {
 });
 
 // log uncaught exceptions
-// ! DONE
 process.on("uncaughtException", (error) => {
   // Handle the error
   log.error(error);

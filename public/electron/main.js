@@ -1,6 +1,6 @@
 /** ELECTRON MAIN PROCESS */
 
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const log = require("electron-log");
 const path = require("node:path");
 const fs = require("node:fs");
@@ -42,12 +42,8 @@ app.whenReady().then(() => {
   ipcMain.on("onFinish", handleOnFinish);
   ipcMain.on("photodiodeTrigger", handlePhotoDiodeTrigger);
 
-  // Handle process events
-  process.on("uncaughtException", handleUncaughtException);
-
+  // Setup min files and create the Electron window
   setupLocalFilesNormalizerProxy();
-
-  // Create the Electron window
   createWindow();
 
   /**
@@ -133,8 +129,8 @@ function createWindow() {
  * Set up a local proxy to adjust the paths of requested files
  * when loading them from the production bundle (e.g. local fonts, etc...).
  */
-// TODO: This is deprecated but needed to load the min files?
 function setupLocalFilesNormalizerProxy() {
+  // TODO: This is deprecated but needed to load the min files? https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
   // protocol.registerHttpProtocol(
   //   "file",
   //   (request, callback) => {
@@ -239,13 +235,4 @@ function handleOnFinish() {
 
 function handlePhotoDiodeTrigger() {
   log.info("PHOTODIODE TRIGGER");
-}
-
-/*********** PROCESS EVENT HANDLERS ***********/
-
-/** Log and display uncaught exceptions */
-function handleUncaughtException(error, window) {
-  log.error(error);
-
-  dialog.showMessageBoxSync(window, { type: "error", message: error, title: "Task Error" });
 }
