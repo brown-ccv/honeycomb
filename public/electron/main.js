@@ -1,6 +1,7 @@
 /** ELECTRON MAIN PROCESS */
 
 const { app, BrowserWindow, ipcMain } = require("electron");
+const log = require("electron-log");
 const path = require("node:path");
 const fs = require("node:fs");
 const url = require("url");
@@ -16,8 +17,6 @@ let CONFIG; // Honeycomb configuration object
 let OUT_FILE; // The data file being written to
 let WRITE_STREAM; // Writeable file stream for the data
 
-console.log("TEMP LOG", CONFIG);
-
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../config/version.json")));
 
 /************ APP LIFECYCLE ***********/
@@ -28,6 +27,8 @@ const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../confi
  * @mac Builds the Electron window
  */
 app.whenReady().then(() => {
+  log.info("App Ready: ", app.name);
+
   // Handle ipcRenderer events (on is renderer -> main, handle is renderer <--> main)
   ipcMain.on("setConfig", handleSetConfig);
   ipcMain.handle("getCredentials", handleGetCredentials);
@@ -97,6 +98,7 @@ function createWindow() {
         slashes: true,
       })
     : process.env.ELECTRON_START_URL;
+  log.info("Loading URL: ", appURL);
   mainWindow.loadURL(appURL);
 
   // Maximize the window in production
@@ -132,6 +134,7 @@ function setupLocalFilesNormalizerProxy() {
  */
 function handleSetConfig(event, config) {
   CONFIG = config;
+  log.info("Honeycomb Configuration: ", CONFIG);
 }
 
 /**
@@ -140,15 +143,23 @@ function handleSetConfig(event, config) {
  * @returns An object containing a studyID and participantID
  */
 function handleGetCredentials() {
-  return {
-    studyID: process.env.REACT_APP_STUDY_ID,
-    participantID: process.env.REACT_APP_PARTICIPANT_ID,
-  };
+  const studyID = process.env.REACT_APP_STUDY_ID;
+  const participantID = process.env.REACT_APP_PARTICIPANT_ID;
+  if (studyID) log.info("Received study from ENV: ", studyID);
+  if (participantID) log.info("Received participant from ENV: ", participantID);
+  return { studyID, participantID };
 }
 
 function handleOnDataUpdate(event, data) {
   const { participant_id, study_id, start_date } = data;
+
   // TODO: We should probably initialize file on login? That's how Firebase handles it
+  // if (WRITE_STREAM) {
+  //   const userData = app.getPath("userData");
+  //   const appName = app.getName();
+  //   const fileName = `${start_date}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names);
+  //   console.log(preSavePath);
+  // }
   if (OUT_FILE == undefined) {
     const desktop = app.getPath("desktop");
     const appName = app.getName();
