@@ -19,13 +19,7 @@ function photodiodeGhostBox() {
  * Conditionally flashes a spot inside the photodiodeGhostBox
  */
 function photodiodeSpot(taskCode) {
-  // Conditionally load electron based on config variable
-  let ipcRenderer = false;
-  if (config.USE_ELECTRON) {
-    const electron = window.require("electron");
-    ipcRenderer = electron.ipcRenderer;
-  } else throw new Error("photodiodeSpot trial is only available when running inside Electron");
-
+  console.log("photodiodeSpot");
   // Pulse the spot color from black to white
   function pulseFor(ms, callback) {
     $(".photodiode-spot").css({ "background-color": "black" });
@@ -46,12 +40,24 @@ function photodiodeSpot(taskCode) {
     }
   }
 
+  // Conditionally load electron based on config variable
+  // let ipcRenderer = false;
+  // if (config.USE_ELECTRON) {
+  //   const electron = window.require("electron");
+  //   ipcRenderer = electron.ipcRenderer;
+  // } else throw new Error("photodiodeSpot trial is only available when running inside Electron");
+  if (!config.USE_ELECTRON) {
+    throw new Error("photodiodeSpot trial is only available when running inside Electron");
+  }
+
   if (config.USE_PHOTODIODE) {
+    console.log("PHOTODIODE");
     const blinkTime = 40; // TODO: Get blink time based off fixation time?
     let numBlinks = taskCode;
     if (taskCode < eventCodes.open_task) numBlinks = 1;
     repeatPulseFor(blinkTime, numBlinks);
-    if (ipcRenderer) ipcRenderer.send("trigger", taskCode);
+    // if (ipcRenderer) ipcRenderer.send("trigger", taskCode);
+    window.electronAPI.send("photodiodeTrigger", taskCode);
   }
 }
 

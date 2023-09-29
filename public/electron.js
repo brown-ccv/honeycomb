@@ -159,6 +159,7 @@ const handleEventSend = (code) => {
 };
 
 // Update env variables with buildtime values from frontend
+// ! DONE
 ipc.on("updateEnvironmentVariables", (event, args) => {
   USE_EEG = args.USE_EEG;
   VIDEO = args.USE_CAMERA;
@@ -198,6 +199,7 @@ const today = new Date();
  * Abstracts constructing the filepath for saving data for this participant and study.
  * @returns {string} The filepath.
  */
+// ! NOT USING
 const getSavePath = (studyID, participantID) => {
   if (studyID !== "" && participantID !== "") {
     const desktop = app.getPath("desktop");
@@ -207,14 +209,17 @@ const getSavePath = (studyID, participantID) => {
   }
 };
 
+// ! NOT USING
 const getFullPath = (fileName) => {
   return path.join(savePath, fileName);
 };
 
 // Read version file (git sha and branch)
+// ! DONE
 const git = JSON.parse(fs.readFileSync(path.resolve(__dirname, "config/version.json")));
 
 // Get Participant Id and Study Id from environment
+// ! DONE
 ipc.on("syncCredentials", (event) => {
   event.returnValue = {
     envParticipantId: process.env.REACT_APP_PARTICIPANT_ID,
@@ -223,6 +228,7 @@ ipc.on("syncCredentials", (event) => {
 });
 
 // listener for new data
+// ! DONE
 ipc.on("data", (event, args) => {
   // initialize file - we got a participant_id to save the data to
   if (args.study_id && args.participant_id && !fileCreated) {
@@ -276,6 +282,7 @@ ipc.on("save_video", (event, videoFileName, buffer) => {
 });
 
 // EXPERIMENT END
+// ! DONE
 ipc.on("end", () => {
   // quit app
   app.quit();

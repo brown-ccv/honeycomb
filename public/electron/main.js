@@ -40,6 +40,7 @@ app.whenReady().then(() => {
   ipcMain.handle("getCredentials", handleGetCredentials);
   ipcMain.on("onDataUpdate", handleOnDataUpdate);
   ipcMain.on("onFinish", handleOnFinish);
+  ipcMain.on("photodiodeTrigger", handlePhotoDiodeTrigger);
 
   setupLocalFilesNormalizerProxy();
 
@@ -231,4 +232,8 @@ function handleOnFinish() {
     log.error.error(e);
   }
   log.info("Successfully saved experiment data to ", filePath);
+}
+
+function handlePhotoDiodeTrigger() {
+  log.info("PHOTODIODE TRIGGER");
 }

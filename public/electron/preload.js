@@ -10,5 +10,6 @@ process.once("loaded", () => {
     getCredentials: () => ipcRenderer.invoke("getCredentials"),
     on_data_update: (data) => ipcRenderer.send("onDataUpdate", data),
     on_finish: () => ipcRenderer.send("onFinish"),
+    photodiodeTrigger: () => ipcRenderer.send("photodiodeTrigger"),
   });
 });
