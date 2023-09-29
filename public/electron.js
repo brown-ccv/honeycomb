@@ -336,6 +336,7 @@ app.on("activate", function () {
 // code. You can also put them in separate files and require them here.
 
 // EXPERIMENT END
+// ! DONE
 app.on("will-quit", () => {
   if (fileCreated) {
     // finish writing file

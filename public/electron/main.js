@@ -168,6 +168,13 @@ function handleGetCredentials() {
   return { studyID, participantID };
 }
 
+/**
+ * Receives the trial data and writes it to a temp file in AppData
+ * The out path/file and writable stream are initialized if isn't yet
+ * The temp file is written at ~/userData/[appName]/TempData/[studyID]/[participantID]/
+ * @param {Event} event The Electron renderer event
+ * @param {Object} data The trial data
+ */
 function handleOnDataUpdate(event, data) {
   const { participant_id, study_id, start_date, trial_index } = data;
 
@@ -187,25 +194,23 @@ function handleOnDataUpdate(event, data) {
     WRITE_STREAM = fs.createWriteStream(tempFilePath, { flags: "ax+" });
     log.info("Writable stream created at ", tempFilePath);
     WRITE_STREAM.write("{"); // Write initial brace
-
-    // WRITE_STREAM.write(JSON.stringify({ start_time: start_date }) + ",");
-    // WRITE_STREAM.write(JSON.stringify({ git_version: GIT_VERSION }) + ",");
     WRITE_STREAM.write(`"start_time": "${start_date}",`);
     WRITE_STREAM.write(`"git_version": ${JSON.stringify(GIT_VERSION)},`);
-
     WRITE_STREAM.write(`"trials": [`); // Begin writing trials array
   }
 
   // Prepend comma for all trials except first
   if (trial_index > 0) WRITE_STREAM.write(",");
 
-  log.info(WRITE_STREAM.path);
-
-  // Write trial data+
+  // Write trial data
   WRITE_STREAM.write(JSON.stringify(data));
   log.info(`Trial ${trial_index} successfully written to TempData`);
 }
 
+/**
+ * Finishes writing to the writable stream and copies the file to the Desktop
+ * File is saved inside ~/Desktop/[appName]/[studyID]/[participantID]/
+ */
 function handleOnFinish() {
   log.info("Experiment Finished");
   const tempFilePath = WRITE_STREAM.path;
