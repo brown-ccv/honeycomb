@@ -4,10 +4,16 @@
   },
   "honeycomb": {
     "randomize_order": true,
-    "repetitions": 5,
+    "repetitions": 1,
     "timeline_variables": [
-      { "stimulus": "assets/blue.png", "correct_response": "f" },
-      { "stimulus": "assets/orange.png", "correct_response": "j" }
+      {
+        "stimulus": "assets/blue.png",
+        "correct_response": "f"
+      },
+      {
+        "stimulus": "assets/orange.png",
+        "correct_response": "j"
+      }
     ]
   }
 }

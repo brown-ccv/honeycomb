@@ -9,19 +9,19 @@ const url = require("url");
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 if (require("electron-squirrel-startup")) app.quit();
 
-/************ GLOBALS ***********/
-
 // TODO: Handle trigger.js config in the same way as this, delete from public folder
 // TODO: Initialize writeable stream on login
 // TODO: Handle data writing to desktop in a utility process?
 // TODO: Handle video data writing to desktop in a utility process?
+// TODO: Separate log files for each run through?
+
+/************ GLOBALS ***********/
+
 let CONFIG; // Honeycomb configuration object
 let WRITE_STREAM; // Writeable file stream for the data (in the user's appData folder)
 let OUT_PATH; // Path to the final output file (on the Desktop)
 let OUT_FILE; // Name of the output file
 // let OUT_VIDEO_FILE; // Name of the video output file
-
-console.log(OUT_PATH); // TEMP
 
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../config/version.json")));
 
@@ -67,12 +67,12 @@ app.on("window-all-closed", () => {
 
 /**
  * Executed before the application begins closing its windows
- * We ensure the writeable stream is closed
+ * We ensure the writeable stream is closed before exiting
  */
+// TODO: Check what's been written to stream? May not have finished writing the first trial?
 app.on("before-quit", () => {
   if (WRITE_STREAM) {
-    WRITE_STREAM.write("]");
-    WRITE_STREAM.write("}");
+    WRITE_STREAM.write("]}");
     WRITE_STREAM.end();
   }
 });
@@ -199,8 +199,31 @@ function handleOnDataUpdate(event, data) {
   // Prepend comma for all trials except first
   if (trial_index > 0) WRITE_STREAM.write(",");
 
+  log.info(WRITE_STREAM.path);
+
   // Write trial data+
   WRITE_STREAM.write(JSON.stringify(data));
+  log.info(`Trial ${trial_index} successfully written to TempData`);
 }
 
-function handleOnFinish() {}
+function handleOnFinish() {
+  log.info("Experiment Finished");
+  const tempFilePath = WRITE_STREAM.path;
+  const filePath = path.resolve(OUT_PATH, OUT_FILE);
+
+  // Finish writing JSON and dereference WRITE_STREAM
+  WRITE_STREAM.write("]}");
+  WRITE_STREAM.end();
+  WRITE_STREAM = undefined;
+  log.info("Finished writing experiment data to TempData");
+
+  // Copy temp file to Desktop
+  try {
+    fs.mkdirSync(OUT_PATH, { recursive: true });
+    fs.copyFileSync(tempFilePath, filePath);
+  } catch (e) {
+    log.error.error("Unable to save file: ", filePath);
+    log.error.error(e);
+  }
+  log.info("Successfully saved experiment data to ", filePath);
+}
