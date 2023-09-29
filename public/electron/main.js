@@ -12,10 +12,16 @@ if (require("electron-squirrel-startup")) app.quit();
 /************ GLOBALS ***********/
 
 // TODO: Handle trigger.js config in the same way as this, delete from public folder
+// TODO: Initialize writeable stream on login
 // TODO: Handle data writing to desktop in a utility process?
+// TODO: Handle video data writing to desktop in a utility process?
 let CONFIG; // Honeycomb configuration object
-let OUT_FILE; // The data file being written to
-let WRITE_STREAM; // Writeable file stream for the data
+let WRITE_STREAM; // Writeable file stream for the data (in the user's appData folder)
+let OUT_PATH; // Path to the final output file (on the Desktop)
+let OUT_FILE; // Name of the output file
+// let OUT_VIDEO_FILE; // Name of the video output file
+
+console.log(OUT_PATH); // TEMP
 
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../config/version.json")));
 
@@ -57,6 +63,18 @@ app.whenReady().then(() => {
  */
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
+});
+
+/**
+ * Executed before the application begins closing its windows
+ * We ensure the writeable stream is closed
+ */
+app.on("before-quit", () => {
+  if (WRITE_STREAM) {
+    WRITE_STREAM.write("]");
+    WRITE_STREAM.write("}");
+    WRITE_STREAM.end();
+  }
 });
 
 /** Prevents navigation outside of known pages */
@@ -151,34 +169,38 @@ function handleGetCredentials() {
 }
 
 function handleOnDataUpdate(event, data) {
-  const { participant_id, study_id, start_date } = data;
+  const { participant_id, study_id, start_date, trial_index } = data;
 
   // TODO: We should probably initialize file on login? That's how Firebase handles it
-  // if (WRITE_STREAM) {
-  //   const userData = app.getPath("userData");
-  //   const appName = app.getName();
-  //   const fileName = `${start_date}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names);
-  //   console.log(preSavePath);
-  // }
-  if (OUT_FILE == undefined) {
-    const desktop = app.getPath("desktop");
-    const appName = app.getName();
-    const fileName = `${start_date}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names);
-    const savePath = path.resolve(desktop, appName, study_id, participant_id, fileName);
+  // Set the output file names/paths and initialize a writeable stream in the user's appData folder
+  if (!WRITE_STREAM) {
+    // The final OUT_FILE will be nested inside subfolders on the Desktop
+    OUT_PATH = path.resolve(app.getPath("desktop"), app.getName(), study_id, participant_id);
+    OUT_FILE = `${start_date}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names);
+
+    // The tempFile is nested inside "TempData" in the user's local app data folder
+    const tempPath = path.resolve(app.getPath("userData"), "TempData", study_id, participant_id);
+    const tempFilePath = path.resolve(tempPath, OUT_FILE);
+    fs.mkdirSync(tempPath, { recursive: true });
 
     // Initialize the writeable stream
-    // TODO: Need to create and write to the file on the desktop
-    // TODO: It may be easier to write to the temp folder like before
-    WRITE_STREAM = fs.createWriteStream(savePath, { flags: "ax+" });
-    WRITE_STREAM.write("{");
+    WRITE_STREAM = fs.createWriteStream(tempFilePath, { flags: "ax+" });
+    log.info("Writable stream created at ", tempFilePath);
+    WRITE_STREAM.write("{"); // Write initial brace
 
-    // Write
-    WRITE_STREAM.write(`version: ${GIT_VERSION}`);
+    // WRITE_STREAM.write(JSON.stringify({ start_time: start_date }) + ",");
+    // WRITE_STREAM.write(JSON.stringify({ git_version: GIT_VERSION }) + ",");
+    WRITE_STREAM.write(`"start_time": "${start_date}",`);
+    WRITE_STREAM.write(`"git_version": ${JSON.stringify(GIT_VERSION)},`);
+
+    WRITE_STREAM.write(`"trials": [`); // Begin writing trials array
   }
 
-  // Temp - write ending
-  WRITE_STREAM.write("}");
-  WRITE_STREAM.end();
+  // Prepend comma for all trials except first
+  if (trial_index > 0) WRITE_STREAM.write(",");
+
+  // Write trial data+
+  WRITE_STREAM.write(JSON.stringify(data));
 }
 
 function handleOnFinish() {}
