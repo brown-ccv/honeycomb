@@ -100,7 +100,6 @@ export default function App() {
       }
     }
     setUpHoneycomb();
-
     // eslint-disable-next-line
   }, []);
 

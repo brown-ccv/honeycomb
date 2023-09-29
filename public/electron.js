@@ -306,6 +306,7 @@ ipc.on("error", (event, args) => {
 });
 
 // log uncaught exceptions
+// ! DONE
 process.on("uncaughtException", (error) => {
   // Handle the error
   log.error(error);

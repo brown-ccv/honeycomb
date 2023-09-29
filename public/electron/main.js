@@ -1,6 +1,6 @@
 /** ELECTRON MAIN PROCESS */
 
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const log = require("electron-log");
 const path = require("node:path");
 const fs = require("node:fs");
@@ -41,6 +41,9 @@ app.whenReady().then(() => {
   ipcMain.on("onDataUpdate", handleOnDataUpdate);
   ipcMain.on("onFinish", handleOnFinish);
   ipcMain.on("photodiodeTrigger", handlePhotoDiodeTrigger);
+
+  // Handle process events
+  process.on("uncaughtException", handleUncaughtException);
 
   setupLocalFilesNormalizerProxy();
 
@@ -236,4 +239,13 @@ function handleOnFinish() {
 
 function handlePhotoDiodeTrigger() {
   log.info("PHOTODIODE TRIGGER");
+}
+
+/*********** PROCESS EVENT HANDLERS ***********/
+
+/** Log and display uncaught exceptions */
+function handleUncaughtException(error, window) {
+  log.error(error);
+
+  dialog.showMessageBoxSync(window, { type: "error", message: error, title: "Task Error" });
 }
