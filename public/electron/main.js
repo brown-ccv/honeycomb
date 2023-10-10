@@ -41,6 +41,7 @@ app.whenReady().then(() => {
   ipcMain.on("onDataUpdate", handleOnDataUpdate);
   ipcMain.on("onFinish", handleOnFinish);
   ipcMain.on("photodiodeTrigger", handlePhotoDiodeTrigger);
+  ipcMain.on("saveVideo", handleSaveVideo);
 
   // Setup min files and create the Electron window
   setupLocalFilesNormalizerProxy();
@@ -235,4 +236,29 @@ function handleOnFinish() {
 
 function handlePhotoDiodeTrigger() {
   log.info("PHOTODIODE TRIGGER");
+}
+
+function handleSaveVideo(event, fileName, buffer) {
+  const filePath = path.resolve(OUT_PATH, fileName);
+
+  if (CONFIG.USE_VIDEO) {
+    try {
+      fs.mkdirSync(OUT_PATH, { recursive: true });
+      // Save video file to the desktop
+      // fs.outputFile(filePath, buffer, (err) => {
+      //   if (err) {
+      //     event.sender.send("ERROR", err.message);
+      //   } else {
+      //     event.sender.send("SAVED_FILE", filePath);
+      //     console.log(filePath);
+      //   }
+      // });
+      fs.outputFileSync(filePath, buffer);
+    } catch (e) {
+      event.sender.send("ERROR", e.message); // TEMP?
+      log.error.error("Unable to save file: ", filePath);
+      log.error.error(e);
+    }
+    log.info("Successfully saved video file to ", filePath);
+  }
 }

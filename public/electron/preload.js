@@ -11,5 +11,6 @@ process.once("loaded", () => {
     on_data_update: (data) => ipcRenderer.send("onDataUpdate", data),
     on_finish: () => ipcRenderer.send("onFinish"),
     photodiodeTrigger: () => ipcRenderer.send("photodiodeTrigger"),
+    saveVideo: () => ipcRenderer.send("saveVideo"),
   });
 });

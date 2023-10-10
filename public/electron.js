@@ -263,6 +263,7 @@ ipc.on("data", (event, args) => {
 });
 
 // Save Video
+// ! DONE
 ipc.on("save_video", (event, videoFileName, buffer) => {
   if (savePath === "") {
     savePath = getSavePath(studyID, participantID);

@@ -27,6 +27,9 @@ function cameraStart(jsPsych, participantID) {
     choices: [language.prompts.continue.button],
     response_ends_trial: true,
     on_load: () => {
+      if (!config.USE_ELECTRON) {
+        throw new Error("cameraStart trial is only available when running inside Electron");
+      }
       const camera = document.getElementById("camera"); // Get the HTML object containing the camera
 
       const handleEvents = function (stream, recorder) {
@@ -44,24 +47,15 @@ function cameraStart(jsPsych, participantID) {
         // Saves a blob of the raw data feed from the participants camera.
         window[recorder].addEventListener("stop", () => {
           const blob = new Blob(recordedChunks); // eslint-disable-line no-undef
-
-          // Conditionally load electron based on config variable
-          let ipcRenderer = false;
-          if (config.USE_ELECTRON) {
-            const electron = window.require("electron");
-            ipcRenderer = electron.ipcRenderer;
-          } else {
-            throw new Error("cameraStart trial is only available when running inside Electron");
-          }
-          // Save the data
           const reader = new FileReader(); // eslint-disable-line no-undef
-          // TODO: Match filename to experiment json
+
+          // TODO: Match filename to experiment json?
           const fileName = `pid_${participantID}_${recorder}_${Date.now()}.webm`;
+
           reader.onload = () => {
             if (reader.readyState === 2) {
               const buffer = Buffer.from(reader.result); // eslint-disable-line no-undef
-              ipcRenderer.send("save_video", fileName, buffer);
-              console.log(`Saving ${JSON.stringify({ fileName, size: blob.size })}`);
+              window.electronAPI.send("saveVideo", fileName, buffer);
             }
           };
           reader.readAsArrayBuffer(blob);
@@ -72,15 +66,14 @@ function cameraStart(jsPsych, participantID) {
         .getUserMedia({ video: true })
         .then((stream) => handleEvents(stream, "cameraCapture"));
 
-      // Conditionally load electron based on config variable
+      // TODO: desktopCapturer is only available on the main process
       let desktopCapturer = false;
-      if (config.USE_ELECTRON) {
-        const electron = window.require("electron");
-        desktopCapturer = electron.desktopCapturer;
-      } else {
-        throw new Error("cameraStart trial is only available when running inside Electron");
-      }
-
+      // if (config.USE_ELECTRON) {
+      //   const electron = window.require("electron");
+      //   desktopCapturer = electron.desktopCapturer;
+      // } else {
+      //   throw new Error("cameraStart trial is only available when running inside Electron");
+      // }
       desktopCapturer.getSources({ types: ["window"] }).then(async (sources) => {
         for (const source of sources) {
           if (source.name === taskName) {
@@ -102,15 +95,18 @@ function cameraStart(jsPsych, participantID) {
       });
     },
     on_finish: () => {
-      if (config.USE_CAMERA) {
-        try {
-          window.cameraCapture.start();
-          window.screenCapture.start();
-        } catch (error) {
-          window.alert(
-            "Camera permissions were not given, if you choose to proceed, your recording will not be saved. Please restart the experiment after you have given permission."
-          );
-        }
+      if (!config.USE_ELECTRON) {
+        throw new Error("cameraStart trial is only available when running inside Electron");
+      }
+
+      try {
+        // Start capturing the camera and screen
+        window.cameraCapture.start();
+        window.screenCapture.start();
+      } catch (error) {
+        window.alert(
+          "Camera permissions were not given, if you choose to proceed, your recording will not be saved. Please restart the experiment after you have given permission."
+        );
       }
     },
   };
