@@ -16,6 +16,7 @@ function cameraStart(jsPsych) {
   const videoMarkup = tag("video", "", { id: "camera", width: 640, height: 480, autoplay: true });
   const cameraStartMarkup = p(language.trials.camera.start);
   const markup = div(cameraStartMarkup + videoMarkup, {
+    // TODO: Need to get rid of bootstrap
     class: "d-flex flex-column align-items-center",
   });
 
