@@ -10,7 +10,8 @@ import { div, h1, p, tag } from "../lib/markup/tags";
  * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns
  */
-function cameraStart(jsPsych) {
+// TODO: refactor to record using web USB
+function cameraStart(jsPsych, participantID) {
   document.title = taskName;
 
   const videoMarkup = tag("video", "", { id: "camera", width: 640, height: 480, autoplay: true });
@@ -26,7 +27,6 @@ function cameraStart(jsPsych) {
     choices: [language.prompts.continue.button],
     response_ends_trial: true,
     on_load: () => {
-      const participantID = jsPsych.data.get().values()[0].participant_id;
       const camera = document.getElementById("camera"); // Get the HTML object containing the camera
 
       const handleEvents = function (stream, recorder) {
@@ -55,6 +55,7 @@ function cameraStart(jsPsych) {
           }
           // Save the data
           const reader = new FileReader(); // eslint-disable-line no-undef
+          // TODO: Match filename to experiment json
           const fileName = `pid_${participantID}_${recorder}_${Date.now()}.webm`;
           reader.onload = () => {
             if (reader.readyState === 2) {
