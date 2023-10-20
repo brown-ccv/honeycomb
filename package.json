@@ -50,7 +50,7 @@
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.2.0",
     "dotenv-cli": "^7.0.0",
-    "electron": "^26.2.4",
+    "electron": "^27.0.1",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
