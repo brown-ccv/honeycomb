@@ -6,7 +6,7 @@
     "email": "ccv-bot@brown.edu",
     "url": "https://ccv.brown.edu"
   },
-  "version": "3.2.1",
+  "version": "3.2.2",
   "license": "MIT",
   "private": true,
   "main": "public/electron.js",
@@ -50,14 +50,14 @@
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.2.0",
     "dotenv-cli": "^7.0.0",
-    "electron": "^26.2.4",
+    "electron": "^27.0.1",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
     "firebase-admin": "^11.0.1",
     "firebase-tools": "^12.4.7",
     "husky": "^8.0.3",
-    "lint-staged": "^14.0.1",
+    "lint-staged": "^15.0.2",
     "wait-on": "^7.0.1"
   },
   "scripts": {
