@@ -2,7 +2,7 @@ import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import initializeCamera from "@jspsych/plugin-initialize-camera";
 
-import { language, taskName, config } from "../config/main";
+import { language, config } from "../config/main";
 import { photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
 import { div, h1, p, tag } from "../lib/markup/tags";
@@ -15,10 +15,10 @@ import { div, h1, p, tag } from "../lib/markup/tags";
 // TODO: refactor to record using web USB
 function cameraStart(jsPsych, participantID) {
   // TODO: is this needed?
-  document.title = taskName;
+  // document.title = taskName;
 
-  // TODO: ID is the device id of the camera
-  const videoMarkup = tag("video", "", { id: "camera", width: 640, height: 480, autoplay: true });
+  // TODO: ID is the device id of the camera?
+  const videoMarkup = tag("video", "", { id: "webcam", width: 640, height: 480, autoplay: true });
   const cameraStartMarkup = p(language.trials.camera.start);
   const markup = div(cameraStartMarkup + videoMarkup, {
     // TODO: Need to get rid of bootstrap (this is just centering it)
@@ -33,16 +33,86 @@ function cameraStart(jsPsych, participantID) {
   return {
     timeline: [
       {
+        // Prompts user permission for camera device
         type: initializeCamera,
-        // TODO: mime type from below
+        mime_type: "video/webm",
       },
+      // TODO: Add initialize microphone trial
       {
+        // Helps participant center themselves inside the camera
         type: htmlButtonResponse,
         stimulus: baseStimulus(markup, true) + photodiodeGhostBox(),
         choices: [language.prompts.continue.button],
         response_ends_trial: true,
+        on_start: () => {
+          if (!config.USE_ELECTRON) {
+            // TODO: We should be able to make this work on both electron and browser?
+            // ? File size will probably be an issue with Firebase?
+            throw new Error("video recording is only available when running inside Electron");
+          }
+
+          // TODO: Can we pass the camera recorder to Electron and handle everything there?
+
+          // ! https://github.com/jspsych/jsPsych/blob/main/packages/extension-record-video/src/index.ts
+          const cameraRecorder = jsPsych.pluginAPI.getCameraRecorder();
+          if (!cameraRecorder) {
+            console.error("Camera is not initialized, no data will be recorded.");
+            return;
+          }
+          const cameraChunks = [];
+
+          // TODO: Add microphone recording too
+          // const microphoneRecorder = jsPsych.pluginAPI.getMicrophoneRecorder();
+
+          // Push data whenever available
+          cameraRecorder.addEventListener("dataavailable", (event) => {
+            if (event.data.size > 0) {
+              cameraChunks.push(event.data);
+            }
+          });
+
+          // Saves the raw data feed from the participants camera (called as cameraRecorder.stop()).
+          cameraRecorder.addEventListener("stop", () => {
+            const blob = new Blob(cameraChunks, { type: cameraRecorder.mimeType });
+
+            // Read blob as a base64 encoded string and send to electron
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.addEventListener("load", () => {
+              // Read data as a base64 string
+              const data = reader.result.split(",")[1];
+              window.electronAPI.saveVideo(data);
+            });
+          });
+        },
         on_load: () => {
-          // https://github.com/jspsych/jsPsych/blob/main/packages/extension-record-video/src/index.ts
+          const cameraRecorder = jsPsych.pluginAPI.getCameraRecorder();
+          if (!cameraRecorder) {
+            console.error("Camera is not initialized, no data will be recorded.");
+            return;
+          }
+
+          // Assign camera stream to <video> element
+          const camera = document.getElementById("webcam");
+          camera.srcObject = cameraRecorder.stream;
+
+          // Start recording
+          cameraRecorder.start();
+        },
+        on_finish: () => {
+          const cameraRecorder = jsPsych.pluginAPI.getCameraRecorder();
+          if (!cameraRecorder) {
+            console.error("Camera is not initialized, no data will be recorded.");
+            return;
+          }
+          try {
+            // Stop capturing the camera and screen
+            // TODO: Start the camera recording here, not on on_load?
+
+            cameraRecorder.stop(); // TODO: this belongs in cameraStop trial
+          } catch (error) {
+            window.alert("Unable to start recording:\n", error);
+          }
         },
       },
     ],

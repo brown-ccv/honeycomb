@@ -238,9 +238,10 @@ function handlePhotoDiodeTrigger() {
   log.info("PHOTODIODE TRIGGER");
 }
 
-function handleSaveVideo(event, fileName, buffer) {
-  const filePath = path.resolve(OUT_PATH, fileName);
-
+// Data is sent as a base64 encoded string
+function handleSaveVideo(event, data) {
+  console.log("ELECTRON", data);
+  const filePath = path.resolve(OUT_PATH, `video.webm`);
   if (CONFIG.USE_VIDEO) {
     try {
       fs.mkdirSync(OUT_PATH, { recursive: true });
@@ -253,7 +254,7 @@ function handleSaveVideo(event, fileName, buffer) {
       //     console.log(filePath);
       //   }
       // });
-      fs.outputFileSync(filePath, buffer);
+      // fs.outputFileSync(filePath, buffer);
     } catch (e) {
       event.sender.send("ERROR", e.message); // TEMP?
       log.error.error("Unable to save file: ", filePath);
