@@ -19,6 +19,7 @@
     "@jspsych/plugin-html-button-response": "^1.1.1",
     "@jspsych/plugin-html-keyboard-response": "^1.1.1",
     "@jspsych/plugin-image-keyboard-response": "^1.1.2",
+    "@jspsych/plugin-initialize-camera": "^1.0.1",
     "@jspsych/plugin-instructions": "^1.1.3",
     "@jspsych/plugin-preload": "^1.1.2",
     "@jspsych/plugin-survey-multi-select": "^1.1.1",

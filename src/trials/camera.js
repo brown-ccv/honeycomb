@@ -1,5 +1,7 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
+import initializeCamera from "@jspsych/plugin-initialize-camera";
+
 import { language, taskName, config } from "../config/main";
 import { photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
@@ -12,14 +14,34 @@ import { div, h1, p, tag } from "../lib/markup/tags";
  */
 // TODO: refactor to record using web USB
 function cameraStart(jsPsych, participantID) {
+  // TODO: is this needed?
   document.title = taskName;
 
   const videoMarkup = tag("video", "", { id: "camera", width: 640, height: 480, autoplay: true });
   const cameraStartMarkup = p(language.trials.camera.start);
   const markup = div(cameraStartMarkup + videoMarkup, {
-    // TODO: Need to get rid of bootstrap
+    // TODO: Need to get rid of bootstrap (this is just centering it)
     class: "d-flex flex-column align-items-center",
   });
+
+  // TODO: Use initialize camera plugin, get video from there?
+  // ?: Initialize microphone plugin too?
+  // 1) Prompt for camera permissions
+  // 2) Position camera
+  // 3) Begin recording (on finish)
+  return {
+    type: initializeCamera,
+    timeline: [
+      {
+        type: htmlButtonResponse,
+        stimulus: baseStimulus(markup, true) + photodiodeGhostBox(),
+        choices: [language.prompts.continue.button],
+        response_ends_trial: true,
+      },
+    ],
+  };
+
+  /* eslint-disable no-unreachable */
 
   return {
     type: htmlButtonResponse,
