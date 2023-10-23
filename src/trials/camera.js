@@ -17,6 +17,7 @@ function cameraStart(jsPsych, participantID) {
   // TODO: is this needed?
   document.title = taskName;
 
+  // TODO: ID is the device id of the camera
   const videoMarkup = tag("video", "", { id: "camera", width: 640, height: 480, autoplay: true });
   const cameraStartMarkup = p(language.trials.camera.start);
   const markup = div(cameraStartMarkup + videoMarkup, {
@@ -30,13 +31,19 @@ function cameraStart(jsPsych, participantID) {
   // 2) Position camera
   // 3) Begin recording (on finish)
   return {
-    type: initializeCamera,
     timeline: [
+      {
+        type: initializeCamera,
+        // TODO: mime type from below
+      },
       {
         type: htmlButtonResponse,
         stimulus: baseStimulus(markup, true) + photodiodeGhostBox(),
         choices: [language.prompts.continue.button],
         response_ends_trial: true,
+        on_load: () => {
+          // https://github.com/jspsych/jsPsych/blob/main/packages/extension-record-video/src/index.ts
+        },
       },
     ],
   };
