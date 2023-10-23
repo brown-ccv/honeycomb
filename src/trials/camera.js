@@ -95,6 +95,7 @@ function cameraStart(jsPsych, participantID) {
 
       try {
         // Start capturing the camera and screen
+        // TODO: window.electronAPI.camera("start")
         window.cameraCapture.start();
         // window.screenCapture.start();
       } catch (error) {
