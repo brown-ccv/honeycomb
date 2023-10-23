@@ -38,7 +38,7 @@ function cameraStart(jsPsych, participantID) {
 
         const options = { mimeType: "video/webm" };
         const recordedChunks = [];
-        window[recorder] = new MediaRecorder(stream, options); // eslint-disable-line no-undef
+        window[recorder] = new MediaRecorder(stream, options);
 
         window[recorder].addEventListener("dataavailable", (e) => {
           if (e.data.size > 0) recordedChunks.push(e.data);
@@ -46,15 +46,15 @@ function cameraStart(jsPsych, participantID) {
 
         // Saves a blob of the raw data feed from the participants camera.
         window[recorder].addEventListener("stop", () => {
-          const blob = new Blob(recordedChunks); // eslint-disable-line no-undef
-          const reader = new FileReader(); // eslint-disable-line no-undef
+          const blob = new Blob(recordedChunks);
+          const reader = new FileReader();
 
           // TODO: Match filename to experiment json?
           const fileName = `pid_${participantID}_${recorder}_${Date.now()}.webm`;
 
           reader.onload = () => {
             if (reader.readyState === 2) {
-              const buffer = Buffer.from(reader.result); // eslint-disable-line no-undef
+              const buffer = Buffer.from(reader.result);
               window.electronAPI.send("saveVideo", fileName, buffer);
             }
           };
