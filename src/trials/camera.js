@@ -67,32 +67,26 @@ function cameraStart(jsPsych, participantID) {
         .then((stream) => handleEvents(stream, "cameraCapture"));
 
       // TODO: desktopCapturer is only available on the main process
-      let desktopCapturer = false;
-      // if (config.USE_ELECTRON) {
-      //   const electron = window.require("electron");
-      //   desktopCapturer = electron.desktopCapturer;
-      // } else {
-      //   throw new Error("cameraStart trial is only available when running inside Electron");
-      // }
-      desktopCapturer.getSources({ types: ["window"] }).then(async (sources) => {
-        for (const source of sources) {
-          if (source.name === taskName) {
-            navigator.mediaDevices
-              .getUserMedia({
-                video: {
-                  mandatory: {
-                    chromeMediaSource: "desktop",
-                    chromeMediaSourceId: source.id,
-                  },
-                },
-              })
-              .then((stream) => {
-                handleEvents(stream, "screenCapture");
-              })
-              .catch((error) => console.log(error));
-          }
-        }
-      });
+      // let desktopCapturer = false;
+      // desktopCapturer.getSources({ types: ["window"] }).then(async (sources) => {
+      //   for (const source of sources) {
+      //     if (source.name === taskName) {
+      //       navigator.mediaDevices
+      //         .getUserMedia({
+      //           video: {
+      //             mandatory: {
+      //               chromeMediaSource: "desktop",
+      //               chromeMediaSourceId: source.id,
+      //             },
+      //           },
+      //         })
+      //         .then((stream) => {
+      //           handleEvents(stream, "screenCapture");
+      //         })
+      //         .catch((error) => console.log(error));
+      //     }
+      //   }
+      // });
     },
     on_finish: () => {
       if (!config.USE_ELECTRON) {
@@ -102,10 +96,12 @@ function cameraStart(jsPsych, participantID) {
       try {
         // Start capturing the camera and screen
         window.cameraCapture.start();
-        window.screenCapture.start();
+        // window.screenCapture.start();
       } catch (error) {
         window.alert(
-          "Camera permissions were not given, if you choose to proceed, your recording will not be saved. Please restart the experiment after you have given permission."
+          // "Camera permissions were not given, if you choose to proceed, your recording will not be saved. " +
+          // " Please restart the experiment after you have given permission.",
+          error
         );
       }
     },
@@ -130,7 +126,7 @@ function cameraEnd(duration) {
       if (config.USE_CAMERA) {
         try {
           window.cameraCapture.stop();
-          window.screenCapture.stop();
+          // window.screenCapture.stop();
         } catch (error) {
           window.alert("Your video recording was not saved");
         }
