@@ -30,7 +30,6 @@ function cameraStart(jsPsych) {
         // TODO: webm is a subset of mkv, should be able to do a rolling save?
         mime_type: "video/webm",
       },
-      // TODO: Add initialize microphone trial?
       {
         // Helps participant center themselves inside the camera
         type: htmlButtonResponse,

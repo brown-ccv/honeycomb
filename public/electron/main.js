@@ -12,7 +12,7 @@ if (require("electron-squirrel-startup")) app.quit();
 // Initialize the logger for any renderer process
 log.initialize({ preload: true });
 
-// TODO: Handle trigger.js config in the same way as this, delete from public folder
+// TODO 306: Handle trigger.js config in the same way as this, delete from public folder
 // TODO: Initialize writeable stream on login
 // TODO: Handle data writing to desktop in a utility process?
 // TODO: Handle video data writing to desktop in a utility process?
@@ -187,7 +187,7 @@ function handleOnDataUpdate(event, data) {
   if (!WRITE_STREAM) {
     // The final OUT_FILE will be nested inside subfolders on the Desktop
     OUT_PATH = path.resolve(app.getPath("desktop"), app.getName(), study_id, participant_id);
-    // TODO: ISO 8061 data string? Doesn't include the punctuation
+    // TODO 307: ISO 8061 data string? Doesn't include the punctuation
     OUT_FILE = `${start_date}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names);
 
     // The tempFile is nested inside "TempData" in the user's local app data folder

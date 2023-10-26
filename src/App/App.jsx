@@ -59,7 +59,7 @@ export default function App() {
       // If on desktop
       if (config.USE_ELECTRON) {
         await window.electronAPI.setConfig(config); // Pass config to Electron ipcMain
-        // TODO: Pass trigger to Electron ipcMain
+        // TODO 306: Pass trigger to Electron ipcMain
 
         // Fill in login fields based on environment variables (may still be blank)
         const credentials = await window.electronAPI.getCredentials();
