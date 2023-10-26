@@ -12,8 +12,6 @@ if (require("electron-squirrel-startup")) app.quit();
 // Initialize the logger for any renderer process
 log.initialize({ preload: true });
 
-// TODO: Rolling save on webm video recordings, remux to mp4 at the end of the trial
-
 // TODO: Handle trigger.js config in the same way as this, delete from public folder
 // TODO: Initialize writeable stream on login
 // TODO: Handle data writing to desktop in a utility process?
@@ -246,7 +244,7 @@ function handlePhotoDiodeTrigger() {
 
 // Save webm video file
 // TODO: Rolling save of webm video, remux to mp4 at the end?
-function handleSaveVideo(event, base64Data) {
+function handleSaveVideo(event, data) {
   // Video file is the same as OUT_FILE except it's mp4, not json
   const filePath = path.join(
     path.dirname(OUT_FILE),
@@ -256,17 +254,15 @@ function handleSaveVideo(event, base64Data) {
   log.info(filePath);
 
   // Save video file to the desktop
-  if (CONFIG.USE_CAMERA) {
-    try {
-      fs.mkdirSync(OUT_PATH, { recursive: true });
-      fs.writeFileSync(
-        path.join(OUT_PATH, filePath),
-        Buffer.from(base64Data.split(",")[1], "base64")
-      );
-    } catch (e) {
-      log.error.error("Unable to save file: ", filePath);
-      log.error.error(e);
-    }
-    log.info("Successfully saved video file to ", filePath);
+  try {
+    // Note the video data is sent to the main process as a base64 string
+    const videoData = Buffer.from(data.split(",")[1], "base64");
+
+    fs.mkdirSync(OUT_PATH, { recursive: true });
+    fs.writeFileSync(path.join(OUT_PATH, filePath), videoData);
+  } catch (e) {
+    log.error.error("Unable to save file: ", filePath);
+    log.error.error(e);
   }
+  log.info("Successfully saved video file to ", filePath);
 }
