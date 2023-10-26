@@ -24,7 +24,7 @@
     "@jspsych/plugin-preload": "^1.1.2",
     "@jspsych/plugin-survey-multi-select": "^1.1.1",
     "bootstrap": "^5.2.0-beta1",
-    "electron-log": "^4.4.8",
+    "electron-log": "^5.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "event-marker": "git+https://github.com/brown-ccv/event-marker.git",
     "execa": "^8.0.1",
