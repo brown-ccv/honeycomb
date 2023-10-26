@@ -65,28 +65,6 @@ function cameraStart(jsPsych) {
             reader.readAsDataURL(blob);
             reader.onloadend = () => window.electronAPI.saveVideo(reader.result);
           });
-
-          // TODO: desktopCapturer is only available on the main process
-          // let desktopCapturer = false;
-          // desktopCapturer.getSources({ types: ["window"] }).then(async (sources) => {
-          //   for (const source of sources) {
-          //     if (source.name === taskName) {
-          //       navigator.mediaDevices
-          //         .getUserMedia({
-          //           video: {
-          //             mandatory: {
-          //               chromeMediaSource: "desktop",
-          //               chromeMediaSourceId: source.id,
-          //             },
-          //           },
-          //         })
-          //         .then((stream) => {
-          //           handleEvents(stream, "screenCapture");
-          //         })
-          //         .catch((error) => console.log(error));
-          //     }
-          //   }
-          // });
         },
         on_load: () => {
           // Assign camera feed to the <video> element
