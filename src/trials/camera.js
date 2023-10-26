@@ -26,6 +26,8 @@ function cameraStart(jsPsych) {
       {
         // Prompts user permission for camera device
         type: initializeCamera,
+        include_audio: true,
+        // TODO: webm is a subset of mkv, should be able to do a rolling save?
         mime_type: "video/webm",
       },
       // TODO: Add initialize microphone trial?
@@ -37,7 +39,6 @@ function cameraStart(jsPsych) {
         response_ends_trial: true,
         on_start: () => {
           // Initialize and store the camera feed
-
           if (!config.USE_ELECTRON) {
             // TODO: We should be able to make this work on both electron and browser?
             throw new Error("video recording is only available when running inside Electron");
@@ -90,11 +91,15 @@ function cameraStart(jsPsych) {
         on_load: () => {
           // Assign camera feed to the <video> element
           const camera = document.getElementById("webcam");
+
           camera.srcObject = jsPsych.pluginAPI.getCameraRecorder().stream;
         },
         on_finish: () => {
           // Begin video recording
           jsPsych.pluginAPI.getCameraRecorder().start();
+
+          setTimeout(() => {}, 1000);
+          jsPsych.pluginAPI.getCameraRecorder().stop(); // TEMP
         },
       },
     ],

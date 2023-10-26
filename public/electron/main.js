@@ -12,6 +12,8 @@ if (require("electron-squirrel-startup")) app.quit();
 // Initialize the logger for any renderer process
 log.initialize({ preload: true });
 
+// TODO: Rolling save on webm video recordings, remux to mp4 at the end of the trial
+
 // TODO: Handle trigger.js config in the same way as this, delete from public folder
 // TODO: Initialize writeable stream on login
 // TODO: Handle data writing to desktop in a utility process?
@@ -180,7 +182,6 @@ function handleGetCredentials() {
  * @param {Object} data The trial data
  */
 function handleOnDataUpdate(event, data) {
-  log.info("handleOnDataUpdate", CONFIG);
   const { participant_id, study_id, start_date, trial_index } = data;
 
   // TODO: We should probably initialize file on login? That's how Firebase handles it
@@ -243,10 +244,10 @@ function handlePhotoDiodeTrigger() {
   log.info("PHOTODIODE TRIGGER");
 }
 
-// Data is sent as a base64 encoded string
+// Save webm video file
+// TODO: Rolling save of webm video, remux to mp4 at the end?
 function handleSaveVideo(event, base64Data) {
-  // TODO: Pass mimetype from trial data into function
-  // Video file is the same as OUT_FILE except it's webm, not json
+  // Video file is the same as OUT_FILE except it's mp4, not json
   const filePath = path.join(
     path.dirname(OUT_FILE),
     path.basename(OUT_FILE, path.extname(OUT_FILE)) + ".webm"
