@@ -65,13 +65,17 @@ async function downloadDataFirebase() {
     const experimentSnapshot = await experimentRef.get();
     const experimentData = experimentSnapshot.data();
 
-    // Merge the experiment's trials' data into a single array
-    const trialsRef = experimentRef.collection(TRIALS_COL);
-    const trialsSnapshot = await trialsRef.orderBy("trial_index").get();
-    const trialsData = trialsSnapshot.docs.map((trial) => trial.data());
-
-    // Add the trials' data to the experiment's data as "results" array
-    experimentData["results"] = trialsData;
+    // Check for nested trials subcollection
+    const trialsSnapshot = await experimentRef.collection(TRIALS_COL).orderBy("trial_index").get();
+    if (!trialsSnapshot.empty) {
+      // Add the trials' data to the experiment's data as "results" array
+      const trialsData = trialsSnapshot.docs.map((trial) => trial.data());
+      experimentData["results"] = trialsData;
+    } else {
+      // Running in an older version of Honeycomb where "trials" subcollection doesn't exist
+      // All experiment data used to be stored inside the experiment document -
+      // In this case "results" is already inside the experimentData object
+    }
 
     // Get the path of the file to be saved
     const outputFile =
@@ -79,6 +83,7 @@ async function downloadDataFirebase() {
       `${STUDY_ID}/${PARTICIPANT_ID}/${experimentID}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names)
 
     // Determine if the file should be saved
+    // TODO 300: Download as either CSV or JSON
     let shouldDownload;
     if (fsExtra.existsSync(outputFile)) {
       // File exists, check if user wants to overwrite
