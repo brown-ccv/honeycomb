@@ -21,6 +21,7 @@ log.initialize({ preload: true });
 /************ GLOBALS ***********/
 
 let CONFIG; // Honeycomb configuration object
+let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
 let WRITE_STREAM; // Writeable file stream for the data (in the user's appData folder)
 // TODO: These should use path, and can be combined into one?
 let OUT_PATH; // Path to the final output file (on the Desktop)
@@ -40,6 +41,7 @@ app.whenReady().then(() => {
 
   // Handle ipcRenderer events (on is renderer -> main, handle is renderer <--> main)
   ipcMain.on("setConfig", handleSetConfig);
+  ipcMain.on("setTrigger", handleSetTrigger);
   ipcMain.handle("getCredentials", handleGetCredentials);
   ipcMain.on("onDataUpdate", handleOnDataUpdate);
   ipcMain.on("onFinish", handleOnFinish);
@@ -157,6 +159,16 @@ function setupLocalFilesNormalizerProxy() {
 function handleSetConfig(event, config) {
   CONFIG = config;
   log.info("Honeycomb Configuration: ", CONFIG);
+}
+
+/**
+ * Receives the Honeycomb config settings and passes them to the CONFIG global in this file
+ * @param {Event} event The Electron renderer event
+ * @param {Object} config The current Honeycomb configuration
+ */
+function handleSetTrigger(event, trigger) {
+  TRIGGER_CODES = trigger;
+  log.info("Trigger Codes: ", TRIGGER_CODES);
 }
 
 /**

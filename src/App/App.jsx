@@ -16,6 +16,7 @@ import Login from "./components/Login";
 import { addToFirebase, validateParticipant } from "./deployments/firebase";
 
 import { config, taskSettings, taskVersion, turkUniqueId } from "../config/main";
+import * as trigger from "../config/trigger";
 import { getProlificId } from "../lib/utils";
 
 /**
@@ -60,6 +61,8 @@ export default function App() {
       if (config.USE_ELECTRON) {
         await window.electronAPI.setConfig(config); // Pass config to Electron ipcMain
         // TODO 306: Pass trigger to Electron ipcMain
+        console.log("APP", trigger);
+        await window.electronAPI.setTrigger(trigger); // Pass trigger to Electron ipcMain
 
         // Fill in login fields based on environment variables (may still be blank)
         const credentials = await window.electronAPI.getCredentials();
