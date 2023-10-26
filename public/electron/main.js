@@ -9,6 +9,9 @@ const url = require("url");
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 if (require("electron-squirrel-startup")) app.quit();
 
+// Initialize the logger for any renderer process
+log.initialize({ preload: true });
+
 // TODO: Handle trigger.js config in the same way as this, delete from public folder
 // TODO: Initialize writeable stream on login
 // TODO: Handle data writing to desktop in a utility process?
@@ -70,7 +73,7 @@ app.on("window-all-closed", () => {
  * Executed before the application begins closing its windows
  * We ensure the writeable stream is closed before exiting
  */
-// TODO: Check what's been written to stream? May not have finished writing the first trial?
+// TODO: Check what's been written to stream? If trial hasn't finished we need to add the closing '}'
 app.on("before-quit", () => {
   if (WRITE_STREAM) {
     WRITE_STREAM.write("]}");

@@ -14,9 +14,6 @@ import { div, h1, p, tag } from "../lib/markup/tags";
  */
 // TODO: refactor to record using web USB
 function cameraStart(jsPsych, participantID) {
-  // TODO: is this needed?
-  // document.title = taskName;
-
   // TODO: ID is the device id of the camera?
   const videoMarkup = tag("video", "", { id: "webcam", width: 640, height: 480, autoplay: true });
   const cameraStartMarkup = p(language.trials.camera.start);
