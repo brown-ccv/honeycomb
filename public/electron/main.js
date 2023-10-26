@@ -22,9 +22,9 @@ log.initialize({ preload: true });
 
 let CONFIG; // Honeycomb configuration object
 let WRITE_STREAM; // Writeable file stream for the data (in the user's appData folder)
+// TODO: These should use path, and can be combined into one?
 let OUT_PATH; // Path to the final output file (on the Desktop)
 let OUT_FILE; // Name of the output file
-// let OUT_VIDEO_FILE; // Name of the video output file
 
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../config/version.json")));
 
@@ -180,6 +180,7 @@ function handleGetCredentials() {
  * @param {Object} data The trial data
  */
 function handleOnDataUpdate(event, data) {
+  log.info("handleOnDataUpdate", CONFIG);
   const { participant_id, study_id, start_date, trial_index } = data;
 
   // TODO: We should probably initialize file on login? That's how Firebase handles it
@@ -187,6 +188,7 @@ function handleOnDataUpdate(event, data) {
   if (!WRITE_STREAM) {
     // The final OUT_FILE will be nested inside subfolders on the Desktop
     OUT_PATH = path.resolve(app.getPath("desktop"), app.getName(), study_id, participant_id);
+    // TODO: ISO 8061 data string? Doesn't include the punctuation
     OUT_FILE = `${start_date}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names);
 
     // The tempFile is nested inside "TempData" in the user's local app data folder
@@ -242,24 +244,25 @@ function handlePhotoDiodeTrigger() {
 }
 
 // Data is sent as a base64 encoded string
-function handleSaveVideo(event, data) {
-  console.log("ELECTRON", data);
-  const filePath = path.resolve(OUT_PATH, `video.webm`);
-  if (CONFIG.USE_VIDEO) {
+function handleSaveVideo(event, base64Data) {
+  // TODO: Pass mimetype from trial data into function
+  // Video file is the same as OUT_FILE except it's webm, not json
+  const filePath = path.join(
+    path.dirname(OUT_FILE),
+    path.basename(OUT_FILE, path.extname(OUT_FILE)) + ".webm"
+  );
+
+  log.info(filePath);
+
+  // Save video file to the desktop
+  if (CONFIG.USE_CAMERA) {
     try {
       fs.mkdirSync(OUT_PATH, { recursive: true });
-      // Save video file to the desktop
-      // fs.outputFile(filePath, buffer, (err) => {
-      //   if (err) {
-      //     event.sender.send("ERROR", err.message);
-      //   } else {
-      //     event.sender.send("SAVED_FILE", filePath);
-      //     console.log(filePath);
-      //   }
-      // });
-      // fs.outputFileSync(filePath, buffer);
+      fs.writeFileSync(
+        path.join(OUT_PATH, filePath),
+        Buffer.from(base64Data.split(",")[1], "base64")
+      );
     } catch (e) {
-      event.sender.send("ERROR", e.message); // TEMP?
       log.error.error("Unable to save file: ", filePath);
       log.error.error(e);
     }
