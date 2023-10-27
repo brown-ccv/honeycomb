@@ -271,6 +271,7 @@ function handleSaveVideo(event, data) {
     const videoData = Buffer.from(data.split(",")[1], "base64");
 
     fs.mkdirSync(OUT_PATH, { recursive: true });
+    // TODO: Convert to mp4 before final save? https://gist.github.com/AVGP/4c2ce4ab3c67760a0f30a9d54544a060
     fs.writeFileSync(path.join(OUT_PATH, filePath), videoData);
   } catch (e) {
     log.error.error("Unable to save file: ", filePath);
