@@ -2,10 +2,10 @@
 const vendorID = "16c0";
 
 // Default if process.env.EVENT_MARKER_PRODUCT_ID is not set
-const productID = "";
+const productID = process.env.EVENT_MARKER_PRODUCT_ID || "";
 
 // Default if process.env.EVENT_MARKER_COM_NAME is not set
-const comName = "COM3";
+const comName = process.env.EVENT_MARKER_COM_NAME || "COM3";
 
 /**
  * Custom codes for specific task events - used to parse the EEG data

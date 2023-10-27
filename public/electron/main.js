@@ -1,10 +1,14 @@
 /** ELECTRON MAIN PROCESS */
 
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const log = require("electron-log");
 const path = require("node:path");
 const fs = require("node:fs");
 const url = require("url");
+
+// TODO: Bring these functions directly into here
+// TODO: EEG check as a separate subprocess?
+const { getPort } = require("event-marker");
 
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 if (require("electron-squirrel-startup")) app.quit();
@@ -21,11 +25,13 @@ log.initialize({ preload: true });
 /************ GLOBALS ***********/
 
 let CONFIG; // Honeycomb configuration object
-let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
 let WRITE_STREAM; // Writeable file stream for the data (in the user's appData folder)
 // TODO: These should use path, and can be combined into one?
 let OUT_PATH; // Path to the final output file (on the Desktop)
 let OUT_FILE; // Name of the output file
+
+let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
+let TRIGGER_PORT; // Port that the EEG machine is talking through
 
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../config/version.json")));
 
@@ -97,59 +103,6 @@ app.on("before-quit", () => {
 //   });
 // });
 
-/********** HELPERS **********/
-
-/** Creates a new Electron window. */
-function createWindow() {
-  const mainWindow = new BrowserWindow({
-    width: 1500,
-    height: 900,
-    icon: "./favicon.ico",
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-    },
-  });
-
-  /**
-   * Load the app into the Electron window
-   * In production it loads the local bundle created by the build process
-   * In development we use ELECTRON_START_URL (This allows hot-reloading)
-   */
-  // TODO: I'm not sure this isPackaged is returning true/false correctly?
-  const appURL = app.isPackaged
-    ? url.format({
-        pathname: path.join(__dirname, "index.html"),
-        protocol: "file:",
-        slashes: true,
-      })
-    : process.env.ELECTRON_START_URL;
-  log.info("Loading URL: ", appURL);
-  mainWindow.loadURL(appURL);
-
-  // Maximize the window in production
-  if (app.isisPackaged) mainWindow.maximize();
-  // Open the dev tools in development
-  else mainWindow.webContents.openDevTools();
-}
-
-/**
- * Set up a local proxy to adjust the paths of requested files
- * when loading them from the production bundle (e.g. local fonts, etc...).
- */
-function setupLocalFilesNormalizerProxy() {
-  // TODO: This is deprecated but needed to load the min files? https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
-  // protocol.registerHttpProtocol(
-  //   "file",
-  //   (request, callback) => {
-  //     const url = request.url.substr(8);
-  //     callback({ path: path.normalize(`${__dirname}/${url}`) });
-  //   },
-  //   (error) => {
-  //     if (error) console.error("Failed to register protocol");
-  //   }
-  // );
-}
-
 /*********** RENDERER EVENT HANDLERS ***********/
 
 /**
@@ -190,7 +143,8 @@ function handleGetCredentials() {
  * @returns {Boolean} Whether or not the EEG machine is connected to the computer
  */
 function handleCheckEegPort() {
-  log.info("CHECKING EEG PORT");
+  // setUpPort().then(() => handleEventSend(eventCodes.test_connect));
+  setUpPort();
 }
 
 function handlePhotoDiodeTrigger() {
@@ -287,4 +241,145 @@ function handleSaveVideo(event, data) {
     log.error.error(e);
   }
   log.info("Successfully saved video file to ", filePath);
+}
+
+/********** HELPERS **********/
+
+/** Creates a new Electron window. */
+function createWindow() {
+  const mainWindow = new BrowserWindow({
+    width: 1500,
+    height: 900,
+    icon: "./favicon.ico",
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+    },
+  });
+
+  /**
+   * Load the app into the Electron window
+   * In production it loads the local bundle created by the build process
+   * In development we use ELECTRON_START_URL (This allows hot-reloading)
+   */
+  // TODO: I'm not sure this isPackaged is returning true/false correctly?
+  const appURL = app.isPackaged
+    ? url.format({
+        pathname: path.join(__dirname, "index.html"),
+        protocol: "file:",
+        slashes: true,
+      })
+    : process.env.ELECTRON_START_URL;
+  log.info("Loading URL: ", appURL);
+  mainWindow.loadURL(appURL);
+
+  // Maximize the window in production
+  if (app.isisPackaged) mainWindow.maximize();
+  // Open the dev tools in development
+  else mainWindow.webContents.openDevTools();
+}
+
+/**
+ * Set up a local proxy to adjust the paths of requested files
+ * when loading them from the production bundle (e.g. local fonts, etc...).
+ */
+function setupLocalFilesNormalizerProxy() {
+  // TODO: This is deprecated but needed to load the min files? https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
+  // protocol.registerHttpProtocol(
+  //   "file",
+  //   (request, callback) => {
+  //     const url = request.url.substr(8);
+  //     callback({ path: path.normalize(`${__dirname}/${url}`) });
+  //   },
+  //   (error) => {
+  //     if (error) console.error("Failed to register protocol");
+  //   }
+  // );
+}
+
+/**
+ * Checks the connection to an EEG machine via USB ports
+ */
+async function setUpPort() {
+  log.info("Setting up USB port");
+  const { productID, comName, vendorID } = TRIGGER_CODES;
+
+  let maybePort;
+  if (productID) {
+    // Check port based on productID
+    log.info("Received a product ID:", productID);
+    maybePort = await getPort(vendorID, productID);
+  } else {
+    // Check port based on COM name
+    log.info("No product ID, defaulting to COM:", comName);
+    maybePort = await getPort(comName);
+  }
+
+  if (maybePort !== false) {
+    TRIGGER_PORT = maybePort;
+
+    // Show dialog box if trigger port has any errors
+    TRIGGER_PORT.on("error", (err) => {
+      log.error(err);
+
+      const buttons = [
+        "OK",
+        // Allow continuation when running in development mode
+        ...(process.env.ELECTRON_START_URL ? ["Continue Anyway"] : []),
+      ];
+
+      dialog
+        .showMessageBox(null, {
+          type: "error",
+          message: "Error communicating with event marker.",
+          title: "Task Error",
+          buttons,
+          defaultId: 0,
+        })
+        .then((opt) => {
+          console.log(opt);
+          // if (opt.response === 0) {
+          //   app.exit();
+          // } else {
+          //   SKIP_SENDING_DEV = true;
+          //   portAvailable = false;
+          //   triggerPort = false;
+          // }
+        });
+    });
+  } else {
+    // Unable to connect to a port
+  }
+
+  // if (p) {
+  //   triggerPort = p;
+  //   portAvailable = true;
+
+  //   triggerPort.on("error", (err) => {
+  //     log.error(err);
+  //     const buttons = ["OK"];
+  //     if (process.env.ELECTRON_START_URL) {
+  //       buttons.push("Continue Anyway");
+  //     }
+  //     dialog
+  //       .showMessageBox(mainWindow, {
+  //         type: "error",
+  //         message: "Error communicating with event marker.",
+  //         title: "Task Error",
+  //         buttons,
+  //         defaultId: 0,
+  //       })
+  //       .then((opt) => {
+  //         if (opt.response === 0) {
+  //           app.exit();
+  //         } else {
+  //           SKIP_SENDING_DEV = true;
+  //           portAvailable = false;
+  //           triggerPort = false;
+  //         }
+  //       });
+  //   });
+  // } else {
+  //   triggerPort = false;
+  //   portAvailable = false;
+  // }
 }
