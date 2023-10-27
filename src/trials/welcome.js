@@ -12,6 +12,7 @@ import { h1 } from "../lib/markup/tags";
  */
 // TODO: Turn into jsPsych instruction trial (config is only used for task name)
 function showName() {
+  // TODO: showMessage CSS is causing scroll bars
   return showMessage(config, {
     responseType: htmlButtonResponse,
     message: language.name,

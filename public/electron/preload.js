@@ -11,5 +11,6 @@ process.once("loaded", () => {
     on_finish: () => ipcRenderer.send("onFinish"),
     photodiodeTrigger: () => ipcRenderer.send("photodiodeTrigger"),
     saveVideo: (data) => ipcRenderer.send("saveVideo", data),
+    checkEegPort: () => ipcRenderer.invoke("checkEegPort"),
   });
 });

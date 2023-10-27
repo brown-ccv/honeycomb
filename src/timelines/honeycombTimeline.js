@@ -1,12 +1,16 @@
-import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
+import {
+  // enterFullscreen,
+  exitFullscreen,
+} from "../trials/fullscreen";
 import {
   createDebriefTrial,
   finishTrial,
   instructionsTrial,
   preloadTrial,
-  welcomeTrial,
+  // welcomeTrial,
 } from "../trials/honeycombTrials";
 import { createHoneycombBlock } from "./honeycombBlock";
+import { preamble } from "./preamble";
 
 /**
  * This timeline builds the example reaction time task from the jsPsych tutorial.
@@ -19,8 +23,9 @@ function createHoneycombTimeline(jsPsych) {
   const debriefTrial = createDebriefTrial(jsPsych);
 
   const timeline = [
-    welcomeTrial,
-    enterFullscreen,
+    preamble,
+    // welcomeTrial,
+    // enterFullscreen,
     preloadTrial,
     instructionsTrial,
     honeycombBlock,

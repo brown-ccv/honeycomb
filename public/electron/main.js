@@ -47,6 +47,7 @@ app.whenReady().then(() => {
   ipcMain.on("onFinish", handleOnFinish);
   ipcMain.on("photodiodeTrigger", handlePhotoDiodeTrigger);
   ipcMain.on("saveVideo", handleSaveVideo);
+  ipcMain.handle("checkEegPort", handleCheckEegPort);
 
   // Setup min files and create the Electron window
   setupLocalFilesNormalizerProxy();
@@ -184,6 +185,18 @@ function handleGetCredentials() {
   return { studyID, participantID };
 }
 
+// TODO: Split this into its own file?
+/**
+ * @returns {Boolean} Whether or not the EEG machine is connected to the computer
+ */
+function handleCheckEegPort() {
+  log.info("CHECKING EEG PORT");
+}
+
+function handlePhotoDiodeTrigger() {
+  log.info("PHOTODIODE TRIGGER");
+}
+
 /**
  * Receives the trial data and writes it to a temp file in AppData
  * The out path/file and writable stream are initialized if isn't yet
@@ -248,10 +261,6 @@ function handleOnFinish() {
     log.error.error(e);
   }
   log.info("Successfully saved experiment data to ", filePath);
-}
-
-function handlePhotoDiodeTrigger() {
-  log.info("PHOTODIODE TRIGGER");
 }
 
 // Save webm video file

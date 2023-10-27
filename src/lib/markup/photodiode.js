@@ -41,11 +41,6 @@ function photodiodeSpot(taskCode) {
   }
 
   // Conditionally load electron based on config variable
-  // let ipcRenderer = false;
-  // if (config.USE_ELECTRON) {
-  //   const electron = window.require("electron");
-  //   ipcRenderer = electron.ipcRenderer;
-  // } else throw new Error("photodiodeSpot trial is only available when running inside Electron");
   if (!config.USE_ELECTRON) {
     throw new Error("photodiodeSpot trial is only available when running inside Electron");
   }
@@ -56,7 +51,6 @@ function photodiodeSpot(taskCode) {
     let numBlinks = taskCode;
     if (taskCode < eventCodes.open_task) numBlinks = 1;
     repeatPulseFor(blinkTime, numBlinks);
-    // if (ipcRenderer) ipcRenderer.send("trigger", taskCode);
     window.electronAPI.send("photodiodeTrigger", taskCode);
   }
 }
