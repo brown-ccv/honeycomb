@@ -6,6 +6,7 @@ import { baseStimulus } from "../lib/markup/stimuli";
 import { h1, p } from "../lib/markup/tags";
 
 // TODO: Actually check to see if USB is connected? This isn't testing anything?
+// TODO: Rename as checkEEG? (this is a similar trial to cameraStart)
 function holdUpMarker() {
   const eventMarkerMarkup = h1(language.trials.eventMarker.connected, { style: "color: green;" });
 

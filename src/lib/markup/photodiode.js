@@ -21,6 +21,7 @@ function photodiodeGhostBox() {
 function photodiodeSpot(taskCode) {
   console.log("photodiodeSpot");
   // Pulse the spot color from black to white
+  // TODO: Pulse between visible and invisible?
   function pulseFor(ms, callback) {
     $(".photodiode-spot").css({ "background-color": "black" });
     setTimeout(() => {
