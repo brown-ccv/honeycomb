@@ -20,6 +20,7 @@ let VIDEO = false;
 // Override product ID if environment variable set
 const activeProductId = process.env.EVENT_MARKER_PRODUCT_ID || productId;
 const activeComName = process.env.EVENT_MARKER_COM_NAME || comName;
+// !DONE
 if (activeProductId) {
   log.info("Active product ID", activeProductId);
 } else {
