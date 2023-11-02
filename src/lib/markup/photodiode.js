@@ -23,7 +23,6 @@ function photodiodeGhostBox() {
  * @param {*} taskCode The code to be sent to the USB port (Electron only)
  */
 function photodiodeSpot(taskCode) {
-  // Conditionally load electron based on config variable
   if (!config.USE_ELECTRON) {
     throw new Error("photodiodeSpot trial is only available when running inside Electron");
   }

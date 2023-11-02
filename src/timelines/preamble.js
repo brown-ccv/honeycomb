@@ -1,6 +1,5 @@
 import { config } from "../config/main";
 
-// import { enterFullscreen } from "../trials/fullscreen";
 import holdUpMarker from "../trials/holdUpMarker";
 import startCode from "../trials/startCode";
 import { showName, showWelcome } from "../trials/welcome";

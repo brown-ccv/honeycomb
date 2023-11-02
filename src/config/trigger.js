@@ -1,3 +1,6 @@
+// TODO: Rename file? This is specific to EEG stuff?
+// TODO: Should this just be json?
+
 // teensyduino
 const vendorID = "16c0";
 
@@ -20,7 +23,4 @@ const eventCodes = {
 };
 
 // Note that this is module.exports so it can be imported into the electron app
-// module.exports = { eventCodes };
 export { vendorID, productID, comName, eventCodes };
-// TODO: Rename file? This is specific to EEG stuff?
-// TODO: Should this just be json?

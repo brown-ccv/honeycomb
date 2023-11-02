@@ -158,7 +158,7 @@ function handleCheckEegPort() {
 function handlePhotoDiodeTrigger(event, code) {
   if (code !== undefined) {
     log.info(`Event: ${_.invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
-    if (CONFIG.USE_EEG) handleEventSend(code);
+    handleEventSend(code);
   } else {
     log.warn("Photodiode event triggered but no code was sent");
   }
