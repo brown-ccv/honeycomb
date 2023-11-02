@@ -160,7 +160,7 @@ function handlePhotoDiodeTrigger(event, code) {
     log.info(`Event: ${_.invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
     if (CONFIG.USE_EEG) handleEventSend(code);
   } else {
-    log.warning("Photodiode event triggered but no code was sent");
+    log.warn("Photodiode event triggered but no code was sent");
   }
 }
 

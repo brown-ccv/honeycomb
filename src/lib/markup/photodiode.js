@@ -16,10 +16,18 @@ function photodiodeGhostBox() {
 }
 
 /**
- * Conditionally flashes a spot inside the photodiodeGhostBox
+ * Repeatedly flashes a spot inside the photodiodeGhostBox and communicates with the USB port
+ *
+ * Note that this trial is only available when running in Electron
+ *
+ * @param {*} taskCode The code to be sent to the USB port (Electron only)
  */
 function photodiodeSpot(taskCode) {
-  console.log("photodiodeSpot");
+  // Conditionally load electron based on config variable
+  if (!config.USE_ELECTRON) {
+    throw new Error("photodiodeSpot trial is only available when running inside Electron");
+  }
+
   // Pulse the spot color from black to white
   // TODO: Pulse between visible and invisible?
   function pulseFor(ms, callback) {
@@ -41,18 +49,16 @@ function photodiodeSpot(taskCode) {
     }
   }
 
-  // Conditionally load electron based on config variable
-  if (!config.USE_ELECTRON) {
-    throw new Error("photodiodeSpot trial is only available when running inside Electron");
-  }
-
   if (config.USE_PHOTODIODE) {
-    console.log("PHOTODIODE");
-    const blinkTime = 40; // TODO: Get blink time based off fixation time?
+    // TODO: Pass blinkTime as config setting
+    const blinkTime = 40;
     let numBlinks = taskCode;
+
+    // TODO?: Legacy, can it be removed?
     if (taskCode < eventCodes.open_task) numBlinks = 1;
+
     repeatPulseFor(blinkTime, numBlinks);
-    window.electronAPI.send("photodiodeTrigger", taskCode);
+    window.electronAPI.photodiodeTrigger(taskCode);
   }
 }
 

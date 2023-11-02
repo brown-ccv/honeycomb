@@ -15,8 +15,8 @@ const eventCodes = {
   fixation: 1,
   evidence: 5,
   show_earnings: 7,
-  test_connect: 32,
   open_task: 18,
+  test_connect: 32,
 };
 
 // Note that this is module.exports so it can be imported into the electron app
