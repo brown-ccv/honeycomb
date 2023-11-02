@@ -81,6 +81,7 @@ let triggerPort;
 let portAvailable;
 let SKIP_SENDING_DEV = false;
 
+// !DONE
 const setUpPort = async () => {
   let p;
   if (activeProductId) {
@@ -122,6 +123,7 @@ const setUpPort = async () => {
   }
 };
 
+// !DONE
 const handleEventSend = (code) => {
   if (!portAvailable && !SKIP_SENDING_DEV) {
     const message = "Event Marker not connected";
@@ -167,7 +169,7 @@ ipc.on("updateEnvironmentVariables", (event, args) => {
 });
 
 // EVENT TRIGGER
-
+// !DONE
 ipc.on("trigger", (event, args) => {
   const code = args;
   if (code !== undefined) {
@@ -306,6 +308,7 @@ ipc.on("error", (event, args) => {
 });
 
 // log uncaught exceptions
+// !DONE
 process.on("uncaughtException", (error) => {
   // Handle the error
   log.error(error);

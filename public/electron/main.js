@@ -2,13 +2,14 @@
 
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const log = require("electron-log");
+const _ = require("lodash");
+const url = require("url");
 const path = require("node:path");
 const fs = require("node:fs");
-const url = require("url");
 
 // TODO: Bring these functions directly into here
-// TODO: EEG check as a separate subprocess?
-const { getPort } = require("event-marker");
+// TODO: USB check as a separate subprocess?
+const { getPort, sendToPort } = require("event-marker");
 
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 if (require("electron-squirrel-startup")) app.quit();
@@ -25,6 +26,7 @@ log.initialize({ preload: true });
 /************ GLOBALS ***********/
 
 let CONFIG; // Honeycomb configuration object
+let DEV_MODE; // Whether or not the application is running in dev mode
 let WRITE_STREAM; // Writeable file stream for the data (in the user's appData folder)
 // TODO: These should use path, and can be combined into one?
 let OUT_PATH; // Path to the final output file (on the Desktop)
@@ -103,6 +105,12 @@ app.on("before-quit", () => {
 //   });
 // });
 
+/** Log any uncaught exceptions before quitting */
+process.on("uncaughtException", (error) => {
+  log.error(error);
+  app.quit();
+});
+
 /*********** RENDERER EVENT HANDLERS ***********/
 
 /**
@@ -142,13 +150,18 @@ function handleGetCredentials() {
 /**
  * @returns {Boolean} Whether or not the EEG machine is connected to the computer
  */
+// TODO: This is called in
 function handleCheckEegPort() {
-  // setUpPort().then(() => handleEventSend(eventCodes.test_connect));
-  setUpPort();
+  setUpPort().then(() => handleEventSend(TRIGGER_CODES.eventCodes.test_connect));
 }
 
-function handlePhotoDiodeTrigger() {
-  log.info("PHOTODIODE TRIGGER");
+function handlePhotoDiodeTrigger(event, code) {
+  if (code !== undefined) {
+    log.info(`Event: ${_.invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
+    if (CONFIG.USE_EEG) handleEventSend(code);
+  } else {
+    log.warning("Photodiode event triggered but no code was sent");
+  }
 }
 
 /**
@@ -321,65 +334,78 @@ async function setUpPort() {
     TRIGGER_PORT.on("error", (err) => {
       log.error(err);
 
-      const buttons = [
-        "OK",
-        // Allow continuation when running in development mode
-        ...(process.env.ELECTRON_START_URL ? ["Continue Anyway"] : []),
-      ];
-
+      // This dialog will should if there is any error with the TRIGGER_PORT
+      // TODo: Clean up this dialog to better reflect what the error is?
+      // TODO: Let this just be dialog.showErrorBox?
       dialog
         .showMessageBox(null, {
           type: "error",
-          message: "Error communicating with event marker.",
-          title: "Task Error",
-          buttons,
+          message: "Unable to communicate with event marker.",
+          title: "USB Error",
+          buttons: [
+            "OK",
+            // Allow continuation when running in development mode
+            ...(process.env.ELECTRON_START_URL ? ["Continue Anyway"] : []),
+          ],
           defaultId: 0,
         })
         .then((opt) => {
-          console.log(opt);
-          // if (opt.response === 0) {
-          //   app.exit();
-          // } else {
-          //   SKIP_SENDING_DEV = true;
-          //   portAvailable = false;
-          //   triggerPort = false;
-          // }
+          log.info(opt);
+          if (opt.response === 0) {
+            // Quit app when user selects "OK"
+            app.exit();
+          } else {
+            // User selected "Continue Anyway", we must be in dev mode
+            DEV_MODE = true;
+            TRIGGER_PORT = undefined;
+          }
         });
     });
   } else {
     // Unable to connect to a port
+    TRIGGER_PORT = undefined;
+    log.warn("USB port was not connected");
   }
+}
 
-  // if (p) {
-  //   triggerPort = p;
-  //   portAvailable = true;
+/**
+ * Handles the sending of an event code to TRIGGER_PORT
+ * @param code The code to send via USB
+ */
+function handleEventSend(code) {
+  log.info(`Sending USB event ${code} to port ${TRIGGER_PORT}`);
+  if (TRIGGER_PORT !== undefined && !DEV_MODE) {
+    sendToPort(TRIGGER_PORT, code);
+  } else {
+    log.error(`Trigger port is undefined - Event Marker is not connected`);
 
-  //   triggerPort.on("error", (err) => {
-  //     log.error(err);
-  //     const buttons = ["OK"];
-  //     if (process.env.ELECTRON_START_URL) {
-  //       buttons.push("Continue Anyway");
-  //     }
-  //     dialog
-  //       .showMessageBox(mainWindow, {
-  //         type: "error",
-  //         message: "Error communicating with event marker.",
-  //         title: "Task Error",
-  //         buttons,
-  //         defaultId: 0,
-  //       })
-  //       .then((opt) => {
-  //         if (opt.response === 0) {
-  //           app.exit();
-  //         } else {
-  //           SKIP_SENDING_DEV = true;
-  //           portAvailable = false;
-  //           triggerPort = false;
-  //         }
-  //       });
-  //   });
-  // } else {
-  //   triggerPort = false;
-  //   portAvailable = false;
-  // }
+    // Display error menu
+    const response = dialog.showMessageBoxSync(null, {
+      type: "error",
+      message: "Event Marker is not connected",
+      title: "USB Error",
+      buttons: [
+        "Quit",
+        "Retry",
+        // Allow continuation when running in development mode
+        ...(process.env.ELECTRON_START_URL ? ["Continue Anyway"] : []),
+      ],
+      detail: "heres some detail",
+    });
+
+    switch (response) {
+      case 0:
+        // User selects "Quit"
+        app.exit();
+        break;
+      case 1:
+        // User selects "Retry" so we reset the port and try again
+        setUpPort().then(() => handleEventSend(code));
+        break;
+      case 2:
+        // User selects "Continue Anyway", we must be in dev mode
+        DEV_MODE = true;
+        break;
+    }
+  }
 }
