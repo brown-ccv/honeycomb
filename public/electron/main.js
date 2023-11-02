@@ -35,6 +35,7 @@ let OUT_FILE; // Name of the output file
 let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
 let TRIGGER_PORT; // Port that the EEG machine is talking through
 
+// TODO: THis is causing an error cause it's not built into the app?
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../config/version.json")));
 
 /************ APP LIFECYCLE ***********/
