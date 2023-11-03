@@ -17,7 +17,7 @@ module.exports = {
       config: {
         options: {
           // TODO: Honeycomb icon
-          icon: "/path/to/icon.png",
+          icon: "./assets/icons/mac/icon.icns",
         },
       },
     },
@@ -25,10 +25,11 @@ module.exports = {
       // Build for Mac
       name: "@electron-forge/maker-dmg",
       config: {
-        overwrite: true,
         // TODO: Honeycomb icon
         icon: "./assets/icons/icon.icns",
+        overwrite: true,
       },
+      platforms: ["darwin"],
     },
     {
       // Build for Windows
@@ -37,7 +38,8 @@ module.exports = {
         // TODO: Honeycomb icon (here, not on Github)
         iconUrl:
           "https://raw.githubusercontent.com/brown-ccv/honeycomb/main/assets/icons/win/icon.ico",
-        setupIcon: "./assets/icons/icon.ico",
+        setupIcon:
+          "https://raw.githubusercontent.com/brown-ccv/honeycomb/main/assets/icons/win/icon.ico",
 
         // TODO: These are used in the example?
         // certificateFile: "./cert.pfx",
@@ -52,19 +54,19 @@ module.exports = {
       config: {},
     },
   ],
-  publishers: [
-    {
-      // TODO: These might be nice for the end user? But not Honeycomb itself?
-      name: "@electron-forge/publisher-github",
-      config: {
-        repository: {
-          owner: "brown-ccv",
-          name: "honeycomb",
-        },
-        prerelease: true,
-      },
-    },
-  ],
+  // publishers: [
+  //   {
+  //     // TODO: These might be nice for the end user? But not Honeycomb itself?
+  //     name: "@electron-forge/publisher-github",
+  //     config: {
+  //       repository: {
+  //         owner: "brown-ccv",
+  //         name: "honeycomb",
+  //       },
+  //       prerelease: true,
+  //     },
+  //   },
+  // ],
 };
 
 // TODO: Should we add rpm installers?
