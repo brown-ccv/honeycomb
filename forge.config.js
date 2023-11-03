@@ -1,4 +1,3 @@
-// TODO: Should we add rpm installers?
 /**
  * Configuration file for Electron Forge
  */
