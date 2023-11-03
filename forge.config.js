@@ -1,47 +1,48 @@
+// TODO: Should we add rpm installers?
 /**
  * Configuration file for Electron Forge
  */
 module.exports = {
   packagerConfig: {
     asar: true,
-    icon: "./assets/icons/icon", // TODO: Honeycomb icon
+    // TODO: Honeycomb icon (hexagon on docs)
+    icon: "assets/icons/icon",
   },
   makers: [
     {
-      // Build zip files
+      // zip files
       name: "@electron-forge/maker-zip",
     },
     {
-      // Build for Linux
+      // Linux Distribution
       name: "@electron-forge/maker-deb",
       config: {
         options: {
-          // TODO: Honeycomb icon
-          icon: "./assets/icons/mac/icon.icns",
+          // TODO: Honeycomb icon (hexagon on docs)
+          // icon: "assets/icons/icon.png",
         },
       },
     },
     {
-      // Build for Mac
+      // Mac Distribution
       name: "@electron-forge/maker-dmg",
       config: {
-        // TODO: Honeycomb icon
-        icon: "./assets/icons/icon.icns",
+        // TODO: Honeycomb icon (hexagon on docs)
+        icon: "assets/icons/icon.icns",
         overwrite: true,
       },
       platforms: ["darwin"],
     },
     {
-      // Build for Windows
+      // Windows Distribution
       name: "@electron-forge/maker-squirrel",
       config: {
-        // TODO: Honeycomb icon (here, not on Github)
+        // TODO: Honeycomb icon (hexagon on docs)
+        // TODO: This will break when we merge with main
         iconUrl:
           "https://raw.githubusercontent.com/brown-ccv/honeycomb/main/assets/icons/win/icon.ico",
-        setupIcon:
-          "https://raw.githubusercontent.com/brown-ccv/honeycomb/main/assets/icons/win/icon.ico",
-
-        // TODO: These are used in the example?
+        setupIcon: "assets/icons/icon.ico",
+        // TODO: Certificates on mac and windows will prefect antivirus issues
         // certificateFile: "./cert.pfx",
         // certificatePassword: process.env.CERTIFICATE_PASSWORD,
       },
@@ -54,20 +55,4 @@ module.exports = {
       config: {},
     },
   ],
-  // publishers: [
-  //   {
-  //     // TODO: These might be nice for the end user? But not Honeycomb itself?
-  //     name: "@electron-forge/publisher-github",
-  //     config: {
-  //       repository: {
-  //         owner: "brown-ccv",
-  //         name: "honeycomb",
-  //       },
-  //       prerelease: true,
-  //     },
-  //   },
-  // ],
 };
-
-// TODO: Should we add rpm installers?
-// TODO: Add launch config for debugging in Electron? https://www.electronforge.io/advanced/debugging#debugging-with-vs-code
