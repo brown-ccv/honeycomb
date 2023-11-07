@@ -34,7 +34,6 @@ module.exports = {
       config: {
         iconUrl: "https://raw.githubusercontent.com/brown-ccv/honeycomb/main/assets/icons/icon.ico",
         setupIcon: "assets/icons/icon.ico",
-        author: "Example Author",
         // TODO: Certificates on mac and windows will prefect antivirus issues
         // certificateFile: "./cert.pfx",
         // certificatePassword: process.env.CERTIFICATE_PASSWORD,
