@@ -48,50 +48,57 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
 
-      # Install dependencies and set up environment
-      - name: 📥 Install Dependencies
-        run: npm ci
-      - name: 🔃 Load .env file (.env.${{github.event.inputs.setting}})
-        uses: xom9ikk/dotenv@v2
-        with:
-          path: ./env
-          mode: ${{github.event.inputs.setting}}
-
-      # Build the app
-      - name: ⚒ Run Build
-        run: npm run build
-
-      # Package the app installers
-      - name: 📦 Package app installer - Windows
-        if: startsWith(matrix.os, 'windows')
-        run: npm run package:windows
-      - name: 📦 Package app installer - Mac
-        if: startsWith(matrix.os, 'mac')
-        run: npm run package:mac
-      - name: 📦 Package app installer - Linux
-        if: startsWith(matrix.os, 'ubuntu')
-        run: npm run package:linux
-
-      # Upload installers to github action
       - name: Set package version and name
-        uses: brown-ccv/gh-actions/get-package-info@feat-update-package-info
+        uses: brown-ccv/gh-actions/get-package-info@main
         id: package_info
-      - name: ⬆ Upload installer - Windows
-        uses: actions/upload-artifact@v2
-        if: startsWith(matrix.os, 'windows')
-        with:
-          name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }} Setup.exe
 
-      - name: ⬆ Upload installer - Mac
-        uses: actions/upload-artifact@v2
-        if: startsWith(matrix.os, 'mac')
-        with:
-          name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-x64.dmg
-      - name: ⬆ Upload installer - Linux
-        uses: actions/upload-artifact@v2
-        if: startsWith(matrix.os, 'ubuntu')
-        with:
-          name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
+      - name: Echo name and version
+        run: echo "${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}""
+
+      # # Install dependencies and set up environment
+      # - name: 📥 Install Dependencies
+      #   run: npm ci
+      # - name: 🔃 Load .env file (.env.${{github.event.inputs.setting}})
+      #   uses: xom9ikk/dotenv@v2
+      #   with:
+      #     path: ./env
+      #     mode: ${{github.event.inputs.setting}}
+
+      # # Build the app
+      # - name: ⚒ Run Build
+      #   run: npm run build
+
+      # # Package the app installers
+      # - name: 📦 Package app installer - Windows
+      #   if: startsWith(matrix.os, 'windows')
+      #   run: npm run package:windows
+      # - name: 📦 Package app installer - Mac
+      #   if: startsWith(matrix.os, 'mac')
+      #   run: npm run package:mac
+      # - name: 📦 Package app installer - Linux
+      #   if: startsWith(matrix.os, 'ubuntu')
+      #   run: npm run package:linux
+
+      # # Upload installers to github action
+      # - name: Set package version and name
+      #   uses: brown-ccv/gh-actions/get-package-info@main
+      #   id: package_info
+      # - name: ⬆ Upload installer - Windows
+      #   uses: actions/upload-artifact@v2
+      #   if: startsWith(matrix.os, 'windows')
+      #   with:
+      #     name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
+      #     path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }} Setup.exe
+
+      # - name: ⬆ Upload installer - Mac
+      #   uses: actions/upload-artifact@v2
+      #   if: startsWith(matrix.os, 'mac')
+      #   with:
+      #     name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
+      #     path: out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-x64.dmg
+      # - name: ⬆ Upload installer - Linux
+      #   uses: actions/upload-artifact@v2
+      #   if: startsWith(matrix.os, 'ubuntu')
+      #   with:
+      #     name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
+      #     path: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
