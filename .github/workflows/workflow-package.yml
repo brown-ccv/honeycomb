@@ -49,7 +49,7 @@ jobs:
           cache: npm
 
       - name: Set package version and name
-        uses: brown-ccv/gh-actions/get-package-info@main
+        uses: brown-ccv/gh-actions/get-package-info@feat-update-package-info
         id: package_info
 
       - name: Echo name and version
