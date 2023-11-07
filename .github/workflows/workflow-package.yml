@@ -53,7 +53,7 @@ jobs:
         id: package_info
 
       - name: Echo name and version
-        run: echo "${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}""
+        run: echo "${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}"
 
       # # Install dependencies and set up environment
       # - name: 📥 Install Dependencies
