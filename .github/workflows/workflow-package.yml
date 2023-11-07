@@ -74,7 +74,7 @@ jobs:
 
       # Upload installers to github action
       - name: Set package version and name
-        uses: brown-ccv/gh-actions/get-package-info@main
+        uses: brown-ccv/gh-actions/get-package-info@feat-update-package-info
         id: package_info
       - name: ⬆ Upload installer - Windows
         uses: actions/upload-artifact@v2
