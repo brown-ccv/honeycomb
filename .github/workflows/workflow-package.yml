@@ -48,8 +48,11 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
 
+      # - name: Set package version and name
+      #   uses: luizfelipelaviola/get-package-info@v1
+      #   id: package_info
       - name: Set package version and name
-        uses: luizfelipelaviola/get-package-info@v1
+        uses: brown-ccv/gh-actions/get-package-info@main
         id: package_info
 
       # Install dependencies and set up environment
@@ -82,17 +85,17 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         with:
           name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-setup.exe
+          path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-setup.exe
 
       - name: ⬆ Upload installer - Mac
         uses: actions/upload-artifact@v2
         if: startsWith(matrix.os, 'mac')
         with:
           name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}.dmg
+          path: out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
       - name: ⬆ Upload installer - Linux
         uses: actions/upload-artifact@v2
         if: startsWith(matrix.os, 'ubuntu')
         with:
           name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}.deb
+          path: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}.deb
