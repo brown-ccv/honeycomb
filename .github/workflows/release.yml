@@ -33,6 +33,10 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
       # Install dependencies and set up environment
       - name: 📥 Install Dependencies
