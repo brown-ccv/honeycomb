@@ -43,7 +43,7 @@ jobs:
           mode: ${{matrix.setting}}
 
       # Test and build the app
-      - name: 🧪 Run Lint
+      - name: 🧪 Run Test
         run: npm test
         env:
           CI: true
