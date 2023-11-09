@@ -39,7 +39,7 @@ jobs:
       fail-fast: false # A failed build will not end the other matrix jobs
 
     steps:
-      # Set up Node
+      # Set up runner
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
       - name: ⎔ Setup node
@@ -47,6 +47,10 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
       # Install dependencies and set up environment
       - name: 📥 Install Dependencies
