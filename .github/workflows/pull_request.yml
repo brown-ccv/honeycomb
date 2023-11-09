@@ -29,6 +29,9 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
 
+      - name: "Check Python version"
+        run: echo "python --version"
+
       # Install dependencies and set up environment
       - name: 📥 Install Dependencies
         run: npm ci
