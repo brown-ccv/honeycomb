@@ -4,7 +4,7 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 2018,
+    ecmaVersion: 2020,
     sourceType: "module",
   },
   settings: {
@@ -24,7 +24,7 @@ module.exports = {
   plugins: ["react", "prettier"],
   extends: ["eslint:recommended", "plugin:react/recommended", "prettier"],
   rules: {
-    "react/prop-types": "off",
+    "react/prop-types": "off", // TODO: Add prop validation
     "prettier/prettier": "warn",
   },
   overrides: [{ files: ["*.jsx", "*.js"] }],

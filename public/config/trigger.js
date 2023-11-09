@@ -17,7 +17,7 @@ const eventCodes = {
   open_task: 18,
 };
 
-// this is module.exports isntead of just exports as it is also imported into the electron app
+// this is module.exports instead of just exports as it is also imported into the electron app
 module.exports = {
   vendorId,
   productId,
