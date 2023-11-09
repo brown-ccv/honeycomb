@@ -30,7 +30,7 @@ jobs:
           cache: npm
 
       - name: "Check Python version"
-        run: echo "python --version"
+        run: python --version
 
       # Install dependencies and set up environment
       - name: 📥 Install Dependencies
