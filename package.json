@@ -7,7 +7,7 @@
     "url": "https://ccv.brown.edu"
   },
   "version": "3.2.4",
-  "honeycomb_version": "",
+  "honeycombVersion": "",
   "license": "MIT",
   "private": true,
   "main": "public/electron.js",
