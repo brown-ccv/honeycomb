@@ -135,7 +135,6 @@ function handleGetCredentials() {
 /**
  * @returns {Boolean} Whether or not the EEG machine is connected to the computer
  */
-// TODO: Rename handleCheckSerialPort
 function handleCheckSerialPort() {
   setUpPort().then(() => handleEventSend(TRIGGER_CODES.eventCodes.test_connect));
 }
