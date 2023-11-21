@@ -90,9 +90,6 @@ export default function App() {
         }
       } else if (config.USE_FIREBASE) {
         // Fill in login fields based on query parameters (may still be blank)
-        // const query = new URLSearchParams(window.location.search);
-        // const studyId = query.get("studyID");
-        // const participantId = query.get("participantID");
         const maybeStudyID = getSearchParam("studyID");
         const maybeParticipantID = getSearchParam("participantID");
         if (maybeStudyID != null) setStudyID(maybeStudyID);
