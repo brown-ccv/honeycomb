@@ -58,7 +58,7 @@ export default function App() {
         "Task Settings": taskSettings,
       });
 
-      // If running in a native application
+      // If on desktop
       if (config.USE_ELECTRON) {
         await window.electronAPI.setConfig(config); // Pass config to Electron ipcMain
         await window.electronAPI.setTrigger(trigger); // Pass trigger to Electron ipcMain
@@ -68,13 +68,9 @@ export default function App() {
         if (credentials.participantID) setParticipantID(credentials.participantID);
         if (credentials.studyID) setStudyID(credentials.studyID);
 
-        // Ensure EEG is connected if using it
-        if (config.USE_EEG) await window.electronAPI.checkEegPort();
-
         setMethod("desktop");
       } else {
-        // If using Mechanical Turk and PsiTurk
-        // TODO: Change config variable to psiturk? That's what user's are really using
+        // If MTURK
         if (config.USE_MTURK) {
           /* eslint-disable */
           window.lodash = _.noConflict();
@@ -83,7 +79,6 @@ export default function App() {
           handleLogin("mturk", turkUniqueId);
           /* eslint-enable */
         } else if (config.USE_PROLIFIC) {
-          // TODO: Remove prolific check - we should always check process.env AND UrlSearchParams
           const pID = getProlificId();
           if (config.USE_FIREBASE && pID) {
             setMethod("firebase");
@@ -93,7 +88,6 @@ export default function App() {
             setIsError(true);
           }
         } else if (config.USE_FIREBASE) {
-          // TODO: There's a difference between PROLIFIC_ID in URL and PID/SID
           // Fill in login fields based on query parameters (may still be blank)
           const query = new URLSearchParams(window.location.search);
           const studyId = query.get("studyID");
@@ -108,6 +102,7 @@ export default function App() {
       }
     }
     setUpHoneycomb();
+    // eslint-disable-next-line
   }, []);
 
   /** VALIDATION FUNCTIONS */

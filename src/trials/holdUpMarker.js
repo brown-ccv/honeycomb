@@ -1,6 +1,6 @@
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 
-import { language } from "../config/main";
+import { config, language } from "../config/main";
 import { photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
 import { h1, p } from "../lib/markup/tags";
@@ -15,6 +15,10 @@ function holdUpMarker() {
     stimulus: baseStimulus(eventMarkerMarkup, true) + photodiodeGhostBox(),
     prompt: [p(language.trials.holdUpMarker)],
     choices: [language.prompts.continue.button],
+    on_start: async () => {
+      // Ensure EEG is connected if using it
+      if (config.USE_EEG) await window.electronAPI.checkSerialPort();
+    },
   };
 }
 

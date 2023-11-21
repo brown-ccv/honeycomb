@@ -54,7 +54,7 @@ app.whenReady().then(() => {
   ipcMain.on("onFinish", handleOnFinish);
   ipcMain.on("photodiodeTrigger", handlePhotoDiodeTrigger);
   ipcMain.on("saveVideo", handleSaveVideo);
-  ipcMain.handle("checkEegPort", handleCheckEegPort);
+  ipcMain.handle("checkSerialPort", handleCheckSerialPort);
 
   // Setup min files and create the Electron window
   setupLocalFilesNormalizerProxy();
@@ -132,12 +132,11 @@ function handleGetCredentials() {
   return { studyID, participantID };
 }
 
-// TODO: Split this into its own file?
 /**
  * @returns {Boolean} Whether or not the EEG machine is connected to the computer
  */
-// TODO: This is called in
-function handleCheckEegPort() {
+// TODO: Rename handleCheckSerialPort
+function handleCheckSerialPort() {
   setUpPort().then(() => handleEventSend(TRIGGER_CODES.eventCodes.test_connect));
 }
 
