@@ -319,7 +319,7 @@ async function setUpPort() {
     TRIGGER_PORT.on("error", (err) => {
       log.error(err);
 
-      // Disable as a dialog if there Electron is unable to communicate with the event marker's serial port
+      // Displays as a dialog if there Electron is unable to communicate with the event marker's serial port
       // TODO: Let this just be dialog.showErrorBox?
       dialog
         .showMessageBox(null, {
