@@ -319,13 +319,12 @@ async function setUpPort() {
     TRIGGER_PORT.on("error", (err) => {
       log.error(err);
 
-      // This dialog will should if there is any error with the TRIGGER_PORT
-      // TODo: Clean up this dialog to better reflect what the error is?
+      // Disable as a dialog if there Electron is unable to communicate with the event marker's serial port
       // TODO: Let this just be dialog.showErrorBox?
       dialog
         .showMessageBox(null, {
           type: "error",
-          message: "Unable to communicate with event marker.",
+          message: "There was an error with event marker's serial port.",
           title: "USB Error",
           buttons: [
             "OK",
