@@ -1,13 +1,10 @@
-import {
-  // enterFullscreen,
-  exitFullscreen,
-} from "../trials/fullscreen";
+import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
 import {
   createDebriefTrial,
   finishTrial,
   instructionsTrial,
   preloadTrial,
-  // welcomeTrial,
+  welcomeTrial,
 } from "../trials/honeycombTrials";
 import { createHoneycombBlock } from "./honeycombBlock";
 import { preamble } from "./preamble";
@@ -23,9 +20,10 @@ function createHoneycombTimeline(jsPsych) {
   const debriefTrial = createDebriefTrial(jsPsych);
 
   const timeline = [
+    // TODO: Use the new welcome trial inside the preamble
     preamble,
-    // welcomeTrial,
-    // enterFullscreen,
+    welcomeTrial,
+    enterFullscreen,
     preloadTrial,
     instructionsTrial,
     honeycombBlock,

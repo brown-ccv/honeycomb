@@ -1,5 +1,4 @@
-// TODO: Rename file? This is specific to EEG stuff?
-// TODO: Should this just be json?
+// TODO 333: Move to "event_marker" config.json
 
 // teensyduino
 const vendorID = "16c0";
