@@ -53,23 +53,6 @@ function formatDollars(amount) {
 }
 
 /**
- * Adds a wait period before a trial begins
- * @param {Object} trial The trial to add a wait period to
- * @param {number} waitTime The amount of time to wait by
- * @returns The given trial with a waiting period before it
- */
-// TODO 162: This should be a trial not a utility? It"s adding a separate trial in and of itself
-// TODO 162: JsPsych has a property for the wait time before moving to the next trial
-function generateWaitSet(trial, waitTime) {
-  const waitTrial = Object.assign({}, trial);
-  waitTrial.trial_duration = waitTime;
-  waitTrial.response_ends_trial = false;
-  waitTrial.prompt = "-";
-
-  return [waitTrial, trial];
-}
-
-/**
  * Starts the JsPsych keyboard response listener
  * @param  jsPsych The jsPsych instance running the task.
  */
@@ -90,18 +73,12 @@ function startKeypressListener(jsPsych) {
 
 /**
  * Gets the value of a given variable from the URL search parameters
- * @param {any} variable The key of the variable in the search parameters
- * @returns The value of variable in the search parameters
+ * @param {string} queryParameter The key of the variable in the search parameters
+ * @returns {string} The value of variable in the search parameters
  */
-function getQueryVariable(variable) {
-  const query = window.location.search.substring(1);
-  const vars = query.split("&");
-  for (let i = 0; i < vars.length; i++) {
-    const pair = vars[i].split("=");
-    if (decodeURIComponent(pair[0]) === variable) {
-      return decodeURIComponent(pair[1]);
-    }
-  }
+function getSearchParam(queryParameter) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(queryParameter);
 }
 
 /**
@@ -109,7 +86,7 @@ function getQueryVariable(variable) {
  * @returns
  */
 function getProlificId() {
-  const prolificId = getQueryVariable("PROLIFIC_PID");
+  const prolificId = getSearchParam("PROLIFIC_PID");
   return prolificId;
 }
 
@@ -145,8 +122,8 @@ export {
   beep,
   deepCopy,
   formatDollars,
-  generateWaitSet,
   getProlificId,
+  getSearchParam,
   interleave,
   jitter,
   jitter50,
