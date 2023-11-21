@@ -16,7 +16,7 @@ function holdUpMarker() {
     prompt: [p(language.trials.holdUpMarker)],
     choices: [language.prompts.continue.button],
     on_start: async () => {
-      // Ensure EEG is connected if using it
+      // Ensure event marker is connected if using it
       if (config.USE_EEG) await window.electronAPI.checkSerialPort();
     },
   };
