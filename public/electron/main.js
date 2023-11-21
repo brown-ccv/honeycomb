@@ -112,29 +112,28 @@ function createWindow() {
    * In production it loads the local bundle created by the build process
    * In development we use ELECTRON_START_URL (This allows hot-reloading)
    */
-  // TODO: I'm not sure this isPackaged is returning true/false correctly?
-  const appURL = app.isPackaged
-    ? url.format({
-        pathname: path.join(__dirname, "index.html"),
-        protocol: "file:",
-        slashes: true,
-      })
-    : process.env.ELECTRON_START_URL;
+  const appURL =
+    process.env.ELECTRON_START_URL ||
+    url.format({
+      pathname: path.join(__dirname, "index.html"),
+      protocol: "file:",
+      slashes: true,
+    });
   log.info("Loading URL: ", appURL);
   mainWindow.loadURL(appURL);
 
-  // Maximize the window in production
-  if (app.isisPackaged) mainWindow.maximize();
   // Open the dev tools in development
-  else mainWindow.webContents.openDevTools();
+  if (process.env.ELECTRON_START_URL) mainWindow.webContents.openDevTools();
+  // Maximize the window in production
+  else mainWindow.maximize();
 }
 
 /**
  * Set up a local proxy to adjust the paths of requested files
  * when loading them from the production bundle (e.g. local fonts, etc...).
  */
+// TODO: This is deprecated but needed to load the min files? https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
 function setupLocalFilesNormalizerProxy() {
-  // TODO: This is deprecated but needed to load the min files? https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
   // protocol.registerHttpProtocol(
   //   "file",
   //   (request, callback) => {
