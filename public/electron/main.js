@@ -294,6 +294,8 @@ function setupLocalFilesNormalizerProxy() {
   // );
 }
 
+/** SERIAL PORT SETUP & COMMUNICATION (EVENT MARKER) */
+
 /**
  * Checks the connection to an EEG machine via USB ports
  */
