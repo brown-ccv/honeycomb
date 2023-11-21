@@ -93,19 +93,6 @@ app.on("before-quit", () => {
   }
 });
 
-/** Prevents navigation outside of known pages */
-// TODO: This is super useful but end user will have to enter their live website?
-// const allowedNavigationDestinations = "https://my-electron-app.com";
-// app.on("web-contents-created", (event, contents) => {
-//   contents.on("will-navigate", (event, navigationUrl) => {
-//     const parsedUrl = new URL(navigationUrl);
-
-//     if (!allowedNavigationDestinations.includes(parsedUrl.origin)) {
-//       event.preventDefault();
-//     }
-//   });
-// });
-
 /** Log any uncaught exceptions before quitting */
 process.on("uncaughtException", (error) => {
   log.error(error);

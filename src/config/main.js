@@ -34,7 +34,6 @@ const USE_MTURK = !turkInfo.outsideTurk;
 const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`; // ID of the user in mechanical turk
 
 // Whether or not the experiment is running in Electron (local app)
-// TODO: Fix .electronAPi?.USE_ELECTRON - need ? support
 const USE_ELECTRON = window.electronAPI !== undefined;
 const USE_PROLIFIC = (getProlificId() && !USE_MTURK) || false; // Whether or not the experiment is running with Prolific
 const USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true"; // Whether or not the experiment is running in Firebase (web app)
