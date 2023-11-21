@@ -4,10 +4,12 @@ const { contextBridge, ipcRenderer } = require("electron");
 process.once("loaded", () => {
   contextBridge.exposeInMainWorld("electronAPI", {
     setConfig: (config) => ipcRenderer.send("setConfig", config),
+    setTrigger: (triggerCodes) => ipcRenderer.send("setTrigger", triggerCodes),
     getCredentials: () => ipcRenderer.invoke("getCredentials"),
     on_data_update: (data) => ipcRenderer.send("onDataUpdate", data),
     on_finish: () => ipcRenderer.send("onFinish"),
     photodiodeTrigger: () => ipcRenderer.send("photodiodeTrigger"),
     saveVideo: (data) => ipcRenderer.send("saveVideo", data),
+    checkSerialPort: () => ipcRenderer.invoke("checkSerialPort"),
   });
 });

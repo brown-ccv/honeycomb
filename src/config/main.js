@@ -48,7 +48,7 @@ const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_EL
  */
 const config = init({
   USE_PHOTODIODE,
-  USE_EEG,
+  USE_EEG, // TODO: Remove USE_EEG - separate variables for USE_PHOTODIODE and USE_EVENT_MARKER
   USE_ELECTRON,
   USE_MTURK,
   USE_VOLUME,

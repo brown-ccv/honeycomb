@@ -1,10 +1,14 @@
 /** ELECTRON MAIN PROCESS */
 
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const log = require("electron-log");
+const _ = require("lodash");
+const url = require("url");
 const path = require("node:path");
 const fs = require("node:fs");
-const url = require("url");
+
+// TODO: Use Electron's web serial API for this
+const { getPort, sendToPort } = require("event-marker");
 
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 if (require("electron-squirrel-startup")) app.quit();
@@ -12,7 +16,6 @@ if (require("electron-squirrel-startup")) app.quit();
 // Initialize the logger for any renderer process
 log.initialize({ preload: true });
 
-// TODO 306: Handle trigger.js config in the same way as this, delete from public folder
 // TODO: Initialize writeable stream on login
 // TODO: Handle data writing to desktop in a utility process?
 // TODO: Handle video data writing to desktop in a utility process?
@@ -21,11 +24,16 @@ log.initialize({ preload: true });
 /************ GLOBALS ***********/
 
 let CONFIG; // Honeycomb configuration object
+let DEV_MODE; // Whether or not the application is running in dev mode
 let WRITE_STREAM; // Writeable file stream for the data (in the user's appData folder)
 // TODO: These should use path, and can be combined into one?
 let OUT_PATH; // Path to the final output file (on the Desktop)
 let OUT_FILE; // Name of the output file
 
+let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
+let TRIGGER_PORT; // Port that the EEG machine is talking through
+
+// TODO: THis is causing an error cause it's not built into the app?
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../config/version.json")));
 
 /************ APP LIFECYCLE ***********/
@@ -40,11 +48,13 @@ app.whenReady().then(() => {
 
   // Handle ipcRenderer events (on is renderer -> main, handle is renderer <--> main)
   ipcMain.on("setConfig", handleSetConfig);
+  ipcMain.on("setTrigger", handleSetTrigger);
   ipcMain.handle("getCredentials", handleGetCredentials);
   ipcMain.on("onDataUpdate", handleOnDataUpdate);
   ipcMain.on("onFinish", handleOnFinish);
   ipcMain.on("photodiodeTrigger", handlePhotoDiodeTrigger);
   ipcMain.on("saveVideo", handleSaveVideo);
+  ipcMain.handle("checkSerialPort", handleCheckSerialPort);
 
   // Setup min files and create the Electron window
   setupLocalFilesNormalizerProxy();
@@ -81,57 +91,11 @@ app.on("before-quit", () => {
   }
 });
 
-/********** HELPERS **********/
-
-/** Creates a new Electron window. */
-function createWindow() {
-  const mainWindow = new BrowserWindow({
-    width: 1500,
-    height: 900,
-    icon: "./favicon.ico",
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-    },
-  });
-
-  /**
-   * Load the app into the Electron window
-   * In production it loads the local bundle created by the build process
-   * In development we use ELECTRON_START_URL (This allows hot-reloading)
-   */
-  const appURL =
-    process.env.ELECTRON_START_URL ||
-    url.format({
-      pathname: path.join(__dirname, "index.html"),
-      protocol: "file:",
-      slashes: true,
-    });
-  log.info("Loading URL: ", appURL);
-  mainWindow.loadURL(appURL);
-
-  // Open the dev tools in development
-  if (process.env.ELECTRON_START_URL) mainWindow.webContents.openDevTools();
-  // Maximize the window in production
-  else mainWindow.maximize();
-}
-
-/**
- * Set up a local proxy to adjust the paths of requested files
- * when loading them from the production bundle (e.g. local fonts, etc...).
- */
-// TODO: This is deprecated but needed to load the min files? https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
-function setupLocalFilesNormalizerProxy() {
-  // protocol.registerHttpProtocol(
-  //   "file",
-  //   (request, callback) => {
-  //     const url = request.url.substr(8);
-  //     callback({ path: path.normalize(`${__dirname}/${url}`) });
-  //   },
-  //   (error) => {
-  //     if (error) console.error("Failed to register protocol");
-  //   }
-  // );
-}
+/** Log any uncaught exceptions before quitting */
+process.on("uncaughtException", (error) => {
+  log.error(error);
+  app.quit();
+});
 
 /*********** RENDERER EVENT HANDLERS ***********/
 
@@ -146,6 +110,16 @@ function handleSetConfig(event, config) {
 }
 
 /**
+ * Receives the Honeycomb config settings and passes them to the CONFIG global in this file
+ * @param {Event} event The Electron renderer event
+ * @param {Object} config The current Honeycomb configuration
+ */
+function handleSetTrigger(event, trigger) {
+  TRIGGER_CODES = trigger;
+  log.info("Trigger Codes: ", TRIGGER_CODES);
+}
+
+/**
  * Checks for REACT_APP_STUDY_ID and REACT_APP_PARTICIPANT_ID environment variables
  * Note that studyID and participantID are undefined when the environment variables are not given
  * @returns An object containing a studyID and participantID
@@ -156,6 +130,22 @@ function handleGetCredentials() {
   if (studyID) log.info("Received study from ENV: ", studyID);
   if (participantID) log.info("Received participant from ENV: ", participantID);
   return { studyID, participantID };
+}
+
+/**
+ * @returns {Boolean} Whether or not the EEG machine is connected to the computer
+ */
+function handleCheckSerialPort() {
+  setUpPort().then(() => handleEventSend(TRIGGER_CODES.eventCodes.test_connect));
+}
+
+function handlePhotoDiodeTrigger(event, code) {
+  if (code !== undefined) {
+    log.info(`Event: ${_.invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
+    handleEventSend(code);
+  } else {
+    log.warn("Photodiode event triggered but no code was sent");
+  }
 }
 
 /**
@@ -224,10 +214,6 @@ function handleOnFinish() {
   log.info("Successfully saved experiment data to ", filePath);
 }
 
-function handlePhotoDiodeTrigger() {
-  log.info("PHOTODIODE TRIGGER");
-}
-
 // Save webm video file
 // TODO: Rolling save of webm video, remux to mp4 at the end?
 function handleSaveVideo(event, data) {
@@ -245,10 +231,165 @@ function handleSaveVideo(event, data) {
     const videoData = Buffer.from(data.split(",")[1], "base64");
 
     fs.mkdirSync(OUT_PATH, { recursive: true });
+    // TODO: Convert to mp4 before final save? https://gist.github.com/AVGP/4c2ce4ab3c67760a0f30a9d54544a060
     fs.writeFileSync(path.join(OUT_PATH, filePath), videoData);
   } catch (e) {
     log.error.error("Unable to save file: ", filePath);
     log.error.error(e);
   }
   log.info("Successfully saved video file to ", filePath);
+}
+
+/********** HELPERS **********/
+
+/** Creates a new Electron window. */
+function createWindow() {
+  const mainWindow = new BrowserWindow({
+    width: 1500,
+    height: 900,
+    icon: "./favicon.ico",
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+    },
+  });
+
+  /**
+   * Load the app into the Electron window
+   * In production it loads the local bundle created by the build process
+   * In development we use ELECTRON_START_URL (This allows hot-reloading)
+   */
+  const appURL =
+    process.env.ELECTRON_START_URL ||
+    url.format({
+      pathname: path.join(__dirname, "index.html"),
+      protocol: "file:",
+      slashes: true,
+    });
+  log.info("Loading URL: ", appURL);
+  mainWindow.loadURL(appURL);
+
+  // Open the dev tools in development
+  if (process.env.ELECTRON_START_URL) mainWindow.webContents.openDevTools();
+  // Maximize the window in production
+  else mainWindow.maximize();
+}
+
+/**
+ * Set up a local proxy to adjust the paths of requested files
+ * when loading them from the production bundle (e.g. local fonts, etc...).
+ */
+// TODO: This is deprecated but needed to load the min files? https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
+function setupLocalFilesNormalizerProxy() {
+  // protocol.registerHttpProtocol(
+  //   "file",
+  //   (request, callback) => {
+  //     const url = request.url.substr(8);
+  //     callback({ path: path.normalize(`${__dirname}/${url}`) });
+  //   },
+  //   (error) => {
+  //     if (error) console.error("Failed to register protocol");
+  //   }
+  // );
+}
+
+/** SERIAL PORT SETUP & COMMUNICATION (EVENT MARKER) */
+
+/**
+ * Checks the connection to an EEG machine via USB ports
+ */
+async function setUpPort() {
+  log.info("Setting up USB port");
+  const { productID, comName, vendorID } = TRIGGER_CODES;
+
+  let maybePort;
+  if (productID) {
+    // Check port based on productID
+    log.info("Received a product ID:", productID);
+    maybePort = await getPort(vendorID, productID);
+  } else {
+    // Check port based on COM name
+    log.info("No product ID, defaulting to COM:", comName);
+    maybePort = await getPort(comName);
+  }
+
+  if (maybePort !== false) {
+    TRIGGER_PORT = maybePort;
+
+    // Show dialog box if trigger port has any errors
+    TRIGGER_PORT.on("error", (err) => {
+      log.error(err);
+
+      // Disable as a dialog if there Electron is unable to communicate with the event marker's serial port
+      // TODO: Let this just be dialog.showErrorBox?
+      dialog
+        .showMessageBox(null, {
+          type: "error",
+          message: "There was an error with event marker's serial port.",
+          title: "USB Error",
+          buttons: [
+            "OK",
+            // Allow continuation when running in development mode
+            ...(process.env.ELECTRON_START_URL ? ["Continue Anyway"] : []),
+          ],
+          defaultId: 0,
+        })
+        .then((opt) => {
+          log.info(opt);
+          if (opt.response === 0) {
+            // Quit app when user selects "OK"
+            app.exit();
+          } else {
+            // User selected "Continue Anyway", we must be in dev mode
+            DEV_MODE = true;
+            TRIGGER_PORT = undefined;
+          }
+        });
+    });
+  } else {
+    // Unable to connect to a port
+    TRIGGER_PORT = undefined;
+    log.warn("USB port was not connected");
+  }
+}
+
+/**
+ * Handles the sending of an event code to TRIGGER_PORT
+ * @param code The code to send via USB
+ */
+function handleEventSend(code) {
+  log.info(`Sending USB event ${code} to port ${TRIGGER_PORT}`);
+  if (TRIGGER_PORT !== undefined && !DEV_MODE) {
+    sendToPort(TRIGGER_PORT, code);
+  } else {
+    log.error(`Trigger port is undefined - Event Marker is not connected`);
+
+    // Display error menu
+    const response = dialog.showMessageBoxSync(null, {
+      type: "error",
+      message: "Event Marker is not connected",
+      title: "USB Error",
+      buttons: [
+        "Quit",
+        "Retry",
+        // Allow continuation when running in development mode
+        ...(process.env.ELECTRON_START_URL ? ["Continue Anyway"] : []),
+      ],
+      detail: "heres some detail",
+    });
+
+    switch (response) {
+      case 0:
+        // User selects "Quit"
+        app.exit();
+        break;
+      case 1:
+        // User selects "Retry" so we reset the port and try again
+        setUpPort().then(() => handleEventSend(code));
+        break;
+      case 2:
+        // User selects "Continue Anyway", we must be in dev mode
+        DEV_MODE = true;
+        break;
+    }
+  }
 }

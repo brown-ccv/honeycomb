@@ -4,8 +4,8 @@ import React from "react";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "jspsych/css/jspsych.css";
-import "./index.css";
 import "./App.css";
+import "./index.css";
 
 // Import React components
 import Error from "./components/Error";
@@ -15,7 +15,9 @@ import Login from "./components/Login";
 // Import deployment functions
 import { addToFirebase, validateParticipant } from "./deployments/firebase";
 
+// Import configurations and utilities
 import { config, taskSettings, taskVersion, turkUniqueId } from "../config/main";
+import * as trigger from "../config/trigger";
 import { getProlificId } from "../lib/utils";
 
 /**
@@ -56,10 +58,10 @@ export default function App() {
         "Task Settings": taskSettings,
       });
 
-      // If running in a native application
+      // If on desktop
       if (config.USE_ELECTRON) {
         await window.electronAPI.setConfig(config); // Pass config to Electron ipcMain
-        // TODO 306: Pass trigger to Electron ipcMain
+        await window.electronAPI.setTrigger(trigger); // Pass trigger to Electron ipcMain
 
         // Fill in login fields based on environment variables (may still be blank)
         const credentials = await window.electronAPI.getCredentials();
