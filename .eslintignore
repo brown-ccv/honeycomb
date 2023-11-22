@@ -1,7 +1,5 @@
 # Dependencies
 /node_modules
-/.pnp
-.pnp.js
 
 # Testing
 **/__tests__/
@@ -22,10 +20,11 @@ psiturkit/*_turk
 /.vscode
 /.env
 .env
-**/firebase-service-account.json
+/.pnp
+.pnp.js
 .gitignore
 .DS_Store
-
+**/firebase-service-account.json
 
 # File types
 # TODO: Only running on js and jsx anyways?
