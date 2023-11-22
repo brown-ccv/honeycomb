@@ -19,16 +19,13 @@ module.exports = {
     SharedArrayBuffer: "readonly",
   },
   parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
     ecmaVersion: 2018,
     sourceType: "module",
   },
   plugins: ["react", "prettier"],
   rules: {
-    "react/prop-types": "off",
-    "prettier/prettier": "warn",
+    "react/prop-types": "off", // TODO: We should provide these?
+    "prettier/prettier": "warn", // TODO: Remove prettier from eslint
   },
   settings: {
     react: {
