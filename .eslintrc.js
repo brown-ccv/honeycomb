@@ -22,7 +22,7 @@ module.exports = {
   },
   settings: {
     react: {
-      version: "detect", // Eslint detects the react version from package.json when linting
+      version: "detect",
     },
   },
 };
