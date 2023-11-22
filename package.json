@@ -65,7 +65,7 @@
     "cli": "node cli.mjs",
     "commit": "git-cz",
     "lint": "eslint .",
-    "format": "eslint --fix .",
+    "format": "prettier --write .",
     "test": "react-scripts test",
     "prepare": "husky install",
     "firebase:emulators:start": "firebase emulators:start --import emulator_data",
