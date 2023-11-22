@@ -6,6 +6,18 @@ module.exports = {
     es6: true,
     jest: true,
   },
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    // TODO: Add rules for import order
+    // "plugin:import/errors",
+    // "plugin:import/warnings",
+    "prettier",
+  ],
+  globals: {
+    Atomics: "readonly",
+    SharedArrayBuffer: "readonly",
+  },
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -13,21 +25,14 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module",
   },
+  plugins: ["react", "prettier"],
+  rules: {
+    "react/prop-types": "off",
+    "prettier/prettier": "warn",
+  },
   settings: {
     react: {
       version: "detect",
     },
   },
-
-  globals: {
-    Atomics: "readonly",
-    SharedArrayBuffer: "readonly",
-  },
-  plugins: ["react", "prettier"],
-  extends: ["eslint:recommended", "plugin:react/recommended", "prettier"],
-  rules: {
-    "react/prop-types": "off",
-    "prettier/prettier": "warn",
-  },
-  overrides: [{ files: ["*.jsx", "*.js"] }],
 };
