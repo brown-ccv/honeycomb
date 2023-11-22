@@ -17,9 +17,6 @@ module.exports = {
     ecmaVersion: 2023,
   },
   plugins: ["react"],
-  rules: {
-    "react/prop-types": "off", // TODO: We should provide these?
-  },
   settings: {
     react: {
       version: "detect", // Eslint detects the react version from package.json when linting
