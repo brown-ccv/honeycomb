@@ -1,5 +1,11 @@
 module.exports = {
   root: true,
+  env: {
+    browser: true,
+    node: true,
+    es6: true,
+    jest: true,
+  },
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -12,11 +18,7 @@ module.exports = {
       version: "detect",
     },
   },
-  env: {
-    browser: true,
-    node: true,
-    es6: true,
-  },
+
   globals: {
     Atomics: "readonly",
     SharedArrayBuffer: "readonly",
