@@ -26,8 +26,3 @@ psiturkit/*_turk
 .gitignore
 .DS_Store
 **/firebase-service-account.json
-
-# File types
-# TODO: Only running on js and jsx anyways?
-# *.md
-# *.json
