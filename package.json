@@ -140,6 +140,9 @@
     }
   },
   "lint-staged": {
+    "*": [
+      "prettier --ignore-unknown --write"
+    ],
     "**/*.{js,jsx}": [
       "eslint --fix"
     ]
