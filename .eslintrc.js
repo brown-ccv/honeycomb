@@ -2,9 +2,9 @@ module.exports = {
   root: true,
   env: {
     browser: true,
-    node: true,
     es6: true,
     jest: true,
+    node: true,
   },
   extends: [
     "eslint:recommended",
@@ -14,13 +14,9 @@ module.exports = {
     // "plugin:import/warnings",
     "prettier",
   ],
-  globals: {
-    Atomics: "readonly",
-    SharedArrayBuffer: "readonly",
-  },
   parserOptions: {
-    ecmaVersion: 2023,
     sourceType: "module",
+    ecmaVersion: 2023,
   },
   plugins: ["react", "prettier"],
   rules: {
@@ -29,7 +25,7 @@ module.exports = {
   },
   settings: {
     react: {
-      version: "detect",
+      version: "detect", // Eslint detects the react version from package.json when linting
     },
   },
 };
