@@ -9,19 +9,16 @@ module.exports = {
   extends: [
     "eslint:recommended",
     "plugin:react/recommended",
-    // TODO: Add rules for import order
-    // "plugin:import/errors",
-    // "plugin:import/warnings",
+    // TODO 325: Add rules for import order
     "prettier",
   ],
   parserOptions: {
     sourceType: "module",
     ecmaVersion: 2023,
   },
-  plugins: ["react", "prettier"],
+  plugins: ["react"],
   rules: {
     "react/prop-types": "off", // TODO: We should provide these?
-    "prettier/prettier": "off", // TODO: Remove prettier from eslint
   },
   settings: {
     react: {
