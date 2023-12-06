@@ -29,7 +29,7 @@ function createHoneycombBlock(jsPsych) {
    * Note that the correct_response is saved as a data point
    * Note that the trial calculates and saves if the user responded correctly on trial_finish
    */
-  // TODO: Add photodiodeGhostBox and pdSpotEncode to this trial
+  // TODO 332: Add photodiodeGhostBox and pdSpotEncode to this trial
   const taskTrial = {
     type: imageKeyboardResponse,
     // Display a stimulus passed as a timeline variable
