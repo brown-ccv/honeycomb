@@ -28,9 +28,9 @@ function pdSpotEncode(taskCode) {
 
   // Conditionally pulse the photodiode and send event codes
   if (config.USE_PHOTODIODE) {
-    const blinkTime = 40; // TODO: Get blink time from config.json (40ms is the default)
+    const blinkTime = 40; // TODO #333: Get blink time from config.json (40ms is the default)
     let numBlinks = taskCode;
-    if (taskCode < eventCodes.open_task) numBlinks = 1; // TODO: Encode numBlinks in the event marker config
+    if (taskCode < eventCodes.open_task) numBlinks = 1; // TODO #333: Encode numBlinks in the event marker config
     repeatPulseFor(blinkTime, numBlinks);
     if (ipcRenderer) ipcRenderer.send("trigger", taskCode);
   }
