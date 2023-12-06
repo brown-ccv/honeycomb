@@ -55,7 +55,7 @@ jobs:
 
       # TEMP - CHECK CORRECT PATHS
       - name: Echo Paths
-        run: echo out/make/squirrel.windows/x64/${{ steps.test.outputs.name }}-${{ steps.test.outputs.version }} Setup.exe
+        run: echo out/make/squirrel.windows/x64/${{ steps.test.outputs.name }} - ${{ steps.test.outputs.version }} Setup.exe
 
       - name: ⎔ Setup node
         uses: actions/setup-node@v3
