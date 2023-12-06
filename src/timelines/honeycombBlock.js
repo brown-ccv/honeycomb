@@ -18,6 +18,7 @@ function createHoneycombBlock(jsPsych) {
     duration: fixationSettings.randomize_duration
       ? jsPsych.randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0]
       : fixationSettings.default_duration,
+    // TODO 280: Fixation will be recorded as "task: fixation" (data object, see below)
   });
 
   /**
@@ -28,6 +29,7 @@ function createHoneycombBlock(jsPsych) {
    * Note that the correct_response is saved as a data point
    * Note that the trial calculates and saves if the user responded correctly on trial_finish
    */
+  // TODO: Add photodiodeGhostBox and pdSpotEncode to this trial
   const taskTrial = {
     type: imageKeyboardResponse,
     // Display a stimulus passed as a timeline variable
@@ -36,7 +38,7 @@ function createHoneycombBlock(jsPsych) {
     choices: honeycombSettings.timeline_variables.map((variable) => variable.correct_response),
     data: {
       // Record the correct_response passed as a timeline variable
-      task: "response", // TODO 280: Fixation will be recorded as "task: fixation"
+      task: "response",
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
     // Add a boolean value ("correct") to the data - if the user responded with the correct key or not
