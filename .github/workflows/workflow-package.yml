@@ -43,17 +43,6 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
-      # TEMP: Test Windows
-      - name: Get package name and version
-        id: test
-        run: |
-          echo "name=$(cat package.json | jq -r '.name')" >> $GITHUB_OUTPUT
-          echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
-        shell: bash
-
-      - run: echo "${{steps.test.outputs.name}}-${{ steps.test.outputs.version }}"
-        shell: bash
-
       - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
@@ -88,24 +77,15 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: npm run package:linux
 
-      # Upload installers to github action
-      # - name: Set package version and name
-      #   uses: brown-ccv/gh-actions/get-package-info@main
-      #   id: package_info
-      # TODO: echo isn't working on Windows
+      # Get package info
       - name: Get package name and version
         id: package_info
         run: |
           echo "name=$(cat package.json | jq -r '.name')" >> $GITHUB_OUTPUT
           echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
+        shell: bash
 
-      # TEMP - CHECK CORRECT PATHS
-      - name: Echo Paths
-        run: |
-          echo out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
-          echo out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
-          echo out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
-
+      # Upload installers to github action
       - name: ⬆ Upload installer - Windows
         uses: actions/upload-artifact@v3
         if: startsWith(matrix.os, 'windows')
