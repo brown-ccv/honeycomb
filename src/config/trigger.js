@@ -11,5 +11,4 @@ const eventCodes = {
 };
 
 // Note that this is module.exports so it can be imported into the electron app
-// TODO: Do this for the firebase functions too?
 module.exports = { eventCodes };
