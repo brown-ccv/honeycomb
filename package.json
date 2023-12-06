@@ -53,7 +53,6 @@
     "electron": "^27.0.1",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.0",
     "firebase-admin": "^11.0.1",
     "firebase-tools": "^12.4.7",
     "husky": "^8.0.3",
@@ -65,7 +64,7 @@
     "cli": "node cli.mjs",
     "commit": "git-cz",
     "lint": "eslint .",
-    "format": "eslint --fix .",
+    "format": "prettier --write .",
     "test": "react-scripts test",
     "prepare": "husky install",
     "firebase:emulators:start": "firebase emulators:start --import emulator_data",
@@ -140,6 +139,9 @@
     }
   },
   "lint-staged": {
+    "*": [
+      "prettier --ignore-unknown --write"
+    ],
     "**/*.{js,jsx}": [
       "eslint --fix"
     ]
