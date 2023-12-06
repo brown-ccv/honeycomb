@@ -51,13 +51,13 @@ const instructionsTrial = {
   post_trial_gap: 500,
 };
 
-// TODO 281: Function for preloading all files in public/images?
 /** Trial that loads all of the stimulus images */
 const preloadTrial = {
   type: preloadResponse,
   message: p(language.prompts.settingUp),
   images: taskSettings.honeycomb.timeline_variables.map(({ stimulus }) => stimulus),
 };
+// TODO #281: Function for preloading all files in public/images?
 
 /** Trial that calculates and displays some results of the session  */
 const createDebriefTrial = (jsPsych) => ({
