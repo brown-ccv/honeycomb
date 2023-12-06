@@ -1,7 +1,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 
-// TODO 183: Upgrade to modular SDK instead of compat
+// TODO #183: Upgrade to modular SDK instead of compat
 
 // Initialize Firebase and Firestore
 firebase.initializeApp({
@@ -16,7 +16,7 @@ firebase.initializeApp({
 const db = firebase.firestore();
 
 // Use emulator if on localhost
-// TODO 173: Refactor to use NODE_ENV
+// TODO #173: Refactor to use NODE_ENV
 if (window.location.hostname === "localhost") db.useEmulator("localhost", 8080);
 
 // Get a reference to the Firebase document at
@@ -59,10 +59,10 @@ async function initParticipant(studyID, participantID, startDate) {
     const experiment = getExperimentRef(studyID, participantID, startDate);
     await experiment.set({
       start_time: startDate,
-      // TODO 173: app_version and app_platform are deprecated
+      // TODO #173: app_version and app_platform are deprecated
       app_version: window.navigator.appVersion,
       app_platform: window.navigator.platform,
-      // TODO 175: Store participantID and studyID here, not on each trial
+      // TODO #175: Store participantID and studyID here, not on each trial
     });
     console.log("Initialized experiment:", studyID, participantID, startDate);
     return true;

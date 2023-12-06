@@ -13,7 +13,7 @@ function createHoneycombBlock(jsPsych) {
    *    If randomize_duration is true the dot is shown for default_duration
    *    Otherwise, a random value is selected from durations
    */
-  // TODO 280: Pull fixation trial into Honeycomb directly
+  // TODO #280: Pull fixation trial into Honeycomb directly
   const fixationTrial = fixation(config, {
     duration: fixationSettings.randomize_duration
       ? jsPsych.randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0]
@@ -38,7 +38,7 @@ function createHoneycombBlock(jsPsych) {
     choices: honeycombSettings.timeline_variables.map((variable) => variable.correct_response),
     data: {
       // Record the correct_response passed as a timeline variable
-      task: "response",
+      task: "response", // TODO #280: Fixation will be recorded as "task: fixation"
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
     // Add a boolean value ("correct") to the data - if the user responded with the correct key or not
