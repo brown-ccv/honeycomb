@@ -28,7 +28,7 @@ function showWelcome() {
   const welcomeMarkup = h1(language.trials.welcome);
   return {
     type: htmlKeyboardResponse,
-    stimulus: baseStimulus(welcomeMarkup, true) + photodiodeGhostBox(),
+    stimulus: baseStimulus(welcomeMarkup, true) + photodiodeGhostBox,
     prompt: language.prompts.continue.prompt,
     response_ends_trial: true,
   };

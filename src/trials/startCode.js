@@ -10,7 +10,7 @@ function startCode() {
   const startCodeMarkup = h1(language.prompts.settingUp);
   return {
     type: htmlKeyboardResponse,
-    stimulus: baseStimulus(startCodeMarkup, true) + photodiodeGhostBox(),
+    stimulus: baseStimulus(startCodeMarkup, true) + photodiodeGhostBox,
     trial_duration: 2000,
     on_load: () => {
       // Displays the photodiode spot and plays an audible beep when the trial first loads

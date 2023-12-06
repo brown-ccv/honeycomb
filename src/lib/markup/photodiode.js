@@ -4,19 +4,19 @@ import { eventCodes } from "../../config/trigger";
 import { div, span } from "./tags";
 
 /**
- * Displays a box in the bottom right corner of the screen with the id "photodiode-spot"
+ * Markup for a box in the bottom right corner of the screen and a photodiode spot inside the ghost box
+ * Note the box will only be visible if USE_PHOTODIODE is true
  */
-function photodiodeGhostBox() {
-  const spot = span("", { id: "photodiode-spot", class: "photodiode-spot" });
-  return div(spot, {
-    id: "photodiode-box",
-    // Photodiode is only visible if config.USE_PHOTODIODE is true
-    class: config.USE_PHOTODIODE ? "photodiode-box visible" : "photodiode-box invisible",
-  });
-}
+const photodiodeGhostBox = div(span("", { id: "photodiode-spot", class: "photodiode-spot" }), {
+  id: "photodiode-box",
+  class: config.USE_PHOTODIODE ? "photodiode-box visible" : "photodiode-box invisible",
+});
 
 /**
  * Conditionally flashes a spot inside the photodiodeGhostBox
+ *
+ * Note that this function must be executed inside the "on_load" callback of a trial
+ * @param {number} taskCode The unique code for the given trial on which this function executes
  */
 function pdSpotEncode(taskCode) {
   // Conditionally load electron based on config variable
@@ -26,7 +26,20 @@ function pdSpotEncode(taskCode) {
     ipcRenderer = electron.ipcRenderer;
   } else throw new Error("pdSpotEncode trial is only available when running inside Electron");
 
-  // Pulse the spot color from black to white
+  // Conditionally pulse the photodiode and send event codes
+  if (config.USE_PHOTODIODE) {
+    const blinkTime = 40; // TODO: Get blink time from config.json (40ms is the default)
+    let numBlinks = taskCode;
+    if (taskCode < eventCodes.open_task) numBlinks = 1; // TODO: Encode numBlinks in the event marker config
+    repeatPulseFor(blinkTime, numBlinks);
+    if (ipcRenderer) ipcRenderer.send("trigger", taskCode);
+  }
+
+  /**
+   * Pulses the photodiode spot from black (on) to white (off) and runs a callback function
+   * @param {number} ms The amount of time to flash the photodiode spot
+   * @param {function} callback A callback function to execute after the flash
+   */
   function pulseFor(ms, callback) {
     $(".photodiode-spot").css({ "background-color": "black" });
     setTimeout(() => {
@@ -35,7 +48,11 @@ function pdSpotEncode(taskCode) {
     }, ms);
   }
 
-  // Repeat pulseFor i times
+  /**
+   * Recursive function that executes the pulseFor function i times
+   * @param {number} ms The amount of time to flash the photodiode spot and wait before recursion
+   * @param {number} i The number of times to repeat
+   */
   function repeatPulseFor(ms, i) {
     if (i > 0) {
       pulseFor(ms, () => {
@@ -44,14 +61,6 @@ function pdSpotEncode(taskCode) {
         }, ms);
       });
     }
-  }
-
-  if (config.USE_PHOTODIODE) {
-    const blinkTime = 40; // TODO: Get blink time based off fixation time?
-    let numBlinks = taskCode;
-    if (taskCode < eventCodes.open_task) numBlinks = 1;
-    repeatPulseFor(blinkTime, numBlinks);
-    if (ipcRenderer) ipcRenderer.send("trigger", taskCode);
   }
 }
 
