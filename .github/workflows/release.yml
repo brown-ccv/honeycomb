@@ -160,7 +160,7 @@ jobs:
           cd psiturkit
           ./psiturk-it -p ${{ steps.package_info.outputs.package_name }}-psiturk
       - name: ⬆ Upload PsiTurk Build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: psiturk-build
           path: psiturkit/${{ steps.package_info.outputs.package_name }}-psiturk
