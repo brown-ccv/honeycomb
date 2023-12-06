@@ -49,9 +49,12 @@ jobs:
           echo "name=$(cat package.json | jq -r '.name')" >> $GITHUB_OUTPUT
           echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
 
-      - run: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
-      - run: echo out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
-      - run: out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
+      - run: echo ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}
+      - name: Echo Paths
+        run: |
+          echo out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
+          echo out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
+          echo out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
       # - name: ⎔ Setup node
       #   uses: actions/setup-node@v3
       #   with:
