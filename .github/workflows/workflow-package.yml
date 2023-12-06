@@ -90,7 +90,6 @@ jobs:
         uses: actions/upload-artifact@v3
         if: startsWith(matrix.os, 'windows')
         with:
-          # TODO: I don't think the path will resolve correctly, it needs to be run in a bash shell
           name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
           path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
           if-no-files-found: error
