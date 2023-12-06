@@ -27,6 +27,8 @@ jobs:
   package-and-upload:
     name: Package and Upload
     runs-on: ${{ matrix.os }}
+    env:
+      TEST: $(cat package.json | jq -r '.name')
 
     # Run action for [home/clinic] in [windows/macOS/ubuntu] based on user input
     strategy:
@@ -53,6 +55,7 @@ jobs:
 
       - run: echo $NAME
       - run: echo $VERSION
+      - run: echo $TEST
 
       # - name: ⎔ Setup node
       #   uses: actions/setup-node@v3
