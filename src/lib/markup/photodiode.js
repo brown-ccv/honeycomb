@@ -18,13 +18,13 @@ function photodiodeGhostBox() {
 /**
  * Conditionally flashes a spot inside the photodiodeGhostBox
  */
-function photodiodeSpot(taskCode) {
+function pdSpotEncode(taskCode) {
   // Conditionally load electron based on config variable
   let ipcRenderer = false;
   if (config.USE_ELECTRON) {
     const electron = window.require("electron");
     ipcRenderer = electron.ipcRenderer;
-  } else throw new Error("photodiodeSpot trial is only available when running inside Electron");
+  } else throw new Error("pdSpotEncode trial is only available when running inside Electron");
 
   // Pulse the spot color from black to white
   function pulseFor(ms, callback) {
@@ -55,4 +55,4 @@ function photodiodeSpot(taskCode) {
   }
 }
 
-export { photodiodeGhostBox, photodiodeSpot };
+export { photodiodeGhostBox, pdSpotEncode };
