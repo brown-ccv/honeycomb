@@ -20,8 +20,8 @@ let USE_EEG = false;
 let VIDEO = false;
 
 // Override product ID if environment variable set
-const activeProductId = process.env.EVENT_MARKER_PRODUCT_ID || productId;
-const activeComName = process.env.EVENT_MARKER_COM_NAME || comName;
+const activeProductId = process.env.EVENT_MARKER_PRODUCT_ID ?? productId;
+const activeComName = process.env.EVENT_MARKER_COM_NAME ?? comName;
 if (activeProductId) {
   log.info("Active product ID", activeProductId);
 } else {
@@ -61,7 +61,7 @@ function createWindow() {
 
   // and load the index.html of the app.
   const startUrl =
-    process.env.ELECTRON_START_URL || `file://${path.join(__dirname, "../build/index.html")}`;
+    process.env.ELECTRON_START_URL ?? `file://${path.join(__dirname, "../build/index.html")}`;
   log.info(startUrl);
   mainWindow.loadURL(startUrl);
 
