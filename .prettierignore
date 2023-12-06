@@ -1,0 +1,2 @@
+# Files inside public/lib are minimized files that shouldn't be touched
+public/lib

@@ -18,7 +18,7 @@ import { addToFirebase, validateParticipant } from "./deployments/firebase";
 // Import configurations and utilities
 import { config, taskSettings, taskVersion, turkUniqueId } from "../config/main";
 import * as trigger from "../config/trigger";
-import { getProlificId } from "../lib/utils";
+import { getProlificId, getSearchParam } from "../lib/utils";
 
 /**
  * The top-level React component for Honeycomb. App handles initiating the jsPsych component when the participant
@@ -67,11 +67,9 @@ export default function App() {
         const credentials = await window.electronAPI.getCredentials();
         if (credentials.participantID) setParticipantID(credentials.participantID);
         if (credentials.studyID) setStudyID(credentials.studyID);
-
         setMethod("desktop");
       } else {
-        // If using Mechanical Turk and PsiTurk
-        // TODO: Change config variable to psiturk? That's what user's are really using
+        // If MTURK
         if (config.USE_MTURK) {
           /* eslint-disable */
           window.lodash = _.noConflict();
@@ -80,7 +78,6 @@ export default function App() {
           handleLogin("mturk", turkUniqueId);
           /* eslint-enable */
         } else if (config.USE_PROLIFIC) {
-          // TODO: Remove prolific check - we should always check process.env AND UrlSearchParams
           const pID = getProlificId();
           if (config.USE_FIREBASE && pID) {
             setMethod("firebase");
@@ -90,13 +87,11 @@ export default function App() {
             setIsError(true);
           }
         } else if (config.USE_FIREBASE) {
-          // TODO: There's a difference between PROLIFIC_ID in URL and PID/SID
           // Fill in login fields based on query parameters (may still be blank)
-          const query = new URLSearchParams(window.location.search);
-          const studyId = query.get("studyID");
-          const participantId = query.get("participantID");
-          if (studyId) setStudyID(studyId);
-          if (participantId) setParticipantID(participantId);
+          const maybeStudyID = getSearchParam("studyID");
+          const maybeParticipantID = getSearchParam("participantID");
+          if (maybeStudyID !== null) setStudyID(maybeStudyID);
+          if (maybeParticipantID !== null) setParticipantID(maybeParticipantID);
 
           setMethod("firebase");
         } else {

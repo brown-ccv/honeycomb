@@ -1,31 +1,28 @@
 module.exports = {
   root: true,
+  env: {
+    browser: true,
+    es6: true,
+    jest: true,
+    node: true,
+  },
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    // TODO 325: Add rules for import order
+    "prettier",
+  ],
   parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
-    ecmaVersion: 2020,
     sourceType: "module",
+    ecmaVersion: 2023,
+  },
+  plugins: ["react"],
+  rules: {
+    "react/prop-types": "off", // TODO: These should be added so the rule can be removed
   },
   settings: {
     react: {
       version: "detect",
     },
   },
-  env: {
-    browser: true,
-    node: true,
-    es6: true,
-  },
-  globals: {
-    Atomics: "readonly",
-    SharedArrayBuffer: "readonly",
-  },
-  plugins: ["react", "prettier"],
-  extends: ["eslint:recommended", "plugin:react/recommended", "prettier"],
-  rules: {
-    "react/prop-types": "off", // TODO: Add prop validation
-    "prettier/prettier": "warn",
-  },
-  overrides: [{ files: ["*.jsx", "*.js"] }],
 };
