@@ -27,9 +27,6 @@ jobs:
   package-and-upload:
     name: Package and Upload
     runs-on: ${{ matrix.os }}
-    env:
-      NAME: cat package.json | jq -r '.name'
-      VERSION: cat package.json | jq -r '.version'
 
     # Run action for [home/clinic] in [windows/macOS/ubuntu] based on user input
     strategy:
@@ -49,10 +46,13 @@ jobs:
       # TEMP
       - name: Set package name
         # run: cat package.json | jq -r '.name'
-        run: echo "$NAME"
+        run: echo "NAME=$(cat package.json | jq -r '.name')" >> $GITHUB_ENV"
       - name: Set package version
         # run: cat package.json | jq -r '.version'
-        run: echo "$VERSION"
+        run: echo "VERSION=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV"
+
+      - run: echo $NAME
+      - run: echo $VERSION
 
       # - name: ⎔ Setup node
       #   uses: actions/setup-node@v3
