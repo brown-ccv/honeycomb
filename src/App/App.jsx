@@ -16,7 +16,7 @@ import Login from "./components/Login";
 import { addToFirebase, validateParticipant } from "./deployments/firebase";
 
 import { config, taskSettings, taskVersion, turkUniqueId } from "../config/main";
-import { getProlificId } from "../lib/utils";
+import { getProlificId, getSearchParam } from "../lib/utils";
 
 /**
  * The top-level React component for Honeycomb. App handles initiating the jsPsych component when the participant
@@ -90,18 +90,16 @@ export default function App() {
         }
       } else if (config.USE_FIREBASE) {
         // Fill in login fields based on query parameters (may still be blank)
-        const query = new URLSearchParams(window.location.search);
-        const studyId = query.get("studyID");
-        const participantId = query.get("participantID");
-        if (studyId) setStudyID(studyId);
-        if (participantId) setParticipantID(participantId);
+        const maybeStudyID = getSearchParam("studyID");
+        const maybeParticipantID = getSearchParam("participantID");
+        if (maybeStudyID !== null) setStudyID(maybeStudyID);
+        if (maybeParticipantID !== null) setParticipantID(maybeParticipantID);
 
         setMethod("firebase");
       } else {
         setMethod("default");
       }
     }
-    // eslint-disable-next-line
   }, []);
 
   /** VALIDATION FUNCTIONS */
