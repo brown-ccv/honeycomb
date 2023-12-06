@@ -44,10 +44,15 @@ jobs:
         uses: actions/checkout@v4
 
       # TEMP
-      - name: Set package name
-        run: echo "PACKAGE_NAME=$(cat package.json | jq -r '.name')" >> $GITHUB_ENV
-      - name: Set package version
-        run: echo "PACKAGE_VERSION=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
+      # - name: Set package name
+      #   run: echo "PACKAGE_NAME=$(cat package.json | jq -r '.name')" >> $GITHUB_ENV
+      # - name: Set package version
+      #   run: echo "PACKAGE_VERSION=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
+
+      - name: Set package name and version
+        run: |
+          echo "PACKAGE_NAME=$(cat package.json | jq -r '.name')" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
 
       - run: echo $PACKAGE_NAME
       - run: echo $PACKAGE_VERSION
