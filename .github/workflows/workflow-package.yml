@@ -50,10 +50,10 @@ jobs:
           echo "name=$(cat package.json | jq -r '.name')" >> $GITHUB_OUTPUT
           echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
 
-      - run: echo "name=$(cat package.json | jq -r '.name')"
-      - run: echo "version=$(cat package.json | jq -r '.version')"
-      - run: echo "${{steps.test.outputs.name}}-${{ steps.test.outputs.version }}"
-      - run: echo ${{steps.test.outputs.name}}
+      # - run: echo "name=$(cat package.json | jq -r '.name')"
+      # - run: echo "version=$(cat package.json | jq -r '.version')"
+      # - run: echo "${{steps.test.outputs.name}}-${{ steps.test.outputs.version }}"
+      - run: echo ${{steps.test.outputs}} | jq -R
 
       # TEMP - CHECK CORRECT PATHS
       - name: Echo Paths
