@@ -92,8 +92,8 @@ export default function App() {
         // Fill in login fields based on query parameters (may still be blank)
         const maybeStudyID = getSearchParam("studyID");
         const maybeParticipantID = getSearchParam("participantID");
-        if (maybeStudyID != null) setStudyID(maybeStudyID);
-        if (maybeParticipantID != null) setParticipantID(maybeParticipantID);
+        if (maybeStudyID !== null) setStudyID(maybeStudyID);
+        if (maybeParticipantID !== null) setParticipantID(maybeParticipantID);
 
         setMethod("firebase");
       } else {
