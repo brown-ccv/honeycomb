@@ -48,7 +48,7 @@ function photodiodeSpot(taskCode) {
   }
 
   if (config.USE_PHOTODIODE) {
-    // TODO: Pass blinkTime as config setting
+    // TODO #333: Pass blinkTime as config setting
     const blinkTime = 40;
 
     repeatPulseFor(blinkTime, taskCode);
