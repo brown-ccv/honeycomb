@@ -44,9 +44,10 @@ jobs:
         uses: actions/checkout@v4
 
       # TEMP
-      # - name: Test package versioning
-      - run: echo ECHO
-      - run: grep ./package.json
+      - name: Set package name
+        run: cat package.json | jq -r '.name'
+      - name: Set package version
+        run: cat package.json | jq -r '.version'
 
       # - name: ⎔ Setup node
       #   uses: actions/setup-node@v3
