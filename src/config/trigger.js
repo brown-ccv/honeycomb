@@ -1,4 +1,4 @@
-// TODO 333: Move to "event_marker" config.json
+// TODO #333: Move to "event_marker" config.json
 
 // teensyduino
 const vendorID = "16c0";

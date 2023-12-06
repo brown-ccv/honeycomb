@@ -12,12 +12,12 @@ import { div, h1, p, tag } from "../lib/markup/tags";
  * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns
  */
-// TODO: refactor to record using web USB
+// TODO #342: refactor to record using web USB
 function cameraStart(jsPsych) {
   const videoMarkup = tag("video", "", { id: "webcam", width: 640, height: 480, autoplay: true });
   const cameraStartMarkup = p(language.trials.camera.start);
   const markup = div(cameraStartMarkup + videoMarkup, {
-    // TODO: Need to get rid of bootstrap (this is just centering it)
+    // TODO #344: Need to get rid of bootstrap (this is just centering it)
     class: "d-flex flex-column align-items-center",
   });
 
@@ -27,7 +27,7 @@ function cameraStart(jsPsych) {
         // Prompts user permission for camera device
         type: initializeCamera,
         include_audio: true,
-        // TODO: webm is a subset of mkv, should be able to do a rolling save?
+        // TODO #342: webm is a subset of mkv, should be able to do a rolling save?
         mime_type: "video/webm",
       },
       {
@@ -39,7 +39,7 @@ function cameraStart(jsPsych) {
         on_start: () => {
           // Initialize and store the camera feed
           if (!config.USE_ELECTRON) {
-            // TODO: We should be able to make this work on both electron and browser?
+            // TODO #343: We should be able to make this work on both electron and browser?
             throw new Error("video recording is only available when running inside Electron");
           }
 
@@ -74,9 +74,6 @@ function cameraStart(jsPsych) {
         on_finish: () => {
           // Begin video recording
           jsPsych.pluginAPI.getCameraRecorder().start();
-
-          setTimeout(() => {}, 1000);
-          jsPsych.pluginAPI.getCameraRecorder().stop(); // TEMP
         },
       },
     ],

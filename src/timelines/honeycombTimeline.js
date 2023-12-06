@@ -20,7 +20,7 @@ function createHoneycombTimeline(jsPsych) {
   const debriefTrial = createDebriefTrial(jsPsych);
 
   const timeline = [
-    // TODO: Use the new welcome trial inside the preamble
+    // TODO #231: Use the new welcome trial inside the preamble
     preamble,
     welcomeTrial,
     enterFullscreen,

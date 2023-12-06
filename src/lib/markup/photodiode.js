@@ -27,7 +27,7 @@ function photodiodeSpot(taskCode) {
   }
 
   // Pulse the spot color from black to white
-  // TODO: Pulse between visible and invisible
+  // TODO #331: Single photodiode color, pulse between visible and invisible here
   function pulseFor(ms, callback) {
     $(".photodiode-spot").css({ "background-color": "black" });
     setTimeout(() => {
