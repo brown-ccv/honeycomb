@@ -80,12 +80,14 @@ jobs:
       - name: Set package version and name
         uses: brown-ccv/gh-actions/get-package-info@main
         id: package_info
+
       - name: ⬆ Upload installer - Windows
         uses: actions/upload-artifact@v3.1.3
         if: startsWith(matrix.os, 'windows')
         with:
           name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
           path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }} Setup.exe
+          if-no-files-found: error
 
       - name: ⬆ Upload installer - Mac
         uses: actions/upload-artifact@v3.1.3
@@ -93,9 +95,11 @@ jobs:
         with:
           name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
           path: out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-x64.dmg
+          if-no-files-found: error
       - name: ⬆ Upload installer - Linux
         uses: actions/upload-artifact@v3.1.3
         if: startsWith(matrix.os, 'ubuntu')
         with:
           name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
           path: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
+          if-no-files-found: error
