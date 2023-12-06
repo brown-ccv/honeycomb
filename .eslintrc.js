@@ -9,7 +9,7 @@ module.exports = {
   extends: [
     "eslint:recommended",
     "plugin:react/recommended",
-    // TODO 325: Add rules for import order
+    "plugin:import/recommended",
     "prettier",
   ],
   parserOptions: {
@@ -18,7 +18,14 @@ module.exports = {
   },
   plugins: ["react"],
   rules: {
-    "react/prop-types": "off", // TODO: These should be added so the rule can be removed
+    // TODO: These should be added so the rule can be removed
+    "react/prop-types": "off",
+    "import/order": [
+      "error",
+      {
+        groups: [["builtin", "external"], "parent", "sibling", "index"],
+      },
+    ],
   },
   settings: {
     react: {

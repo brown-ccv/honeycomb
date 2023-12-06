@@ -9,8 +9,8 @@ const fs = require("fs-extra");
 const log = require("electron-log");
 
 // Event Trigger
-const { eventCodes, vendorId, productId, comName } = require("./config/trigger");
 const { getPort, sendToPort } = require("event-marker");
+const { eventCodes, vendorId, productId, comName } = require("./config/trigger");
 
 // handle windows installer set up
 if (require("electron-squirrel-startup")) app.quit();
