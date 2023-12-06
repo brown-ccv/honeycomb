@@ -11,7 +11,6 @@ import { h1 } from "../lib/markup/tags";
  * Task that displays the name of the experiment
  */
 function showName() {
-  // TODO: showMessage CSS is causing scroll bars
   return showMessage(config, {
     responseType: htmlButtonResponse,
     message: language.name,
