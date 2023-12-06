@@ -43,69 +43,78 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - name: 🐍 Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-
-      # Install dependencies and set up environment
-      - name: 📥 Install Dependencies
-        run: npm ci
-      - name: 🔃 Load .env file (.env.${{github.event.inputs.setting}})
-        uses: xom9ikk/dotenv@v2
-        with:
-          path: ./env
-          mode: ${{github.event.inputs.setting}}
-
-      # Build the app
-      - name: ⚒ Run Build
-        run: npm run build
-
-      # Package the app installers
-      - name: 📦 Package app installer - Windows
-        if: startsWith(matrix.os, 'windows')
-        run: npm run package:windows
-      - name: 📦 Package app installer - Mac
-        if: startsWith(matrix.os, 'mac')
-        run: npm run package:mac
-      - name: 📦 Package app installer - Linux
-        if: startsWith(matrix.os, 'ubuntu')
-        run: npm run package:linux
-
-      # Upload installers to github action
-      # - name: Set package version and name
-      #   uses: brown-ccv/gh-actions/get-package-info@main
-      #   id: package_info
       - name: Get package name and version
         id: package_info
         run: |
           echo "name=$(cat package.json | jq -r '.name')" >> $GITHUB_OUTPUT
           echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
 
-      - name: ⬆ Upload installer - Windows
-        uses: actions/upload-artifact@v3
-        if: startsWith(matrix.os, 'windows')
-        with:
-          name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
-          if-no-files-found: error
+      - run: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
+      - run: echo out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
+      - run: out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
+      # - name: ⎔ Setup node
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version-file: .nvmrc
+      #     cache: npm
+      # - name: 🐍 Setup Python
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: "3.10"
 
-      - name: ⬆ Upload installer - Mac
-        uses: actions/upload-artifact@v3
-        if: startsWith(matrix.os, 'mac')
-        with:
-          name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-x64.dmg
-          if-no-files-found: error
-      - name: ⬆ Upload installer - Linux
-        uses: actions/upload-artifact@v3
-        if: startsWith(matrix.os, 'ubuntu')
-        with:
-          name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
-          if-no-files-found: error
+      # # Install dependencies and set up environment
+      # - name: 📥 Install Dependencies
+      #   run: npm ci
+      # - name: 🔃 Load .env file (.env.${{github.event.inputs.setting}})
+      #   uses: xom9ikk/dotenv@v2
+      #   with:
+      #     path: ./env
+      #     mode: ${{github.event.inputs.setting}}
+
+      # # Build the app
+      # - name: ⚒ Run Build
+      #   run: npm run build
+
+      # # Package the app installers
+      # - name: 📦 Package app installer - Windows
+      #   if: startsWith(matrix.os, 'windows')
+      #   run: npm run package:windows
+      # - name: 📦 Package app installer - Mac
+      #   if: startsWith(matrix.os, 'mac')
+      #   run: npm run package:mac
+      # - name: 📦 Package app installer - Linux
+      #   if: startsWith(matrix.os, 'ubuntu')
+      #   run: npm run package:linux
+
+      # # Upload installers to github action
+      # # - name: Set package version and name
+      # #   uses: brown-ccv/gh-actions/get-package-info@main
+      # #   id: package_info
+      # - name: Get package name and version
+      #   id: package_info
+      #   run: |
+      #     echo "name=$(cat package.json | jq -r '.name')" >> $GITHUB_OUTPUT
+      #     echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
+
+      # - name: ⬆ Upload installer - Windows
+      #   uses: actions/upload-artifact@v3
+      #   if: startsWith(matrix.os, 'windows')
+      #   with:
+      #     name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
+      #     path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
+      #     if-no-files-found: error
+
+      # - name: ⬆ Upload installer - Mac
+      #   uses: actions/upload-artifact@v3
+      #   if: startsWith(matrix.os, 'mac')
+      #   with:
+      #     name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
+      #     path: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-x64.dmg
+      #     if-no-files-found: error
+      # - name: ⬆ Upload installer - Linux
+      #   uses: actions/upload-artifact@v3
+      #   if: startsWith(matrix.os, 'ubuntu')
+      #   with:
+      #     name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
+      #     path: out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
+      #     if-no-files-found: error
