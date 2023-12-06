@@ -10,7 +10,6 @@ import { h1 } from "../lib/markup/tags";
 /**
  * Task that displays the name of the experiment
  */
-// TODO: Turn into jsPsych instruction trial (config is only used for task name)
 function showName() {
   // TODO: showMessage CSS is causing scroll bars
   return showMessage(config, {
@@ -20,11 +19,12 @@ function showName() {
     buttons: [language.prompts.continue.button],
   });
 }
+// TODO #292: Turn into jsPsych instruction trial (config is only used for task name)
 
 /**
  * Task that displays a welcome message with the photodiode ghost box
  */
-// TODO: Turn into jsPsych instruction trial
+
 function showWelcome() {
   const welcomeMarkup = h1(language.trials.welcome);
   return {
@@ -34,5 +34,6 @@ function showWelcome() {
     response_ends_trial: true,
   };
 }
+// TODO #292: Turn into jsPsych instruction trial
 
 export { showName, showWelcome };
