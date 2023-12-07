@@ -1,8 +1,8 @@
 // TODO #151: Can't use ES7 import statements here?
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, dialog } = require("electron");
 const path = require("path");
+const { app, BrowserWindow, dialog } = require("electron");
 const ipc = require("electron").ipcMain;
 const _ = require("lodash");
 const fs = require("fs-extra");
