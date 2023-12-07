@@ -26,4 +26,5 @@ module.exports = {
       version: "detect",
     },
   },
+  overrides: [{ files: ["*.jsx", "*.js"] }],
 };
