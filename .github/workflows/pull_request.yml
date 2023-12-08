@@ -104,7 +104,7 @@ jobs:
       - name: ⬆ Upload PsiTurk Build
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-psiturk
+          name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-psiturk.zip
           path: psiturkit/${{ steps.package_info.outputs.name }}-psiturk.zip
           if-no-files-found: error
         # uses: svenstaro/upload-release-action@v2
