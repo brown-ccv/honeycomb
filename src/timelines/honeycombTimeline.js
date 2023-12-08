@@ -1,6 +1,6 @@
 import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
 import {
-  createDebriefTrial,
+  buildDebriefTrial,
   finishTrial,
   instructionsTrial,
   preloadTrial,
@@ -16,7 +16,7 @@ import { createHoneycombBlock } from "./honeycombBlock";
  */
 function createHoneycombTimeline(jsPsych) {
   const honeycombTrials = createHoneycombBlock(jsPsych); // The first block repeats 5 times
-  const debriefTrial = createDebriefTrial(jsPsych);
+  const debriefTrial = buildDebriefTrial(jsPsych);
 
   const timeline = [
     welcomeTrial,

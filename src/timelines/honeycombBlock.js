@@ -1,12 +1,12 @@
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 
-import { fixation } from "../trials/fixation";
 import { eventCodes, taskSettings } from "../config/main";
+import { buildFixationTrial } from "../trials/fixation";
 
 function createHoneycombBlock(jsPsych) {
   const { honeycomb: honeycombSettings } = taskSettings;
 
-  const fixationTrial = fixation(jsPsych);
+  const fixationTrial = buildFixationTrial(jsPsych);
 
   /**
    * Displays a colored circle and waits for participant to response with a keyboard press
