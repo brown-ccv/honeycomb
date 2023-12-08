@@ -25,8 +25,7 @@ function createHoneycombBlock(jsPsych) {
     choices: honeycombSettings.timeline_variables.map((variable) => variable.correct_response),
     data: {
       // Record the correct_response passed as a timeline variable
-      // TODO: This should be an event code instead of response
-      task: "response", // TODO #280: Fixation will be recorded as "task: fixation"
+      task: "response", // TODO: Remove task, use code
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
     // Add a boolean value ("correct") to the data - if the user responded with the correct key or not
