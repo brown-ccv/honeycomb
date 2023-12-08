@@ -168,7 +168,7 @@ export default function App() {
         <JsPsychExperiment
           studyID={studyID}
           participantID={participantID}
-          taskVersion={taskVersion}
+          taskVersion={taskVersion} // TODO: Import in JsPsych experiment, no need to pass
           dataUpdateFunction={
             {
               desktop: desktopUpdateFunction,
