@@ -42,12 +42,14 @@ jobs:
           path: ./env
           mode: ${{matrix.setting}}
 
-      # Test and build the app
+      # Test and lint
       - name: 🧪 Run Test
         run: npm test
         env:
           CI: true
       - name: 🔬 Lint
-        run: npm run lint
+        run: npm run lint -- --max-warnings=0
+
+      # Build the app
       - name: ⚒ Run Build
         run: npm run build
