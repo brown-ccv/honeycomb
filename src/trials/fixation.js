@@ -28,7 +28,6 @@ export function fixation(jsPsych) {
       : fixationSettings.default_duration,
     data: {
       code: fixationCode, // Add event code to the recorded data
-      task: "fixation", // TODO: Remove task, use code
     },
     on_load: () => {
       // TODO: photodiodeSpot should check config, early return instead of error

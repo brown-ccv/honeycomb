@@ -1,7 +1,7 @@
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 
 import { fixation } from "../trials/fixation";
-import { taskSettings } from "../config/main";
+import { eventCodes, taskSettings } from "../config/main";
 
 function createHoneycombBlock(jsPsych) {
   const { honeycomb: honeycombSettings } = taskSettings;
@@ -25,7 +25,7 @@ function createHoneycombBlock(jsPsych) {
     choices: honeycombSettings.timeline_variables.map((variable) => variable.correct_response),
     data: {
       // Record the correct_response passed as a timeline variable
-      task: "response", // TODO: Remove task, use code
+      code: eventCodes.honeycomb,
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
     // Add a boolean value ("correct") to the data - if the user responded with the correct key or not

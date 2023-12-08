@@ -1,7 +1,8 @@
 /**
  * Custom codes for specific task events - used to parse the EEG data
- * NOTE - these event codes must match what is in public/config/trigger.js
+ * ! These event codes must match what is in public/config/trigger.js
  */
+// TODO: Each event should have a code, name, and numBlinks
 const eventCodes = {
   fixation: 1, // Fixation trial
   honeycomb: 2, // Main reaction-time trial for the Honeycomb task
