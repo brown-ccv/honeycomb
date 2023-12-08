@@ -11,17 +11,16 @@ export default function JsPsychExperiment({
   dataUpdateFunction,
   dataFinishFunction,
 }) {
-  // This will be the div in the dom that holds the experiment.
-  // We reference it explicitly here so we can do some plumbing with react, jspsych, and events.
+  // This element in the dom that holds the experiment.
   const experimentDivId = "experimentWindow";
 
   /**
-   * Create the instance of JsPsych whenever the studyID or participantID changes,
-   * which occurs then the user logs in.
+   * Create the instance of JsPsych whenever the studyID or participantID changes, which occurs then the user logs in.
    *
    * This instance of jsPsych is passed to any trials that need it when the timeline is built.
    */
   const jsPsych = React.useMemo(() => {
+    console.log("INITIALIZING JSPSYCH");
     // TODO #169: JsPsych has a built in timestamp function
     // Start date of the experiment - used as the UID of the session
     const startDate = new Date().toISOString();
@@ -30,7 +29,7 @@ export default function JsPsychExperiment({
     if (config.USE_FIREBASE) initParticipant(studyID, participantID, startDate);
 
     const jsPsych = initJsPsych({
-      // Combine custom options (src/timelines/main.js) with necessary Honeycomb options.
+      // Combine necessary Honeycomb options with custom ones (src/timelines/main.js)
       ...jsPsychOptions,
       display_element: experimentDivId,
       on_data_update: (data) => {
@@ -50,18 +49,15 @@ export default function JsPsychExperiment({
       start_date: startDate,
       task_version: taskVersion,
     });
+
     return jsPsych;
   }, [studyID, participantID]);
 
-  // Build the experiment timeline
-  const timeline = buildTimeline(jsPsych, studyID, participantID);
-
-  /**
-   * These useEffect callbacks manage keyboard events between React and the JsPsych experiment
-   */
+  /** Builds and runs the experiment timeline */
   React.useEffect(() => {
+    const timeline = buildTimeline(jsPsych, studyID, participantID);
     jsPsych.run(timeline);
-  });
+  }, [jsPsych]);
 
   return <div id={experimentDivId} className="App" />;
 }

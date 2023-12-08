@@ -7,7 +7,8 @@ import { createHoneycombTimeline } from "./honeycombTimeline";
  * Note that Honeycomb combines these with other options required for Honeycomb to operate correctly
  */
 const jsPsychOptions = {
-  on_trial_finish: (data) => console.log(`Trial ${data.internal_node_id} just finished:`, data),
+  // TEMP
+  // on_trial_finish: (data) => console.log(`Trial ${data.internal_node_id} just finished:`, data),
 };
 
 /**
