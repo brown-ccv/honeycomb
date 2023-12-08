@@ -1,11 +1,12 @@
 /** ELECTRON MAIN PROCESS */
 
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
-const log = require("electron-log");
-const _ = require("lodash");
 const url = require("url");
 const path = require("node:path");
 const fs = require("node:fs");
+
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const log = require("electron-log");
+const _ = require("lodash");
 
 // TODO 340: Use Electron's web serial API for this
 const { getPort, sendToPort } = require("event-marker");
