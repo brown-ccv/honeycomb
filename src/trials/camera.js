@@ -10,6 +10,7 @@ import { div, h1, p, tag } from "../lib/markup/tags";
  * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns
  */
+// TODO: Refactor to buildCameraStartTrial
 function cameraStart(jsPsych) {
   document.title = taskName;
 

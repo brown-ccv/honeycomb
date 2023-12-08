@@ -3,7 +3,7 @@ import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 import { eventCodes, taskSettings } from "../config/main";
 import { buildFixationTrial } from "../trials/fixation";
 
-function createHoneycombBlock(jsPsych) {
+function buildHoneycombBlock(jsPsych) {
   const { honeycomb: honeycombSettings } = taskSettings;
 
   const fixationTrial = buildFixationTrial(jsPsych);
@@ -52,4 +52,4 @@ function createHoneycombBlock(jsPsych) {
   return honeycombBlock;
 }
 
-export { createHoneycombBlock };
+export { buildHoneycombBlock };

@@ -90,6 +90,7 @@ function buildDebriefTrial(jsPsych) {
 }
 
 /** Trial that displays a completion message for 5 seconds */
+// TODO: Bring showMessage trial directly into HC and update
 const finishTrial = showMessage(config, {
   duration: 5000,
   message: honeycombLanguage.finish,
