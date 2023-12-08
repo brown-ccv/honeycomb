@@ -99,7 +99,7 @@ jobs:
       - name: Zip PsiTurk folder
         uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r ${{ steps.package_info.outputs.name }}-psiturk.zip ${{ steps.package_info.outputs.name }}-psiturk
+          args: zip -qq -r ${{ steps.package_info.outputs.name }}-psiturk.zip . -i ${{ steps.package_info.outputs.name }}-psiturk
 
       - name: ⬆ Upload PsiTurk Build
         uses: actions/upload-artifact@v3
