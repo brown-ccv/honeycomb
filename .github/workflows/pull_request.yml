@@ -43,7 +43,7 @@ jobs:
           mode: ${{matrix.setting}}
 
       # Test and lint
-      - name: 🧪 Run Test
+      - name: 🧪 Test
         run: npm test
         env:
           CI: true
@@ -51,5 +51,5 @@ jobs:
         run: npm run lint -- --max-warnings=0
 
       # Build the app
-      - name: ⚒ Run Build
+      - name: ⚒ Build
         run: npm run build
