@@ -5,15 +5,15 @@ import { config, taskVersion } from "../../config/main";
 import { initParticipant } from "../deployments/firebase";
 import { buildTimeline, jsPsychOptions } from "../../timelines/main";
 
+// ID used to identify the DOM element that holds the experiment.
+const EXPERIMENT_ID = "experimentWindow";
+
 export default function JsPsychExperiment({
   studyID,
   participantID,
   dataUpdateFunction,
   dataFinishFunction,
 }) {
-  // This element in the dom that holds the experiment.
-  const experimentDivId = "experimentWindow";
-
   /**
    * Create the instance of JsPsych whenever the studyID or participantID changes, which occurs then the user logs in.
    *
@@ -31,7 +31,7 @@ export default function JsPsychExperiment({
     const jsPsych = initJsPsych({
       // Combine necessary Honeycomb options with custom ones (src/timelines/main.js)
       ...jsPsychOptions,
-      display_element: experimentDivId,
+      display_element: EXPERIMENT_ID,
       on_data_update: (data) => {
         jsPsychOptions.on_data_update && jsPsychOptions.on_data_update(data); // Call custom on_data_update function (if provided)
         dataUpdateFunction(data); // Call Honeycomb's on_data_update function
@@ -59,5 +59,5 @@ export default function JsPsychExperiment({
     jsPsych.run(timeline);
   }, [jsPsych]);
 
-  return <div id={experimentDivId} className="App" />;
+  return <div id={EXPERIMENT_ID} className="App" />;
 }
