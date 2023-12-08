@@ -1,6 +1,7 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import { photodiodeSpot, photodiodeGhostBox } from "../lib/markup/photodiode";
 import { jitter as jitterx } from "../lib/utils";
+import { config } from "../config/main";
 
 /**
  * @description
@@ -18,16 +19,12 @@ import { jitter as jitterx } from "../lib/utils";
  * @param {number} options.taskCode - Task code to be saved into data log (default: 1)
  * @param {number} options.numBlinks - Number of times the pulse needs to be repeated for photodiode box, when USE_PHOTODIODE is set true. (default: 1)
  */
-// TODO: Import config, don't take from function
-export function fixation(config, options) {
-  const defaults = {
+export function fixation(options) {
+  const { duration, jitter, taskCode, numBlinks } = {
     duration: 1000,
     jitter: 50,
     taskCode: 1,
     numBlinks: 1,
-  };
-  const { duration, jitter, taskCode, numBlinks } = {
-    ...defaults,
     ...options,
   };
 
