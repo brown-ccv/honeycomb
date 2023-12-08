@@ -95,18 +95,19 @@ jobs:
       - name: 📦 Create Psiturk Build
         run: |
           cd psiturkit
-          ./psiturk-it -p ${{ steps.package_info.outputs.name }}-psiturk
-      - name: Zip PsiTurk folder
-        uses: montudor/action-zip@v1
-        with:
-          args: zip -qq -r ${{ steps.package_info.outputs.name }}-psiturk.zip . -i ${{ steps.package_info.outputs.name }}-psiturk
+          ./psiturk-it -p ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-psiturk
+      # - name: Zip PsiTurk folder
+      #   uses: montudor/action-zip@v1
+      #   with:
+      #     args: zip -qq -r ${{ steps.package_info.outputs.name }}-psiturk.zip . -i ${{ steps.package_info.outputs.name }}-psiturk
 
       - run: ls
       - name: ⬆ Upload PsiTurk Build
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-psiturk.zip
-          path: ${{ steps.package_info.outputs.name }}-psiturk.zip
+          # name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-psiturk.zip
+          # path: ${{ steps.package_info.outputs.name }}-psiturk.zip
+          path: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-psiturk
           if-no-files-found: error
         # uses: svenstaro/upload-release-action@v2
         # with:
