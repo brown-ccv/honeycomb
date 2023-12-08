@@ -4,21 +4,9 @@ import { fixation } from "../trials/fixation";
 import { taskSettings } from "../config/main";
 
 function createHoneycombBlock(jsPsych) {
-  const { fixation: fixationSettings, honeycomb: honeycombSettings } = taskSettings;
+  const { honeycomb: honeycombSettings } = taskSettings;
 
-  /**
-   * Displays a fixation dot at the center of the screen.
-   *
-   * The settings for this trial are loaded from taskSettings.fixation:
-   *    If randomize_duration is true the dot is shown for default_duration
-   *    Otherwise, a random value is selected from durations
-   */
-  // TODO #280: Pull fixation trial into Honeycomb directly
-  const fixationTrial = fixation({
-    duration: fixationSettings.randomize_duration
-      ? jsPsych.randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0]
-      : fixationSettings.default_duration,
-  });
+  const fixationTrial = fixation(jsPsych);
 
   /**
    * Displays a colored circle and waits for participant to response with a keyboard press
@@ -37,6 +25,7 @@ function createHoneycombBlock(jsPsych) {
     choices: honeycombSettings.timeline_variables.map((variable) => variable.correct_response),
     data: {
       // Record the correct_response passed as a timeline variable
+      // TODO: This should be an event code instead of response
       task: "response", // TODO #280: Fixation will be recorded as "task: fixation"
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
