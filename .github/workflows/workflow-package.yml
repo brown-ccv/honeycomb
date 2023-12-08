@@ -63,7 +63,7 @@ jobs:
           mode: ${{github.event.inputs.setting}}
 
       # Build the app
-      - name: ⚒ Run Build
+      - name: ⚒ Build
         run: npm run build
 
       # Package the app installers
