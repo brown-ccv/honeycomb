@@ -7,16 +7,15 @@ const productId = "";
 // commName can be changed with environment variable process.env.EVENT_MARKER_COM_NAME
 const comName = "COM3";
 
-// NOTE - these event codes must match what is in public/config/trigger.js
+// ! These event codes must match what is in public/config/trigger.js
 const eventCodes = {
-  fixation: 1,
-  evidence: 5, // TODO: Remove from both trigger files
-  show_earnings: 7, // TODO: Remove from both trigger files
-  test_connect: 32,
-  open_task: 18,
+  fixation: 1, // Fixation trial
+  honeycomb: 2, // Main reaction-time trial for the Honeycomb task
+  open_task: 18, // Opening task for setting up the experiment
+  test_connect: 32, // Initial test connection
 };
 
-// this is module.exports isntead of just exports as it is also imported into the electron app
+// this is module.exports instead of just exports as it is also imported into the electron app
 module.exports = {
   vendorId,
   productId,
