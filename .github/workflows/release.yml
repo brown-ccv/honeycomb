@@ -48,7 +48,7 @@ jobs:
           mode: ${{matrix.setting}}
 
       # Build the app
-      - name: ⚒ Run Build
+      - name: ⚒ Build
         run: npm run build
 
       # Package the app installers
@@ -114,7 +114,7 @@ jobs:
         run: npm ci
 
       # Build the app
-      - name: ⚒ Run Build
+      - name: ⚒ Build
         run: npm run build
 
       # Deploy the app to GitHub Pages
@@ -142,7 +142,7 @@ jobs:
         run: npm ci
 
       # Build the app
-      - name: ⚒ Run Build
+      - name: ⚒ Build
         run: npm run build
 
       # Package on PsiTurk
