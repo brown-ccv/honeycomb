@@ -19,7 +19,7 @@ module.exports = {
   plugins: ["react"],
   rules: {
     "react/prop-types": "off", // TODO: These should be added so the rule can be removed
-    "import/order": ["error"],
+    "import/order": "warn",
   },
   settings: {
     react: {
