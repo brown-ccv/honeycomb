@@ -12,11 +12,9 @@ import { div } from "../lib/markup/tags";
  *  Otherwise, a random value is selected from durations
  *
  */
-// TODO: How do we want to add the jitter to the fixation?
-// TODO: taskCode and numBlinks in config.json?
 export function fixation(jsPsych) {
   const fixationSettings = taskSettings.fixation;
-  const taskCode = eventCodes.fixation;
+  const fixationCode = eventCodes.fixation;
 
   let stimulus = div(div("", { id: "fixation-dot" }), { class: "center_container" });
   if (config.USE_PHOTODIODE) stimulus += photodiodeGhostBox();
@@ -29,12 +27,12 @@ export function fixation(jsPsych) {
       ? jsPsych.randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0]
       : fixationSettings.default_duration,
     data: {
-      code: taskCode, // Add event code to the recorded data
+      code: fixationCode, // Add event code to the recorded data
       task: "fixation", // TODO: Remove task, use code
     },
     on_load: () => {
       // TODO: photodiodeSpot should check config, early return instead of error
-      if (config.USE_PHOTODIODE) photodiodeSpot(taskCode, 1, config);
+      if (config.USE_PHOTODIODE) photodiodeSpot(fixationCode, 1, config);
     },
   };
 }
