@@ -1,6 +1,6 @@
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
-import { fixation } from "@brown-ccv/behavioral-task-trials";
 
+import { fixation } from "../trials/fixation";
 import { config, taskSettings } from "../config/main";
 
 function createHoneycombBlock(jsPsych) {
