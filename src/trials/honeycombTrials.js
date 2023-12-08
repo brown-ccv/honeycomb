@@ -3,8 +3,8 @@ import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import instructionsResponse from "@jspsych/plugin-instructions";
 import preloadResponse from "@jspsych/plugin-preload";
 
-import { config, language, taskSettings } from "../config/main";
-import { div, image, p, b } from "../lib/markup/tags";
+import { config, eventCodes, language, taskSettings } from "../config/main";
+import { b, div, image, p } from "../lib/markup/tags";
 
 const honeycombLanguage = language.trials.honeycomb;
 
@@ -60,29 +60,34 @@ const preloadTrial = {
 // TODO #281: Function for preloading all files in public/images?
 
 /** Trial that calculates and displays some results of the session  */
-const createDebriefTrial = (jsPsych) => ({
-  type: htmlKeyboardResponse,
-  stimulus: () => {
-    // Note that we need the jsPsych instance to aggregate the data
-    const responseTrials = jsPsych.data.get().filter({ task: "response" }); // TODO: Filter by task code (trigger has code, task, numBlinks)
-    const correct_trials = responseTrials.filter({ correct: true });
-    const accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
-    const reactionTime = Math.round(correct_trials.select("rt").mean());
+function createDebriefTrial(jsPsych) {
+  return {
+    type: htmlKeyboardResponse,
+    stimulus: () => {
+      /**
+       * Note that we need the jsPsych instance to aggregate the data.
+       * By accessing jsPsych inside the "stimulus" callback we have access to all of the data when this trial is run
+       * Calling jsPsych outside of the trial object would be executed to soon (when the experiment first starts) and would therefore have no data
+       */
+      const responseTrials = jsPsych.data.get().filter({ code: eventCodes.honeycomb });
+      const correct_trials = responseTrials.filter({ correct: true });
+      const accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
+      const reactionTime = Math.round(correct_trials.select("rt").mean());
+      const debriefLanguage = honeycombLanguage.debrief;
 
-    const debriefLanguage = honeycombLanguage.debrief;
+      const accuracyMarkup = p(
+        debriefLanguage.accuracy.start + accuracy + debriefLanguage.accuracy.end
+      );
+      const reactionTimeMarkup = p(
+        debriefLanguage.reactionTime.start + reactionTime + debriefLanguage.reactionTime.end
+      );
+      const completeMarkup = p(debriefLanguage.complete);
 
-    const accuracyMarkup = p(
-      debriefLanguage.accuracy.start + accuracy + debriefLanguage.accuracy.end
-    );
-    const reactionTimeMarkup = p(
-      debriefLanguage.reactionTime.start + reactionTime + debriefLanguage.reactionTime.end
-    );
-    const completeMarkup = p(debriefLanguage.complete);
-
-    // Display the accuracy, reaction time, and complete message as 3 paragraphs in a row
-    return accuracyMarkup + reactionTimeMarkup + completeMarkup;
-  },
-});
+      // Display the accuracy, reaction time, and complete message as 3 paragraphs in a row
+      return accuracyMarkup + reactionTimeMarkup + completeMarkup;
+    },
+  };
+}
 
 /** Trial that displays a completion message for 5 seconds */
 const finishTrial = showMessage(config, {
