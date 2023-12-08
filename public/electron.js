@@ -1,16 +1,15 @@
 // TODO #151: Can't use ES7 import statements here?
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, dialog } = require("electron");
 const path = require("path");
-const ipc = require("electron").ipcMain;
+const { app, BrowserWindow, dialog, ipcMain: ipc } = require("electron");
 const _ = require("lodash");
 const fs = require("fs-extra");
 const log = require("electron-log");
 
 // Event Trigger
-const { eventCodes, vendorId, productId, comName } = require("./config/trigger");
 const { getPort, sendToPort } = require("event-marker");
+const { eventCodes, vendorId, productId, comName } = require("./config/trigger");
 
 // handle windows installer set up
 if (require("electron-squirrel-startup")) app.quit();
