@@ -1,7 +1,6 @@
 name: 📦 Package Workflow
 
 # Workflow dispatch for packaging an electron executable
-# TODO: Add PsiTurk build here as well
 on:
   workflow_dispatch:
     inputs:
