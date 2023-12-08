@@ -1,21 +1,20 @@
 import { initJsPsych } from "jspsych";
 import React from "react";
 
-import { config } from "../../config/main";
+import { config, taskVersion } from "../../config/main";
 import { initParticipant } from "../deployments/firebase";
 import { buildTimeline, jsPsychOptions } from "../../timelines/main";
 
 export default function JsPsychExperiment({
   studyID,
   participantID,
-  taskVersion,
   dataUpdateFunction,
   dataFinishFunction,
 }) {
   // This will be the div in the dom that holds the experiment.
   // We reference it explicitly here so we can do some plumbing with react, jspsych, and events.
-  const experimentDivId = "experimentWindow";
   const experimentDiv = React.useRef(null);
+  const experimentDivId = "experimentWindow";
 
   // Combine custom options imported from timelines/maine.js, with necessary Honeycomb options.
   const combinedOptions = {
@@ -26,7 +25,7 @@ export default function JsPsychExperiment({
   };
 
   /**
-   * Create the instance of JsPsych whenever the studyID, participantID, or taskVersion changes,
+   * Create the instance of JsPsych whenever the studyID or participantID changes,
    * which occurs then the user logs in.
    *
    * This instance of jsPsych is passed to any trials that need it when the timeline is built.
@@ -48,7 +47,7 @@ export default function JsPsychExperiment({
       task_version: taskVersion,
     });
     return jsPsych;
-  }, [studyID, participantID, taskVersion]);
+  }, [studyID, participantID]);
 
   // Build the experiment timeline
   const timeline = buildTimeline(jsPsych, studyID, participantID);
