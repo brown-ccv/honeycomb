@@ -60,7 +60,7 @@ const preloadTrial = {
 // TODO #281: Function for preloading all files in public/images?
 
 /** Trial that calculates and displays some results of the session  */
-function createDebriefTrial(jsPsych) {
+function buildDebriefTrial(jsPsych) {
   return {
     type: htmlKeyboardResponse,
     stimulus: () => {
@@ -95,4 +95,4 @@ const finishTrial = showMessage(config, {
   message: honeycombLanguage.finish,
 });
 
-export { createDebriefTrial, finishTrial, instructionsTrial, preloadTrial, welcomeTrial };
+export { buildDebriefTrial, finishTrial, instructionsTrial, preloadTrial, welcomeTrial };

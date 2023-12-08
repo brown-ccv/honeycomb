@@ -12,7 +12,7 @@ import { div } from "../lib/markup/tags";
  *  Otherwise, a random value is selected from durations
  *
  */
-export function fixation(jsPsych) {
+export function buildFixationTrial(jsPsych) {
   const fixationSettings = taskSettings.fixation;
   const fixationCode = eventCodes.fixation;
 
