@@ -171,9 +171,20 @@ jobs:
         run: |
           cd psiturkit
           ./psiturk-it -p ${{ steps.package_info.outputs.name }}-psiturk
-      - name: ⬆ Upload PsiTurk Build
-        uses: actions/upload-artifact@v3
+      - name: Zip PsiTurk folder
+        uses: montudor/action-zip@v1
         with:
-          name: psiturk-build
-          path: psiturkit/${{ steps.package_info.outputs.name }}-psiturk
-          if-no-files-found: error
+          args: zip -qq -r ${{ steps.package_info.outputs.name }}-psiturk.zip ${{ steps.package_info.outputs.name }}-psiturk
+
+      - name: ⬆ Upload PsiTurk Build
+        # uses: actions/upload-artifact@v3
+        # with:
+        #   name: psiturk-build
+        #   path: psiturkit/${{ steps.package_info.outputs.name }}-psiturk
+        #   if-no-files-found: error
+        uses: svenstaro/upload-release-action@v2
+        with:
+          file: psiturkit/${{ steps.package_info.outputs.name }}-psiturk.zip
+          asset_name: ${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-psiturk
+          tag: ${{ github.ref }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
