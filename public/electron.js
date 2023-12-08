@@ -2,8 +2,7 @@
 
 // Modules to control application life and create native browser window
 const path = require("path");
-const { app, BrowserWindow, dialog } = require("electron");
-const ipc = require("electron").ipcMain;
+const { app, BrowserWindow, dialog, ipcMain: ipc } = require("electron");
 const _ = require("lodash");
 const fs = require("fs-extra");
 const log = require("electron-log");
