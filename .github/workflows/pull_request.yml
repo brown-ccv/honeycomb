@@ -101,6 +101,8 @@ jobs:
         with:
           args: zip -qq -r ${{ steps.package_info.outputs.name }}-psiturk.zip . -i ${{ steps.package_info.outputs.name }}-psiturk
 
+      - run: ls
+      - run: ls ./psiturk-it
       - name: ⬆ Upload PsiTurk Build
         uses: actions/upload-artifact@v3
         with:
