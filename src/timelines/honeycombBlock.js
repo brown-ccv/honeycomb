@@ -28,6 +28,7 @@ function createHoneycombBlock(jsPsych) {
    * Note that the correct_response is saved as a data point
    * Note that the trial calculates and saves if the user responded correctly on trial_finish
    */
+  // TODO #332: Add photodiode and event marker code here
   const taskTrial = {
     type: imageKeyboardResponse,
     // Display a stimulus passed as a timeline variable
