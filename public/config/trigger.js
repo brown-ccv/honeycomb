@@ -10,8 +10,8 @@ const comName = "COM3";
 // NOTE - these event codes must match what is in public/config/trigger.js
 const eventCodes = {
   fixation: 1,
-  evidence: 5,
-  show_earnings: 7,
+  evidence: 5, // TODO: Remove from both trigger files
+  show_earnings: 7, // TODO: Remove from both trigger files
   test_connect: 32,
   open_task: 18,
 };
