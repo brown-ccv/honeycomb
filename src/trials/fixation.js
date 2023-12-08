@@ -1,46 +1,40 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import { photodiodeSpot, photodiodeGhostBox } from "../lib/markup/photodiode";
-import { jitter as jitterx } from "../lib/utils";
-import { config } from "../config/main";
+
+import { config, eventCodes, taskSettings } from "../config/main";
+import { photodiodeGhostBox, photodiodeSpot } from "../lib/markup/photodiode";
+import { div } from "../lib/markup/tags";
 
 /**
- * @description
  * Builds a trial with a fixation dot and optional photodiode box.
  *
- * @module
- * @param {Object} config - The configuration object for USE_PHOTODIODE, USE_EEG, USE_ELECTRON and USE_MTURK flags.
- * @param {boolean} config.USE_PHOTODIODE - USE_PHOTODIODE flag
- * @param {boolean} config.USE_EEG - USE_EEG flag
- * @param {boolean} config.USE_ELECTRON - USE_ELECTRON flag
- * @param {boolean} config.USE_MTURK - USE_MTURK flag
- * @param {Object} options
- * @param {number} options.duration - trial duration in milliseconds jittered with the jitter param. (default: 1000)
- * @param {number} options.jitter - jitter range (0-jitter) to add from to the trial duration (default: 50)
- * @param {number} options.taskCode - Task code to be saved into data log (default: 1)
- * @param {number} options.numBlinks - Number of times the pulse needs to be repeated for photodiode box, when USE_PHOTODIODE is set true. (default: 1)
+ * The settings for this trial are loaded from taskSettings.fixation:
+ *  If randomize_duration is true the dot is shown for default_duration
+ *  Otherwise, a random value is selected from durations
+ *
  */
-export function fixation(options) {
-  const { duration, jitter, taskCode, numBlinks } = {
-    duration: 1000,
-    jitter: 50,
-    taskCode: 1,
-    numBlinks: 1,
-    ...options,
-  };
+// TODO: How do we want to add the jitter to the fixation?
+// TODO: taskCode and numBlinks in config.json?
+export function fixation(jsPsych) {
+  const fixationSettings = taskSettings.fixation;
+  const taskCode = eventCodes.fixation;
 
-  // TODO: Use helper function
-  let stimulus = '<div class="center_container"><div id="fixation-dot"> </div></div>';
+  let stimulus = div(div("", { id: "fixation-dot" }), { class: "center_container" });
   if (config.USE_PHOTODIODE) stimulus += photodiodeGhostBox();
 
   return {
     type: htmlKeyboardResponse,
     stimulus: stimulus,
     response_ends_trial: false,
-    trial_duration: jitterx(duration, jitter),
-    on_load: () => {
-      if (config.USE_PHOTODIODE) photodiodeSpot(taskCode, numBlinks, config);
+    trial_duration: fixationSettings.randomize_duration
+      ? jsPsych.randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0]
+      : fixationSettings.default_duration,
+    data: {
+      code: taskCode, // Add event code to the recorded data
+      task: "fixation", // TODO: Remove task, use code
     },
-    on_finish: (data) => (data.code = taskCode),
+    on_load: () => {
+      // TODO: photodiodeSpot should check config, early return instead of error
+      if (config.USE_PHOTODIODE) photodiodeSpot(taskCode, 1, config);
+    },
   };
 }
-// TODO: Export as constant, not function

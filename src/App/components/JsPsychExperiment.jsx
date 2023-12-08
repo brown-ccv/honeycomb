@@ -20,7 +20,6 @@ export default function JsPsychExperiment({
    * This instance of jsPsych is passed to any trials that need it when the timeline is built.
    */
   const jsPsych = React.useMemo(() => {
-    console.log("INITIALIZING JSPSYCH");
     // TODO #169: JsPsych has a built in timestamp function
     // Start date of the experiment - used as the UID of the session
     const startDate = new Date().toISOString();
