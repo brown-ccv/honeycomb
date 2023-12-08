@@ -1,7 +1,7 @@
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 
 import { fixation } from "../trials/fixation";
-import { config, taskSettings } from "../config/main";
+import { taskSettings } from "../config/main";
 
 function createHoneycombBlock(jsPsych) {
   const { fixation: fixationSettings, honeycomb: honeycombSettings } = taskSettings;
@@ -14,7 +14,7 @@ function createHoneycombBlock(jsPsych) {
    *    Otherwise, a random value is selected from durations
    */
   // TODO #280: Pull fixation trial into Honeycomb directly
-  const fixationTrial = fixation(config, {
+  const fixationTrial = fixation({
     duration: fixationSettings.randomize_duration
       ? jsPsych.randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0]
       : fixationSettings.default_duration,
