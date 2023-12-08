@@ -64,7 +64,7 @@ const createDebriefTrial = (jsPsych) => ({
   type: htmlKeyboardResponse,
   stimulus: () => {
     // Note that we need the jsPsych instance to aggregate the data
-    const responseTrials = jsPsych.data.get().filter({ task: "response" });
+    const responseTrials = jsPsych.data.get().filter({ task: "response" }); // TODO: Filter by task code (trigger has code, task, numBlinks)
     const correct_trials = responseTrials.filter({ correct: true });
     const accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
     const reactionTime = Math.round(correct_trials.select("rt").mean());

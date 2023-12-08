@@ -19,7 +19,7 @@ const taskVersion = packageInfo.version;
 // audio codes
 /** Audio code of a basic "beep" sine wave */
 const audioCodes = {
-  frequency: 100 * (eventCodes.open_task - 9),
+  frequency: 100 * (eventCodes.open_task - 9), // TODO: Given a normal frequency here
   type: "sine",
 };
 

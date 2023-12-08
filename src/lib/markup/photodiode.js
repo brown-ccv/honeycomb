@@ -50,7 +50,7 @@ function photodiodeSpot(taskCode) {
   if (config.USE_PHOTODIODE) {
     const blinkTime = 40; // TODO: Get blink time based off fixation time?
     let numBlinks = taskCode;
-    if (taskCode < eventCodes.open_task) numBlinks = 1;
+    if (taskCode < eventCodes.open_task) numBlinks = 1; // TODO: numBlinks inside trigger.js too
     repeatPulseFor(blinkTime, numBlinks);
     if (ipcRenderer) ipcRenderer.send("trigger", taskCode);
   }
