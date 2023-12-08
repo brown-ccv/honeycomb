@@ -3,6 +3,7 @@ import { language } from "../config/main";
 import { baseStimulus } from "../lib/markup/stimuli";
 import { h1 } from "../lib/markup/tags";
 
+// TODO: Refactor to constant
 function adjustVolume() {
   const adjustVolumeMarkup = h1(language.trials.adjustVolume);
 

@@ -6,6 +6,7 @@ import { baseStimulus } from "../lib/markup/stimuli";
 import { h1, p } from "../lib/markup/tags";
 
 // TODO #330: Actually check to see if USB is connected? This isn't testing anything?
+// TODO: Refactor to constant
 function holdUpMarker() {
   const eventMarkerMarkup = h1(language.trials.eventMarker.connected, { style: "color: green;" });
 
