@@ -107,7 +107,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           # name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip
-          path: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
+          path: psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
           if-no-files-found: error
         # uses: svenstaro/upload-release-action@v2
         # with:
