@@ -7,7 +7,7 @@ import "jspsych/css/jspsych.css";
 import "./index.css";
 import "./App.css";
 
-import { config, taskSettings, taskVersion, turkUniqueId } from "../config/main";
+import { config, taskSettings, turkUniqueId } from "../config/main";
 import { getProlificId, getSearchParam } from "../lib/utils";
 
 // Import deployment functions
@@ -168,7 +168,6 @@ export default function App() {
         <JsPsychExperiment
           studyID={studyID}
           participantID={participantID}
-          taskVersion={taskVersion} // TODO: Import in JsPsych experiment, no need to pass
           dataUpdateFunction={
             {
               desktop: desktopUpdateFunction,
