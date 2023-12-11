@@ -1,7 +1,7 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
 import { config, eventCodes, taskSettings } from "../config/main";
-import { photodiodeGhostBox, photodiodeSpot } from "../lib/markup/photodiode";
+import { pdSpotEncode, photodiodeGhostBox } from "../lib/markup/photodiode";
 import { div } from "../lib/markup/tags";
 
 /**
@@ -31,7 +31,7 @@ export function buildFixationTrial(jsPsych) {
     },
     on_load: () => {
       // TODO: Permeate this check for all other trials
-      if (config.USE_PHOTODIODE) photodiodeSpot(fixationCode, 1, config);
+      if (config.USE_PHOTODIODE) pdSpotEncode(fixationCode, 1, config);
     },
   };
 }
