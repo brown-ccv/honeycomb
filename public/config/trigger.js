@@ -9,7 +9,6 @@ const vendorId = "16c0";
  * This value is used for the "teensyduino" trigger box
  * This value can be changed with the environment variable EVENT_MARKER_PRODUCT_ID
  */
-// TODO: This is not set? Should it be undefined?
 const productId = undefined;
 
 /**
