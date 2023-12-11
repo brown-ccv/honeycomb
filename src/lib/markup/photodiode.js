@@ -9,6 +9,7 @@ import { div, span } from "./tags";
  */
 const photodiodeGhostBox = div(span("", { id: "photodiode-spot", class: "photodiode-spot" }), {
   id: "photodiode-box",
+  // TODO #355: Conditional check should be at the task level
   class: config.USE_PHOTODIODE ? "photodiode-box visible" : "photodiode-box invisible",
 });
 
