@@ -15,7 +15,7 @@ import { buildHoneycombBlock } from "./honeycombBlock";
  * See the jsPsych documentation for more: https://www.jspsych.org/7.3/tutorials/rt-task/
  */
 function buildHoneycombTimeline(jsPsych) {
-  const honeycombTrials = buildHoneycombBlock(jsPsych); // The first block repeats 5 times
+  const honeycombBlock = buildHoneycombBlock(jsPsych); // The first block repeats 5 times
   const debriefTrial = buildDebriefTrial(jsPsych);
 
   const timeline = [
@@ -23,7 +23,7 @@ function buildHoneycombTimeline(jsPsych) {
     enterFullscreen,
     preloadTrial,
     instructionsTrial,
-    honeycombTrials,
+    honeycombBlock,
     debriefTrial,
     finishTrial,
     exitFullscreen,
