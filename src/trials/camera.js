@@ -22,7 +22,7 @@ function cameraStart(jsPsych) {
 
   return {
     type: htmlButtonResponse,
-    stimulus: baseStimulus(markup, true) + photodiodeGhostBox(),
+    stimulus: baseStimulus(markup, true) + photodiodeGhostBox,
     choices: [language.prompts.continue.button],
     response_ends_trial: true,
     on_load: () => {
@@ -126,7 +126,7 @@ function cameraEnd(duration) {
 
   return {
     type: htmlKeyboardResponse,
-    stimulus: baseStimulus(recordingEndMarkup, true) + photodiodeGhostBox(),
+    stimulus: baseStimulus(recordingEndMarkup, true) + photodiodeGhostBox,
     trial_duration: duration,
     on_load: () => {
       // Finish the camera recording when the trial first loads
