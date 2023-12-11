@@ -41,7 +41,7 @@ export default function JsPsychExperiment({
       },
     });
 
-    // Add experiment properties into jsPsych directly
+    // Adds experiment data into jsPsych directly. These properties will be added to all trials
     jsPsych.data.addProperties({
       study_id: studyID,
       participant_id: participantID,
@@ -52,7 +52,7 @@ export default function JsPsychExperiment({
     return jsPsych;
   }, [studyID, participantID]);
 
-  /** Builds and runs the experiment timeline */
+  /** Build and run the experiment timeline */
   React.useEffect(() => {
     const timeline = buildTimeline(jsPsych, studyID, participantID);
     jsPsych.run(timeline);
