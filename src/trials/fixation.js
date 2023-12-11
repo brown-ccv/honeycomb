@@ -32,6 +32,7 @@ export function buildFixationTrial(jsPsych) {
     data: {
       code: fixationCode, // Add event code to the recorded data
     },
+    // Flash the photodiode when the trial first loads
     on_load: () => {
       if (config.USE_PHOTODIODE) pdSpotEncode(fixationCode, 1, config);
     },

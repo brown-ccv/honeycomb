@@ -36,7 +36,9 @@ function buildHoneycombBlock(jsPsych) {
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
     // Flash the photodiode when the trial first loads
-    on_load: () => config.USE_PHOTODIODE && pdSpotEncode(eventCodes.honeycomb, 1, config),
+    on_load: () => {
+      if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.honeycomb, 1, config);
+    },
     // Add a boolean value ("correct") to the data - if the user responded with the correct key or not
     on_finish: (data) => {
       data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
