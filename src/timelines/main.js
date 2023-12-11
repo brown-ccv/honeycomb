@@ -8,7 +8,6 @@ import { createHoneycombTimeline } from "./honeycombTimeline";
  */
 const jsPsychOptions = {
   on_trial_finish: (data) => console.log(`Trial ${data.internal_node_id} just finished:`, data),
-  default_iti: 250,
 };
 
 /**
