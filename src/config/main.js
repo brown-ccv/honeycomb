@@ -44,14 +44,15 @@ try {
 const USE_PROLIFIC = (getProlificId() && !USE_MTURK) || false; // Whether or not the experiment is running with Prolific
 const USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true"; // Whether or not the experiment is running in Firebase (web app)
 
-const USE_VOLUME = process.env.REACT_APP_VOLUME === "true"; // whether or not to ask the participant to adjust the volume
-const USE_CAMERA = process.env.REACT_APP_VIDEO === "true" && USE_ELECTRON; // whether or not to enable video
-const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON; // whether or not the EEG/event marker is available
+const USE_VOLUME = process.env.REACT_APP_VOLUME === "true"; // Whether or not to use audio cues in the task
+const USE_CAMERA = process.env.REACT_APP_VIDEO === "true" && USE_ELECTRON; // Whether or not to use video recording
+const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON; // Whether or not the EEG/event marker is available (TODO: This is only used for sending event codes)
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON; // whether or not the photodiode is in use
 
 /**
  * Configuration object for Honeycomb
  */
+// TODO: Remove init call
 const config = init({
   USE_PHOTODIODE,
   USE_EEG,
@@ -66,6 +67,7 @@ const config = init({
 /** Determine the task settings to be used   */
 
 // Honeycomb's default task settings
+// TODO: Remove this default, just use config.json
 let taskSettings = {
   fixation: {
     durations: [250, 500, 750, 1000, 1250, 1500, 1750, 2000],
