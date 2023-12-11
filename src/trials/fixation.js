@@ -4,11 +4,10 @@ import { config, eventCodes, taskSettings } from "../config/main";
 import { photodiodeGhostBox, photodiodeSpot } from "../lib/markup/photodiode";
 import { div } from "../lib/markup/tags";
 
-/**  */
 /**
  * Builds a trial with a fixation dot and optional photodiode box.
  * @param {Object} jsPsych The global jsPsych object used to build the trial
- * @returns
+ * @returns {Object} A jsPsych trial object
  */
 export function buildFixationTrial(jsPsych) {
   // TODO: These values should be passed to function
