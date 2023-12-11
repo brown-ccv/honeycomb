@@ -41,7 +41,7 @@ export default function JsPsychExperiment({
       },
     });
 
-    // Add experiment properties into jsPsych directly
+    // Adds experiment data into jsPsych directly. These properties will be added to all trials
     jsPsych.data.addProperties({
       study_id: studyID,
       participant_id: participantID,
