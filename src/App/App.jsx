@@ -8,7 +8,7 @@ import "./App.css";
 import "./index.css";
 
 // Import configurations and utilities
-import { config, taskSettings, taskVersion, turkUniqueId } from "../config/main";
+import { config, taskSettings, turkUniqueId } from "../config/main";
 import * as trigger from "../config/trigger";
 import { getProlificId, getSearchParam } from "../lib/utils";
 
@@ -168,7 +168,6 @@ export default function App() {
         <JsPsychExperiment
           studyID={studyID}
           participantID={participantID}
-          taskVersion={taskVersion}
           dataUpdateFunction={
             {
               desktop: desktopUpdateFunction,
