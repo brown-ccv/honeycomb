@@ -16,16 +16,16 @@ import { eventCodes } from "./trigger";
 const taskName = packageInfo.name;
 const taskVersion = packageInfo.version;
 
-// audio codes
 /** Audio code of a basic "beep" sine wave */
 const audioCodes = {
-  frequency: 100 * (eventCodes.open_task - 9), // TODO: Given a normal frequency here
+  frequency: 900,
   type: "sine",
 };
 
 // As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
 // The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
 // The actual task and related utils will use a different instance of jsPsych created after login.
+// TODO: Initialize using using react code in jsPsychExperiment
 const jsPsych = initJsPsych();
 
 // Whether or not the experiment is running on mechanical turk
