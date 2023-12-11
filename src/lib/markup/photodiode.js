@@ -20,7 +20,6 @@ function photodiodeGhostBox() {
  */
 function photodiodeSpot(taskCode) {
   // Conditionally load electron based on config variable
-  // TODO: Just do an early return here, don't throw error
   let ipcRenderer = false;
   if (config.USE_ELECTRON) {
     const electron = window.require("electron");
