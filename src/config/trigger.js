@@ -2,7 +2,7 @@
  * Custom codes for specific task events - used to parse the EEG data
  * ! These event codes must match what is in public/config/trigger.js
  */
-// TODO: Each event should have a code, name, and numBlinks
+// TODO #354: Each event should have a code, name, and numBlinks
 const eventCodes = {
   fixation: 1, // Fixation trial
   honeycomb: 2, // Main reaction-time trial for the Honeycomb task
@@ -10,5 +10,5 @@ const eventCodes = {
   test_connect: 32, // Initial test connection
 };
 
-// Note that this is module.exports so it can be imported into the electron app
+// module.exports is used so it can be imported into the electron app
 module.exports = { eventCodes };
