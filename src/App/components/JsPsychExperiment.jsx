@@ -52,7 +52,7 @@ export default function JsPsychExperiment({
     return jsPsych;
   }, [studyID, participantID]);
 
-  /** Builds and runs the experiment timeline */
+  /** Build and run the experiment timeline */
   React.useEffect(() => {
     const timeline = buildTimeline(jsPsych, studyID, participantID);
     jsPsych.run(timeline);
