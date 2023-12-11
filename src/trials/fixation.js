@@ -14,12 +14,15 @@ export function buildFixationTrial(jsPsych) {
   const fixationSettings = taskSettings.fixation;
   const fixationCode = eventCodes.fixation;
 
-  let stimulus = div(div("", { id: "fixation-dot" }), { class: "center_container" });
-  if (config.USE_PHOTODIODE) stimulus += photodiodeGhostBox();
-
   return {
     type: htmlKeyboardResponse,
-    stimulus: stimulus,
+    // Display the fixation dot
+    stimulus: div(div("", { id: "fixation-dot" }), { class: "center_container" }),
+    // Display the photodiodeGhostBox
+    prompt: () => {
+      if (config.USE_PHOTODIODE) return photodiodeGhostBox();
+      else return null;
+    },
     response_ends_trial: false,
     // If randomize_duration is true the dot is shown for default_duration
     // Otherwise, a random value is selected from durations
@@ -29,9 +32,7 @@ export function buildFixationTrial(jsPsych) {
     data: {
       code: fixationCode, // Add event code to the recorded data
     },
-    on_load: () => {
-      // TODO: Permeate this check for all other trials
-      if (config.USE_PHOTODIODE) photodiodeSpot(fixationCode, 1, config);
-    },
+    // Flash the photodiode when the trial first loads
+    on_load: () => config.USE_PHOTODIODE && photodiodeSpot(fixationCode, 1, config),
   };
 }

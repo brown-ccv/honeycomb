@@ -1,6 +1,7 @@
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 
-import { eventCodes, taskSettings } from "../config/main";
+import { config, eventCodes, taskSettings } from "../config/main";
+import { photodiodeGhostBox, photodiodeSpot } from "../lib/markup/photodiode";
 import { buildFixationTrial } from "../trials/fixation";
 
 function buildHoneycombBlock(jsPsych) {
@@ -17,10 +18,16 @@ function buildHoneycombBlock(jsPsych) {
    * Note that the trial calculates and saves if the user responded correctly on trial_finish
    */
   // TODO #332: Add photodiode and event marker code here
+
   const taskTrial = {
     type: imageKeyboardResponse,
-    // Display a stimulus passed as a timeline variable
+    // Display the image passed as a timeline variable
     stimulus: jsPsych.timelineVariable("stimulus"),
+    // Display the photodiodeGhostBox
+    prompt: () => {
+      if (config.USE_PHOTODIODE) return photodiodeGhostBox();
+      else return null;
+    },
     // Possible choices are the correct_responses from the task settings
     choices: honeycombSettings.timeline_variables.map((variable) => variable.correct_response),
     data: {
@@ -28,6 +35,8 @@ function buildHoneycombBlock(jsPsych) {
       code: eventCodes.honeycomb,
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
+    // Flash the photodiode when the trial first loads
+    on_load: () => config.USE_PHOTODIODE && photodiodeSpot(eventCodes.honeycomb, 1, config),
     // Add a boolean value ("correct") to the data - if the user responded with the correct key or not
     on_finish: (data) => {
       data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
