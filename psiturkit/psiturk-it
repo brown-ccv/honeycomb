@@ -25,6 +25,7 @@ if [ -z ${PSI_PATH+x} ]; then
 jsPsych task path and -p for the psiturk output directory. Make sure you have PsiTurk installed."
 else
    echo "Setting up ${PSI_PATH} PsiTurk project"
+   # TODO: This is causing a failure?
    psiturk-setup-example
    cp -R ../build/static/* psiturk-example/static/
    cp ../build/*.js* psiturk-example/static/
