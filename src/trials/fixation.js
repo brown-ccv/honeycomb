@@ -10,7 +10,6 @@ import { div } from "../lib/markup/tags";
  * @returns {Object} A jsPsych trial object
  */
 export function buildFixationTrial(jsPsych) {
-  // TODO: These values should be passed to function
   const fixationSettings = taskSettings.fixation;
   const fixationCode = eventCodes.fixation;
 
@@ -24,11 +23,15 @@ export function buildFixationTrial(jsPsych) {
       else return null;
     },
     response_ends_trial: false,
-    // If randomize_duration is true the dot is shown for default_duration
-    // Otherwise, a random value is selected from durations
-    trial_duration: fixationSettings.randomize_duration
-      ? jsPsych.randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0]
-      : fixationSettings.default_duration,
+    trial_duration: () => {
+      if (fixationSettings.randomize_duration) {
+        // Select a random duration from the durations array to show the fixation dot for
+        return jsPsych.randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0];
+      } else {
+        // Show the fixation dot for default duration seconds
+        return fixationSettings.default_duration;
+      }
+    },
     data: {
       code: fixationCode, // Add event code to the recorded data
     },
