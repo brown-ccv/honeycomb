@@ -125,7 +125,7 @@ function buildCameraStartTrial(jsPsych) {
  * @param {Number} duration How long to show the trial for
  * @returns
  */
-function cameraEnd(duration) {
+function buildCameraEndTrial(duration) {
   const recordingEndMarkup = h1(language.trials.camera.start);
 
   return {
@@ -147,4 +147,4 @@ function cameraEnd(duration) {
   };
 }
 
-export { buildCameraStartTrial, cameraEnd };
+export { buildCameraStartTrial, buildCameraEndTrial };
