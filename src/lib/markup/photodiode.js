@@ -7,6 +7,8 @@ import { div, span } from "./tags";
  * Markup for a box in the bottom right corner of the screen and a photodiode spot inside the ghost box
  * Note the box will only be visible if USE_PHOTODIODE is true
  */
+
+// TODO #355: Conditional check should be at the task level
 const photodiodeGhostBox = div(span("", { id: "photodiode-spot", class: "photodiode-spot" }), {
   id: "photodiode-box",
   // Photodiode is only visible if config.USE_PHOTODIODE is true
