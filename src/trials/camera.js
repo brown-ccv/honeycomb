@@ -11,12 +11,12 @@ import { div, h1, p, tag } from "../lib/markup/tags";
  * @returns
  */
 // TODO: Refactor to buildCameraStartTrial
-function cameraStart(jsPsych) {
+function buildCameraStartTrial(jsPsych) {
   document.title = taskName;
 
   const videoMarkup = tag("video", "", { id: "camera", width: 640, height: 480, autoplay: true });
-  const cameraStartMarkup = p(language.trials.camera.start);
-  const markup = div(cameraStartMarkup + videoMarkup, {
+  const buildCameraStartTrialMarkup = p(language.trials.camera.start);
+  const markup = div(buildCameraStartTrialMarkup + videoMarkup, {
     class: "d-flex flex-column align-items-center",
   });
 
@@ -51,7 +51,9 @@ function cameraStart(jsPsych) {
             const electron = window.require("electron");
             ipcRenderer = electron.ipcRenderer;
           } else {
-            throw new Error("cameraStart trial is only available when running inside Electron");
+            throw new Error(
+              "buildCameraStartTrial trial is only available when running inside Electron"
+            );
           }
           // Save the data
           const reader = new FileReader(); // eslint-disable-line no-undef
@@ -77,7 +79,9 @@ function cameraStart(jsPsych) {
         const electron = window.require("electron");
         desktopCapturer = electron.desktopCapturer;
       } else {
-        throw new Error("cameraStart trial is only available when running inside Electron");
+        throw new Error(
+          "buildCameraStartTrial trial is only available when running inside Electron"
+        );
       }
 
       desktopCapturer.getSources({ types: ["window"] }).then(async (sources) => {
@@ -143,4 +147,4 @@ function cameraEnd(duration) {
   };
 }
 
-export { cameraStart, cameraEnd };
+export { buildCameraStartTrial, cameraEnd };

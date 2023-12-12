@@ -18,6 +18,7 @@ if (config.USE_PHOTODIODE) {
   timeline.push(startCode());
 }
 
+// TODO: Refactor to function
 export const preamble = {
   type: htmlKeyboardResponse,
   stimulus: "",
