@@ -6,19 +6,19 @@ import { baseStimulus } from "../lib/markup/stimuli";
 import { h1 } from "../lib/markup/tags";
 import { beep } from "../lib/utils";
 
-// TODO: Refactor to constants
-function startCode() {
-  const startCodeMarkup = h1(language.prompts.settingUp);
-  return {
-    type: htmlKeyboardResponse,
-    stimulus: baseStimulus(startCodeMarkup, true) + photodiodeGhostBox,
-    trial_duration: 2000,
-    on_load: () => {
-      // Displays the photodiode spot and plays an audible beep when the trial first loads
-      pdSpotEncode(eventCodes.open_task);
-      beep(audioCodes);
-    },
-  };
-}
+const startCode = {
+  type: htmlKeyboardResponse,
+  // TODO: Display photodiodeGhostBox as prompt
+  stimulus: () => {
+    const startCodeMarkup = h1(language.prompts.settingUp);
+    return baseStimulus(startCodeMarkup, true) + photodiodeGhostBox;
+  },
+  trial_duration: 2000,
+  on_load: () => {
+    // Displays the photodiode spot and plays an audible beep when the trial first loads
+    pdSpotEncode(eventCodes.open_task);
+    beep(audioCodes);
+  },
+};
 
-export default startCode;
+export { startCode };
