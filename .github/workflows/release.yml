@@ -189,7 +189,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           file: psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip
-          asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
+          # asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
           tag: ${{ github.ref }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
       # TEMP
