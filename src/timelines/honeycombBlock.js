@@ -23,7 +23,7 @@ function buildHoneycombBlock(jsPsych) {
     stimulus: jsPsych.timelineVariable("stimulus"),
     // Conditionally displays the photodiodeGhostBox
     prompt: () => {
-      if (config.USE_PHOTODIODE) return photodiodeGhostBox();
+      if (config.USE_PHOTODIODE) return photodiodeGhostBox;
       else return null;
     },
     // Possible choices are the correct_responses from the task settings

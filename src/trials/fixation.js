@@ -19,7 +19,7 @@ export function buildFixationTrial(jsPsych) {
     stimulus: div(div("", { id: "fixation-dot" }), { class: "center_container" }),
     // Conditionally display the photodiodeGhostBox
     prompt: () => {
-      if (config.USE_PHOTODIODE) return photodiodeGhostBox();
+      if (config.USE_PHOTODIODE) return photodiodeGhostBox;
       else return null;
     },
     response_ends_trial: false,
