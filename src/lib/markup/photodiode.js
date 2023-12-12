@@ -7,6 +7,7 @@ import { div, span } from "./tags";
  * Markup for a box in the bottom right corner of the screen and a photodiode spot inside the ghost box
  * Note the box will only be visible if USE_PHOTODIODE is true
  */
+// TODO: Make constant
 function photodiodeGhostBox() {
   const spot = span("", { id: "photodiode-spot", class: "photodiode-spot" });
   return div(spot, {

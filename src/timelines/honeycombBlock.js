@@ -23,7 +23,7 @@ function buildHoneycombBlock(jsPsych) {
     type: imageKeyboardResponse,
     // Display the image passed as a timeline variable
     stimulus: jsPsych.timelineVariable("stimulus"),
-    // Display the photodiodeGhostBox
+    // Conditionally displays the photodiodeGhostBox
     prompt: () => {
       if (config.USE_PHOTODIODE) return photodiodeGhostBox();
       else return null;
@@ -35,7 +35,7 @@ function buildHoneycombBlock(jsPsych) {
       code: eventCodes.honeycomb,
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
-    // Flash the photodiode when the trial first loads
+    // Conditionally flashes the photodiode when the trial first loads
     on_load: () => {
       if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.honeycomb, 1, config);
     },
