@@ -4,7 +4,7 @@ import { baseStimulus } from "../lib/markup/stimuli";
 import { h1 } from "../lib/markup/tags";
 
 /** Trial that prompts the user to adjust the volume on their computer */
-const adjustVolume = {
+const adjustVolumeTrial = {
   type: htmlKeyboardResponse,
   stimulus: () => {
     const adjustVolumeMarkup = h1(language.trials.adjustVolume);
@@ -14,4 +14,4 @@ const adjustVolume = {
   response_ends_trial: true,
 };
 
-export { adjustVolume };
+export { adjustVolumeTrial };
