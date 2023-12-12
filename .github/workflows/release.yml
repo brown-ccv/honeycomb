@@ -171,6 +171,10 @@ jobs:
         run: |
           cd psiturkit
           ./psiturk-it -p ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
+      # TEMP
+      - run: ls
+      - run: ls ./psiturkit
+      # TEMP
       - name: ⬆ Upload PsiTurk Build
         uses: svenstaro/upload-release-action@v2
         with:
