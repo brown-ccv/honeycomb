@@ -3,7 +3,10 @@ import { config } from "../../config/main";
 import { eventCodes } from "../../config/trigger";
 import { div, span } from "./tags";
 
-/** Displays a box in the bottom right corner of the screen with the id "photodiode-spot" */
+/**
+ * Markup for a box in the bottom right corner of the screen and a photodiode spot inside the ghost box
+ * Note the box will only be visible if USE_PHOTODIODE is true
+ */
 function photodiodeGhostBox() {
   const spot = span("", { id: "photodiode-spot", class: "photodiode-spot" });
   return div(spot, {
@@ -13,7 +16,12 @@ function photodiodeGhostBox() {
   });
 }
 
-/** Conditionally flashes a spot inside the photodiodeGhostBox */
+/**
+ * Conditionally flashes a spot inside the photodiodeGhostBox
+ *
+ * Note that this function must be executed inside the "on_load" callback of a trial
+ * @param {number} taskCode The unique code for the given trial on which this function executes
+ */
 function pdSpotEncode(taskCode) {
   // Conditionally load electron based on config variable
   let ipcRenderer = false;
