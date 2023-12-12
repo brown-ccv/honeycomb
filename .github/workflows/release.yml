@@ -171,19 +171,29 @@ jobs:
         run: |
           cd psiturkit
           ./psiturk-it -p ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
-      # TEMP
-      - run: ls ./psiturkit
-      - run: ls ./psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
-      # TEMP
+      - run: ls ./psiturkit # TEMP
+      # - name: ⬆ Upload PsiTurk Build
+      #   id: upload
+      #   uses: svenstaro/upload-release-action@v2
+      #   with:
+      #     file: psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
+      #     asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
+      #     tag: ${{ github.ref }}
+      #     repo_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Zip psiturk folder
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
       - name: ⬆ Upload PsiTurk Build
         id: upload
         uses: svenstaro/upload-release-action@v2
         with:
-          file: psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
+          file: psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip
           asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
           tag: ${{ github.ref }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
       # TEMP
+      - run: ls ./psiturkit
       - run: echo ${{steps.upload.conclusion}}
       - run: echo ${{steps.upload.outcome}}
       - run: echo ${{steps.upload.outputs.browser_download_url}}
