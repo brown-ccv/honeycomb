@@ -6,7 +6,7 @@ import { baseStimulus } from "../lib/markup/stimuli";
 import { h1 } from "../lib/markup/tags";
 import { beep } from "../lib/utils";
 
-const startCode = {
+const startCodeTrial = {
   type: htmlKeyboardResponse,
   // TODO: Display photodiodeGhostBox as prompt
   stimulus: () => {
@@ -21,4 +21,4 @@ const startCode = {
   },
 };
 
-export { startCode };
+export { startCodeTrial };

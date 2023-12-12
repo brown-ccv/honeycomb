@@ -4,18 +4,18 @@ import { config } from "../config/main";
 
 import { enterFullscreenTrial } from "../trials/fullscreen";
 import { holdUpMarkerTrial } from "../trials/holdUpMarker";
-import startCode from "../trials/startCode";
-import { showName, showWelcome } from "../trials/welcome";
+import { startCodeTrial } from "../trials/startCode";
+import { welcomeTrial, nameTrial } from "../trials/welcome";
 
 /**
  * Timeline of initial trials used for setup and instructions
  */
-const timeline = [showName(), enterFullscreenTrial, showWelcome()];
+const timeline = [nameTrial, enterFullscreenTrial, welcomeTrial];
 
 // Add photodiode trials
 if (config.USE_PHOTODIODE) {
   timeline.push(holdUpMarkerTrial);
-  timeline.push(startCode());
+  timeline.push(startCodeTrial);
 }
 
 // TODO: Refactor to function

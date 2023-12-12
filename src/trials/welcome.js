@@ -8,7 +8,7 @@ import { baseStimulus } from "../lib/markup/stimuli";
 import { h1 } from "../lib/markup/tags";
 
 /** Task that displays the name of the experiment */
-const showName = showMessage(config, {
+const nameTrial = showMessage(config, {
   responseType: htmlButtonResponse,
   message: language.name,
   responseEndsTrial: true,
@@ -18,7 +18,7 @@ const showName = showMessage(config, {
 // TODO: Move showMessage into this repo?
 
 /** Task that displays a welcome message with the photodiode ghost box */
-const showWelcome = {
+const welcomeTrial = {
   type: htmlKeyboardResponse,
   stimulus: () => {
     const welcomeMarkup = h1(language.trials.welcome);
@@ -29,4 +29,4 @@ const showWelcome = {
 };
 // TODO #292: Turn into jsPsych NO_KEYS trial
 
-export { showName, showWelcome };
+export { nameTrial, welcomeTrial };
