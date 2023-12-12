@@ -174,10 +174,11 @@ jobs:
 
       - run: ls
       - run: ls ./psiturkit
+      - run: ls -R ./psiturkit
       - name: Zip psiturk folder
         uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk/psiturk/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
+          args: zip -qq -r ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
 
       - run: ls
       - run: ls ./psiturkit
