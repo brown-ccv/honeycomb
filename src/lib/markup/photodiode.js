@@ -18,6 +18,7 @@ const photodiodeGhostBox = div(span("", { id: "photodiode-spot", class: "photodi
  * Note that this function must be executed inside the "on_load" callback of a trial
  * @param {number} taskCode The unique code for the given trial on which this function executes
  */
+// TODO: Pass config variables to the function too
 function pdSpotEncode(taskCode) {
   // Conditionally load electron based on config variable
   let ipcRenderer = false;
