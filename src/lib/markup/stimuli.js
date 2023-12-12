@@ -7,7 +7,6 @@ import { div } from "./tags";
  * @param {boolean} centered Whether or not the children should be centered on the container
  * @returns
  */
-// TODO: Removing this function is probably best
 function baseStimulus(children, prompt = false, centered = false) {
   return div(children, { class: centered ? "center_container" : prompt ? "main-prompt" : "main" });
 }
