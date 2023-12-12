@@ -172,20 +172,12 @@ jobs:
           cd psiturkit
           ./psiturk-it -p ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
 
-      - run: ls
-      - run: ls ./psiturkit
-      - run: ls -R ./psiturkit
-      # - name: Zip psiturk folder
-      # uses: montudor/action-zip@v1
-      # with:
-      # args: zip -qq -r ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
-
+      # Zip and upload the package
       - name: Zip psiturk folder
         run: |
           cd psiturkit
           zip -r ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
       - name: ⬆ Upload PsiTurk Build
-        id: upload
         uses: svenstaro/upload-release-action@v2
         with:
           file: psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip
