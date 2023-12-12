@@ -13,7 +13,7 @@ export const enterFullscreenTrial = {
  * Trial to exit fullscreen mode.
  * Any trials after this one will NOT be run while the app/browser is in fullscreen.
  */
-export const exitFullscreen = {
+export const exitFullscreenTrial = {
   type: jsPsychFullscreen,
   fullscreen_mode: false,
 };
