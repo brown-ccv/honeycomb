@@ -8,6 +8,7 @@ import { div, span } from "./tags";
  * Note the box will only be visible if USE_PHOTODIODE is true
  */
 // TODO: Make constant
+// TODO #355: Conditional check should be at the task level
 function photodiodeGhostBox() {
   const spot = span("", { id: "photodiode-spot", class: "photodiode-spot" });
   return div(spot, {
