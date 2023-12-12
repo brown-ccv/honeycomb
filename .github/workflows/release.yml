@@ -166,14 +166,15 @@ jobs:
           echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
         shell: bash
 
-      # Package on PsiTurk
+      # Package with PsiTurk
       - name: 📦 Create Psiturk Build
         run: |
           cd psiturkit
-          ./psiturk-it -p ${{ steps.package_info.outputs.name }}-psiturk
+          ./psiturk-it -p ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
       - name: ⬆ Upload PsiTurk Build
-        uses: actions/upload-artifact@v3
+        uses: svenstaro/upload-release-action@v2
         with:
-          name: psiturk-build
-          path: psiturkit/${{ steps.package_info.outputs.name }}-psiturk
-          if-no-files-found: error
+          file: psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
+          asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
+          tag: ${{ github.ref }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
