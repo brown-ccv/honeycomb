@@ -51,9 +51,7 @@ function buildCameraStartTrial(jsPsych) {
             const electron = window.require("electron");
             ipcRenderer = electron.ipcRenderer;
           } else {
-            throw new Error(
-              "buildCameraStartTrial trial is only available when running inside Electron"
-            );
+            throw new Error("cameraStart trial is only available when running inside Electron");
           }
           // Save the data
           const reader = new FileReader(); // eslint-disable-line no-undef
