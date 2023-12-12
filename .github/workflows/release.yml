@@ -181,12 +181,14 @@ jobs:
       # args: zip -qq -r ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
 
       - name: Zip psiturk folder
-        run: zip -r ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
+        run: |
+          cd psiturkit
+          zip -r ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
       - name: ⬆ Upload PsiTurk Build
         id: upload
         uses: svenstaro/upload-release-action@v2
         with:
-          file: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip
+          file: psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip
           # asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
           tag: ${{ github.ref }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
