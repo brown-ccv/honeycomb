@@ -22,7 +22,7 @@ jobs:
       matrix:
         setting: [home, clinic]
         os: [windows-latest, macOS-latest, ubuntu-latest]
-      fail-fast: true # A failed build will not end the other matrix jobs
+      fail-fast: true
 
     steps:
       # Set up runner
@@ -86,15 +86,15 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           file: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-x64.dmg
-          asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-${{ matrix.setting }}.dmg
+          asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-${{ matrix.setting }}-x64.dmg
           tag: ${{ github.ref }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
       - name: ⬆ Upload installer to release - Linux
         if: startsWith(matrix.os, 'ubuntu')
         uses: svenstaro/upload-release-action@v2
         with:
-          file: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
-          asset_name: ${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_${{ matrix.setting }}_amd64.deb
+          file: out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
+          asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-${{ matrix.setting }}-amd64.deb
           tag: ${{ github.ref }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -171,10 +171,15 @@ jobs:
         run: |
           cd psiturkit
           ./psiturk-it -p ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
+
+      # Zip and upload the package
+      - name: Zip psiturk folder
+        run: |
+          cd psiturkit
+          zip -r ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
       - name: ⬆ Upload PsiTurk Build
         uses: svenstaro/upload-release-action@v2
         with:
-          file: psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
-          asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk
+          file: psiturkit/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-psiturk.zip
           tag: ${{ github.ref }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
