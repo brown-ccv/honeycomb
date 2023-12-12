@@ -14,15 +14,15 @@ function buildCameraStartTrial(jsPsych) {
   document.title = taskName;
 
   const videoMarkup = tag("video", "", { id: "camera", width: 640, height: 480, autoplay: true });
-  const buildCameraStartTrialMarkup = p(language.trials.camera.start);
-  const markup = div(buildCameraStartTrialMarkup + videoMarkup, {
+  const cameraStartMarkup = p(language.trials.camera.start);
+  const trialMarkup = div(cameraStartMarkup + videoMarkup, {
     class: "d-flex flex-column align-items-center",
   });
 
   return {
     type: htmlButtonResponse,
     // TODO: Show photodiodeGhostBox as prompt
-    stimulus: baseStimulus(markup, true) + photodiodeGhostBox,
+    stimulus: baseStimulus(trialMarkup, true) + photodiodeGhostBox,
     choices: [language.prompts.continue.button],
     response_ends_trial: true,
     on_load: () => {
