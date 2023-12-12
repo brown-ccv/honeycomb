@@ -4,7 +4,7 @@ import jsPsychFullscreen from "@jspsych/plugin-fullscreen";
  * Trial to enter fullscreen mode.
  * Any trials after this one will be run while the app/browser is in fullscreen.
  */
-export const enterFullscreen = {
+export const enterFullscreenTrial = {
   type: jsPsychFullscreen,
   fullscreen_mode: true,
 };

@@ -8,9 +8,8 @@ import { div, h1, p, tag } from "../lib/markup/tags";
 /**
  * A trial that begins recording the participant using their computer's default camera
  * @param {Object} jsPsych The jsPsych instance being used to run the task
- * @returns
+ * @returns {Object} A jsPsych trial object
  */
-// TODO: Refactor to buildCameraStartTrial
 function buildCameraStartTrial(jsPsych) {
   document.title = taskName;
 
@@ -22,6 +21,7 @@ function buildCameraStartTrial(jsPsych) {
 
   return {
     type: htmlButtonResponse,
+    // TODO: Show photodiodeGhostBox as prompt
     stimulus: baseStimulus(markup, true) + photodiodeGhostBox,
     choices: [language.prompts.continue.button],
     response_ends_trial: true,
@@ -123,13 +123,14 @@ function buildCameraStartTrial(jsPsych) {
  * A trial that finishes recording the participant using their computer's default camera
  *
  * @param {Number} duration How long to show the trial for
- * @returns
+ * @returns {Object} A jsPsych trial object
  */
 function buildCameraEndTrial(duration) {
   const recordingEndMarkup = h1(language.trials.camera.start);
 
   return {
     type: htmlKeyboardResponse,
+    // TODO: Show photodiodeGhostBox as prompt
     stimulus: baseStimulus(recordingEndMarkup, true) + photodiodeGhostBox,
     trial_duration: duration,
     on_load: () => {

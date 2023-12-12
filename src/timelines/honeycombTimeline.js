@@ -1,4 +1,4 @@
-import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
+import { enterFullscreenTrial, exitFullscreen } from "../trials/fullscreen";
 import {
   buildDebriefTrial,
   finishTrial,
@@ -22,7 +22,7 @@ function buildHoneycombTimeline(jsPsych) {
   const timeline = [
     preamble,
     welcomeTrial,
-    enterFullscreen,
+    enterFullscreenTrial,
     preloadTrial,
     instructionsTrial,
     honeycombBlock,
