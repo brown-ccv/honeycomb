@@ -1,4 +1,4 @@
-name: Package Workflow
+name: 📦 Package Workflow
 
 # Workflow dispatch for packaging an electron executable
 on:
@@ -42,6 +42,7 @@ jobs:
       # Set up runner
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
+
       - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
@@ -76,26 +77,34 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: npm run package:linux
 
-      # Upload installers to github action
-      - name: Set package version and name
-        uses: brown-ccv/gh-actions/get-package-info@main
+      # Get package info
+      - name: Get package name and version
         id: package_info
+        run: |
+          echo "name=$(cat package.json | jq -r '.name')" >> $GITHUB_OUTPUT
+          echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
+        shell: bash
+
+      # Upload installers to github action
       - name: ⬆ Upload installer - Windows
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: startsWith(matrix.os, 'windows')
         with:
           name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }} Setup.exe
+          path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
+          if-no-files-found: error
 
       - name: ⬆ Upload installer - Mac
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: startsWith(matrix.os, 'mac')
         with:
           name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-x64.dmg
+          path: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-x64.dmg
+          if-no-files-found: error
       - name: ⬆ Upload installer - Linux
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: startsWith(matrix.os, 'ubuntu')
         with:
           name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/deb/x64/${{ steps.package_info.outputs.package_name }}_${{ steps.package_info.outputs.package_version }}_amd64.deb
+          path: out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
+          if-no-files-found: error
