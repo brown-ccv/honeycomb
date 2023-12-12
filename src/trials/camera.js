@@ -77,9 +77,7 @@ function buildCameraStartTrial(jsPsych) {
         const electron = window.require("electron");
         desktopCapturer = electron.desktopCapturer;
       } else {
-        throw new Error(
-          "buildCameraStartTrial trial is only available when running inside Electron"
-        );
+        throw new Error("cameraStart trial is only available when running inside Electron");
       }
 
       desktopCapturer.getSources({ types: ["window"] }).then(async (sources) => {
