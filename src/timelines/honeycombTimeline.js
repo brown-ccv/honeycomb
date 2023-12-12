@@ -6,6 +6,7 @@ import {
   preloadTrial,
   welcomeTrial,
 } from "../trials/honeycombTrials";
+
 import { createHoneycombBlock } from "./honeycombBlock";
 
 /**
