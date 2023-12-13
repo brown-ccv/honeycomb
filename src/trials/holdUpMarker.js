@@ -1,6 +1,6 @@
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 
-import { config, eventCodes, language } from "../config/main";
+import { config, eventCodes, LANGUAGE } from "../config/main";
 import { pdSpotEncode, photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
 import { h1, p } from "../lib/markup/tags";
@@ -10,20 +10,20 @@ import { h1, p } from "../lib/markup/tags";
 const holdUpMarkerTrial = {
   type: htmlButtonResponse,
   stimulus: () => {
-    const eventMarkerMarkup = h1(language.trials.eventMarker.connected, {
+    const eventMarkerMarkup = h1(LANGUAGE.trials.eventMarker.connected, {
       style: "color: green;",
     });
     return baseStimulus(eventMarkerMarkup, true);
   },
   prompt: () => {
-    let holdUpMarkerPrompt = p(language.trials.holdUpMarker);
+    let holdUpMarkerPrompt = p(LANGUAGE.trials.holdUpMarker);
 
     // Conditionally add the photodiodeGhostBox
     if (config.USE_PHOTODIODE) holdUpMarkerPrompt += photodiodeGhostBox;
 
     return holdUpMarkerPrompt;
   },
-  choices: [language.prompts.continue.button],
+  choices: [LANGUAGE.prompts.continue.button],
   // Conditionally flash the photodiode when the trial first loads
   on_load: () => {
     if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.open_task);

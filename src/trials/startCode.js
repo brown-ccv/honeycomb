@@ -1,6 +1,6 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { audioCodes, config, eventCodes, language } from "../config/main";
+import { audioCodes, config, eventCodes, LANGUAGE } from "../config/main";
 import { pdSpotEncode, photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
 import { h1 } from "../lib/markup/tags";
@@ -10,7 +10,7 @@ const startCodeTrial = {
   type: htmlKeyboardResponse,
   // TODO #372: Display photodiodeGhostBox as prompt
   stimulus: () => {
-    const startCodeMarkup = h1(language.prompts.settingUp);
+    const startCodeMarkup = h1(LANGUAGE.prompts.settingUp);
     return baseStimulus(startCodeMarkup, true) + photodiodeGhostBox;
   },
   trial_duration: 2000,

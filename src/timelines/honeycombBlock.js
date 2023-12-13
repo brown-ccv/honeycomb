@@ -1,6 +1,6 @@
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 
-import { config, eventCodes, taskSettings } from "../config/main";
+import { config, eventCodes, SETTINGS } from "../config/main";
 import { photodiodeGhostBox, pdSpotEncode } from "../lib/markup/photodiode";
 import { buildFixationTrial } from "../trials/fixation";
 
@@ -13,7 +13,8 @@ import { buildFixationTrial } from "../trials/fixation";
  * Note that the block is conditionally rendered and repeated based on the task settings
  */
 function buildHoneycombBlock(jsPsych) {
-  const honeycombSettings = taskSettings.honeycomb;
+  // TODO #371: These settings should be passed as a parameter to the function
+  const honeycombSettings = SETTINGS.honeycomb;
 
   const fixationTrial = buildFixationTrial(jsPsych);
 

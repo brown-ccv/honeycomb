@@ -3,10 +3,10 @@ import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import instructionsResponse from "@jspsych/plugin-instructions";
 import preloadResponse from "@jspsych/plugin-preload";
 
-import { config, eventCodes, language, taskSettings } from "../config/main";
+import { config, eventCodes, LANGUAGE, SETTINGS } from "../config/main";
 import { b, div, image, p } from "../lib/markup/tags";
 
-const honeycombLanguage = language.trials.honeycomb;
+const honeycombLanguage = LANGUAGE.trials.honeycomb;
 
 /**
  * Trial that displays a welcome message and waits for the participant to press a key
@@ -29,7 +29,7 @@ const instructionsTrial = {
     p(honeycombLanguage.instructions.read),
     p(honeycombLanguage.instructions.circle),
     // Add a page for very possible stimuli - displays the image and the correct response
-    ...taskSettings.honeycomb.timeline_variables.map(({ stimulus, correct_response }) => {
+    ...SETTINGS.honeycomb.timeline_variables.map(({ stimulus, correct_response }) => {
       // Pull the color out of the file name
       const color = stimulus.substring(stimulus.lastIndexOf("/") + 1, stimulus.indexOf("."));
 
@@ -54,8 +54,8 @@ const instructionsTrial = {
 /** Trial that loads all of the stimulus images */
 const preloadTrial = {
   type: preloadResponse,
-  message: p(language.prompts.settingUp),
-  images: taskSettings.honeycomb.timeline_variables.map(({ stimulus }) => stimulus),
+  message: p(LANGUAGE.prompts.settingUp),
+  images: SETTINGS.honeycomb.timeline_variables.map(({ stimulus }) => stimulus),
 };
 // TODO #281: Function for preloading all files in public/images?
 

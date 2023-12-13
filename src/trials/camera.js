@@ -2,7 +2,7 @@ import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import initializeCamera from "@jspsych/plugin-initialize-camera";
 
-import { language, config } from "../config/main";
+import { LANGUAGE, config } from "../config/main";
 import { photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
 import { div, h1, p, tag } from "../lib/markup/tags";
@@ -33,7 +33,7 @@ function buildCameraStartTrial(jsPsych) {
             height: 480,
             autoplay: true,
           });
-          const cameraStartMarkup = p(language.trials.camera.start);
+          const cameraStartMarkup = p(LANGUAGE.trials.camera.start);
           const trialMarkup = div(cameraStartMarkup + videoMarkup, {
             // TODO #344: Need to get rid of bootstrap (this is just centering it)
             class: "d-flex flex-column align-items-center",
@@ -41,7 +41,7 @@ function buildCameraStartTrial(jsPsych) {
           // TODO #372: Show photodiodeGhostBox as prompt
           return baseStimulus(trialMarkup, true) + photodiodeGhostBox;
         },
-        choices: [language.prompts.continue.button],
+        choices: [LANGUAGE.prompts.continue.button],
         response_ends_trial: true,
         on_start: () => {
           // Initialize and store the camera feed
@@ -94,7 +94,7 @@ function buildCameraStartTrial(jsPsych) {
  * @returns {Object} A jsPsych trial object
  */
 function buildCameraEndTrial(jsPsych, duration) {
-  const recordingEndMarkup = h1(language.trials.camera.end);
+  const recordingEndMarkup = h1(LANGUAGE.trials.camera.end);
 
   return {
     type: htmlKeyboardResponse,
