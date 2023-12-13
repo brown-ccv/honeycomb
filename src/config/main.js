@@ -34,13 +34,7 @@ const USE_MTURK = !turkInfo.outsideTurk;
 const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`; // ID of the user in mechanical turk
 
 // Whether or not the experiment is running in Electron (local app)
-let USE_ELECTRON = true;
-try {
-  window.require("electron");
-} catch (error) {
-  USE_ELECTRON = false;
-}
-
+const USE_ELECTRON = window.electronAPI !== undefined;
 const USE_PROLIFIC = (getProlificId() && !USE_MTURK) || false; // Whether or not the experiment is running with Prolific
 const USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true"; // Whether or not the experiment is running in Firebase (web app)
 
@@ -55,7 +49,7 @@ const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_EL
 // TODO: Remove init call
 const config = init({
   USE_PHOTODIODE,
-  USE_EEG,
+  USE_EEG, // TODO #341: Remove USE_EEG - separate variables for USE_PHOTODIODE and USE_EVENT_MARKER
   USE_ELECTRON,
   USE_MTURK,
   USE_VOLUME,
