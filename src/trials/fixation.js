@@ -10,6 +10,7 @@ import { div } from "../lib/markup/tags";
  * @returns {Object} A jsPsych trial object
  */
 export function buildFixationTrial(jsPsych) {
+  // TODO: These values should be passed to function
   const fixationSettings = taskSettings.fixation;
   const fixationCode = eventCodes.fixation;
 

@@ -12,6 +12,7 @@ import { div, h1, p, tag } from "../lib/markup/tags";
  * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych trial object
  */
+// TODO: Refactor to buildCameraStartTrial
 // TODO #342: refactor to record using web USB
 function buildCameraStartTrial(jsPsych) {
   return {

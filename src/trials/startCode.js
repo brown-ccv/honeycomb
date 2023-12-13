@@ -16,6 +16,7 @@ const startCodeTrial = {
   trial_duration: 2000,
   // Conditionally flash the photodiode and plays an audible beep when the trial first loads
   on_load: () => {
+    // TODO: Pass config values as parameters to the function
     if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.open_task);
     if (config.USE_VOLUME) beep(audioCodes);
   },

@@ -17,6 +17,8 @@ import { buildPreambleBlock } from "./preamble";
  * See the jsPsych documentation for more: https://www.jspsych.org/7.3/tutorials/rt-task/
  */
 function buildHoneycombTimeline(jsPsych) {
+  const preambleBlock = buildPreambleBlock();
+
   // The first block repeats 5 times
   // TODO: Pull from config here and pass into function
   const honeycombBlock = buildHoneycombBlock(jsPsych);
@@ -25,7 +27,7 @@ function buildHoneycombTimeline(jsPsych) {
 
   const timeline = [
     // TODO #231: Use the new welcome trial inside the preamble
-    buildPreambleBlock(),
+    preambleBlock,
     welcomeTrial,
     enterFullscreenTrial,
     preloadTrial,

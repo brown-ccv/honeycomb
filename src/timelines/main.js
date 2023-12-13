@@ -1,5 +1,6 @@
 import { config } from "../config/main";
 import { buildCameraEndTrial, buildCameraStartTrial } from "../trials/camera";
+
 import { buildHoneycombTimeline } from "./honeycombTimeline";
 
 /**
