@@ -25,10 +25,11 @@ const audioCodes = {
 // As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
 // The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
 // The actual task and related utils will use a different instance of jsPsych created after login.
-// TODO: Initialize using using react code in jsPsychExperiment
+// TODO 370: Initialize using using react code in jsPsychExperiment
 const jsPsych = initJsPsych();
 
 // Whether or not the experiment is running on mechanical turk
+// TODO 370: This is a separate deployment? Should set based on ENV variable
 const turkInfo = jsPsych.turk.turkInfo();
 const USE_MTURK = !turkInfo.outsideTurk;
 const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`; // ID of the user in mechanical turk
@@ -46,7 +47,7 @@ const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_EL
 /**
  * Configuration object for Honeycomb
  */
-// TODO: Remove init call
+// TODO #361: Remove init call, export as ENV
 const config = init({
   USE_PHOTODIODE,
   USE_EEG, // TODO #341: Remove USE_EEG - separate variables for USE_PHOTODIODE and USE_EVENT_MARKER
@@ -61,7 +62,7 @@ const config = init({
 /** Determine the task settings to be used   */
 
 // Honeycomb's default task settings
-// TODO: Remove this default, just use config.json
+// TODO #363: Remove this default, just use config.json
 let taskSettings = {
   fixation: {
     durations: [250, 500, 750, 1000, 1250, 1500, 1750, 2000],

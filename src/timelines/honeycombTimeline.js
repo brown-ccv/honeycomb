@@ -20,7 +20,7 @@ function buildHoneycombTimeline(jsPsych) {
   const preambleBlock = buildPreambleBlock();
 
   // The first block repeats 5 times
-  // TODO: Pull from config here and pass into function
+  // TODO #371: Pull from config here and pass into function
   const honeycombBlock = buildHoneycombBlock(jsPsych);
 
   const debriefTrial = buildDebriefTrial(jsPsych);

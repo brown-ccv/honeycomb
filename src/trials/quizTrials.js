@@ -7,8 +7,7 @@ import { b, br, div, h1, p } from "../lib/markup/tags";
 
 const QUIZ_LANGUAGE = language.trials.quiz;
 
-// TODO: Refactor to jsPsych survey trials
-// TODO: Refactor to create_Trial functions
+// TODO #235: Refactor to jsPsych survey trials
 
 // Age Check
 const ask = QUIZ_LANGUAGE.ask.age;

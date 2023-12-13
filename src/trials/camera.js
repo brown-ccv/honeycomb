@@ -12,7 +12,6 @@ import { div, h1, p, tag } from "../lib/markup/tags";
  * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych trial object
  */
-// TODO: Refactor to buildCameraStartTrial
 // TODO #342: refactor to record using web USB
 function buildCameraStartTrial(jsPsych) {
   return {
@@ -39,7 +38,7 @@ function buildCameraStartTrial(jsPsych) {
             // TODO #344: Need to get rid of bootstrap (this is just centering it)
             class: "d-flex flex-column align-items-center",
           });
-          // TODO: Show photodiodeGhostBox as prompt
+          // TODO #372: Show photodiodeGhostBox as prompt
           return baseStimulus(trialMarkup, true) + photodiodeGhostBox;
         },
         choices: [language.prompts.continue.button],
@@ -99,7 +98,7 @@ function buildCameraEndTrial(jsPsych, duration) {
 
   return {
     type: htmlKeyboardResponse,
-    // TODO: Show photodiodeGhostBox as prompt
+    // TODO #372: Show photodiodeGhostBox as prompt
     stimulus: baseStimulus(recordingEndMarkup, true) + photodiodeGhostBox,
     trial_duration: duration,
     on_start: () => {

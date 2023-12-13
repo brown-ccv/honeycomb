@@ -15,7 +15,7 @@ const nameTrial = showMessage(config, {
   buttons: [language.prompts.continue.button],
 });
 // TODO #292: Turn into jsPsych NO_KEYS trial
-// TODO: Move showMessage into this repo?
+// TODO #365: Move showMessage into this repo?
 
 /** Task that displays a welcome message with the photodiode ghost box */
 const welcomeTrial = {
@@ -28,5 +28,6 @@ const welcomeTrial = {
   response_ends_trial: true,
 };
 // TODO #292: Turn into jsPsych NO_KEYS trial
+// TODO #365: Move showMessage into this repo?
 
 export { nameTrial, welcomeTrial };
