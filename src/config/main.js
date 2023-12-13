@@ -8,10 +8,9 @@ import { initJsPsych } from "jspsych";
 import packageInfo from "../../package.json";
 import { getProlificId } from "../lib/utils";
 
-// TODO: eventCodes in settings.json
 import language from "./language.json";
 import settings from "./settings.json";
-import { eventCodes } from "./trigger";
+import { eventCodes } from "./trigger"; // TODO #333: eventCodes in settings.json
 
 // TODO #363: Separate into index.js (for exporting) and env.js
 
