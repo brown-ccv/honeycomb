@@ -25,7 +25,7 @@ function buildTimeline(jsPsych, studyID, participantID) {
   // Dynamically adds the camera trials to the experiment if config.USE_CAMERA
   if (config.USE_CAMERA) {
     timeline.unshift(cameraStart(jsPsych)); // Add cameraStart as the first trial
-    timeline.push(cameraEnd(5000)); // Add cameraEnd as the last trial
+    timeline.push(cameraEnd(jsPsych, 5000)); // Add cameraEnd as the last trial
   }
 
   return timeline;

@@ -1,6 +1,8 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
-import { language, taskName, config } from "../config/main";
+import initializeCamera from "@jspsych/plugin-initialize-camera";
+
+import { language, config } from "../config/main";
 import { photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
 import { div, h1, p, tag } from "../lib/markup/tags";
@@ -10,107 +12,71 @@ import { div, h1, p, tag } from "../lib/markup/tags";
  * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns
  */
+// TODO #342: refactor to record using web USB
 function cameraStart(jsPsych) {
-  document.title = taskName;
-
-  const videoMarkup = tag("video", "", { id: "camera", width: 640, height: 480, autoplay: true });
+  const videoMarkup = tag("video", "", { id: "webcam", width: 640, height: 480, autoplay: true });
   const cameraStartMarkup = p(language.trials.camera.start);
   const markup = div(cameraStartMarkup + videoMarkup, {
+    // TODO #344: Need to get rid of bootstrap (this is just centering it)
     class: "d-flex flex-column align-items-center",
   });
 
   return {
-    type: htmlButtonResponse,
-    stimulus: baseStimulus(markup, true) + photodiodeGhostBox,
-    choices: [language.prompts.continue.button],
-    response_ends_trial: true,
-    on_load: () => {
-      const participantID = jsPsych.data.get().values()[0].participant_id;
-      const camera = document.getElementById("camera"); // Get the HTML object containing the camera
-
-      const handleEvents = function (stream, recorder) {
-        console.log(stream);
-        if (recorder === "cameraCapture") camera.srcObject = stream;
-
-        const options = { mimeType: "video/webm" };
-        const recordedChunks = [];
-        window[recorder] = new MediaRecorder(stream, options); // eslint-disable-line no-undef
-
-        window[recorder].addEventListener("dataavailable", (e) => {
-          if (e.data.size > 0) recordedChunks.push(e.data);
-        });
-
-        // Saves a blob of the raw data feed from the participants camera.
-        window[recorder].addEventListener("stop", () => {
-          const blob = new Blob(recordedChunks); // eslint-disable-line no-undef
-
-          // Conditionally load electron based on config variable
-          let ipcRenderer = false;
-          if (config.USE_ELECTRON) {
-            const electron = window.require("electron");
-            ipcRenderer = electron.ipcRenderer;
-          } else {
-            throw new Error("cameraStart trial is only available when running inside Electron");
+    timeline: [
+      {
+        // Prompts user permission for camera device
+        type: initializeCamera,
+        include_audio: true,
+        // TODO #342: webm is a subset of mkv, should be able to do a rolling save?
+        mime_type: "video/webm",
+      },
+      {
+        // Helps participant center themselves inside the camera
+        type: htmlButtonResponse,
+        stimulus: baseStimulus(markup, true) + photodiodeGhostBox,
+        choices: [language.prompts.continue.button],
+        response_ends_trial: true,
+        on_start: () => {
+          // Initialize and store the camera feed
+          if (!config.USE_ELECTRON) {
+            // TODO #343: We should be able to make this work on both electron and browser?
+            throw new Error("video recording is only available when running inside Electron");
           }
-          // Save the data
-          const reader = new FileReader(); // eslint-disable-line no-undef
-          const fileName = `pid_${participantID}_${recorder}_${Date.now()}.webm`;
-          reader.onload = () => {
-            if (reader.readyState === 2) {
-              const buffer = Buffer.from(reader.result); // eslint-disable-line no-undef
-              ipcRenderer.send("save_video", fileName, buffer);
-              console.log(`Saving ${JSON.stringify({ fileName, size: blob.size })}`);
-            }
-          };
-          reader.readAsArrayBuffer(blob);
-        });
-      };
 
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then((stream) => handleEvents(stream, "cameraCapture"));
-
-      // Conditionally load electron based on config variable
-      let desktopCapturer = false;
-      if (config.USE_ELECTRON) {
-        const electron = window.require("electron");
-        desktopCapturer = electron.desktopCapturer;
-      } else {
-        throw new Error("cameraStart trial is only available when running inside Electron");
-      }
-
-      desktopCapturer.getSources({ types: ["window"] }).then(async (sources) => {
-        for (const source of sources) {
-          if (source.name === taskName) {
-            navigator.mediaDevices
-              .getUserMedia({
-                video: {
-                  mandatory: {
-                    chromeMediaSource: "desktop",
-                    chromeMediaSourceId: source.id,
-                  },
-                },
-              })
-              .then((stream) => {
-                handleEvents(stream, "screenCapture");
-              })
-              .catch((error) => console.log(error));
+          const cameraRecorder = jsPsych.pluginAPI.getCameraRecorder();
+          if (!cameraRecorder) {
+            console.error("Camera is not initialized, no data will be recorded.");
+            return;
           }
-        }
-      });
-    },
-    on_finish: () => {
-      if (config.USE_CAMERA) {
-        try {
-          window.cameraCapture.start();
-          window.screenCapture.start();
-        } catch (error) {
-          window.alert(
-            "Camera permissions were not given, if you choose to proceed, your recording will not be saved. Please restart the experiment after you have given permission."
-          );
-        }
-      }
-    },
+          const cameraChunks = [];
+
+          // Push data whenever available
+          cameraRecorder.addEventListener("dataavailable", (event) => {
+            if (event.data.size > 0) cameraChunks.push(event.data);
+          });
+
+          // Saves the raw data feed from the participants camera (executed on cameraRecorder.stop()).
+          cameraRecorder.addEventListener("stop", () => {
+            const blob = new Blob(cameraChunks, { type: cameraRecorder.mimeType });
+
+            // Pass video data to Electron as a base64 encoded string
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => window.electronAPI.saveVideo(reader.result);
+          });
+        },
+        on_load: () => {
+          // Assign camera feed to the <video> element
+          const camera = document.getElementById("webcam");
+
+          camera.srcObject = jsPsych.pluginAPI.getCameraRecorder().stream;
+        },
+        on_finish: () => {
+          // Begin video recording
+          jsPsych.pluginAPI.getCameraRecorder().start();
+        },
+      },
+    ],
   };
 }
 
@@ -120,24 +86,27 @@ function cameraStart(jsPsych) {
  * @param {Number} duration How long to show the trial for
  * @returns
  */
-function cameraEnd(duration) {
-  const recordingEndMarkup = h1(language.trials.camera.start);
+function cameraEnd(jsPsych, duration) {
+  const recordingEndMarkup = h1(language.trials.camera.end);
 
   return {
     type: htmlKeyboardResponse,
     stimulus: baseStimulus(recordingEndMarkup, true) + photodiodeGhostBox,
     trial_duration: duration,
-    on_load: () => {
-      // Finish the camera recording when the trial first loads
-      if (config.USE_CAMERA) {
-        try {
-          window.cameraCapture.stop();
-          window.screenCapture.stop();
-        } catch (error) {
-          window.alert("Your video recording was not saved");
-        }
-        console.log("Recording finished");
+    on_start: () => {
+      // Complete the camera recording
+
+      if (!config.USE_ELECTRON) {
+        throw new Error("video recording is only available when running inside Electron");
       }
+
+      const cameraRecorder = jsPsych.pluginAPI.getCameraRecorder();
+      if (!cameraRecorder) {
+        console.error("Camera is not initialized, no data will be recorded.");
+        return;
+      }
+
+      cameraRecorder.stop();
     },
   };
 }
