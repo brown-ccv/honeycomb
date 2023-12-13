@@ -1,5 +1,6 @@
 import { config } from "../config/main";
-import { cameraEnd, cameraStart } from "../trials/camera";
+import { buildCameraEndTrial, buildCameraStartTrial } from "../trials/camera";
+
 import { buildHoneycombTimeline } from "./honeycombTimeline";
 
 /**
@@ -24,8 +25,9 @@ function buildTimeline(jsPsych, studyID, participantID) {
 
   // Dynamically adds the camera trials to the experiment if config.USE_CAMERA
   if (config.USE_CAMERA) {
-    timeline.unshift(cameraStart(jsPsych)); // Add cameraStart as the first trial
-    timeline.push(cameraEnd(jsPsych, 5000)); // Add cameraEnd as the last trial
+    // TODO: These should be a part of the start and end blocks
+    timeline.unshift(buildCameraStartTrial(jsPsych)); // Add buildCameraStartTrial as the first trial
+    timeline.push(buildCameraEndTrial(jsPsych, 5000)); // Add buildCameraEndTrial as the last trial
   }
 
   return timeline;

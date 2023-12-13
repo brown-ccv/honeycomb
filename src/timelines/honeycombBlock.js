@@ -4,8 +4,16 @@ import { config, eventCodes, taskSettings } from "../config/main";
 import { photodiodeGhostBox, pdSpotEncode } from "../lib/markup/photodiode";
 import { buildFixationTrial } from "../trials/fixation";
 
+/**
+ * Builds the blocks of trials that form the core of the Honeycomb experiment
+ *
+ * 1) A fixation dot is shown at the center of the screen
+ * 2) The stimulus image is shown and the user is prompted to press the correct key
+ *
+ * Note that the block is conditionally rendered and repeated based on the task settings
+ */
 function buildHoneycombBlock(jsPsych) {
-  const { honeycomb: honeycombSettings } = taskSettings;
+  const honeycombSettings = taskSettings.honeycomb;
 
   const fixationTrial = buildFixationTrial(jsPsych);
 
@@ -35,7 +43,7 @@ function buildHoneycombBlock(jsPsych) {
     },
     // Conditionally flashes the photodiode when the trial first loads
     on_load: () => {
-      if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.honeycomb, 1, config);
+      if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.honeycomb);
     },
     // Add a boolean value ("correct") to the data - if the user responded with the correct key or not
     on_finish: (data) => {
@@ -53,10 +61,10 @@ function buildHoneycombBlock(jsPsych) {
    *
    */
   const honeycombBlock = {
-    timeline: [fixationTrial, taskTrial],
     randomize_order: honeycombSettings.randomize_order,
     repetitions: honeycombSettings.repetitions,
     timeline_variables: honeycombSettings.timeline_variables,
+    timeline: [fixationTrial, taskTrial],
   };
   return honeycombBlock;
 }

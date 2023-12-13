@@ -10,18 +10,11 @@ import { div, h1, p, tag } from "../lib/markup/tags";
 /**
  * A trial that begins recording the participant using their computer's default camera
  * @param {Object} jsPsych The jsPsych instance being used to run the task
- * @returns
+ * @returns {Object} A jsPsych trial object
  */
 // TODO: Refactor to buildCameraStartTrial
 // TODO #342: refactor to record using web USB
-function cameraStart(jsPsych) {
-  const videoMarkup = tag("video", "", { id: "webcam", width: 640, height: 480, autoplay: true });
-  const cameraStartMarkup = p(language.trials.camera.start);
-  const markup = div(cameraStartMarkup + videoMarkup, {
-    // TODO #344: Need to get rid of bootstrap (this is just centering it)
-    class: "d-flex flex-column align-items-center",
-  });
-
+function buildCameraStartTrial(jsPsych) {
   return {
     timeline: [
       {
@@ -34,7 +27,21 @@ function cameraStart(jsPsych) {
       {
         // Helps participant center themselves inside the camera
         type: htmlButtonResponse,
-        stimulus: baseStimulus(markup, true) + photodiodeGhostBox,
+        stimulus: () => {
+          const videoMarkup = tag("video", "", {
+            id: "camera",
+            width: 640,
+            height: 480,
+            autoplay: true,
+          });
+          const cameraStartMarkup = p(language.trials.camera.start);
+          const trialMarkup = div(cameraStartMarkup + videoMarkup, {
+            // TODO #344: Need to get rid of bootstrap (this is just centering it)
+            class: "d-flex flex-column align-items-center",
+          });
+          // TODO: Show photodiodeGhostBox as prompt
+          return baseStimulus(trialMarkup, true) + photodiodeGhostBox;
+        },
         choices: [language.prompts.continue.button],
         response_ends_trial: true,
         on_start: () => {
@@ -85,13 +92,14 @@ function cameraStart(jsPsych) {
  * A trial that finishes recording the participant using their computer's default camera
  *
  * @param {Number} duration How long to show the trial for
- * @returns
+ * @returns {Object} A jsPsych trial object
  */
-function cameraEnd(jsPsych, duration) {
+function buildCameraEndTrial(jsPsych, duration) {
   const recordingEndMarkup = h1(language.trials.camera.end);
 
   return {
     type: htmlKeyboardResponse,
+    // TODO: Show photodiodeGhostBox as prompt
     stimulus: baseStimulus(recordingEndMarkup, true) + photodiodeGhostBox,
     trial_duration: duration,
     on_start: () => {
@@ -112,4 +120,4 @@ function cameraEnd(jsPsych, duration) {
   };
 }
 
-export { cameraStart, cameraEnd };
+export { buildCameraStartTrial, buildCameraEndTrial };

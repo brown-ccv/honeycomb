@@ -1,4 +1,4 @@
-import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
+import { enterFullscreenTrial, exitFullscreenTrial } from "../trials/fullscreen";
 import {
   buildDebriefTrial,
   finishTrial,
@@ -8,7 +8,7 @@ import {
 } from "../trials/honeycombTrials";
 
 import { buildHoneycombBlock } from "./honeycombBlock";
-import { preamble } from "./preamble";
+import { buildPreambleBlock } from "./preamble";
 
 /**
  * This timeline builds the example reaction time task from the jsPsych tutorial.
@@ -17,20 +17,25 @@ import { preamble } from "./preamble";
  * See the jsPsych documentation for more: https://www.jspsych.org/7.3/tutorials/rt-task/
  */
 function buildHoneycombTimeline(jsPsych) {
-  const honeycombBlock = buildHoneycombBlock(jsPsych); // The first block repeats 5 times
+  const preambleBlock = buildPreambleBlock();
+
+  // The first block repeats 5 times
+  // TODO: Pull from config here and pass into function
+  const honeycombBlock = buildHoneycombBlock(jsPsych);
+
   const debriefTrial = buildDebriefTrial(jsPsych);
 
   const timeline = [
     // TODO #231: Use the new welcome trial inside the preamble
-    preamble,
+    preambleBlock,
     welcomeTrial,
-    enterFullscreen,
+    enterFullscreenTrial,
     preloadTrial,
     instructionsTrial,
     honeycombBlock,
     debriefTrial,
     finishTrial,
-    exitFullscreen,
+    exitFullscreenTrial,
   ];
   return timeline;
 }

@@ -38,7 +38,7 @@ export function buildFixationTrial(jsPsych) {
     },
     // Conditionally flash the photodiode when the trial first loads
     on_load: () => {
-      if (config.USE_PHOTODIODE) pdSpotEncode(fixationCode, 1, config);
+      if (config.USE_PHOTODIODE) pdSpotEncode(fixationCode);
     },
   };
 }
