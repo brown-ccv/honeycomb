@@ -16,16 +16,16 @@ import { eventCodes } from "./trigger";
 const taskName = packageInfo.name;
 const taskVersion = packageInfo.version;
 
-// audio codes
 /** Audio code of a basic "beep" sine wave */
 const audioCodes = {
-  frequency: 100 * (eventCodes.open_task - 9),
+  frequency: 900,
   type: "sine",
 };
 
 // As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
 // The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
 // The actual task and related utils will use a different instance of jsPsych created after login.
+// TODO: Initialize using using react code in jsPsychExperiment
 const jsPsych = initJsPsych();
 
 // Whether or not the experiment is running on mechanical turk
@@ -38,14 +38,15 @@ const USE_ELECTRON = window.electronAPI !== undefined;
 const USE_PROLIFIC = (getProlificId() && !USE_MTURK) || false; // Whether or not the experiment is running with Prolific
 const USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true"; // Whether or not the experiment is running in Firebase (web app)
 
-const USE_VOLUME = process.env.REACT_APP_VOLUME === "true"; // whether or not to ask the participant to adjust the volume
-const USE_CAMERA = process.env.REACT_APP_VIDEO === "true" && USE_ELECTRON; // whether or not to enable video
-const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON; // whether or not the EEG/event marker is available
+const USE_VOLUME = process.env.REACT_APP_VOLUME === "true"; // Whether or not to use audio cues in the task
+const USE_CAMERA = process.env.REACT_APP_VIDEO === "true" && USE_ELECTRON; // Whether or not to use video recording
+const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON; // Whether or not the EEG/event marker is available (TODO: This is only used for sending event codes)
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON; // whether or not the photodiode is in use
 
 /**
  * Configuration object for Honeycomb
  */
+// TODO: Remove init call
 const config = init({
   USE_PHOTODIODE,
   USE_EEG, // TODO #341: Remove USE_EEG - separate variables for USE_PHOTODIODE and USE_EVENT_MARKER
@@ -60,6 +61,7 @@ const config = init({
 /** Determine the task settings to be used   */
 
 // Honeycomb's default task settings
+// TODO: Remove this default, just use config.json
 let taskSettings = {
   fixation: {
     durations: [250, 500, 750, 1000, 1250, 1500, 1750, 2000],

@@ -1,25 +1,12 @@
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
-import { fixation } from "@brown-ccv/behavioral-task-trials";
 
-import { config, taskSettings } from "../config/main";
+import { eventCodes, taskSettings } from "../config/main";
+import { buildFixationTrial } from "../trials/fixation";
 
-function createHoneycombBlock(jsPsych) {
-  const { fixation: fixationSettings, honeycomb: honeycombSettings } = taskSettings;
+function buildHoneycombBlock(jsPsych) {
+  const { honeycomb: honeycombSettings } = taskSettings;
 
-  /**
-   * Displays a fixation dot at the center of the screen.
-   *
-   * The settings for this trial are loaded from taskSettings.fixation:
-   *    If randomize_duration is true the dot is shown for default_duration
-   *    Otherwise, a random value is selected from durations
-   */
-  // TODO #280: Pull fixation trial into Honeycomb directly
-  const fixationTrial = fixation(config, {
-    duration: fixationSettings.randomize_duration
-      ? jsPsych.randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0]
-      : fixationSettings.default_duration,
-    // TODO 280: Fixation will be recorded as "task: fixation" (data object, see below)
-  });
+  const fixationTrial = buildFixationTrial(jsPsych);
 
   /**
    * Displays a colored circle and waits for participant to response with a keyboard press
@@ -38,7 +25,7 @@ function createHoneycombBlock(jsPsych) {
     choices: honeycombSettings.timeline_variables.map((variable) => variable.correct_response),
     data: {
       // Record the correct_response passed as a timeline variable
-      task: "response", // TODO #280: Fixation will be recorded as "task: fixation"
+      code: eventCodes.honeycomb,
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
     // Add a boolean value ("correct") to the data - if the user responded with the correct key or not
@@ -65,4 +52,4 @@ function createHoneycombBlock(jsPsych) {
   return honeycombBlock;
 }
 
-export { createHoneycombBlock };
+export { buildHoneycombBlock };

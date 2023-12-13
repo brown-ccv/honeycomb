@@ -1,13 +1,13 @@
 import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
 import {
-  createDebriefTrial,
+  buildDebriefTrial,
   finishTrial,
   instructionsTrial,
   preloadTrial,
   welcomeTrial,
 } from "../trials/honeycombTrials";
 
-import { createHoneycombBlock } from "./honeycombBlock";
+import { buildHoneycombBlock } from "./honeycombBlock";
 import { preamble } from "./preamble";
 
 /**
@@ -16,9 +16,9 @@ import { preamble } from "./preamble";
  *
  * See the jsPsych documentation for more: https://www.jspsych.org/7.3/tutorials/rt-task/
  */
-function createHoneycombTimeline(jsPsych) {
-  const honeycombBlock = createHoneycombBlock(jsPsych); // The first block repeats 5 times
-  const debriefTrial = createDebriefTrial(jsPsych);
+function buildHoneycombTimeline(jsPsych) {
+  const honeycombBlock = buildHoneycombBlock(jsPsych); // The first block repeats 5 times
+  const debriefTrial = buildDebriefTrial(jsPsych);
 
   const timeline = [
     // TODO #231: Use the new welcome trial inside the preamble
@@ -35,4 +35,4 @@ function createHoneycombTimeline(jsPsych) {
   return timeline;
 }
 
-export { createHoneycombTimeline };
+export { buildHoneycombTimeline };

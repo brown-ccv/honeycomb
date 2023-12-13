@@ -9,17 +9,13 @@ const productID = process.env.EVENT_MARKER_PRODUCT_ID || "";
 // Default if process.env.EVENT_MARKER_COM_NAME is not set
 const comName = process.env.EVENT_MARKER_COM_NAME || "COM3";
 
-/**
- * Custom codes for specific task events - used to parse the EEG data
- * NOTE - these event codes must match what is in public/config/trigger.js
- */
+/** Custom codes for specific task events - used to parse the EEG data */
+// TODO #354: Each event should have a code, name, and numBlinks
 const eventCodes = {
-  fixation: 1,
-  evidence: 5,
-  show_earnings: 7,
-  open_task: 18,
-  test_connect: 32,
+  fixation: 1, // Fixation trial
+  honeycomb: 2, // Main reaction-time trial for the Honeycomb task
+  open_task: 18, // Opening task for setting up the experiment
+  test_connect: 32, // Initial test connection
 };
 
-// Note that this is module.exports so it can be imported into the electron app
 export { vendorID, productID, comName, eventCodes };

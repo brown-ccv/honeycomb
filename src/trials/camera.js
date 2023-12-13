@@ -12,6 +12,7 @@ import { div, h1, p, tag } from "../lib/markup/tags";
  * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns
  */
+// TODO: Refactor to buildCameraStartTrial
 // TODO #342: refactor to record using web USB
 function cameraStart(jsPsych) {
   const videoMarkup = tag("video", "", { id: "webcam", width: 640, height: 480, autoplay: true });

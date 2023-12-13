@@ -18,7 +18,7 @@ function showName() {
     buttons: [language.prompts.continue.button],
   });
 }
-// TODO #292: Turn into jsPsych instruction trial (config is only used for task name)
+// TODO #292: Turn into jsPsych NO_KEYS trial (instruction?)
 
 /**
  * Task that displays a welcome message with the photodiode ghost box
@@ -33,6 +33,6 @@ function showWelcome() {
     response_ends_trial: true,
   };
 }
-// TODO #292: Turn into jsPsych instruction trial
+// TODO #292: Turn into jsPsych NO_KEYS trial (instruction?)
 
 export { showName, showWelcome };

@@ -6,6 +6,7 @@ import { baseStimulus } from "../lib/markup/stimuli";
 import { h1 } from "../lib/markup/tags";
 import { beep } from "../lib/utils";
 
+// TODO: Refactor to constants
 function startCode() {
   const startCodeMarkup = h1(language.prompts.settingUp);
   return {
