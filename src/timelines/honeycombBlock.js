@@ -18,6 +18,7 @@ function createHoneycombBlock(jsPsych) {
     duration: fixationSettings.randomize_duration
       ? jsPsych.randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0]
       : fixationSettings.default_duration,
+    // TODO 280: Fixation will be recorded as "task: fixation" (data object, see below)
   });
 
   /**

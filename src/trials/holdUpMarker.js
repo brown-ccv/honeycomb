@@ -12,7 +12,7 @@ function holdUpMarker() {
 
   return {
     type: htmlButtonResponse,
-    stimulus: baseStimulus(eventMarkerMarkup, true) + photodiodeGhostBox(),
+    stimulus: baseStimulus(eventMarkerMarkup, true) + photodiodeGhostBox,
     prompt: [p(language.trials.holdUpMarker)],
     choices: [language.prompts.continue.button],
     on_start: async () => {

@@ -33,7 +33,7 @@ function cameraStart(jsPsych) {
       {
         // Helps participant center themselves inside the camera
         type: htmlButtonResponse,
-        stimulus: baseStimulus(markup, true) + photodiodeGhostBox(),
+        stimulus: baseStimulus(markup, true) + photodiodeGhostBox,
         choices: [language.prompts.continue.button],
         response_ends_trial: true,
         on_start: () => {
@@ -91,7 +91,7 @@ function cameraEnd(jsPsych, duration) {
 
   return {
     type: htmlKeyboardResponse,
-    stimulus: baseStimulus(recordingEndMarkup, true) + photodiodeGhostBox(),
+    stimulus: baseStimulus(recordingEndMarkup, true) + photodiodeGhostBox,
     trial_duration: duration,
     on_start: () => {
       // Complete the camera recording

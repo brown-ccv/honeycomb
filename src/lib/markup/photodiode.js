@@ -3,30 +3,40 @@ import { config } from "../../config/main";
 import { div, span } from "./tags";
 
 /**
- * Displays a box in the bottom right corner of the screen with the id "photodiode-spot"
- * The box is only visible if config.USE_PHOTODIODE is true
+ * Markup for a box in the bottom right corner of the screen and a photodiode spot inside the ghost box
+ *
+ * Note the box will only be visible if USE_PHOTODIODE is true
+ * Note that this trial is only available when running in Electron
  */
-function photodiodeGhostBox() {
-  const spot = span("", { id: "photodiode-spot", class: "photodiode-spot" });
-  return div(spot, {
-    id: "photodiode-box",
-    class: config.USE_PHOTODIODE ? "photodiode-box visible" : "photodiode-box invisible",
-  });
-}
+const photodiodeGhostBox = div(span("", { id: "photodiode-spot", class: "photodiode-spot" }), {
+  id: "photodiode-box",
+  // TODO #355: Conditional check should be at the task level
+  class: config.USE_PHOTODIODE ? "photodiode-box visible" : "photodiode-box invisible",
+});
 
 /**
- * Repeatedly flashes a spot inside the photodiodeGhostBox and communicates with the USB port
+ * Conditionally flashes a spot inside the photodiodeGhostBox and sends event codes to the serial port
  *
- * Note that this trial is only available when running in Electron
- *
- * @param {number} taskCode The code to be sent to the USB port (Electron only)
+ * Note that this function must be executed inside the "on_load" callback of a trial
+ * @param {number} taskCode The unique code for the given trial on which this function executes
  */
-function photodiodeSpot(taskCode) {
+function pdSpotEncode(taskCode) {
   if (!config.USE_ELECTRON) {
     throw new Error("photodiodeSpot trial is only available when running inside Electron");
   }
 
-  // Pulse the spot color from black to white
+  if (config.USE_PHOTODIODE) {
+    const blinkTime = 40; // TODO #333: Get blink time from config.json (40ms is the default)
+    let numBlinks = taskCode; // TODO #354: Encode numBlinks in the event marker config
+    repeatPulseFor(blinkTime, numBlinks);
+    window.electronAPI.photodiodeTrigger(taskCode);
+  }
+
+  /**
+   * Pulses the photodiode spot from black (on) to white (off) and runs a callback function
+   * @param {number} ms The amount of time to flash the photodiode spot
+   * @param {function} callback A callback function to execute after the flash
+   */
   // TODO #331: Single photodiode color, pulse between visible and invisible here
   function pulseFor(ms, callback) {
     $(".photodiode-spot").css({ "background-color": "black" });
@@ -36,7 +46,11 @@ function photodiodeSpot(taskCode) {
     }, ms);
   }
 
-  // Repeat pulseFor i times
+  /**
+   * Recursive function that executes the pulseFor function i times
+   * @param {number} ms The amount of time to flash the photodiode spot and wait before recursion
+   * @param {number} i The number of times to repeat
+   */
   function repeatPulseFor(ms, i) {
     if (i > 0) {
       pulseFor(ms, () => {
@@ -46,14 +60,6 @@ function photodiodeSpot(taskCode) {
       });
     }
   }
-
-  if (config.USE_PHOTODIODE) {
-    // TODO #333: Pass blinkTime as config setting
-    const blinkTime = 40;
-
-    repeatPulseFor(blinkTime, taskCode);
-    window.electronAPI.photodiodeTrigger(taskCode);
-  }
 }
 
-export { photodiodeGhostBox, photodiodeSpot };
+export { photodiodeGhostBox, pdSpotEncode };
