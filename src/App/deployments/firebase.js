@@ -58,6 +58,7 @@ async function initParticipant(studyID, participantID, startDate) {
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate);
     await experiment.set({
+      // TODO #173: Write GIT SHA here
       start_time: startDate,
       // TODO #173: app_version and app_platform are deprecated
       app_version: window.navigator.appVersion,

@@ -1,10 +1,11 @@
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 
-import { language } from "../config/main";
+import { config, language } from "../config/main";
 import { photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
 import { h1, p } from "../lib/markup/tags";
 
+// TODO #330: Rename as checkEEG? (this is a similar trial to cameraStart)
 // TODO #330: Actually check to see if USB is connected? This isn't testing anything?
 // TODO: Refactor to constant
 function holdUpMarker() {
@@ -15,6 +16,10 @@ function holdUpMarker() {
     stimulus: baseStimulus(eventMarkerMarkup, true) + photodiodeGhostBox,
     prompt: [p(language.trials.holdUpMarker)],
     choices: [language.prompts.continue.button],
+    on_start: async () => {
+      // Ensure event marker is connected if using it
+      if (config.USE_EEG) await window.electronAPI.checkSerialPort();
+    },
   };
 }
 

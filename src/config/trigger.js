@@ -1,3 +1,14 @@
+// TODO #333: Move to "event_marker" config.json
+
+// teensyduino
+const vendorID = "16c0";
+
+// Default if process.env.EVENT_MARKER_PRODUCT_ID is not set
+const productID = process.env.EVENT_MARKER_PRODUCT_ID || "";
+
+// Default if process.env.EVENT_MARKER_COM_NAME is not set
+const comName = process.env.EVENT_MARKER_COM_NAME || "COM3";
+
 /**
  * Custom codes for specific task events - used to parse the EEG data
  * ! These event codes must match what is in public/config/trigger.js
@@ -10,5 +21,4 @@ const eventCodes = {
   test_connect: 32, // Initial test connection
 };
 
-// module.exports is used so it can be imported into the electron app
-module.exports = { eventCodes };
+export { vendorID, productID, comName, eventCodes };

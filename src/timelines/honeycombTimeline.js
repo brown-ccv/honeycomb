@@ -8,6 +8,7 @@ import {
 } from "../trials/honeycombTrials";
 
 import { buildHoneycombBlock } from "./honeycombBlock";
+import { preamble } from "./preamble";
 
 /**
  * This timeline builds the example reaction time task from the jsPsych tutorial.
@@ -20,6 +21,8 @@ function buildHoneycombTimeline(jsPsych) {
   const debriefTrial = buildDebriefTrial(jsPsych);
 
   const timeline = [
+    // TODO #231: Use the new welcome trial inside the preamble
+    preamble,
     welcomeTrial,
     enterFullscreen,
     preloadTrial,
