@@ -95,7 +95,7 @@ function buildCameraStartTrial(jsPsych) {
  * @returns {Object} A jsPsych trial object
  */
 function buildCameraEndTrial(jsPsych, duration) {
-  const recordingEndMarkup = h1(language.trials.camera.start);
+  const recordingEndMarkup = h1(language.trials.camera.end);
 
   return {
     type: htmlKeyboardResponse,
