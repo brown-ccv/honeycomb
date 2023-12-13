@@ -9,7 +9,7 @@ const productID = process.env.EVENT_MARKER_PRODUCT_ID || "";
 // Default if process.env.EVENT_MARKER_COM_NAME is not set
 const comName = process.env.EVENT_MARKER_COM_NAME || "COM3";
 
-/** Custom codes for specific task events - used to parse the EEG data */
+/** Custom codes for specific task events - used to identify the trials */
 // TODO #354: Each event should have a code, name, and numBlinks
 const eventCodes = {
   fixation: 1, // Fixation trial
