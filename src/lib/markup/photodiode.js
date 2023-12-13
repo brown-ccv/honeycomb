@@ -15,7 +15,7 @@ const photodiodeGhostBox = div(span("", { id: "photodiode-spot", class: "photodi
 });
 
 /**
- * Conditionally flashes a spot inside the photodiodeGhostBox
+ * Conditionally flashes a spot inside the photodiodeGhostBox and sends event codes to the serial port
  *
  * Note that this function must be executed inside the "on_load" callback of a trial
  * @param {number} taskCode The unique code for the given trial on which this function executes
@@ -25,7 +25,6 @@ function pdSpotEncode(taskCode) {
     throw new Error("photodiodeSpot trial is only available when running inside Electron");
   }
 
-  // Conditionally pulse the photodiode and send event codes
   if (config.USE_PHOTODIODE) {
     const blinkTime = 40; // TODO #333: Get blink time from config.json (40ms is the default)
     let numBlinks = taskCode; // TODO #354: Encode numBlinks in the event marker config
