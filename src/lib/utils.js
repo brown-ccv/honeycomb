@@ -101,7 +101,6 @@ function beep(audioCodes) {
   o.type = audioCodes.type;
   o.connect(g);
   o.frequency.setValueAtTime(audioCodes.frequency, 0);
-  console.log(context.currentTime);
   g.connect(context.destination);
   o.start();
   o.stop(context.currentTime + 0.4);

@@ -1,11 +1,12 @@
 import $ from "jquery";
 import { config } from "../../config/main";
-import { eventCodes } from "../../config/trigger";
 import { div, span } from "./tags";
 
 /**
  * Markup for a box in the bottom right corner of the screen and a photodiode spot inside the ghost box
+ *
  * Note the box will only be visible if USE_PHOTODIODE is true
+ * Note that this trial is only available when running in Electron
  */
 const photodiodeGhostBox = div(span("", { id: "photodiode-spot", class: "photodiode-spot" }), {
   id: "photodiode-box",
@@ -20,22 +21,16 @@ const photodiodeGhostBox = div(span("", { id: "photodiode-spot", class: "photodi
  */
 // TODO: Pass config variables to the function too
 function pdSpotEncode(taskCode) {
-  // Conditionally load electron based on config variable
-  let ipcRenderer = false;
-  if (config.USE_ELECTRON) {
-    const electron = window.require("electron");
-    ipcRenderer = electron.ipcRenderer;
-  } else throw new Error("pdSpotEncode trial is only available when running inside Electron");
+  if (!config.USE_ELECTRON) {
+    throw new Error("photodiodeSpot trial is only available when running inside Electron");
+  }
 
   // Conditionally pulse the photodiode and send event codes
   if (config.USE_PHOTODIODE) {
-    // TODO #333: Get blink time from config.json (40ms is the default)
-    // TODO #354: numBlinks in trigger config too
-    const blinkTime = 40;
-    let numBlinks = taskCode;
-    if (taskCode < eventCodes.open_task) numBlinks = 1;
+    const blinkTime = 40; // TODO #333: Get blink time from config.json (40ms is the default)
+    let numBlinks = taskCode; // TODO #354: Encode numBlinks in the event marker config
     repeatPulseFor(blinkTime, numBlinks);
-    if (ipcRenderer) ipcRenderer.send("trigger", taskCode);
+    window.electronAPI.photodiodeTrigger(taskCode);
   }
 
   /**
@@ -43,6 +38,7 @@ function pdSpotEncode(taskCode) {
    * @param {number} ms The amount of time to flash the photodiode spot
    * @param {function} callback A callback function to execute after the flash
    */
+  // TODO #331: Single photodiode color, pulse between visible and invisible here
   function pulseFor(ms, callback) {
     $(".photodiode-spot").css({ "background-color": "black" });
     setTimeout(() => {
