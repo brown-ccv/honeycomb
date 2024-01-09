@@ -2,15 +2,17 @@
  * This is the main configuration file where universal and default settings should be placed.
  * These setting can then be imported anywhere in the app
  */
-
 import { init } from "@brown-ccv/behavioral-task-trials";
 import { initJsPsych } from "jspsych";
-import _ from "lodash";
 
 import packageInfo from "../../package.json";
 import { getProlificId } from "../lib/utils";
+
 import language from "./language.json";
-import { eventCodes } from "./trigger";
+import settings from "./settings.json";
+import { eventCodes } from "./trigger"; // TODO #333: eventCodes in settings.json
+
+// TODO #363: Separate into index.js (for exporting) and env.js
 
 // Access package name and version so we can store these as facts with task data.
 const taskName = packageInfo.name;
@@ -59,37 +61,14 @@ const config = init({
   USE_FIREBASE,
 });
 
-/** Determine the task settings to be used   */
-
-// Honeycomb's default task settings
-// TODO #363: Remove this default, just use config.json
-let taskSettings = {
-  fixation: {
-    durations: [250, 500, 750, 1000, 1250, 1500, 1750, 2000],
-    default_duration: 1000,
-    randomize_duration: false,
-  },
-};
-try {
-  taskSettings = _.merge(
-    // Honeycomb's default task settings
-    taskSettings,
-    // Override default task settings with settings from the config file
-    require("./config.json")
-  );
-} catch (error) {
-  // Try will fail if require doesn't find the json file
-  console.warn("Unable to load task settings from config.json");
-}
-
 /** Export the settings so they can be used anywhere in the app */
 export {
+  language as LANGUAGE, // TODO #373: Check language in Firebase
+  settings as SETTINGS, // TODO #374: Check settings in Firebase
   audioCodes,
   config,
   eventCodes,
-  language,
   taskName,
-  taskSettings,
   taskVersion,
   turkUniqueId,
 };

@@ -8,7 +8,7 @@ import "./App.css";
 import "./index.css";
 
 // Import configurations and utilities
-import { config, taskSettings, turkUniqueId } from "../config/main";
+import { config, SETTINGS, turkUniqueId } from "../config/main";
 import * as trigger from "../config/trigger";
 import { getProlificId, getSearchParam } from "../lib/utils";
 
@@ -55,7 +55,7 @@ export default function App() {
       // For testing and debugging purposes
       console.log({
         "Honeycomb Configuration": config,
-        "Task Settings": taskSettings,
+        "Task Settings": SETTINGS,
       });
 
       // If on desktop

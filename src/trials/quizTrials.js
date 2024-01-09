@@ -2,10 +2,10 @@ import { multiSurvey, showMessage, slider, survey } from "@brown-ccv/behavioral-
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import surveyMultiselect from "@jspsych/plugin-survey-multi-select";
 
-import { config, language } from "../config/main";
+import { config, LANGUAGE } from "../config/main";
 import { b, br, div, h1, p } from "../lib/markup/tags";
 
-const QUIZ_LANGUAGE = language.trials.quiz;
+const QUIZ_LANGUAGE = LANGUAGE.trials.quiz;
 
 // TODO #235: Refactor to jsPsych survey trials
 

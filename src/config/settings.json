@@ -1,6 +1,8 @@
 {
   "fixation": {
-    "randomize_duration": true
+    "default_duration": 1000,
+    "randomize_duration": true,
+    "durations": [250, 500, 750, 1000, 1250, 1500, 1750, 2000]
   },
   "honeycomb": {
     "randomize_order": true,
