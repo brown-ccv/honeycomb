@@ -3,7 +3,6 @@ import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import initializeCamera from "@jspsych/plugin-initialize-camera";
 
 import { LANGUAGE, config } from "../config/main";
-import { photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
 import { div, h1, p, tag } from "../lib/markup/tags";
 
@@ -35,11 +34,10 @@ function buildCameraStartTrial(jsPsych) {
           });
           const cameraStartMarkup = p(LANGUAGE.trials.camera.start);
           const trialMarkup = div(cameraStartMarkup + videoMarkup, {
-            // TODO #344: Need to get rid of bootstrap (this is just centering it)
+            // TODO #344: Get rid of bootstrap (this is just centering it)
             class: "d-flex flex-column align-items-center",
           });
-          // TODO #372: Show photodiodeGhostBox as prompt
-          return baseStimulus(trialMarkup, true) + photodiodeGhostBox;
+          return baseStimulus(trialMarkup, true);
         },
         choices: [LANGUAGE.prompts.continue.button],
         response_ends_trial: true,
@@ -76,8 +74,6 @@ function buildCameraStartTrial(jsPsych) {
           // Assign camera feed to the <video> element
           const camera = document.getElementById("webcam");
 
-          console.log(jsPsych.pluginAPI.getCameraRecorder());
-
           camera.srcObject = jsPsych.pluginAPI.getCameraRecorder().stream;
         },
         on_finish: () => {
@@ -101,7 +97,7 @@ function buildCameraEndTrial(jsPsych, duration) {
   return {
     type: htmlKeyboardResponse,
     // TODO #372: Show photodiodeGhostBox as prompt
-    stimulus: baseStimulus(recordingEndMarkup, true) + photodiodeGhostBox,
+    stimulus: baseStimulus(recordingEndMarkup, true),
     trial_duration: duration,
     on_start: () => {
       // Complete the camera recording
