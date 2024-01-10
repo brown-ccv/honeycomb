@@ -53,7 +53,7 @@ app.whenReady().then(() => {
   ipcMain.handle("getCredentials", handleGetCredentials);
   ipcMain.on("onDataUpdate", handleOnDataUpdate);
   ipcMain.on("onFinish", handleOnFinish);
-  ipcMain.on("photodiodeTrigger", handlePhotoDiodeTrigger);
+  ipcMain.on("photodiodeTrigger", handlePhotodiodeTrigger);
   ipcMain.on("saveVideo", handleSaveVideo);
   ipcMain.handle("checkSerialPort", handleCheckSerialPort);
 
@@ -140,7 +140,7 @@ function handleCheckSerialPort() {
   setUpPort().then(() => handleEventSend(TRIGGER_CODES.eventCodes.test_connect));
 }
 
-function handlePhotoDiodeTrigger(event, code) {
+function handlePhotodiodeTrigger(code) {
   if (code !== undefined) {
     log.info(`Event: ${_.invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
     handleEventSend(code);
