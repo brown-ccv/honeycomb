@@ -28,7 +28,7 @@ function buildCameraStartTrial(jsPsych) {
         type: htmlButtonResponse,
         stimulus: () => {
           const videoMarkup = tag("video", "", {
-            id: "camera",
+            id: "webcam",
             width: 640,
             height: 480,
             autoplay: true,
@@ -75,6 +75,8 @@ function buildCameraStartTrial(jsPsych) {
         on_load: () => {
           // Assign camera feed to the <video> element
           const camera = document.getElementById("webcam");
+
+          console.log(jsPsych.pluginAPI.getCameraRecorder());
 
           camera.srcObject = jsPsych.pluginAPI.getCameraRecorder().stream;
         },
