@@ -145,7 +145,6 @@ function handleCheckSerialPort() {
 }
 
 function handlePhotodiodeTrigger(event, code) {
-  console.log("handlePhotodiodeTrigger", event, code);
   if (code !== undefined) {
     log.info(`Event: ${_.invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
     handleEventSend(code);
