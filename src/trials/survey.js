@@ -1,15 +1,16 @@
-import { multiSurvey, showMessage, survey } from "@brown-ccv/behavioral-task-trials";
+import { multiSurvey, showMessage } from "@brown-ccv/behavioral-task-trials";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
-import surveyMultiselect from "@jspsych/plugin-survey-multi-select";
+import surveyResponse from "@jspsych/plugin-survey"; // TODO: Rename survey
 
 import { config, LANGUAGE } from "../config/main";
 import { h1, p } from "../lib/markup/tags";
 
+// The survey plugin includes additional styling
+import "@jspsych/plugin-survey/css/survey.css";
+
 const SURVEY_LANGUAGE = LANGUAGE.trials.survey;
 
 // TODO #235: Refactor to jsPsych survey trials
-
-const abstain = SURVEY_LANGUAGE.answer.abstain; // give people choice to abstain
 
 // Survey page headers
 const surveyPreamble1 = h1(SURVEY_LANGUAGE.prompt.preamble.survey_1);
@@ -26,7 +27,7 @@ const iusOptions = {
     SURVEY_LANGUAGE.answer.ius.somewhat,
     SURVEY_LANGUAGE.answer.ius.very,
     SURVEY_LANGUAGE.answer.ius.entirely,
-    abstain,
+    SURVEY_LANGUAGE.answer.abstain,
   ],
 };
 
@@ -51,6 +52,8 @@ const iusSurvey = multiSurvey({
   ansChoices: iusOptions,
 });
 
+const iusSurveyNew = {};
+
 // Debrief Page (non-mTurk)
 const debriefOptions = SURVEY_LANGUAGE.answer.debriefing.confirm_completion;
 const debrief = showMessage(config, {
@@ -59,82 +62,59 @@ const debrief = showMessage(config, {
   buttons: [debriefOptions],
 });
 
-// START of Demographics Questionnaires
-const demographicsAge = p(SURVEY_LANGUAGE.ask.demographics_age);
-const demographicsPreamble1 = h1(SURVEY_LANGUAGE.prompt.preamble.demo_1);
-const demographicsPreamble2 = h1(SURVEY_LANGUAGE.prompt.preamble.demo_2);
-const demographicsPreamble3 = h1(SURVEY_LANGUAGE.prompt.preamble.demo_3);
-
-const openAnswerQuestions = survey({
-  preamble: demographicsPreamble1,
-  stimulus: demographicsAge,
-});
-
-// multi_choice_questions
-const demoMultiChoiceOptions = {
-  ethnicity: [
-    SURVEY_LANGUAGE.answer.demographics_ethnicity.hispanic_latino,
-    SURVEY_LANGUAGE.answer.demographics_ethnicity.no_hispanic_latino,
-  ],
-  race: [
-    SURVEY_LANGUAGE.answer.demographics_race.asian,
-    SURVEY_LANGUAGE.answer.demographics_race.african_american,
-    SURVEY_LANGUAGE.answer.demographics_race.caucasian,
-    SURVEY_LANGUAGE.answer.demographics_race.native_american_alaskan,
-    SURVEY_LANGUAGE.answer.demographics_race.native_hawaiian_pacific_islander,
-    SURVEY_LANGUAGE.answer.demographics_race.other,
-  ],
-  yesNo: [
-    SURVEY_LANGUAGE.answer.demographics_binary.yes,
-    SURVEY_LANGUAGE.answer.demographics_binary.no,
-  ],
-  gender: [
-    SURVEY_LANGUAGE.answer.demographics_gender.female,
-    SURVEY_LANGUAGE.answer.demographics_gender.male,
-    SURVEY_LANGUAGE.answer.demographics_gender.other,
-  ],
-};
-
-const demoMultiChoicePrompts = [
-  p(SURVEY_LANGUAGE.ask.demographics_ethnicity),
-  p(SURVEY_LANGUAGE.ask.demographics_race),
-  p(SURVEY_LANGUAGE.ask.demographics_english),
-  p(SURVEY_LANGUAGE.ask.demographics_gender),
-];
-
-const multiChoiceQuestions = multiSurvey({
-  preamble: demographicsPreamble2,
-  prompts: demoMultiChoicePrompts,
-  ansChoices: demoMultiChoiceOptions,
-});
-
-// multi_select_questions
-const diagnosesQuestions = p(SURVEY_LANGUAGE.ask.diagnoses);
-
-const diagnosesOptions = {
-  diagnoses: [
-    SURVEY_LANGUAGE.answer.demographics_diagnoses.no,
-    SURVEY_LANGUAGE.answer.demographics_diagnoses.parkinsons,
-    SURVEY_LANGUAGE.answer.demographics_diagnoses.schizophrenia,
-    SURVEY_LANGUAGE.answer.demographics_diagnoses.ocd,
-    SURVEY_LANGUAGE.answer.demographics_diagnoses.depression,
+const demographicsSurvey = {
+  type: surveyResponse,
+  title: SURVEY_LANGUAGE.demographics.title,
+  pages: [
+    [
+      {
+        type: "text",
+        input_type: "number",
+        name: "age",
+        required: true,
+        prompt: SURVEY_LANGUAGE.demographics.age.prompt,
+      },
+    ],
+    [
+      {
+        type: "multi-choice",
+        name: "ethnicity",
+        required: true,
+        prompt: SURVEY_LANGUAGE.demographics.ethnicity.prompt,
+        options: SURVEY_LANGUAGE.demographics.ethnicity.options,
+      },
+      {
+        type: "multi-choice",
+        name: "race",
+        required: true,
+        prompt: SURVEY_LANGUAGE.demographics.race.prompt,
+        options: SURVEY_LANGUAGE.demographics.race.options,
+      },
+      {
+        type: "multi-choice",
+        name: "english",
+        required: true,
+        prompt: SURVEY_LANGUAGE.demographics.english.prompt,
+        options: SURVEY_LANGUAGE.demographics.english.options,
+      },
+      {
+        type: "multi-choice",
+        name: "gender",
+        required: true,
+        prompt: SURVEY_LANGUAGE.demographics.gender.prompt,
+        options: SURVEY_LANGUAGE.demographics.gender.options,
+      },
+    ],
+    [
+      {
+        type: "multi-select",
+        name: "diagnoses",
+        required: true,
+        prompt: SURVEY_LANGUAGE.demographics.diagnoses.prompt,
+        options: SURVEY_LANGUAGE.demographics.diagnoses.options,
+      },
+    ],
   ],
 };
 
-const multiSelectQuestions = multiSurvey({
-  responseType: surveyMultiselect,
-  preamble: demographicsPreamble3,
-  prompts: [diagnosesQuestions],
-  ansChoices: diagnosesOptions,
-});
-
-// demographics
-const demographics = {
-  timeline: [
-    openAnswerQuestions, // age, sex
-    multiChoiceQuestions, // ethnicity, race, english_fluency
-    multiSelectQuestions, // diagnoses
-  ],
-};
-
-export { debrief, demographics, iusSurvey };
+export { debrief, demographicsSurvey, iusSurvey, iusSurveyNew };
