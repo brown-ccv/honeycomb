@@ -3,19 +3,11 @@ import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import surveyMultiselect from "@jspsych/plugin-survey-multi-select";
 
 import { config, LANGUAGE } from "../config/main";
-import { b, br, div, h1, p } from "../lib/markup/tags";
+import { h1, p } from "../lib/markup/tags";
 
 const QUIZ_LANGUAGE = LANGUAGE.trials.quiz;
 
 // TODO #235: Refactor to jsPsych survey trials
-
-// Age Check
-const ask = QUIZ_LANGUAGE.ask.age;
-const res = QUIZ_LANGUAGE.answer.age;
-
-const ageMarkup = div(h1(ask) + br() + b(res), { class: "instructions" });
-
-const ageCheck = survey({ stimulus: ageMarkup });
 
 const abstain = QUIZ_LANGUAGE.answer.abstain; // give people choice to abstain
 
@@ -145,4 +137,4 @@ const demographics = {
   ],
 };
 
-export { ageCheck, debrief, demographics, iusSurvey };
+export { debrief, demographics, iusSurvey };
