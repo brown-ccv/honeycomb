@@ -113,7 +113,11 @@ function handleSetConfig(event, config) {
 /**
  * Receives the Honeycomb config settings and passes them to the CONFIG global in this file
  * @param {Event} event The Electron renderer event
- * @param {Object} config The current Honeycomb configuration
+ * @param {Object} trigger The metadata for the event code trigger
+ * @param {string} trigger.comName The COM name of the serial port
+ * @param {Object} trigger.eventCodes The list of possible event codes to be triggered
+ * @param {string} productID The name of the product connected to the serial port
+ * @param {string} vendorID The name of the vendor connected to the serial prot
  */
 function handleSetTrigger(event, trigger) {
   TRIGGER_CODES = trigger;
@@ -140,7 +144,8 @@ function handleCheckSerialPort() {
   setUpPort().then(() => handleEventSend(TRIGGER_CODES.eventCodes.test_connect));
 }
 
-function handlePhotodiodeTrigger(code) {
+function handlePhotodiodeTrigger(event, code) {
+  console.log("handlePhotodiodeTrigger", event, code);
   if (code !== undefined) {
     log.info(`Event: ${_.invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
     handleEventSend(code);
@@ -357,6 +362,7 @@ async function setUpPort() {
  * Handles the sending of an event code to TRIGGER_PORT
  * @param code The code to send via USB
  */
+// TODO: DEV_MODE not being set correctly? Always trying to check USB
 function handleEventSend(code) {
   log.info(`Sending USB event ${code} to port ${TRIGGER_PORT}`);
   if (TRIGGER_PORT !== undefined && !DEV_MODE) {
