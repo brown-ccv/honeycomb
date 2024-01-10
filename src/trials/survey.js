@@ -1,21 +1,16 @@
-import { showMessage } from "@brown-ccv/behavioral-task-trials";
-import htmlButtonResponse from "@jspsych/plugin-html-button-response";
-import surveyResponse from "@jspsych/plugin-survey"; // TODO: Rename survey
+import jsPsychSurveyPlugin from "@jspsych/plugin-survey";
 
-import { config, LANGUAGE } from "../config/main";
+import { LANGUAGE } from "../config/main";
 
 // The survey plugin includes additional styling
 import "@jspsych/plugin-survey/css/survey.css";
 
-const SURVEY_LANGUAGE = LANGUAGE.trials.survey;
-const iusSurveyLanguage = SURVEY_LANGUAGE.ius;
-const demographicsSurveyLanguage = SURVEY_LANGUAGE.demographics;
-
+const iusSurveyLanguage = LANGUAGE.trials.survey.ius;
 /**
  *
  */
 const iusSurvey = {
-  type: surveyResponse,
+  type: jsPsychSurveyPlugin,
   title: iusSurveyLanguage.title,
   pages: [
     [
@@ -30,11 +25,12 @@ const iusSurvey = {
   ],
 };
 
+const demographicsSurveyLanguage = LANGUAGE.trials.survey.demographics;
 /**
  *
  */
 const demographicsSurvey = {
-  type: surveyResponse,
+  type: jsPsychSurveyPlugin,
   title: demographicsSurveyLanguage.title,
   pages: [
     [
@@ -88,13 +84,4 @@ const demographicsSurvey = {
   ],
 };
 
-// Debrief Page
-// TODO: Refactor to NO_KEYS trial
-const debriefOptions = SURVEY_LANGUAGE.debriefing.confirm_completion;
-const debrief = showMessage(config, {
-  responseType: htmlButtonResponse,
-  responseEndsTrial: true,
-  buttons: [debriefOptions],
-});
-
-export { debrief, demographicsSurvey, iusSurvey };
+export { demographicsSurvey, iusSurvey };
