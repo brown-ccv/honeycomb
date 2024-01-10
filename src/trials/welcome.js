@@ -2,8 +2,8 @@ import { showMessage } from "@brown-ccv/behavioral-task-trials";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { config, LANGUAGE } from "../config/main";
-import { photodiodeGhostBox } from "../lib/markup/photodiode";
+import { config, eventCodes, LANGUAGE } from "../config/main";
+import { pdSpotEncode, photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
 import { h1 } from "../lib/markup/tags";
 
@@ -24,7 +24,18 @@ const welcomeTrial = {
     const welcomeMarkup = h1(LANGUAGE.trials.welcome);
     return baseStimulus(welcomeMarkup, true) + photodiodeGhostBox;
   },
-  prompt: LANGUAGE.prompts.continue.prompt,
+  prompt: () => {
+    let promptMarkup = LANGUAGE.prompts.continue.prompt;
+
+    // Conditionally displays the photodiodeGhostBox
+    if (config.USE_PHOTODIODE) promptMarkup += photodiodeGhostBox;
+
+    return promptMarkup;
+  },
+  on_load: () => {
+    // Conditionally flashes the photodiode when the trial first loads
+    if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.test_connect);
+  },
   response_ends_trial: true,
 };
 // TODO #292: Turn into jsPsych NO_KEYS trial
