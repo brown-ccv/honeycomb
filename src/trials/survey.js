@@ -5,29 +5,10 @@ import { LANGUAGE } from "../config/main";
 // The survey plugin includes additional styling
 import "@jspsych/plugin-survey/css/survey.css";
 
-const iusSurveyLanguage = LANGUAGE.trials.survey.ius;
-/**
- *
- */
-const iusSurvey = {
-  type: jsPsychSurveyPlugin,
-  title: iusSurveyLanguage.title,
-  pages: [
-    [
-      {
-        type: "likert-table",
-        name: "ius",
-        prompt: iusSurveyLanguage.prompt,
-        statements: iusSurveyLanguage.statements,
-        options: iusSurveyLanguage.options,
-      },
-    ],
-  ],
-};
-
 const demographicsSurveyLanguage = LANGUAGE.trials.survey.demographics;
 /**
- *
+ * Displays a survey for the participant to complete.
+ * Demographic data about the participant is collected
  */
 const demographicsSurvey = {
   type: jsPsychSurveyPlugin,
@@ -79,6 +60,27 @@ const demographicsSurvey = {
         required: true,
         prompt: demographicsSurveyLanguage.diagnoses.prompt,
         options: demographicsSurveyLanguage.diagnoses.options,
+      },
+    ],
+  ],
+};
+
+const iusSurveyLanguage = LANGUAGE.trials.survey.ius;
+/**
+ * Displays a survey designed to measure intolerance of uncertainty.
+ * The user is shown multiple questions across a likert scale
+ */
+const iusSurvey = {
+  type: jsPsychSurveyPlugin,
+  title: iusSurveyLanguage.title,
+  pages: [
+    [
+      {
+        type: "likert-table",
+        name: "ius",
+        prompt: iusSurveyLanguage.prompt,
+        statements: iusSurveyLanguage.statements,
+        options: iusSurveyLanguage.options,
       },
     ],
   ],
