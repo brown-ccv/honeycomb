@@ -6,7 +6,7 @@ import {
   preloadTrial,
   welcomeTrial,
 } from "../trials/honeycombTrials";
-import { debrief, demographics, iusSurvey } from "../trials/quizTrials";
+import { debrief, demographics, iusSurvey } from "../trials/survey";
 
 import { buildHoneycombBlock } from "./honeycombBlock";
 import { buildPreambleBlock } from "./preamble";

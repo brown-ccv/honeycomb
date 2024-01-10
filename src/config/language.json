@@ -43,7 +43,7 @@
       "not_connected": "No event marker connected."
     },
     "holdUpMarker": "Make sure the photodiode is covering the spot and any external recordings have begun before continuing.",
-    "quiz": {
+    "survey": {
       "ask": {
         "age": "What's your age?",
         "demographics_age": "How old are you?",
