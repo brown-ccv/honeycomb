@@ -361,10 +361,13 @@ async function setUpPort() {
  * Handles the sending of an event code to TRIGGER_PORT
  * @param code The code to send via USB
  */
-// TODO: DEV_MODE not being set correctly? Always trying to check USB
 function handleEventSend(code) {
   log.info(`Sending USB event ${code} to port ${TRIGGER_PORT}`);
-  if (TRIGGER_PORT !== undefined && !DEV_MODE) {
+
+  // Early return when running in development (no trigger port is expected)
+  if (DEV_MODE) return;
+
+  if (TRIGGER_PORT !== undefined) {
     sendToPort(TRIGGER_PORT, code);
   } else {
     log.error(`Trigger port is undefined - Event Marker is not connected`);
