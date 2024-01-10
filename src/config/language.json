@@ -82,45 +82,72 @@
           ]
         }
       },
-      "prompt": {
-        "ius": {
-          "preamble": {
-            "start": "This questionnaire is designed to measure intolerance of uncertainty.",
-            "middle": "Please answer the following questions as honestly as you can.",
-            "end": "There are no right or wrong answers, and there are no trick questions."
+      "ius": {
+        "title": "Survey",
+        "prompt": "This questionnaire is designed to measure intolerance of uncertainty. Please answer the following questions as honestly as you can. There are no right or wrong answers, and there are no trick questions.",
+        "statements": [
+          {
+            "name": "upset",
+            "prompt": "Unforeseen events upset me greatly."
           },
-          "upset": "1. Unforeseen events upset me greatly.",
-          "frustration": "2. It frustrates me not having all the information I need.",
-          "full_life": "3. Uncertainty keeps me from living a full life.",
-          "surprise_avoid": "4. One should always look ahead so as to avoid surprises.",
-          "unforeseen_spoil": "5. A small unforeseen event can spoil everything, even with the best of planning.",
-          "uncertainty_paralysis": "6. When it's time to act, uncertainty paralyzes me.",
-          "uncertainty_malfunction": "7. When I am uncertain I can't function very well.",
-          "future": "8. I always want to know what the future has in store of me.",
-          "surprise_intolerance": "9. I can't stand being taken by surprise",
-          "doubt_paralysis": "10. The smallest doubt can stop me from acting.",
-          "organize": "11. I should be able to organize everything in advance.",
-          "escape": "12. I must get away from all uncertain situations."
-        },
-        "preamble": {
-          "survey_1": "Survey (1/1)"
-        }
+          {
+            "name": "frustration",
+            "prompt": "It frustrates me not having all the information I need."
+          },
+          {
+            "name": "full_life",
+            "prompt": "Uncertainty keeps me from living a full life."
+          },
+          {
+            "name": "surprise_avoid",
+            "prompt": "One should always look ahead so as to avoid surprises."
+          },
+          {
+            "name": "unforeseen_spoil",
+            "prompt": "A small unforeseen event can spoil everything, even with the best of planning."
+          },
+          {
+            "name": "uncertainty_paralysis",
+            "prompt": "When it's time to act, uncertainty paralyzes me."
+          },
+          {
+            "name": "uncertainty_malfunction",
+            "prompt": "When I am uncertain I can't function very well."
+          },
+          {
+            "name": "future",
+            "prompt": "I always want to know what the future has in store of me."
+          },
+          {
+            "name": "surprise_intolerance",
+            "prompt": "I can't stand being taken by surprise"
+          },
+          {
+            "name": "doubt_paralysis",
+            "prompt": "The smallest doubt can stop me from acting."
+          },
+          {
+            "name": "organize",
+            "prompt": "I should be able to organize everything in advance."
+          },
+          {
+            "name": "escape",
+            "prompt": "I must get away from all uncertain situations."
+          }
+        ],
+        "options": [
+          "Not at all characteristic of me",
+          "A little characteristic of me",
+          "Somewhat characteristic of me",
+          "Very characteristic of me",
+          "Entirely characteristic of me",
+          "Prefer not to answer"
+        ]
       },
-      "answer": {
-        "abstain": "Prefer not to answer.",
-        "ius": {
-          "not": "1 - Not at all characteristic of me",
-          "little": "2 - A little characteristic of me",
-          "somewhat": "3 - Somewhat characteristic of me",
-          "very": "4 - Very characteristic of me",
-          "entirely": "5 - Entirely characteristic of me",
-          "abstain": "Prefer not to answer"
-        },
-        "debriefing": {
-          "confirm_completion": "Confirm Completion"
-        }
+      "debriefing": {
+        "confirm_completion": "Confirm Completion"
       }
-    },
-    "welcome": "Welcome! Here are your instructions"
-  }
+    }
+  },
+  "welcome": "Welcome! Here are your instructions"
 }
