@@ -21,6 +21,7 @@ const photodiodeGhostBox = div(span("", { id: "photodiode-spot", class: "photodi
  */
 // TODO #355: Conditional check should be at the task level (pass settings here)
 function pdSpotEncode(taskCode) {
+  console.log("pdSpotEncode", taskCode);
   if (!config.USE_ELECTRON) {
     throw new Error("photodiodeSpot trial is only available when running inside Electron");
   }
@@ -29,6 +30,7 @@ function pdSpotEncode(taskCode) {
     const blinkTime = 40; // TODO #333: Get blink time from config.json (40ms is the default)
     let numBlinks = taskCode; // TODO #354: Encode numBlinks in the event marker config
     repeatPulseFor(blinkTime, numBlinks);
+
     window.electronAPI.photodiodeTrigger(taskCode);
   }
 

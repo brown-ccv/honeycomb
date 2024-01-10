@@ -7,8 +7,8 @@ process.once("loaded", () => {
     setTrigger: (triggerCodes) => ipcRenderer.send("setTrigger", triggerCodes),
     getCredentials: () => ipcRenderer.invoke("getCredentials"),
     on_data_update: (data) => ipcRenderer.send("onDataUpdate", data),
-    on_finish: () => ipcRenderer.send("onFinish"),
-    photodiodeTrigger: () => ipcRenderer.send("photodiodeTrigger"),
+    on_finish: () => ipcRenderer.send("onFinish"), // TODO: This should be invoke
+    photodiodeTrigger: (data) => ipcRenderer.send("photodiodeTrigger", data),
     saveVideo: (data) => ipcRenderer.send("saveVideo", data),
     checkSerialPort: () => ipcRenderer.invoke("checkSerialPort"),
   });
