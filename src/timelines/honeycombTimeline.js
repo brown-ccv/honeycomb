@@ -6,6 +6,7 @@ import {
   preloadTrial,
   welcomeTrial,
 } from "../trials/honeycombTrials";
+import { ageCheck, debrief, demographics, iusSurvey } from "../trials/quizTrials";
 
 import { buildHoneycombBlock } from "./honeycombBlock";
 import { buildPreambleBlock } from "./preamble";
@@ -26,6 +27,11 @@ function buildHoneycombTimeline(jsPsych) {
   const debriefTrial = buildDebriefTrial(jsPsych);
 
   const timeline = [
+    ageCheck,
+    debrief,
+    demographics,
+    iusSurvey,
+
     // TODO #231: Use the new welcome trial inside the preamble
     preambleBlock,
     welcomeTrial,

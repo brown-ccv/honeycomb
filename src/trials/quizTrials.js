@@ -1,4 +1,4 @@
-import { multiSurvey, showMessage, slider, survey } from "@brown-ccv/behavioral-task-trials";
+import { multiSurvey, showMessage, survey } from "@brown-ccv/behavioral-task-trials";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import surveyMultiselect from "@jspsych/plugin-survey-multi-select";
 
@@ -16,10 +16,6 @@ const res = QUIZ_LANGUAGE.answer.age;
 const ageMarkup = div(h1(ask) + br() + b(res), { class: "instructions" });
 
 const ageCheck = survey({ stimulus: ageMarkup });
-
-// Slider Check
-const stmSl = QUIZ_LANGUAGE.direction.slider.right;
-const sliderCheck = slider(stmSl);
 
 const abstain = QUIZ_LANGUAGE.answer.abstain; // give people choice to abstain
 
@@ -149,4 +145,4 @@ const demographics = {
   ],
 };
 
-export { ageCheck, debrief, demographics, iusSurvey, sliderCheck };
+export { ageCheck, debrief, demographics, iusSurvey };
