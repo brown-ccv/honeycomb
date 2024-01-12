@@ -25,10 +25,7 @@ function buildHoneycombTimeline(jsPsych) {
   const debriefTrial = buildDebriefTrial(jsPsych);
 
   const timeline = [
-    // TODO #231: Use the new welcome trial inside the preamble
     preambleBlock,
-    // welcomeTrial,
-    // enterFullscreenTrial,
     preloadTrial,
     instructionsTrial,
     honeycombBlock,
