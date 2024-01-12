@@ -53,7 +53,7 @@ app.whenReady().then(() => {
   ipcMain.handle("getCredentials", handleGetCredentials);
   ipcMain.on("onDataUpdate", handleOnDataUpdate);
   ipcMain.on("onFinish", handleOnFinish);
-  ipcMain.on("photodiodeTrigger", handlePhotoDiodeTrigger);
+  ipcMain.on("photodiodeTrigger", handlePhotodiodeTrigger);
   ipcMain.on("saveVideo", handleSaveVideo);
   ipcMain.handle("checkSerialPort", handleCheckSerialPort);
 
@@ -113,7 +113,11 @@ function handleSetConfig(event, config) {
 /**
  * Receives the Honeycomb config settings and passes them to the CONFIG global in this file
  * @param {Event} event The Electron renderer event
- * @param {Object} config The current Honeycomb configuration
+ * @param {Object} trigger The metadata for the event code trigger
+ * @param {string} trigger.comName The COM name of the serial port
+ * @param {Object} trigger.eventCodes The list of possible event codes to be triggered
+ * @param {string} productID The name of the product connected to the serial port
+ * @param {string} vendorID The name of the vendor connected to the serial prot
  */
 function handleSetTrigger(event, trigger) {
   TRIGGER_CODES = trigger;
@@ -140,7 +144,7 @@ function handleCheckSerialPort() {
   setUpPort().then(() => handleEventSend(TRIGGER_CODES.eventCodes.test_connect));
 }
 
-function handlePhotoDiodeTrigger(event, code) {
+function handlePhotodiodeTrigger(event, code) {
   if (code !== undefined) {
     log.info(`Event: ${_.invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
     handleEventSend(code);
@@ -359,7 +363,11 @@ async function setUpPort() {
  */
 function handleEventSend(code) {
   log.info(`Sending USB event ${code} to port ${TRIGGER_PORT}`);
-  if (TRIGGER_PORT !== undefined && !DEV_MODE) {
+
+  // Early return when running in development (no trigger port is expected)
+  if (DEV_MODE) return;
+
+  if (TRIGGER_PORT !== undefined) {
     sendToPort(TRIGGER_PORT, code);
   } else {
     log.error(`Trigger port is undefined - Event Marker is not connected`);
