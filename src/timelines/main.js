@@ -27,7 +27,7 @@ function buildTimeline(jsPsych, studyID, participantID) {
   if (config.USE_CAMERA) {
     // TODO #367: These should be a part of the start and end blocks
     timeline.unshift(buildCameraStartTrial(jsPsych)); // Add buildCameraStartTrial as the first trial
-    timeline.push(buildCameraEndTrial(jsPsych, 5000)); // Add buildCameraEndTrial as the last trial
+    timeline.push(buildCameraEndTrial(jsPsych)); // Add buildCameraEndTrial as the last trial
   }
 
   return timeline;

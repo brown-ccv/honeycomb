@@ -91,14 +91,14 @@ function buildCameraStartTrial(jsPsych) {
  * @param {Number} duration How long to show the trial for
  * @returns {Object} A jsPsych trial object
  */
-function buildCameraEndTrial(jsPsych, duration) {
+function buildCameraEndTrial(jsPsych) {
   const recordingEndMarkup = h1(LANGUAGE.trials.camera.end);
 
   return {
     type: htmlKeyboardResponse,
     // TODO #372: Show photodiodeGhostBox as prompt
     stimulus: baseStimulus(recordingEndMarkup, true),
-    trial_duration: duration,
+    trial_duration: 5000,
     on_start: () => {
       // Complete the camera recording
 
