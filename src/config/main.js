@@ -18,12 +18,6 @@ import { eventCodes } from "./trigger"; // TODO #333: eventCodes in settings.jso
 const taskName = packageInfo.name;
 const taskVersion = packageInfo.version;
 
-/** Audio code of a basic "beep" sine wave */
-const audioCodes = {
-  frequency: 900,
-  type: "sine",
-};
-
 // As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
 // The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
 // The actual task and related utils will use a different instance of jsPsych created after login.
@@ -65,7 +59,6 @@ const config = init({
 export {
   language as LANGUAGE, // TODO #373: Check language in Firebase
   settings as SETTINGS, // TODO #374: Check settings in Firebase
-  audioCodes,
   config,
   eventCodes,
   taskName,
