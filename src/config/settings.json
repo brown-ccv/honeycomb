@@ -9,11 +9,11 @@
     "repetitions": 5,
     "timeline_variables": [
       {
-        "stimulus": "assets/blue.png",
+        "stimulus": "assets/images/blue.png",
         "correct_response": "f"
       },
       {
-        "stimulus": "assets/orange.png",
+        "stimulus": "assets/images/orange.png",
         "correct_response": "j"
       }
     ]
