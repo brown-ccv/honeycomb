@@ -1,4 +1,4 @@
-import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import audioKeyboardResponse from "@jspsych/plugin-audio-keyboard-response";
 
 import { audioCodes, config, eventCodes, LANGUAGE } from "../config/main";
 import { pdSpotEncode, photodiodeGhostBox } from "../lib/markup/photodiode";
@@ -10,22 +10,19 @@ import { beep } from "../lib/utils";
 // TODO #364: Remove "USE_VOLUME"
 // TODO #364: "Setting up" is a separate trial that runs ALL of the needed setup
 const startCodeTrial = {
-  type: htmlKeyboardResponse,
-  stimulus: () => {
-    const startCodeMarkup = h1(LANGUAGE.prompts.settingUp);
-    return baseStimulus(startCodeMarkup, true);
-  },
-  // Conditionally displays the photodiodeGhostBox
+  type: audioKeyboardResponse,
+  stimulus: "assets/audio/beep.mp3",
+  choices: "NO_KEYS",
+  trial_ends_after_audio: true,
   prompt: () => {
-    if (config.USE_PHOTODIODE) return photodiodeGhostBox;
-    else return null;
+    let markup = h1(LANGUAGE.prompts.settingUp);
+    // Conditionally displays the photodiodeGhostBox
+    if (config.USE_PHOTODIODE) markup += photodiodeGhostBox;
+    return markup;
   },
-  trial_duration: 2000,
   on_load: () => {
     // Conditionally flashes the photodiode when the trial first loads
     if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.open_task);
-    // Conditionally Plays an audible beep when the trial first loads
-    if (config.USE_VOLUME) beep(audioCodes);
   },
 };
 
