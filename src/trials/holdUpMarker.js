@@ -24,8 +24,8 @@ const holdUpMarkerTrial = {
     return holdUpMarkerPrompt;
   },
   choices: [LANGUAGE.prompts.continue.button],
-  // Conditionally flash the photodiode when the trial first loads
   on_load: () => {
+    // Conditionally flash the photodiode when the trial first loads
     if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.open_task);
   },
 };

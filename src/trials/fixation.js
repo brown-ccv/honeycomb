@@ -18,8 +18,8 @@ export function buildFixationTrial(jsPsych) {
     type: htmlKeyboardResponse,
     // Display the fixation dot
     stimulus: div(div("", { id: "fixation-dot" }), { class: "center_container" }),
-    // Conditionally display the photodiodeGhostBox
     prompt: () => {
+      // Conditionally display the photodiodeGhostBox
       if (config.USE_PHOTODIODE) return photodiodeGhostBox;
       else return null;
     },
@@ -36,8 +36,8 @@ export function buildFixationTrial(jsPsych) {
     data: {
       code: fixationCode, // Add event code to the recorded data
     },
-    // Conditionally flash the photodiode when the trial first loads
     on_load: () => {
+      // Conditionally flash the photodiode when the trial first loads
       if (config.USE_PHOTODIODE) pdSpotEncode(fixationCode);
     },
   };

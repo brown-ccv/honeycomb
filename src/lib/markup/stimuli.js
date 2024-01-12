@@ -14,7 +14,5 @@ function baseStimulus(children, prompt = false, centered = false) {
 // TODO #338: Base stimulus is forcing the container to be 100% everything
 // TODO #338: There's a parent element from jsPsych that is doing this
 // TODO #338: Is it possible to inject the html at that container?
-// TODO #338: The child container is why the photodiodeGhostBox isn't sitting in the correct place
-// TODO #338: Full vh/vw is "jspsych-content-wrapper"
 
 export { baseStimulus };
