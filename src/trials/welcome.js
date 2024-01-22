@@ -21,7 +21,7 @@ const nameTrial = showMessage(config, {
 const welcomeTrial = {
   type: htmlKeyboardResponse,
   stimulus: () => {
-    const welcomeMarkup = h1(LANGUAGE.trials.welcome);
+    const welcomeMarkup = h1(LANGUAGE.welcome);
     return baseStimulus(welcomeMarkup, true) + photodiodeGhostBox;
   },
   prompt: () => {

@@ -1,5 +1,6 @@
 {
   "name": "Honeycomb Task",
+  "welcome": "Welcome to the experiment. Press any key to begin.",
   "prompts": {
     "continue": {
       "prompt": "Press any key to continue.",
@@ -9,7 +10,6 @@
   },
   "trials": {
     "honeycomb": {
-      "welcome": "Welcome to the experiment. Press any key to begin.",
       "instructions": {
         "read": "Please read the following instructions carefully.",
         "circle": "In this experiment, a circle will appear in the center of the screen.",
@@ -148,6 +148,5 @@
         "confirm_completion": "Confirm Completion"
       }
     }
-  },
-  "welcome": "Welcome! Here are your instructions"
+  }
 }

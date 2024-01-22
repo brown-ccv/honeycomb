@@ -91,22 +91,6 @@ function getProlificId() {
 }
 
 /**
- * Emits an audible beep
- * @param {Object} audioCodes The type/frequency of the beep
- */
-function beep(audioCodes) {
-  const context = new AudioContext(); // eslint-disable-line no-undef
-  const o = context.createOscillator();
-  const g = context.createGain();
-  o.type = audioCodes.type;
-  o.connect(g);
-  o.frequency.setValueAtTime(audioCodes.frequency, 0);
-  g.connect(context.destination);
-  o.start();
-  o.stop(context.currentTime + 0.4);
-}
-
-/**
  * Interleave a value before/after every element in an array
  * @param {Array<any>} arr The original array
  * @param {any} val The value to interleave inside the array
@@ -118,7 +102,6 @@ function interleave(arr, val, addBefore = true) {
 }
 
 export {
-  beep,
   deepCopy,
   formatDollars,
   getProlificId,

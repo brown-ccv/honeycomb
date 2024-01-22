@@ -9,14 +9,6 @@ import { b, div, image, p } from "../lib/markup/tags";
 const honeycombLanguage = LANGUAGE.trials.honeycomb;
 
 /**
- * Trial that displays a welcome message and waits for the participant to press a key
- */
-const welcomeTrial = {
-  type: htmlKeyboardResponse,
-  stimulus: p(honeycombLanguage.welcome),
-};
-
-/**
  * Trial that displays instructions for the participant.
  * Note that the participant has the ability to navigate between the pages of the instructions.
  *
@@ -97,4 +89,4 @@ const finishTrial = showMessage(config, {
   message: honeycombLanguage.finish,
 });
 
-export { buildDebriefTrial, finishTrial, instructionsTrial, preloadTrial, welcomeTrial };
+export { buildDebriefTrial, finishTrial, instructionsTrial, preloadTrial };
