@@ -49,16 +49,12 @@ body,
   position: absolute;
 }
 
-.main-prompt,
-.center_container {
+.main-prompt {
   height: 100vh;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center !important;
-}
-
-.main-prompt {
   margin-top: -10%;
   margin-bottom: -5%;
 }

@@ -17,7 +17,7 @@ export function buildFixationTrial(jsPsych) {
   return {
     type: htmlKeyboardResponse,
     // Display the fixation dot
-    stimulus: div(div("", { id: "fixation-dot" }), { class: "center_container" }),
+    stimulus: div("", { id: "fixation-dot" }),
     prompt: () => {
       // Conditionally display the photodiodeGhostBox
       if (config.USE_PHOTODIODE) return photodiodeGhostBox;
