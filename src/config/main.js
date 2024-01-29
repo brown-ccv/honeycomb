@@ -2,7 +2,6 @@
  * This is the main configuration file where universal and default settings should be placed.
  * These setting can then be imported anywhere in the app
  */
-import { init } from "@brown-ccv/behavioral-task-trials";
 import { initJsPsych } from "jspsych";
 
 import packageInfo from "../../package.json";
@@ -37,23 +36,23 @@ const USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true"; // Whether or no
 
 const USE_VOLUME = process.env.REACT_APP_VOLUME === "true"; // Whether or not to use audio cues in the task
 const USE_CAMERA = process.env.REACT_APP_VIDEO === "true" && USE_ELECTRON; // Whether or not to use video recording
+// TODO #341: Remove USE_EEG - separate variables for USE_PHOTODIODE and USE_EVENT_MARKER
 const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON; // Whether or not the EEG/event marker is available (TODO: This is only used for sending event codes)
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON; // whether or not the photodiode is in use
 
 /**
  * Configuration object for Honeycomb
  */
-// TODO #361: Remove init call, export as ENV
-const config = init({
+const config = {
   USE_PHOTODIODE,
-  USE_EEG, // TODO #341: Remove USE_EEG - separate variables for USE_PHOTODIODE and USE_EVENT_MARKER
+  USE_EEG,
   USE_ELECTRON,
   USE_MTURK,
   USE_VOLUME,
   USE_CAMERA,
   USE_PROLIFIC,
   USE_FIREBASE,
-});
+};
 
 /** Export the settings so they can be used anywhere in the app */
 export {
