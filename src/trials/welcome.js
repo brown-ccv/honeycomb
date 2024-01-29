@@ -1,5 +1,3 @@
-import { showMessage } from "@brown-ccv/behavioral-task-trials";
-import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
 import { config, eventCodes, LANGUAGE } from "../config/main";
@@ -7,12 +5,12 @@ import { pdSpotEncode, photodiodeGhostBox } from "../lib/markup/photodiode";
 import { div, h1 } from "../lib/markup/tags";
 
 /** Task that displays the name of the experiment */
-const nameTrial = showMessage(config, {
-  responseType: htmlButtonResponse,
-  message: LANGUAGE.name,
-  responseEndsTrial: true,
-  buttons: [LANGUAGE.prompts.continue.button],
-});
+const nameTrial = {
+  type: htmlKeyboardResponse,
+  stimulus: h1(LANGUAGE.name),
+  choices: "NO_KEYS",
+  trial_duration: 1000,
+};
 // TODO #292: Turn into jsPsych NO_KEYS trial
 // TODO #365: Move showMessage into this repo?
 
