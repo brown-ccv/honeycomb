@@ -30,17 +30,6 @@ body,
   width: 100%;
 }
 
-.photodiode-box {
-  position: fixed;
-  bottom: 3px;
-  right: 3px;
-  display: flex;
-  outline: 3px solid rgb(80, 80, 80);
-  margin: auto;
-  height: 50px;
-  width: 50px;
-}
-
 .main-prompt {
   height: 100vh;
   display: flex;
@@ -49,6 +38,17 @@ body,
   align-items: center !important;
   margin-top: -10%;
   margin-bottom: -5%;
+}
+
+#photodiode-box {
+  position: fixed;
+  bottom: 3px;
+  right: 3px;
+  display: flex;
+  outline: 3px solid rgb(80, 80, 80);
+  margin: auto;
+  height: 50px;
+  width: 50px;
 }
 
 #photodiode-spot {
