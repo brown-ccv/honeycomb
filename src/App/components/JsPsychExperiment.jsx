@@ -6,7 +6,7 @@ import { initParticipant } from "../deployments/firebase";
 import { buildTimeline, jsPsychOptions } from "../../timelines/main";
 
 // ID used to identify the DOM element that holds the experiment.
-const EXPERIMENT_ID = "experimentWindow";
+const EXPERIMENT_ID = "experiment-window";
 
 export default function JsPsychExperiment({
   studyID,
@@ -58,5 +58,5 @@ export default function JsPsychExperiment({
     jsPsych.run(timeline);
   }, [jsPsych]);
 
-  return <div id={EXPERIMENT_ID} className="App" />;
+  return <div id={EXPERIMENT_ID} />;
 }
