@@ -69,3 +69,14 @@ body,
   width: 15px;
   border-radius: 50%;
 }
+
+/* Custom styling for the default button */
+.jspsych-btn {
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  box-shadow: 5px 5px 5px #efefef;
+  background-color: #d3d3d3;
+  margin: 1rem;
+  width: 10rem !important;
+}

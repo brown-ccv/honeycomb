@@ -4,8 +4,7 @@ import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
 import { config, eventCodes, LANGUAGE } from "../config/main";
 import { pdSpotEncode, photodiodeGhostBox } from "../lib/markup/photodiode";
-import { baseStimulus } from "../lib/markup/stimuli";
-import { h1 } from "../lib/markup/tags";
+import { div, h1 } from "../lib/markup/tags";
 
 /** Task that displays the name of the experiment */
 const nameTrial = showMessage(config, {
@@ -22,7 +21,7 @@ const welcomeTrial = {
   type: htmlKeyboardResponse,
   stimulus: () => {
     const welcomeMarkup = h1(LANGUAGE.welcome);
-    return baseStimulus(welcomeMarkup, true) + photodiodeGhostBox;
+    return div(welcomeMarkup, { class: "main-prompt" }) + photodiodeGhostBox;
   },
   prompt: () => {
     let promptMarkup = LANGUAGE.prompts.continue.prompt;
