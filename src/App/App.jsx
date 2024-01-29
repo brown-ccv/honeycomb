@@ -3,7 +3,6 @@ import React from "react";
 // Import css styling
 import "@fortawesome/fontawesome-free/css/all.css";
 import "bootstrap/dist/css/bootstrap.css";
-// import "jspsych/css/jspsych.css"; // TODO: Can I import this later?
 import "./index.css";
 
 // Import configurations and utilities
