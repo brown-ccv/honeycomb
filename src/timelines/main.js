@@ -3,7 +3,9 @@ import { buildCameraEndTrial, buildCameraStartTrial } from "../trials/camera";
 
 import { buildHoneycombTimeline } from "./honeycombTimeline";
 
-// Add CSS styling for the trials
+// Add CSS styling from jsPsych
+import "jspsych/css/jspsych.css";
+// Add custom CSS styling for this task
 import "../lib/markup/trials.css";
 
 /**
