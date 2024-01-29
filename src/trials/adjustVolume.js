@@ -7,7 +7,7 @@ const adjustVolumeTrial = {
   type: htmlKeyboardResponse,
   stimulus: () => {
     const adjustVolumeMarkup = h1(LANGUAGE.trials.adjustVolume);
-    return div(adjustVolumeMarkup, { class: "main-prompt" });
+    return div(adjustVolumeMarkup, { class: "bottom-prompt" });
   },
   prompt: LANGUAGE.prompts.continue.prompt,
   response_ends_trial: true,

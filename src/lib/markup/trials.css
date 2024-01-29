@@ -1,4 +1,4 @@
-/* Custom styling for the default button. This targets a built-in class from jsPsych */
+/* Custom styling for the default button. This targets a built-in class from jsPsych. */
 .jspsych-btn {
   padding: 0.5rem 1rem;
   font-weight: bold;
@@ -9,7 +9,7 @@
   width: 10rem !important;
 }
 
-/* Custom styling for the photodiode box */
+/* Custom styling for the photodiode box. */
 #photodiode-box {
   position: fixed;
   bottom: 3px;
@@ -21,7 +21,7 @@
   width: 50px;
 }
 
-/* Custom styling for the photodiode spot */
+/* Custom styling for the photodiode spot. */
 #photodiode-spot {
   width: 50px;
   height: 50px;
@@ -30,7 +30,7 @@
   position: absolute;
 }
 
-/* Custom styling for the fixation dot. See  */
+/* Custom styling for the fixation dot.  */
 #fixation-dot {
   background-color: black;
   height: 15px;
@@ -38,7 +38,8 @@
   border-radius: 50%;
 }
 
-.main-prompt {
+/* Styles the jsPsych stimulus such that the prompt will appear at the bottom of the window */
+.bottom-prompt {
   height: 100vh;
   display: flex;
   flex-direction: row;
