@@ -1,13 +1,15 @@
-.main-prompt {
-  height: 100vh;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center !important;
-  margin-top: -10%;
-  margin-bottom: -5%;
+/* Custom styling for the default button. This targets a built-in class from jsPsych */
+.jspsych-btn {
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  box-shadow: 5px 5px 5px #efefef;
+  background-color: #d3d3d3;
+  margin: 1rem;
+  width: 10rem !important;
 }
 
+/* Custom styling for the photodiode box */
 #photodiode-box {
   position: fixed;
   bottom: 3px;
@@ -19,6 +21,7 @@
   width: 50px;
 }
 
+/* Custom styling for the photodiode spot */
 #photodiode-spot {
   width: 50px;
   height: 50px;
@@ -27,6 +30,7 @@
   position: absolute;
 }
 
+/* Custom styling for the fixation dot. See  */
 #fixation-dot {
   background-color: black;
   height: 15px;
@@ -34,13 +38,12 @@
   border-radius: 50%;
 }
 
-/* Custom styling for the default button */
-.jspsych-btn {
-  padding: 0.5rem 1rem;
-  font-weight: bold;
-  border-radius: 5px;
-  box-shadow: 5px 5px 5px #efefef;
-  background-color: #d3d3d3;
-  margin: 1rem;
-  width: 10rem !important;
+.main-prompt {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center !important;
+  margin-top: -10%;
+  margin-bottom: -5%;
 }
