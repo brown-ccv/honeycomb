@@ -1,10 +1,9 @@
-import { showMessage } from "@brown-ccv/behavioral-task-trials";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import instructionsResponse from "@jspsych/plugin-instructions";
 import preloadResponse from "@jspsych/plugin-preload";
 
-import { config, eventCodes, LANGUAGE, SETTINGS } from "../config/main";
-import { b, div, image, p } from "../lib/markup/tags";
+import { eventCodes, LANGUAGE, SETTINGS } from "../config/main";
+import { b, div, h1, image, p } from "../lib/markup/tags";
 
 const honeycombLanguage = LANGUAGE.trials.honeycomb;
 
@@ -82,11 +81,12 @@ function buildDebriefTrial(jsPsych) {
 }
 
 /** Trial that displays a completion message for 5 seconds */
-// TODO #365: Bring showMessage trial directly into HC and update
 // TODO #367: Use trial inside endBlock
-const finishTrial = showMessage(config, {
-  duration: 5000,
-  message: honeycombLanguage.finish,
-});
+const finishTrial = {
+  type: htmlKeyboardResponse,
+  stimulus: h1(honeycombLanguage.finish),
+  choices: "NO_KEYS",
+  trial_duration: 5000,
+};
 
 export { buildDebriefTrial, finishTrial, instructionsTrial, preloadTrial };
