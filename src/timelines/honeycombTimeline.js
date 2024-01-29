@@ -1,4 +1,3 @@
-import { adjustVolumeTrial } from "../trials/adjustVolume";
 import { exitFullscreenTrial } from "../trials/fullscreen";
 import {
   buildDebriefTrial,
@@ -27,12 +26,12 @@ function buildHoneycombTimeline(jsPsych) {
 
   const timeline = [
     preambleBlock,
-    // preloadTrial,
-    // instructionsTrial,
-    // honeycombBlock,
-    // debriefTrial,
-    // finishTrial,
-    // exitFullscreenTrial,
+    preloadTrial,
+    instructionsTrial,
+    honeycombBlock,
+    debriefTrial,
+    finishTrial,
+    exitFullscreenTrial,
   ];
   return timeline;
 }
