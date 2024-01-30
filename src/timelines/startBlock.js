@@ -14,10 +14,10 @@ import { nameTrial, welcomeTrial } from "../trials/welcome";
  * @returns {Object} A jsPsych (nested) timeline object
  */
 function buildStartBlock(jsPsych) {
-  const timeline = [];
-  if (config.USE_CAMERA) timeline.push(buildCameraStartTrial(jsPsych)); // Add buildCameraStartTrial as the first trial
+  const timeline = [nameTrial, enterFullscreenTrial, welcomeTrial];
 
-  // const timeline = [nameTrial, enterFullscreenTrial, welcomeTrial];
+  // Conditionally add the camera setup trials
+  if (config.USE_CAMERA) timeline.push(buildCameraStartTrial(jsPsych));
 
   // Conditionally add the photodiode setup trials
   if (config.USE_PHOTODIODE) {
