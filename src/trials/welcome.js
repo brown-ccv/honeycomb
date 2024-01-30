@@ -16,7 +16,7 @@ const nameTrial = {
 const welcomeTrial = {
   type: htmlKeyboardResponse,
   stimulus: () => {
-    const welcomeMarkup = h1(LANGUAGE.welcome);
+    const welcomeMarkup = h1(LANGUAGE.trials.welcome);
     return div(welcomeMarkup, { class: "bottom-prompt" }) + photodiodeGhostBox;
   },
   prompt: () => {
