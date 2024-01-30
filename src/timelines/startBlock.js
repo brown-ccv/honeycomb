@@ -3,8 +3,9 @@ import { config } from "../config/main";
 import { buildCameraStartTrial } from "../trials/camera";
 import { enterFullscreenTrial } from "../trials/fullscreen";
 import { holdUpMarkerTrial } from "../trials/holdUpMarker";
+import { nameTrial } from "../trials/name";
 import { startCodeTrial } from "../trials/startCode";
-import { nameTrial, welcomeTrial } from "../trials/welcome";
+import { welcomeTrial } from "../trials/welcome";
 
 /**
  * Builds the block of trials needed to start and setup the experiment

@@ -4,14 +4,6 @@ import { config, eventCodes, LANGUAGE } from "../config/main";
 import { pdSpotEncode, photodiodeGhostBox } from "../lib/markup/photodiode";
 import { div, h1 } from "../lib/markup/tags";
 
-/** Task that displays the name of the experiment */
-const nameTrial = {
-  type: htmlKeyboardResponse,
-  stimulus: h1(LANGUAGE.name),
-  choices: "NO_KEYS",
-  trial_duration: 1000,
-};
-
 /** Task that displays a welcome message with the photodiode ghost box */
 const welcomeTrial = {
   type: htmlKeyboardResponse,
@@ -34,4 +26,4 @@ const welcomeTrial = {
   response_ends_trial: true,
 };
 
-export { nameTrial, welcomeTrial };
+export { welcomeTrial };
