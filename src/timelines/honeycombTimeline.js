@@ -1,6 +1,6 @@
 import { buildDebriefTrial, instructionsTrial, preloadTrial } from "../trials/honeycombTrials";
 
-import { endBlock } from "./endBlock";
+import { buildEndBlock } from "./endBlock";
 import { buildHoneycombBlock } from "./honeycombBlock";
 import { buildStartBlock } from "./startBlock";
 
@@ -13,12 +13,24 @@ import { buildStartBlock } from "./startBlock";
  * @returns {Object} A jsPsych timeline object
  */
 function buildHoneycombTimeline(jsPsych) {
+  // Build the trials that make up the start block
+  const startBlock = buildStartBlock(jsPsych);
+
+  // Build the trials that make up the Honeycomb block
+  const honeycombBlock = buildHoneycombBlock(jsPsych);
+
+  // Builds the trial needed to debrief the participant on their performance
+  const debriefTrial = buildDebriefTrial(jsPsych);
+
+  // Builds the trials that make up the end block
+  const endBlock = buildEndBlock(jsPsych);
+
   const timeline = [
-    buildStartBlock(jsPsych), // Build the trials that make up the start block
+    startBlock,
     preloadTrial,
     instructionsTrial,
-    buildHoneycombBlock(jsPsych), // Build the trials that make up the Honeycomb block
-    buildDebriefTrial(jsPsych), // Builds the trial needed to debrief the participant on their performance
+    honeycombBlock,
+    debriefTrial,
     endBlock,
   ];
   return timeline;
