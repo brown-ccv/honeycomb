@@ -9,13 +9,13 @@ import { div, h1, p } from "../../lib/markup/tags";
 // TODO #330: Actually check to see if USB is connected? This isn't testing anything?
 export const holdUpMarkerTrial = {
   type: htmlButtonResponse,
-  stimulus: () => {
+  stimulus: function () {
     const eventMarkerMarkup = h1(LANGUAGE.trials.eventMarker.connected, {
       style: "color: green;",
     });
     return div(eventMarkerMarkup, { class: "bottom-prompt" });
   },
-  prompt: () => {
+  prompt: function () {
     let holdUpMarkerPrompt = p(LANGUAGE.trials.holdUpMarker);
 
     // Conditionally add the photodiodeGhostBox
@@ -24,7 +24,7 @@ export const holdUpMarkerTrial = {
     return holdUpMarkerPrompt;
   },
   choices: [LANGUAGE.prompts.continue.button],
-  on_load: () => {
+  on_load: function () {
     // Conditionally flash the photodiode when the trial first loads
     if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.test_connect);
   },

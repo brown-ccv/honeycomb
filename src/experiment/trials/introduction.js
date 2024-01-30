@@ -7,7 +7,7 @@ import { div, h1 } from "../../lib/markup/tags";
 export const introductionTrial = {
   type: htmlKeyboardResponse,
   response_ends_trial: true,
-  stimulus: () => {
+  stimulus: function () {
     const welcomeMarkup = h1(LANGUAGE.trials.welcome);
     return div(welcomeMarkup, { class: "bottom-prompt" });
   },

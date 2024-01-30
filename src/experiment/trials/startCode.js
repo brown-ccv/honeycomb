@@ -13,13 +13,13 @@ export const startCodeTrial = {
   stimulus: "assets/audio/beep.mp3",
   choices: "NO_KEYS",
   trial_ends_after_audio: true,
-  prompt: () => {
+  prompt: function () {
     let markup = h1(LANGUAGE.prompts.settingUp);
     // Conditionally displays the photodiodeGhostBox
     if (config.USE_PHOTODIODE) markup += photodiodeGhostBox;
     return markup;
   },
-  on_load: () => {
+  on_load: function () {
     // Conditionally flashes the photodiode when the trial first loads
     if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.open_task);
   },

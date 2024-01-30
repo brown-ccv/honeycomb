@@ -56,6 +56,7 @@ export function formatDollars(amount) {
  * Starts the JsPsych keyboard response listener
  * @param  jsPsych The jsPsych instance running the task.
  */
+// TODO: Remove?
 export function startKeypressListener(jsPsych) {
   const keypressResponse = (info) => {
     const data = { key_press: info.key };

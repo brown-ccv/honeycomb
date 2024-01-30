@@ -14,7 +14,9 @@ import { buildDebriefTrial, instructionsTrial, preloadTrial } from "./trials/hon
  * Note that Honeycomb combines these with other options required for Honeycomb to operate correctly
  */
 export const honeycombOptions = {
-  on_finish: (data) => console.log("The experiment has finished:", data),
+  on_finish: function (data) {
+    return console.log("The experiment has finished:", data);
+  },
 };
 
 /**

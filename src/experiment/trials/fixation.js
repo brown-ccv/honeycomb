@@ -19,12 +19,12 @@ export function buildFixationTrial(jsPsych) {
     choices: "NO_KEYS",
     // Display the fixation dot
     stimulus: div("", { id: "fixation-dot" }),
-    prompt: () => {
+    prompt: function () {
       // Conditionally display the photodiodeGhostBox
       if (config.USE_PHOTODIODE) return photodiodeGhostBox;
       else return null;
     },
-    trial_duration: () => {
+    trial_duration: function () {
       if (fixationSettings.randomize_duration) {
         // Select a random duration from the durations array to show the fixation dot for
         return jsPsych.randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0];
@@ -36,7 +36,7 @@ export function buildFixationTrial(jsPsych) {
     data: {
       code: fixationCode, // Add event code to the recorded data
     },
-    on_load: () => {
+    on_load: function () {
       // Conditionally flash the photodiode when the trial first loads
       if (config.USE_PHOTODIODE) pdSpotEncode(fixationCode);
     },
