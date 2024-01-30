@@ -8,7 +8,9 @@ import { div, span } from "./tags";
  * Note the box will only be visible if USE_PHOTODIODE is true
  * Note that this trial is only available when running in Electron
  */
-const photodiodeGhostBox = div(span("", { id: "photodiode-spot" }), { id: "photodiode-box" });
+export const photodiodeGhostBox = div(span("", { id: "photodiode-spot" }), {
+  id: "photodiode-box",
+});
 
 /**
  * Conditionally flashes a spot inside the photodiodeGhostBox and sends event codes to the serial port
@@ -16,7 +18,7 @@ const photodiodeGhostBox = div(span("", { id: "photodiode-spot" }), { id: "photo
  * Note that this function must be executed inside the "on_load" callback of a trial
  * @param {number} taskCode The unique code for the given trial on which this function executes
  */
-function pdSpotEncode(taskCode) {
+export function pdSpotEncode(taskCode) {
   if (!config.USE_ELECTRON) {
     throw new Error("photodiodeSpot trial is only available when running inside Electron");
   }
@@ -57,5 +59,3 @@ function pdSpotEncode(taskCode) {
     }
   }
 }
-
-export { photodiodeGhostBox, pdSpotEncode };

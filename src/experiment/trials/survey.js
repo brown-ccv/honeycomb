@@ -10,7 +10,7 @@ const demographicsSurveyLanguage = LANGUAGE.trials.survey.demographics;
  * Displays a survey for the participant to complete.
  * Demographic data about the participant is collected
  */
-const demographicsSurvey = {
+export const demographicsSurvey = {
   type: jsPsychSurveyPlugin,
   title: demographicsSurveyLanguage.title,
   pages: [
@@ -70,7 +70,7 @@ const iusSurveyLanguage = LANGUAGE.trials.survey.ius;
  * Displays a survey designed to measure intolerance of uncertainty.
  * The user is shown multiple questions across a likert scale
  */
-const iusSurvey = {
+export const iusSurvey = {
   type: jsPsychSurveyPlugin,
   title: iusSurveyLanguage.title,
   pages: [
@@ -85,5 +85,3 @@ const iusSurvey = {
     ],
   ],
 };
-
-export { demographicsSurvey, iusSurvey };

@@ -7,7 +7,7 @@ import { div, h1, p } from "../../lib/markup/tags";
 
 // TODO #330: Rename as checkEEG? (this is a similar trial to cameraStart)
 // TODO #330: Actually check to see if USB is connected? This isn't testing anything?
-const holdUpMarkerTrial = {
+export const holdUpMarkerTrial = {
   type: htmlButtonResponse,
   stimulus: () => {
     const eventMarkerMarkup = h1(LANGUAGE.trials.eventMarker.connected, {
@@ -29,5 +29,3 @@ const holdUpMarkerTrial = {
     if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.test_connect);
   },
 };
-
-export { holdUpMarkerTrial };

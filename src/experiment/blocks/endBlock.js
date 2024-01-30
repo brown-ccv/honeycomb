@@ -11,7 +11,7 @@ import { exitFullscreenTrial } from "../trials/fullscreen";
  * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych (nested) timeline object
  */
-function buildEndBlock(jsPsych) {
+export function buildEndBlock(jsPsych) {
   const endBlock = [];
 
   // Conditionally add the camera breakdown trials
@@ -25,5 +25,3 @@ function buildEndBlock(jsPsych) {
   // Return the block as a nested timeline
   return { timeline: endBlock };
 }
-
-export { buildEndBlock };

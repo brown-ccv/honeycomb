@@ -11,7 +11,6 @@ import { div } from "../../lib/markup/tags";
  * @returns {Object} A jsPsych trial object
  */
 export function buildFixationTrial(jsPsych) {
-  // TODO #371: These settings should be passed as a parameter to the function
   const fixationSettings = SETTINGS.fixation;
   const fixationCode = eventCodes.fixation;
 

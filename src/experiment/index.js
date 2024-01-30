@@ -15,7 +15,7 @@ import "../lib/markup/trials.css";
  *
  * Custom options for your experiment should be added in your own file inside the experiment folder
  */
-const jsPsychOptions = {
+export const jsPsychOptions = {
   ...honeycombOptions,
   on_trial_finish: (data) => console.log(`Trial ${data.internal_node_id} just finished:`, data),
 };
@@ -28,7 +28,7 @@ const jsPsychOptions = {
  * @param {string} participantID The ID of the participant that was just logged in
  * @returns The timeline for JsPsych to run
  */
-function buildTimeline(jsPsych, studyID, participantID) {
+export function buildTimeline(jsPsych, studyID, participantID) {
   console.log(`Building timeline for participant ${participantID} on study ${studyID}`);
 
   /**
@@ -39,5 +39,3 @@ function buildTimeline(jsPsych, studyID, participantID) {
 
   return timeline;
 }
-
-export { buildTimeline, jsPsychOptions };

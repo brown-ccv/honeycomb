@@ -15,7 +15,7 @@ const honeycombLanguage = LANGUAGE.trials.honeycomb;
  * Instructions have been altered from the original tutorial to match the instructions plugin:
  * https://www.jspsych.org/7.3/plugins/instructions/#including-images
  */
-const instructionsTrial = {
+export const instructionsTrial = {
   type: instructionsResponse,
   pages: [
     p(honeycombLanguage.instructions.read),
@@ -44,7 +44,7 @@ const instructionsTrial = {
 };
 
 /** Trial that loads all of the stimulus images */
-const preloadTrial = {
+export const preloadTrial = {
   type: preloadResponse,
   message: p(LANGUAGE.prompts.settingUp),
   images: SETTINGS.honeycomb.timeline_variables.map(({ stimulus }) => stimulus),
@@ -52,7 +52,7 @@ const preloadTrial = {
 // TODO #281: Function for preloading all files in public/images?
 
 /** Trial that calculates and displays some results of the session  */
-function buildDebriefTrial(jsPsych) {
+export function buildDebriefTrial(jsPsych) {
   return {
     type: htmlKeyboardResponse,
     stimulus: () => {
@@ -80,5 +80,3 @@ function buildDebriefTrial(jsPsych) {
     },
   };
 }
-
-export { buildDebriefTrial, instructionsTrial, preloadTrial };

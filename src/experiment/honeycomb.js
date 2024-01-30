@@ -13,7 +13,7 @@ import { buildDebriefTrial, instructionsTrial, preloadTrial } from "./trials/hon
  * Experiment-wide settings for jsPsych: https://www.jspsych.org/7.3/overview/experiment-options/
  * Note that Honeycomb combines these with other options required for Honeycomb to operate correctly
  */
-const honeycombOptions = {
+export const honeycombOptions = {
   on_finish: (data) => console.log("The experiment has finished:", data),
 };
 
@@ -25,7 +25,7 @@ const honeycombOptions = {
  * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych timeline object
  */
-function buildHoneycombTimeline(jsPsych) {
+export function buildHoneycombTimeline(jsPsych) {
   // Build the trials that make up the start block
   const startBlock = buildStartBlock(jsPsych);
 
@@ -48,5 +48,3 @@ function buildHoneycombTimeline(jsPsych) {
   ];
   return timeline;
 }
-
-export { buildHoneycombTimeline, honeycombOptions };
