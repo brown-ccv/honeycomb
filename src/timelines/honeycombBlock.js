@@ -13,7 +13,6 @@ import { buildFixationTrial } from "../trials/fixation";
  * Note that the block is conditionally rendered and repeated based on the task settings
  */
 function buildHoneycombBlock(jsPsych) {
-  // TODO #371: These settings should be passed as a parameter to the function
   const honeycombSettings = SETTINGS.honeycomb;
 
   const fixationTrial = buildFixationTrial(jsPsych);

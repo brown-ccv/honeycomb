@@ -26,11 +26,13 @@ const jsPsychOptions = {
  */
 function buildTimeline(jsPsych, studyID, participantID) {
   console.log(`Building timeline for participant ${participantID} on study ${studyID}`);
+
+  // Build all of the trials consisting of the Honeycomb task
   const timeline = buildHoneycombTimeline(jsPsych);
 
   // Dynamically adds the camera trials to the experiment if config.USE_CAMERA
+  // TODO #367: These should be a part of the start and end blocks
   if (config.USE_CAMERA) {
-    // TODO #367: These should be a part of the start and end blocks
     timeline.unshift(buildCameraStartTrial(jsPsych)); // Add buildCameraStartTrial as the first trial
     timeline.push(buildCameraEndTrial(jsPsych)); // Add buildCameraEndTrial as the last trial
   }

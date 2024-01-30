@@ -6,7 +6,7 @@ import { startCodeTrial } from "../trials/startCode";
 import { welcomeTrial, nameTrial } from "../trials/welcome";
 
 /** Builds the blocks of trials needed to start and setup the experiment */
-function buildPreambleBlock() {
+function buildStartBlock() {
   const timeline = [nameTrial, enterFullscreenTrial, welcomeTrial];
 
   // Conditionally add the photodiode setup trials
@@ -18,4 +18,4 @@ function buildPreambleBlock() {
   return { timeline };
 }
 
-export { buildPreambleBlock };
+export { buildStartBlock };
