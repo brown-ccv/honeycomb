@@ -5,7 +5,7 @@ import { pdSpotEncode, photodiodeGhostBox } from "../lib/markup/photodiode";
 import { div, h1 } from "../lib/markup/tags";
 
 /** Task that displays a welcome message with the photodiode ghost box */
-const welcomeTrial = {
+const introductionTrial = {
   type: htmlKeyboardResponse,
   stimulus: () => {
     const welcomeMarkup = h1(LANGUAGE.trials.welcome);
@@ -26,4 +26,4 @@ const welcomeTrial = {
   response_ends_trial: true,
 };
 
-export { welcomeTrial };
+export { introductionTrial };
