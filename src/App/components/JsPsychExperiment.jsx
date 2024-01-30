@@ -3,7 +3,7 @@ import React from "react";
 
 import { config, taskVersion } from "../../config/main";
 import { initParticipant } from "../deployments/firebase";
-import { buildTimeline, jsPsychOptions } from "../../timelines/main";
+import { buildTimeline, jsPsychOptions } from "../../experiment/timelines/main";
 
 // ID used to identify the DOM element that holds the experiment.
 const EXPERIMENT_ID = "experiment-window";

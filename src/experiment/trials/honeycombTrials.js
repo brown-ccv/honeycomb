@@ -2,8 +2,8 @@ import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import instructionsResponse from "@jspsych/plugin-instructions";
 import preloadResponse from "@jspsych/plugin-preload";
 
-import { eventCodes, LANGUAGE, SETTINGS } from "../config/main";
-import { b, div, image, p } from "../lib/markup/tags";
+import { eventCodes, LANGUAGE, SETTINGS } from "../../config/main";
+import { b, div, image, p } from "../../lib/markup/tags";
 
 const honeycombLanguage = LANGUAGE.trials.honeycomb;
 
