@@ -17,7 +17,6 @@ export function buildFixationTrial(jsPsych) {
   return {
     type: htmlKeyboardResponse,
     choices: "NO_KEYS",
-    response_ends_trial: false,
     // Display the fixation dot
     stimulus: div("", { id: "fixation-dot" }),
     prompt: () => {
