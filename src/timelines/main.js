@@ -1,4 +1,4 @@
-import { buildHoneycombTimeline } from "./honeycombTimeline";
+import { buildHoneycombTimeline } from "./honeycomb";
 
 // Add CSS styling from jsPsych
 import "jspsych/css/jspsych.css";
