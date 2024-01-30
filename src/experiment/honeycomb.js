@@ -15,7 +15,7 @@ import { buildDebriefTrial, instructionsTrial, preloadTrial } from "./trials/hon
  */
 export const honeycombOptions = {
   on_finish: function (data) {
-    return console.log("The experiment has finished:", data);
+    console.log("The experiment has finished:", data);
   },
 };
 

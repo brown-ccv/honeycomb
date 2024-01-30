@@ -55,18 +55,18 @@ export function buildCameraStartTrial(jsPsych) {
           const cameraChunks = [];
 
           // Push data whenever available
-          cameraRecorder.addEventListener("dataavailable", function (event) {
+          cameraRecorder.addEventListener("dataavailable", (event) => {
             if (event.data.size > 0) cameraChunks.push(event.data);
           });
 
           // Saves the raw data feed from the participants camera (executed on cameraRecorder.stop()).
-          cameraRecorder.addEventListener("stop", function () {
+          cameraRecorder.addEventListener("stop", () => {
             const blob = new Blob(cameraChunks, { type: cameraRecorder.mimeType });
 
             // Pass video data to Electron as a base64 encoded string
             const reader = new FileReader();
             reader.readAsDataURL(blob);
-            reader.onloadend = function () {
+            reader.onloadend = () => {
               window.electronAPI.saveVideo(reader.result);
             };
           });
