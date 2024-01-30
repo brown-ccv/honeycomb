@@ -3,7 +3,7 @@ import { buildHoneycombTimeline } from "./honeycomb";
 // Add CSS styling from jsPsych
 import "jspsych/css/jspsych.css";
 // Add custom CSS styling for this task
-import "../../lib/markup/trials.css";
+import "../lib/markup/trials.css";
 
 /**
  * Experiment-wide settings for jsPsych: https://www.jspsych.org/7.3/overview/experiment-options/

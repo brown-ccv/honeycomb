@@ -1,8 +1,8 @@
-import { buildDebriefTrial, instructionsTrial, preloadTrial } from "../trials/honeycombTrials";
+import { buildEndBlock } from "./blocks/endBlock";
+import { buildHoneycombBlock } from "./blocks/honeycombBlock";
+import { buildStartBlock } from "./blocks/startBlock";
 
-import { buildEndBlock } from "../blocks/endBlock";
-import { buildHoneycombBlock } from "../blocks/honeycombBlock";
-import { buildStartBlock } from "../blocks/startBlock";
+import { buildDebriefTrial, instructionsTrial, preloadTrial } from "./trials/honeycombTrials";
 
 /**
  * This timeline builds the example reaction time task from the jsPsych tutorial.
