@@ -1,6 +1,7 @@
 import audioKeyboardResponse from "@jspsych/plugin-audio-keyboard-response";
 
-import { config, eventCodes, LANGUAGE } from "../../config/main";
+import { config, LANGUAGE } from "../../config/main";
+import { eventCodes } from "../../config/trigger";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 import { h1 } from "../../lib/markup/tags";
 
