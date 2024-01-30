@@ -27,7 +27,9 @@ function buildStartBlock(jsPsych) {
   }
 
   // Conditionally add the camera setup trials
-  if (config.USE_CAMERA) timeline.push(buildCameraStartTrial(jsPsych));
+  if (config.USE_CAMERA) {
+    timeline.push(buildCameraStartTrial(jsPsych));
+  }
 
   return { timeline };
 }
