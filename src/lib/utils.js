@@ -53,26 +53,6 @@ export function formatDollars(amount) {
 }
 
 /**
- * Starts the JsPsych keyboard response listener
- * @param  jsPsych The jsPsych instance running the task.
- */
-// TODO: Remove?
-export function startKeypressListener(jsPsych) {
-  const keypressResponse = (info) => {
-    const data = { key_press: info.key };
-    jsPsych.finishTrial(data);
-  };
-
-  const keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-    callback_function: keypressResponse,
-    valid_responses: ["ALL_KEYS"],
-    persist: false,
-  });
-
-  return keyboardListener;
-}
-
-/**
  * Gets the value of a given variable from the URL search parameters
  * @param {string} queryParameter The key of the variable in the search parameters
  * @returns {string} The value of variable in the search parameters
