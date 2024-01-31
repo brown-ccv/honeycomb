@@ -16,7 +16,6 @@ firebase.initializeApp({
 export const db = firebase.firestore();
 
 // Use emulator if on localhost
-// TODO #173: Refactor to use NODE_ENV
 if (window.location.hostname === "localhost") db.useEmulator("localhost", 8080);
 
 // Get a reference to the Firebase document at
@@ -60,12 +59,12 @@ export async function initParticipant(studyID, participantID, startDate) {
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate);
     await experiment.set({
-      // TODO #173: Write GIT SHA here
+      // TODO #394: Write GIT SHA here
       start_time: startDate,
-      // TODO #173: app_version and app_platform are deprecated
+      // TODO #394: app_version and app_platform are deprecated
       app_version: window.navigator.appVersion,
       app_platform: window.navigator.platform,
-      // TODO #175: Store participantID and studyID here, not on each trial
+      // TODO #394: Store participantID and studyID here, not on each trial
     });
     console.log("Initialized experiment:", studyID, participantID, startDate);
     return true;

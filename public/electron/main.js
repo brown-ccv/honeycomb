@@ -8,7 +8,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const log = require("electron-log");
 const _ = require("lodash");
 
-// TODO 340: Use Electron's web serial API for this
+// TODO # 340: Use Electron's web serial API for this
 const { getPort, sendToPort } = require("event-marker");
 
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events

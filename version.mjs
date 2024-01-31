@@ -1,5 +1,7 @@
-// Get Git Commit SHA and Branch
-// TODO #173: Is there a better way to keep track of versioning? Just use x.x.x?
+/**
+ * Get Git Commit SHA and Branch
+ * The version file is written into public/config/version.json
+ */
 
 import fsExtra from "fs-extra";
 import { execaCommandSync } from "execa";
