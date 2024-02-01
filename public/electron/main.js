@@ -152,7 +152,7 @@ function handleCheckSerialPort() {
 /**
  * Sends the event_codes to the trigger port
  * @param {} event The serial port event
- * @param {number} code The event code to be recorder
+ * @param {number} code The event code to be recorded
  */
 function handlePhotodiodeTrigger(event, code) {
   if (code !== undefined) {
