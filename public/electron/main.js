@@ -201,6 +201,7 @@ function handleOnDataUpdate(event, data) {
 
   // Prepend comma for all trials except first
   if (trial_index > 0) fs.appendFileSync(TEMP_FILE, ",");
+
   // Write trial data
   fs.appendFileSync(TEMP_FILE, JSON.stringify(data));
 
