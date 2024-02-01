@@ -17,10 +17,10 @@ export const taskName = packageInfo.name;
 export const taskVersion = packageInfo.version;
 
 // Re-export the language object
-// TODO @brown-ccv #373: Check language in Firebase
+// TODO @brown-ccv #373: Save language in Firebase
 export const LANGUAGE = language;
 // Re-export the settings object
-// TODO @brown-ccv #374: Check settings in Firebase
+// TODO @brown-ccv #374: Save settings in Firebase
 export const SETTINGS = settings;
 
 /**
@@ -28,7 +28,7 @@ export const SETTINGS = settings;
  * As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
  * The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
  * The actual task and related utils will use a different instance of jsPsych created after login.
- * TODO @brown-ccv #370: Initialize using using react code in jsPsychExperiment
+ * TODO @brown-ccv #395: Use instance from jsPsychExperiment
  */
 const jsPsych = initJsPsych();
 

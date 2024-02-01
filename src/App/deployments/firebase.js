@@ -1,7 +1,6 @@
+// TODO @brown-ccv #183: Upgrade to modular SDK instead of compat
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
-
-// TODO @brown-ccv #183: Upgrade to modular SDK instead of compat
 
 // Initialize Firebase and Firestore
 firebase.initializeApp({
@@ -60,11 +59,11 @@ export async function initParticipant(studyID, participantID, startDate) {
     const experiment = getExperimentRef(studyID, participantID, startDate);
     await experiment.set({
       // TODO @brown-ccv #394: Write GIT SHA here
+      // TODO @brown-ccv #394: Store participantID and studyID here, not on each trial
       start_time: startDate,
       // TODO @brown-ccv #394: app_version and app_platform are deprecated
       app_version: window.navigator.appVersion,
       app_platform: window.navigator.platform,
-      // TODO @brown-ccv #394: Store participantID and studyID here, not on each trial
     });
     console.log("Initialized experiment:", studyID, participantID, startDate);
     return true;

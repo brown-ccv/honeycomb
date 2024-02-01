@@ -62,9 +62,6 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: npm run package:linux
 
-      # Upload installers to github release
-      # TODO @brown-ccv: Can these be combined based on matrix.os???
-      # TODO @brown-ccv: Overwrite files if they exist?
       # Get package info
       - name: Get package name and version
         id: package_info
@@ -73,6 +70,7 @@ jobs:
           echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
         shell: bash
 
+      # Upload installers to github release
       - name: ⬆ Upload installer to release - Windows
         if: startsWith(matrix.os, 'windows')
         uses: svenstaro/upload-release-action@v2

@@ -1,4 +1,4 @@
-// TODO @brown-ccv #333: Move to "event_marker" config.json
+// TODO @brown-ccv #333: Nest this data under "trigger_box" equipment in config.json
 
 // teensyduino
 export const vendorID = "16c0";
@@ -11,7 +11,6 @@ export const comName = process.env.EVENT_MARKER_COM_NAME || "COM3";
 
 /** Custom codes for specific task events - used to identify the trials */
 // TODO @brown-ccv #354: Each event should have a code, name, and numBlinks
-// TODO @brown-ccv #333: eventCodes in settings.json
 export const eventCodes = {
   fixation: 1, // Fixation trial
   honeycomb: 2, // Main reaction-time trial for the Honeycomb task

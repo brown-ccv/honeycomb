@@ -44,12 +44,12 @@ export const instructionsTrial = {
 };
 
 /** Trial that loads all of the stimulus images */
+// TODO @brown-ccv #281: Trial for preloading all files in public/images?
 export const preloadTrial = {
   type: preloadResponse,
   message: p(LANGUAGE.prompts.settingUp),
   images: SETTINGS.honeycomb.timeline_variables.map(({ stimulus }) => stimulus),
 };
-// TODO @brown-ccv #281: Function for preloading all files in public/images?
 
 /** Trial that calculates and displays some results of the session  */
 export function buildDebriefTrial(jsPsych) {

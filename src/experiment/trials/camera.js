@@ -10,7 +10,9 @@ import { div, h1, p, tag } from "../../lib/markup/tags";
  * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych trial object
  */
-// TODO @brown-ccv #342: refactor to record using web USB
+// TODO @brown-ccv #301: Use jsPsych extension, deprecate this function
+// TODO @brown-ccv #343: We should be able to make this work on both electron and browser?
+// TODO @brown-ccv #301: Rolling save to the deployment (webm is a subset of mkv)
 export function buildCameraStartTrial(jsPsych) {
   return {
     timeline: [
@@ -18,7 +20,6 @@ export function buildCameraStartTrial(jsPsych) {
         // Prompts user permission for camera device
         type: initializeCamera,
         include_audio: true,
-        // TODO @brown-ccv #342: webm is a subset of mkv, should be able to do a rolling save?
         mime_type: "video/webm",
       },
       {
@@ -43,7 +44,6 @@ export function buildCameraStartTrial(jsPsych) {
         on_start: function () {
           // Initialize and store the camera feed
           if (!config.USE_ELECTRON) {
-            // TODO @brown-ccv #343: We should be able to make this work on both electron and browser?
             throw new Error("video recording is only available when running inside Electron");
           }
 
@@ -97,7 +97,6 @@ export function buildCameraEndTrial(jsPsych) {
 
   return {
     type: htmlKeyboardResponse,
-    // TODO @brown-ccv #372: Show photodiodeGhostBox as prompt
     stimulus: div(recordingEndMarkup, { class: "bottom-prompt" }),
     trial_duration: 5000,
     on_start: function () {

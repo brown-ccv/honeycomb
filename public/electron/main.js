@@ -8,7 +8,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const log = require("electron-log");
 const _ = require("lodash");
 
-// TODO @brown-ccv # 340: Use Electron's web serial API for this
+// TODO @brown-ccv #340: Use Electron's web serial API (remove event-marker dependency)
 const { getPort, sendToPort } = require("event-marker");
 
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
@@ -17,24 +17,21 @@ if (require("electron-squirrel-startup")) app.quit();
 // Initialize the logger for any renderer process
 log.initialize({ preload: true });
 
-// TODO @brown-ccv: Initialize writeable stream on login
-// TODO @brown-ccv: Handle data writing to desktop in a utility process?
-// TODO @brown-ccv: Handle video data writing to desktop in a utility process?
-// TODO @brown-ccv: Separate log files for each run through?
+// TODO @brown-ccv #192: Handle data writing to desktop in a utility process?
+// TODO @brown-ccv #192: Handle video data writing to desktop in a utility process?
+// TODO @brown-ccv #398: Separate log files for each run through?
 
 /************ GLOBALS ***********/
 
 let CONFIG; // Honeycomb configuration object
 let DEV_MODE; // Whether or not the application is running in dev mode
 let WRITE_STREAM; // Writeable file stream for the data (in the user's appData folder)
-// TODO @brown-ccv: These should use path, and can be combined into one?
 let OUT_PATH; // Path to the final output file (on the Desktop)
 let OUT_FILE; // Name of the output file
 
 let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
 let TRIGGER_PORT; // Port that the EEG machine is talking through
 
-// TODO @brown-ccv: THis is causing an error cause it's not built into the app?
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../config/version.json")));
 
 /************ APP LIFECYCLE ***********/
@@ -84,7 +81,7 @@ app.on("window-all-closed", () => {
  * Executed before the application begins closing its windows
  * We ensure the writeable stream is closed before exiting
  */
-// TODO @brown-ccv: Check what's been written to stream? If trial hasn't finished we need to add the closing '}'
+// TODO @brown-ccv #399: Check what's been written to stream? If trial hasn't finished we need to add the closing '}'
 app.on("before-quit", () => {
   if (WRITE_STREAM) {
     WRITE_STREAM.write("]}");
@@ -163,7 +160,7 @@ function handlePhotodiodeTrigger(event, code) {
 function handleOnDataUpdate(event, data) {
   const { participant_id, study_id, start_date, trial_index } = data;
 
-  // TODO @brown-ccv: We should probably initialize file on login? That's how Firebase handles it
+  // TODO @brown-ccv #397: Initialize writeable stream on login, not here
   // Set the output file names/paths and initialize a writeable stream in the user's appData folder
   if (!WRITE_STREAM) {
     // The final OUT_FILE will be nested inside subfolders on the Desktop
@@ -220,7 +217,7 @@ function handleOnFinish() {
 }
 
 // Save webm video file
-// TODO @brown-ccv @brown-ccv #342: Rolling save of webm video, remux to mp4 at the end?
+// TODO @brown-ccv #342: Rolling save of webm video, remux to mp4 at the end?
 function handleSaveVideo(event, data) {
   // Video file is the same as OUT_FILE except it's mp4, not json
   const filePath = path.join(
@@ -283,7 +280,7 @@ function createWindow() {
  * Set up a local proxy to adjust the paths of requested files
  * when loading them from the production bundle (e.g. local fonts, etc...).
  */
-// TODO @brown-ccv: This is deprecated but needed to load the min files? https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
+// TODO @brown-ccv #395: Delete this and local min files when PsiTurk is deprecated
 function setupLocalFilesNormalizerProxy() {
   // protocol.registerHttpProtocol(
   //   "file",
@@ -325,7 +322,7 @@ async function setUpPort() {
       log.error(err);
 
       // Displays as a dialog if there Electron is unable to communicate with the event marker's serial port
-      // TODO @brown-ccv: Let this just be dialog.showErrorBox?
+      // TODO @brown-ccv #400: Let this just be dialog.showErrorBox?
       dialog
         .showMessageBox(null, {
           type: "error",
