@@ -85,13 +85,13 @@ app.on("before-quit", () => {
     JSON.parse(fs.readFileSync(TEMP_FILE));
   } catch (error) {
     if (error instanceof TypeError) {
-      // TypeError because TEMP_FILE is undefined at this point
+      // TEMP_FILE is undefined at this point
       log.warn("Application quit before the participant started the experiment");
     } else if (error instanceof SyntaxError) {
-      // Syntax error because trials are still being written (hasn't hit handleOnFinish function)
+      // Trials are still being written (i.e. hasn't hit handleOnFinish function)
       log.warn("Application quit while the participant was completing the experiment");
     } else {
-      log.error("Electron encountered an error while logging out:");
+      log.error("Electron encountered an error while quitting:");
       log.error(error);
     }
   }
