@@ -5,4 +5,4 @@ cask "github"
 brew "openjdk"
 cask "visual-studio-code"
 
-# TODO #278: Python management (miniconda)? [Python is only needed for PsiTurk]
+# TODO @brown-ccv #278: Python management (miniconda)? [Python is only needed for PsiTurk]

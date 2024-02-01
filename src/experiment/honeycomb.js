@@ -6,7 +6,7 @@ import { buildDebriefTrial, instructionsTrial, preloadTrial } from "./trials/hon
 
 /**
  * ! This file should not be edited! Instead, create a new file with the name of your task
- * TODO: Link "Quick Start" step once's it's built into the docs
+ * TODO @brown-ccv: Link "Quick Start" step once's it's built into the docs
  */
 
 /**

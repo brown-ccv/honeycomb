@@ -19,7 +19,7 @@ const INVALID_DEPLOYMENT_ERROR = new Error("Invalid deployment: " + DEPLOYMENT);
 /** -------------------- MAIN -------------------- */
 
 async function main() {
-  // TODO #289: User should be able to pass command line arguments OR inquirer (especially for action)
+  // TODO @brown-ccv #289: User should be able to pass command line arguments OR inquirer (especially for action)
 
   ACTION = await actionPrompt();
   DEPLOYMENT = await deploymentPrompt();
@@ -83,7 +83,7 @@ async function downloadDataFirebase() {
       `${STUDY_ID}/${PARTICIPANT_ID}/${experimentID}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names)
 
     // Determine if the file should be saved
-    // TODO #300: Download as either CSV or JSON
+    // TODO @brown-ccv #300: Download as either CSV or JSON
     let shouldDownload;
     if (fsExtra.existsSync(outputFile)) {
       // File exists, check if user wants to overwrite
@@ -157,7 +157,7 @@ async function actionPrompt() {
 
 /** Prompt the user for the deployment they are trying to access */
 async function deploymentPrompt() {
-  // TODO #290: Add other deployments!
+  // TODO @brown-ccv #290: Add other deployments!
   const response = "firebase";
 
   // Initialize Firestore
@@ -213,7 +213,7 @@ async function participantIDPrompt() {
   };
 
   return await input({
-    // TODO #291: Enable downloading all study data at once
+    // TODO @brown-ccv #291: Enable downloading all study data at once
     message: "Select a participant:",
     validate: async (input) => {
       const invalid = "Please enter a valid participant from your Firestore database";
@@ -232,7 +232,7 @@ async function participantIDPrompt() {
 
 /** Prompt the user to select one or more experiments of the PARTICIPANT_ID on STUDY_ID */
 async function experimentIDPrompt() {
-  // TODO #291: Enable downloading all participant data at once
+  // TODO @brown-ccv #291: Enable downloading all participant data at once
   const dataSnapshot = await getDataRef(STUDY_ID, PARTICIPANT_ID).get();
 
   // Sort experiment choices by most recent first

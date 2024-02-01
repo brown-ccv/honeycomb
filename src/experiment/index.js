@@ -1,6 +1,6 @@
 /**
  * ! Your timeline and options should be built in a newly created file, not this one
- * TODO: Link "Quick Start" step once's it's built into the docs
+ * TODO @brown-ccv: Link "Quick Start" step once's it's built into the docs
  */
 import { buildHoneycombTimeline, honeycombOptions } from "./honeycomb";
 
@@ -35,7 +35,7 @@ export function buildTimeline(jsPsych, studyID, participantID) {
 
   /**
    * ! Your timeline should be built in a newly created function, not this one
-   * TODO: Link "Quick Start" step once's it's built into the docs
+   * TODO @brown-ccv: Link "Quick Start" step once's it's built into the docs
    */
   const timeline = buildHoneycombTimeline(jsPsych);
 

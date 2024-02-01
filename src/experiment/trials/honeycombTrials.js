@@ -49,7 +49,7 @@ export const preloadTrial = {
   message: p(LANGUAGE.prompts.settingUp),
   images: SETTINGS.honeycomb.timeline_variables.map(({ stimulus }) => stimulus),
 };
-// TODO #281: Function for preloading all files in public/images?
+// TODO @brown-ccv #281: Function for preloading all files in public/images?
 
 /** Trial that calculates and displays some results of the session  */
 export function buildDebriefTrial(jsPsych) {

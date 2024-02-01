@@ -10,17 +10,17 @@ import { getProlificId } from "../lib/utils";
 import language from "./language.json";
 import settings from "./settings.json";
 
-// TODO #363: Separate into index.js (for exporting) and env.js
+// TODO @brown-ccv #363: Separate into index.js (for exporting) and env.js
 
 // Re-export the package name and version
 export const taskName = packageInfo.name;
 export const taskVersion = packageInfo.version;
 
 // Re-export the language object
-// TODO #373: Check language in Firebase
+// TODO @brown-ccv #373: Check language in Firebase
 export const LANGUAGE = language;
 // Re-export the settings object
-// TODO #374: Check settings in Firebase
+// TODO @brown-ccv #374: Check settings in Firebase
 export const SETTINGS = settings;
 
 /**
@@ -28,12 +28,12 @@ export const SETTINGS = settings;
  * As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
  * The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
  * The actual task and related utils will use a different instance of jsPsych created after login.
- * TODO #370: Initialize using using react code in jsPsychExperiment
+ * TODO @brown-ccv #370: Initialize using using react code in jsPsychExperiment
  */
 const jsPsych = initJsPsych();
 
 // Whether or not the experiment is running on mechanical turk
-// TODO #395: Deprecate PsiTurk and MTurk
+// TODO @brown-ccv #395: Deprecate PsiTurk and MTurk
 const turkInfo = jsPsych.turk.turkInfo();
 const USE_MTURK = !turkInfo.outsideTurk;
 export const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`; // ID of the user in mechanical turk
@@ -44,8 +44,8 @@ const USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true"; // Whether or no
 
 const USE_VOLUME = process.env.REACT_APP_VOLUME === "true"; // Whether or not to use audio cues in the task
 const USE_CAMERA = process.env.REACT_APP_VIDEO === "true" && USE_ELECTRON; // Whether or not to use video recording
-// TODO #341: Remove USE_EEG - separate variables for USE_PHOTODIODE and USE_EVENT_MARKER
-const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON; // Whether or not the EEG/event marker is available (TODO: This is only used for sending event codes)
+// TODO @brown-ccv #341: Remove USE_EEG - separate variables for USE_PHOTODIODE and USE_EVENT_MARKER
+const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON; // Whether or not the EEG/event marker is available (TODO @brown-ccv: This is only used for sending event codes)
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON; // whether or not the photodiode is in use
 
 // Configuration object for Honeycomb

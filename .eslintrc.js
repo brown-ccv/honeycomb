@@ -19,7 +19,7 @@ module.exports = {
   plugins: ["react"],
   rules: {
     "no-unused-vars": "warn",
-    "react/prop-types": "off", // TODO #223: These should be added so the rule can be removed
+    "react/prop-types": "off", // TODO @brown-ccv #223: These should be added so the rule can be removed
     "import/order": "warn",
   },
   settings: {

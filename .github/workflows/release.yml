@@ -63,8 +63,8 @@ jobs:
         run: npm run package:linux
 
       # Upload installers to github release
-      # TODO: Can these be combined based on matrix.os???
-      # TODO: Overwrite files if they exist?
+      # TODO @brown-ccv: Can these be combined based on matrix.os???
+      # TODO @brown-ccv: Overwrite files if they exist?
       # Get package info
       - name: Get package name and version
         id: package_info
