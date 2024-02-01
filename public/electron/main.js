@@ -173,7 +173,7 @@ function handlePhotodiodeTrigger(event, code) {
 function handleOnDataUpdate(event, data) {
   const { participant_id, study_id, start_date, trial_index } = data;
 
-  // Set the output path and file name if they haven't been
+  // Set the output path and file name if they are not set yet
   if (!OUT_PATH) {
     // The final OUT_FILE will be nested inside subfolders on the Desktop
     OUT_PATH = path.resolve(app.getPath("desktop"), app.getName(), study_id, participant_id);
