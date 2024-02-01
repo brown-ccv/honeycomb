@@ -27,8 +27,6 @@ let CONFIG; // Honeycomb configuration object
 let DEV_MODE; // Whether or not the application is running in dev mode
 
 let TEMP_FILE; // Path to the temporary output file
-// TODO: Delete, save temp file path?
-// let WRITE_STREAM; // Writeable file stream for the data (in the user's appData folder)
 let OUT_PATH; // Path to the final output folder (on the Desktop)
 let OUT_FILE; // Name of the final output file
 
@@ -191,11 +189,14 @@ function handleOnDataUpdate(event, data) {
     fs.mkdirSync(tempPath, { recursive: true });
     TEMP_FILE = path.resolve(tempPath, OUT_FILE);
 
-    fs.appendFileSync(TEMP_FILE, "{"); // Write initial bracket
+    // Write initial bracket
+    fs.appendFileSync(TEMP_FILE, "{");
     log.info("Temporary file created at ", TEMP_FILE);
+
+    // Write useful information and the beginning of the trials array
     fs.appendFileSync(TEMP_FILE, `"start_time": "${start_date}",`);
     fs.appendFileSync(TEMP_FILE, `"git_version": ${JSON.stringify(GIT_VERSION)},`);
-    fs.appendFileSync(TEMP_FILE, `"trials": [`); // Begin writing trials array
+    fs.appendFileSync(TEMP_FILE, `"trials": [`);
   }
 
   // Prepend comma for all trials except first
