@@ -20,7 +20,7 @@ if (window.location.hostname === "localhost") db.useEmulator("localhost", 8080);
 // Get a reference to the Firebase document at
 // "/participant_responses/{studyID}/participants/{participantID}"
 function getParticipantRef(studyID, participantID) {
-  db.doc(`participant_responses/${studyID}/participants/${participantID}`);
+  return db.doc(`participant_responses/${studyID}/participants/${participantID}`);
 }
 
 // Get a reference to the Firebase document at
