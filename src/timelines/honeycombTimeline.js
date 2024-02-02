@@ -7,29 +7,33 @@ import {
 } from "../trials/honeycombTrials";
 
 import { buildHoneycombBlock } from "./honeycombBlock";
-import { buildPreambleBlock } from "./preamble";
+import { buildStartBlock } from "./startBlock";
 
 /**
  * This timeline builds the example reaction time task from the jsPsych tutorial.
  * Take a look at how the code here compares to the jsPsych documentation!
- *
  * See the jsPsych documentation for more: https://www.jspsych.org/7.3/tutorials/rt-task/
+ *
+ * @param {Object} jsPsych The jsPsych instance being used to run the task
+ * @returns {Object} A jsPsych timeline object
  */
 function buildHoneycombTimeline(jsPsych) {
-  const preambleBlock = buildPreambleBlock();
+  // Build the trials that make up the start block
+  const startBlock = buildStartBlock(jsPsych);
 
-  // The first block repeats 5 times
-  // TODO #371: Pull from config here and pass into function
+  // Build the trials that make up the Honeycomb block
   const honeycombBlock = buildHoneycombBlock(jsPsych);
 
+  // TODO #367: Move to end of the honeycombBlock?
   const debriefTrial = buildDebriefTrial(jsPsych);
 
   const timeline = [
-    preambleBlock,
+    startBlock,
     preloadTrial,
     instructionsTrial,
     honeycombBlock,
     debriefTrial,
+    // TODO #367: Move to endBlock
     finishTrial,
     exitFullscreenTrial,
   ];

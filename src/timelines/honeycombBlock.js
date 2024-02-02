@@ -5,15 +5,16 @@ import { photodiodeGhostBox, pdSpotEncode } from "../lib/markup/photodiode";
 import { buildFixationTrial } from "../trials/fixation";
 
 /**
- * Builds the blocks of trials that form the core of the Honeycomb experiment
- *
+ * Builds the block of trials that form the core of the Honeycomb experiment
  * 1) A fixation dot is shown at the center of the screen
  * 2) The stimulus image is shown and the user is prompted to press the correct key
  *
  * Note that the block is conditionally rendered and repeated based on the task settings
+ *
+ * @param {Object} jsPsych The jsPsych instance being used to run the task
+ * @returns {Object} A jsPsych (nested) timeline object
  */
 function buildHoneycombBlock(jsPsych) {
-  // TODO #371: These settings should be passed as a parameter to the function
   const honeycombSettings = SETTINGS.honeycomb;
 
   const fixationTrial = buildFixationTrial(jsPsych);
