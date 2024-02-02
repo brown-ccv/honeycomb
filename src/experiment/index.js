@@ -17,7 +17,9 @@ import "../lib/markup/trials.css";
  */
 export const jsPsychOptions = {
   ...honeycombOptions,
-  on_trial_finish: (data) => console.log(`Trial ${data.internal_node_id} just finished:`, data),
+  on_trial_finish: function (data) {
+    console.log(`Trial ${data.internal_node_id} just finished:`, data);
+  },
 };
 
 /**

@@ -24,7 +24,7 @@ export function buildCameraStartTrial(jsPsych) {
       {
         // Helps participant center themselves inside the camera
         type: htmlButtonResponse,
-        stimulus: () => {
+        stimulus: function () {
           const videoMarkup = tag("video", "", {
             id: "webcam",
             width: 640,
@@ -40,7 +40,7 @@ export function buildCameraStartTrial(jsPsych) {
         },
         choices: [LANGUAGE.prompts.continue.button],
         response_ends_trial: true,
-        on_start: () => {
+        on_start: function () {
           // Initialize and store the camera feed
           if (!config.USE_ELECTRON) {
             // TODO #343: We should be able to make this work on both electron and browser?
@@ -66,16 +66,18 @@ export function buildCameraStartTrial(jsPsych) {
             // Pass video data to Electron as a base64 encoded string
             const reader = new FileReader();
             reader.readAsDataURL(blob);
-            reader.onloadend = () => window.electronAPI.saveVideo(reader.result);
+            reader.onloadend = () => {
+              window.electronAPI.saveVideo(reader.result);
+            };
           });
         },
-        on_load: () => {
+        on_load: function () {
           // Assign camera feed to the <video> element
           const camera = document.getElementById("webcam");
 
           camera.srcObject = jsPsych.pluginAPI.getCameraRecorder().stream;
         },
-        on_finish: () => {
+        on_finish: function () {
           // Begin video recording
           jsPsych.pluginAPI.getCameraRecorder().start();
         },
@@ -98,7 +100,7 @@ export function buildCameraEndTrial(jsPsych) {
     // TODO #372: Show photodiodeGhostBox as prompt
     stimulus: div(recordingEndMarkup, { class: "bottom-prompt" }),
     trial_duration: 5000,
-    on_start: () => {
+    on_start: function () {
       // Complete the camera recording
 
       if (!config.USE_ELECTRON) {
