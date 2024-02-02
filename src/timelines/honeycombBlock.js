@@ -43,7 +43,6 @@ function buildHoneycombBlock(jsPsych) {
       code: eventCodes.honeycomb,
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
-
     on_load: () => {
       // Conditionally flashes the photodiode when the trial first loads
       if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.honeycomb);

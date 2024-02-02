@@ -16,7 +16,6 @@ const photodiodeGhostBox = div(span("", { id: "photodiode-spot" }), { id: "photo
  * Note that this function must be executed inside the "on_load" callback of a trial
  * @param {number} taskCode The unique code for the given trial on which this function executes
  */
-// TODO #355: Conditional check should be at the task level (pass settings here)
 function pdSpotEncode(taskCode) {
   if (!config.USE_ELECTRON) {
     throw new Error("photodiodeSpot trial is only available when running inside Electron");

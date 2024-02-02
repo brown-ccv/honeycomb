@@ -3,8 +3,9 @@ import { config } from "../config/main";
 import { buildCameraStartTrial } from "../trials/camera";
 import { enterFullscreenTrial } from "../trials/fullscreen";
 import { holdUpMarkerTrial } from "../trials/holdUpMarker";
+import { nameTrial } from "../trials/name";
 import { startCodeTrial } from "../trials/startCode";
-import { nameTrial, welcomeTrial } from "../trials/welcome";
+import { introductionTrial } from "../trials/introduction";
 
 /**
  * Builds the block of trials needed to start and setup the experiment
@@ -18,7 +19,7 @@ import { nameTrial, welcomeTrial } from "../trials/welcome";
  * @returns {Object} A jsPsych (nested) timeline object
  */
 function buildStartBlock(jsPsych) {
-  const startBlock = [nameTrial, enterFullscreenTrial, welcomeTrial];
+  const startBlock = [nameTrial, enterFullscreenTrial, introductionTrial];
 
   // Conditionally add the photodiode setup trials
   if (config.USE_PHOTODIODE) {
