@@ -1,4 +1,5 @@
 /* Custom styling for the default button. This targets a built-in class from jsPsych. */
+/* TODO: Remove custom styling */
 .jspsych-btn {
   padding: 0.5rem 1rem;
   font-weight: bold;
@@ -39,6 +40,7 @@
 }
 
 /* Styles the jsPsych stimulus such that the prompt will appear at the bottom of the window */
+/* TODO: Remove custom styling */
 .bottom-prompt {
   height: 100vh;
   display: flex;
