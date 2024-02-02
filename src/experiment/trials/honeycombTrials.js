@@ -55,7 +55,7 @@ export const preloadTrial = {
 export function buildDebriefTrial(jsPsych) {
   return {
     type: htmlKeyboardResponse,
-    stimulus: () => {
+    stimulus: function () {
       /**
        * Note that we need the jsPsych instance to aggregate the data.
        * By accessing jsPsych inside the "stimulus" callback we have access to all of the data when this trial is run
