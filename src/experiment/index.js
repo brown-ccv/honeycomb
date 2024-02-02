@@ -1,4 +1,8 @@
-import { buildHoneycombTimeline } from "./honeycombTimeline";
+/**
+ * ! Your timeline and options should be built in a newly created file, not this one
+ * TODO: Link "Quick Start" step once's it's built into the docs
+ */
+import { buildHoneycombTimeline, honeycombOptions } from "./honeycomb";
 
 // Add CSS styling from jsPsych
 import "jspsych/css/jspsych.css";
@@ -8,10 +12,12 @@ import "../lib/markup/trials.css";
 /**
  * Experiment-wide settings for jsPsych: https://www.jspsych.org/7.3/overview/experiment-options/
  * Note that Honeycomb combines these with other options required for Honeycomb to operate correctly
+ *
+ * Custom options for your experiment should be added in your own file inside the experiment folder
  */
 const jsPsychOptions = {
+  ...honeycombOptions,
   on_trial_finish: (data) => console.log(`Trial ${data.internal_node_id} just finished:`, data),
-  on_finish: (data) => console.log("The experiment has finished:", data),
 };
 
 /**
@@ -25,8 +31,12 @@ const jsPsychOptions = {
 function buildTimeline(jsPsych, studyID, participantID) {
   console.log(`Building timeline for participant ${participantID} on study ${studyID}`);
 
-  // Build all of the trials consisting of the Honeycomb task
+  /**
+   * ! Your timeline should be built in a newly created function, not this one
+   * TODO: Link "Quick Start" step once's it's built into the docs
+   */
   const timeline = buildHoneycombTimeline(jsPsych);
+
   return timeline;
 }
 

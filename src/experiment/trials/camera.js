@@ -2,8 +2,8 @@ import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import initializeCamera from "@jspsych/plugin-initialize-camera";
 
-import { LANGUAGE, config } from "../config/main";
-import { div, h1, p, tag } from "../lib/markup/tags";
+import { LANGUAGE, config } from "../../config/main";
+import { div, h1, p, tag } from "../../lib/markup/tags";
 
 /**
  * A trial that begins recording the participant using their computer's default camera

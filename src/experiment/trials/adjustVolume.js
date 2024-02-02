@@ -1,6 +1,6 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import { LANGUAGE } from "../config/main";
-import { div, h1 } from "../lib/markup/tags";
+import { LANGUAGE } from "../../config/main";
+import { div, h1 } from "../../lib/markup/tags";
 
 /** Trial that prompts the user to adjust the volume on their computer */
 const adjustVolumeTrial = {

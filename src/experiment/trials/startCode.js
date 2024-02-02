@@ -1,8 +1,8 @@
 import audioKeyboardResponse from "@jspsych/plugin-audio-keyboard-response";
 
-import { config, eventCodes, LANGUAGE } from "../config/main";
-import { pdSpotEncode, photodiodeGhostBox } from "../lib/markup/photodiode";
-import { h1 } from "../lib/markup/tags";
+import { config, eventCodes, LANGUAGE } from "../../config/main";
+import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
+import { h1 } from "../../lib/markup/tags";
 
 // TODO #364: Refactor to use JsPsych audio trial
 // TODO #364: Remove "USE_VOLUME"

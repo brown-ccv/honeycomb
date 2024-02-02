@@ -1,8 +1,21 @@
-import { buildDebriefTrial, instructionsTrial, preloadTrial } from "../trials/honeycombTrials";
+import { buildEndBlock } from "./blocks/endBlock";
+import { buildHoneycombBlock } from "./blocks/honeycombBlock";
+import { buildStartBlock } from "./blocks/startBlock";
 
-import { buildEndBlock } from "./endBlock";
-import { buildHoneycombBlock } from "./honeycombBlock";
-import { buildStartBlock } from "./startBlock";
+import { buildDebriefTrial, instructionsTrial, preloadTrial } from "./trials/honeycombTrials";
+
+/**
+ * ! This file should not be edited! Instead, create a new file with the name of your task
+ * TODO: Link "Quick Start" step once's it's built into the docs
+ */
+
+/**
+ * Experiment-wide settings for jsPsych: https://www.jspsych.org/7.3/overview/experiment-options/
+ * Note that Honeycomb combines these with other options required for Honeycomb to operate correctly
+ */
+const honeycombOptions = {
+  on_finish: (data) => console.log("The experiment has finished:", data),
+};
 
 /**
  * This timeline builds the example reaction time task from the jsPsych tutorial.
@@ -36,4 +49,4 @@ function buildHoneycombTimeline(jsPsych) {
   return timeline;
 }
 
-export { buildHoneycombTimeline };
+export { buildHoneycombTimeline, honeycombOptions };

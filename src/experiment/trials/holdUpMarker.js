@@ -1,8 +1,8 @@
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 
-import { config, eventCodes, LANGUAGE } from "../config/main";
-import { pdSpotEncode, photodiodeGhostBox } from "../lib/markup/photodiode";
-import { div, h1, p } from "../lib/markup/tags";
+import { config, eventCodes, LANGUAGE } from "../../config/main";
+import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
+import { div, h1, p } from "../../lib/markup/tags";
 
 // TODO #330: Rename as checkEEG? (this is a similar trial to cameraStart)
 // TODO #330: Actually check to see if USB is connected? This isn't testing anything?
