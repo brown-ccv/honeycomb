@@ -2,6 +2,8 @@ import $ from "jquery";
 import { config } from "../../config/main";
 import { div, span } from "./tags";
 
+// TODO @brown-ccv #329: Refactor photodiode logic to be a custom jsPsych extension
+
 /**
  * Markup for a box in the bottom right corner of the screen and a photodiode spot inside the ghost box
  *
@@ -24,8 +26,10 @@ export function pdSpotEncode(taskCode) {
   }
 
   if (config.USE_PHOTODIODE) {
-    const blinkTime = 40; // TODO #333: Get blink time from config.json (40ms is the default)
-    let numBlinks = taskCode; // TODO #354: Encode numBlinks in the event marker config
+    // TODO @brown-ccv #333: Get blink time from config.json (equipment.trigger_box.event_codes) (40ms is the default)
+    const blinkTime = 40;
+    // TODO @brown-ccv #354: Gen numBlinks from config.json (equipment.trigger_box.event_codes) (40ms is the default)
+    let numBlinks = taskCode;
     repeatPulseFor(blinkTime, numBlinks);
     window.electronAPI.photodiodeTrigger(taskCode);
   }
@@ -35,7 +39,7 @@ export function pdSpotEncode(taskCode) {
    * @param {number} ms The amount of time to flash the photodiode spot
    * @param {function} callback A callback function to execute after the flash
    */
-  // TODO #331: Single photodiode color, pulse between visible and invisible here
+  // TODO @brown-ccv #331: Single photodiode color, pulse between visible and invisible here
   function pulseFor(ms, callback) {
     $("#photodiode-spot").css({ "background-color": "black" });
     setTimeout(() => {

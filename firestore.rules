@@ -8,7 +8,6 @@ service cloud.firestore {
       if true
       // Forces participantID and studyID to already be in Firebase to log in
       // if participantID in get(/databases/$(database)/documents/registered_studies/$(studyID)).data.registered_participants;
-      // TODO: Discusssion post about use cases for the different rules
 
       // experimentID must be in the data subcollection
       match /data/{experimentID} {

@@ -5,8 +5,8 @@ import { eventCodes } from "../../config/trigger";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 import { div, h1, p } from "../../lib/markup/tags";
 
-// TODO #330: Rename as checkEEG? (this is a similar trial to cameraStart)
-// TODO #330: Actually check to see if USB is connected? This isn't testing anything?
+// TODO @brown-ccv #330: Custom extension for EEG - this is initializeTriggerBox
+// TODO @brown-ccv #330: Need to ping the serial part - this isn't doing anything yet
 export const holdUpMarkerTrial = {
   type: htmlButtonResponse,
   stimulus: function () {
