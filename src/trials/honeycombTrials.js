@@ -3,7 +3,7 @@ import instructionsResponse from "@jspsych/plugin-instructions";
 import preloadResponse from "@jspsych/plugin-preload";
 
 import { eventCodes, LANGUAGE, SETTINGS } from "../config/main";
-import { b, div, h1, image, p } from "../lib/markup/tags";
+import { b, div, image, p } from "../lib/markup/tags";
 
 const honeycombLanguage = LANGUAGE.trials.honeycomb;
 
@@ -80,13 +80,4 @@ function buildDebriefTrial(jsPsych) {
   };
 }
 
-/** Trial that displays a completion message for 5 seconds */
-// TODO #367: Use trial inside endBlock
-const finishTrial = {
-  type: htmlKeyboardResponse,
-  stimulus: h1(honeycombLanguage.finish),
-  choices: "NO_KEYS",
-  trial_duration: 5000,
-};
-
-export { buildDebriefTrial, finishTrial, instructionsTrial, preloadTrial };
+export { buildDebriefTrial, instructionsTrial, preloadTrial };

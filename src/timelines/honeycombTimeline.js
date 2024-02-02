@@ -1,11 +1,6 @@
-import { exitFullscreenTrial } from "../trials/fullscreen";
-import {
-  buildDebriefTrial,
-  finishTrial,
-  instructionsTrial,
-  preloadTrial,
-} from "../trials/honeycombTrials";
+import { buildDebriefTrial, instructionsTrial, preloadTrial } from "../trials/honeycombTrials";
 
+import { buildEndBlock } from "./endBlock";
 import { buildHoneycombBlock } from "./honeycombBlock";
 import { buildStartBlock } from "./startBlock";
 
@@ -24,8 +19,11 @@ function buildHoneycombTimeline(jsPsych) {
   // Build the trials that make up the Honeycomb block
   const honeycombBlock = buildHoneycombBlock(jsPsych);
 
-  // TODO #367: Move to end of the honeycombBlock?
+  // Builds the trial needed to debrief the participant on their performance
   const debriefTrial = buildDebriefTrial(jsPsych);
+
+  // Builds the trials that make up the end block
+  const endBlock = buildEndBlock(jsPsych);
 
   const timeline = [
     startBlock,
@@ -33,9 +31,7 @@ function buildHoneycombTimeline(jsPsych) {
     instructionsTrial,
     honeycombBlock,
     debriefTrial,
-    // TODO #367: Move to endBlock
-    finishTrial,
-    exitFullscreenTrial,
+    endBlock,
   ];
   return timeline;
 }

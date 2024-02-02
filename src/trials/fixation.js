@@ -16,6 +16,7 @@ export function buildFixationTrial(jsPsych) {
 
   return {
     type: htmlKeyboardResponse,
+    choices: "NO_KEYS",
     // Display the fixation dot
     stimulus: div("", { id: "fixation-dot" }),
     prompt: () => {
@@ -23,7 +24,6 @@ export function buildFixationTrial(jsPsych) {
       if (config.USE_PHOTODIODE) return photodiodeGhostBox;
       else return null;
     },
-    response_ends_trial: false,
     trial_duration: () => {
       if (fixationSettings.randomize_duration) {
         // Select a random duration from the durations array to show the fixation dot for

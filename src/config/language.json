@@ -1,6 +1,5 @@
 {
   "name": "Honeycomb Task",
-  "welcome": "Welcome to the experiment. Press any key to begin.",
   "prompts": {
     "continue": {
       "prompt": "Press any key to continue.",
@@ -9,6 +8,7 @@
     "settingUp": "Setting up..."
   },
   "trials": {
+    "welcome": "Welcome to the experiment. Press any key to begin.",
     "honeycomb": {
       "instructions": {
         "read": "Please read the following instructions carefully.",
@@ -30,8 +30,7 @@
           "end": "ms."
         },
         "complete": "Press any key to complete the experiment. Thank you!"
-      },
-      "finish": "This experiment has ended."
+      }
     },
     "adjustVolume": "Set tablet volume to 50/100.",
     "camera": {
@@ -147,6 +146,7 @@
       "debriefing": {
         "confirm_completion": "Confirm Completion"
       }
-    }
+    },
+    "conclusion": "The experiment has concluded. Thank you for participating."
   }
 }
