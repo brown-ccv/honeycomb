@@ -9,3 +9,36 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
+
+p,
+li {
+  font-size: 1.5rem;
+}
+
+html,
+body,
+#root,
+#experiment-window {
+  text-align: center;
+  margin: 0;
+  min-height: 100vh;
+  height: 100% !important;
+  width: 100vw !important;
+}
+
+.centered-h-v {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.width-50 {
+  width: 50%;
+}
+
+.width-100 {
+  width: 100%;
+}

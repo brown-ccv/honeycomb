@@ -3,7 +3,6 @@ import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import initializeCamera from "@jspsych/plugin-initialize-camera";
 
 import { LANGUAGE, config } from "../config/main";
-import { baseStimulus } from "../lib/markup/stimuli";
 import { div, h1, p, tag } from "../lib/markup/tags";
 
 /**
@@ -37,7 +36,7 @@ function buildCameraStartTrial(jsPsych) {
             // TODO #344: Get rid of bootstrap (this is just centering it)
             class: "d-flex flex-column align-items-center",
           });
-          return baseStimulus(trialMarkup, true);
+          return div(trialMarkup, { class: "bottom-prompt" });
         },
         choices: [LANGUAGE.prompts.continue.button],
         response_ends_trial: true,
@@ -97,7 +96,7 @@ function buildCameraEndTrial(jsPsych) {
   return {
     type: htmlKeyboardResponse,
     // TODO #372: Show photodiodeGhostBox as prompt
-    stimulus: baseStimulus(recordingEndMarkup, true),
+    stimulus: div(recordingEndMarkup, { class: "bottom-prompt" }),
     trial_duration: 5000,
     on_start: () => {
       // Complete the camera recording

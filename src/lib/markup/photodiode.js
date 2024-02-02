@@ -8,10 +8,7 @@ import { div, span } from "./tags";
  * Note the box will only be visible if USE_PHOTODIODE is true
  * Note that this trial is only available when running in Electron
  */
-const photodiodeGhostBox = div(span("", { id: "photodiode-spot", class: "photodiode-spot" }), {
-  id: "photodiode-box",
-  class: "photodiode-box",
-});
+const photodiodeGhostBox = div(span("", { id: "photodiode-spot" }), { id: "photodiode-box" });
 
 /**
  * Conditionally flashes a spot inside the photodiodeGhostBox and sends event codes to the serial port
@@ -39,9 +36,9 @@ function pdSpotEncode(taskCode) {
    */
   // TODO #331: Single photodiode color, pulse between visible and invisible here
   function pulseFor(ms, callback) {
-    $(".photodiode-spot").css({ "background-color": "black" });
+    $("#photodiode-spot").css({ "background-color": "black" });
     setTimeout(() => {
-      $(".photodiode-spot").css({ "background-color": "white" });
+      $("#photodiode-spot").css({ "background-color": "white" });
       callback();
     }, ms);
   }
