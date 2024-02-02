@@ -25,9 +25,10 @@ log.initialize({ preload: true });
 
 let CONFIG; // Honeycomb configuration object
 let DEV_MODE; // Whether or not the application is running in dev mode
-let WRITE_STREAM; // Writeable file stream for the data (in the user's appData folder)
-let OUT_PATH; // Path to the final output file (on the Desktop)
-let OUT_FILE; // Name of the output file
+
+let TEMP_FILE; // Path to the temporary output file
+let OUT_PATH; // Path to the final output folder (on the Desktop)
+let OUT_FILE; // Name of the final output file
 
 let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
 let TRIGGER_PORT; // Port that the EEG machine is talking through
@@ -49,7 +50,7 @@ app.whenReady().then(() => {
   ipcMain.on("setTrigger", handleSetTrigger);
   ipcMain.handle("getCredentials", handleGetCredentials);
   ipcMain.on("onDataUpdate", handleOnDataUpdate);
-  ipcMain.on("onFinish", handleOnFinish);
+  ipcMain.handle("onFinish", handleOnFinish);
   ipcMain.on("photodiodeTrigger", handlePhotodiodeTrigger);
   ipcMain.on("saveVideo", handleSaveVideo);
   ipcMain.handle("checkSerialPort", handleCheckSerialPort);
@@ -77,15 +78,22 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
 
-/**
- * Executed before the application begins closing its windows
- * We ensure the writeable stream is closed before exiting
- */
-// TODO @brown-ccv #399: Check what's been written to stream? If trial hasn't finished we need to add the closing '}'
+/** Executed before the application begins closing its windows */
 app.on("before-quit", () => {
-  if (WRITE_STREAM) {
-    WRITE_STREAM.write("]}");
-    WRITE_STREAM.end();
+  log.info("Attempting to quit application");
+  try {
+    JSON.parse(fs.readFileSync(TEMP_FILE));
+  } catch (error) {
+    if (error instanceof TypeError) {
+      // TEMP_FILE is undefined at this point
+      log.warn("Application quit before the participant started the experiment");
+    } else if (error instanceof SyntaxError) {
+      // Trials are still being written (i.e. hasn't hit handleOnFinish function)
+      log.warn("Application quit while the participant was completing the experiment");
+    } else {
+      log.error("Electron encountered an error while quitting:");
+      log.error(error);
+    }
   }
 });
 
@@ -141,6 +149,11 @@ function handleCheckSerialPort() {
   setUpPort().then(() => handleEventSend(TRIGGER_CODES.eventCodes.test_connect));
 }
 
+/**
+ * Sends the event_codes to the trigger port
+ * @param {} event The serial port event
+ * @param {number} code The event code to be recorded
+ */
 function handlePhotodiodeTrigger(event, code) {
   if (code !== undefined) {
     log.info(`Event: ${_.invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
@@ -160,33 +173,38 @@ function handlePhotodiodeTrigger(event, code) {
 function handleOnDataUpdate(event, data) {
   const { participant_id, study_id, start_date, trial_index } = data;
 
-  // TODO @brown-ccv #397: Initialize writeable stream on login, not here
-  // Set the output file names/paths and initialize a writeable stream in the user's appData folder
-  if (!WRITE_STREAM) {
+  // Set the output path and file name if they are not set yet
+  if (!OUT_PATH) {
     // The final OUT_FILE will be nested inside subfolders on the Desktop
     OUT_PATH = path.resolve(app.getPath("desktop"), app.getName(), study_id, participant_id);
     // TODO @brown-ccv #307: ISO 8061 data string? Doesn't include the punctuation
     OUT_FILE = `${start_date}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names);
+  }
 
+  // Create the temporary folder & file if it hasn't been created
+  // TODO @brown-ccv #397: Initialize file stream on login, not here
+  if (!TEMP_FILE) {
     // The tempFile is nested inside "TempData" in the user's local app data folder
     const tempPath = path.resolve(app.getPath("userData"), "TempData", study_id, participant_id);
-    const tempFilePath = path.resolve(tempPath, OUT_FILE);
     fs.mkdirSync(tempPath, { recursive: true });
+    TEMP_FILE = path.resolve(tempPath, OUT_FILE);
 
-    // Initialize the writeable stream
-    WRITE_STREAM = fs.createWriteStream(tempFilePath, { flags: "ax+" });
-    log.info("Writable stream created at ", tempFilePath);
-    WRITE_STREAM.write("{"); // Write initial brace
-    WRITE_STREAM.write(`"start_time": "${start_date}",`);
-    WRITE_STREAM.write(`"git_version": ${JSON.stringify(GIT_VERSION)},`);
-    WRITE_STREAM.write(`"trials": [`); // Begin writing trials array
+    // Write initial bracket
+    fs.appendFileSync(TEMP_FILE, "{");
+    log.info("Temporary file created at ", TEMP_FILE);
+
+    // Write useful information and the beginning of the trials array
+    fs.appendFileSync(TEMP_FILE, `"start_time": "${start_date}",`);
+    fs.appendFileSync(TEMP_FILE, `"git_version": ${JSON.stringify(GIT_VERSION)},`);
+    fs.appendFileSync(TEMP_FILE, `"trials": [`);
   }
 
   // Prepend comma for all trials except first
-  if (trial_index > 0) WRITE_STREAM.write(",");
+  if (trial_index > 0) fs.appendFileSync(TEMP_FILE, ",");
 
   // Write trial data
-  WRITE_STREAM.write(JSON.stringify(data));
+  fs.appendFileSync(TEMP_FILE, JSON.stringify(data));
+
   log.info(`Trial ${trial_index} successfully written to TempData`);
 }
 
@@ -196,19 +214,16 @@ function handleOnDataUpdate(event, data) {
  */
 function handleOnFinish() {
   log.info("Experiment Finished");
-  const tempFilePath = WRITE_STREAM.path;
-  const filePath = path.resolve(OUT_PATH, OUT_FILE);
 
-  // Finish writing JSON and dereference WRITE_STREAM
-  WRITE_STREAM.write("]}");
-  WRITE_STREAM.end();
-  WRITE_STREAM = undefined;
+  // Finish writing JSON
+  fs.appendFileSync(TEMP_FILE, "]}");
   log.info("Finished writing experiment data to TempData");
 
-  // Copy temp file to Desktop
+  // Move temp file to the output location
+  const filePath = path.resolve(OUT_PATH, OUT_FILE);
   try {
     fs.mkdirSync(OUT_PATH, { recursive: true });
-    fs.copyFileSync(tempFilePath, filePath);
+    fs.copyFileSync(TEMP_FILE, filePath);
   } catch (e) {
     log.error.error("Unable to save file: ", filePath);
     log.error.error(e);
