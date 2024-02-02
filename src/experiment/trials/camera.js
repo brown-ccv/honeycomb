@@ -11,7 +11,7 @@ import { div, h1, p, tag } from "../../lib/markup/tags";
  * @returns {Object} A jsPsych trial object
  */
 // TODO #342: refactor to record using web USB
-function buildCameraStartTrial(jsPsych) {
+export function buildCameraStartTrial(jsPsych) {
   return {
     timeline: [
       {
@@ -90,7 +90,7 @@ function buildCameraStartTrial(jsPsych) {
  * @param {Number} duration How long to show the trial for
  * @returns {Object} A jsPsych trial object
  */
-function buildCameraEndTrial(jsPsych) {
+export function buildCameraEndTrial(jsPsych) {
   const recordingEndMarkup = h1(LANGUAGE.trials.camera.end);
 
   return {
@@ -115,5 +115,3 @@ function buildCameraEndTrial(jsPsych) {
     },
   };
 }
-
-export { buildCameraStartTrial, buildCameraEndTrial };

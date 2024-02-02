@@ -3,7 +3,7 @@ import { LANGUAGE } from "../../config/main";
 import { div, h1 } from "../../lib/markup/tags";
 
 /** Trial that prompts the user to adjust the volume on their computer */
-const adjustVolumeTrial = {
+export const adjustVolumeTrial = {
   type: htmlKeyboardResponse,
   stimulus: () => {
     const adjustVolumeMarkup = h1(LANGUAGE.trials.adjustVolume);
@@ -12,5 +12,3 @@ const adjustVolumeTrial = {
   prompt: LANGUAGE.prompts.continue.prompt,
   response_ends_trial: true,
 };
-
-export { adjustVolumeTrial };

@@ -9,28 +9,36 @@ import { getProlificId } from "../lib/utils";
 
 import language from "./language.json";
 import settings from "./settings.json";
-import { eventCodes } from "./trigger"; // TODO #333: eventCodes in settings.json
 
 // TODO #363: Separate into index.js (for exporting) and env.js
 
-// Access package name and version so we can store these as facts with task data.
-const taskName = packageInfo.name;
-const taskVersion = packageInfo.version;
+// Re-export the package name and version
+export const taskName = packageInfo.name;
+export const taskVersion = packageInfo.version;
 
-// As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
-// The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
-// The actual task and related utils will use a different instance of jsPsych created after login.
-// TODO 370: Initialize using using react code in jsPsychExperiment
+// Re-export the language object
+// TODO #373: Check language in Firebase
+export const LANGUAGE = language;
+// Re-export the settings object
+// TODO #374: Check settings in Firebase
+export const SETTINGS = settings;
+
+/**
+ *
+ * As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
+ * The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
+ * The actual task and related utils will use a different instance of jsPsych created after login.
+ * TODO 370: Initialize using using react code in jsPsychExperiment
+ */
 const jsPsych = initJsPsych();
 
 // Whether or not the experiment is running on mechanical turk
 // TODO 370: This is a separate deployment? Should set based on ENV variable
 const turkInfo = jsPsych.turk.turkInfo();
 const USE_MTURK = !turkInfo.outsideTurk;
-const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`; // ID of the user in mechanical turk
+export const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`; // ID of the user in mechanical turk
 
-// Whether or not the experiment is running in Electron (local app)
-const USE_ELECTRON = window.electronAPI !== undefined;
+const USE_ELECTRON = window.electronAPI !== undefined; // Whether or not the experiment is running in Electron (local app)
 const USE_PROLIFIC = (getProlificId() && !USE_MTURK) || false; // Whether or not the experiment is running with Prolific
 const USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true"; // Whether or not the experiment is running in Firebase (web app)
 
@@ -40,10 +48,8 @@ const USE_CAMERA = process.env.REACT_APP_VIDEO === "true" && USE_ELECTRON; // Wh
 const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON; // Whether or not the EEG/event marker is available (TODO: This is only used for sending event codes)
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON; // whether or not the photodiode is in use
 
-/**
- * Configuration object for Honeycomb
- */
-const config = {
+// Configuration object for Honeycomb
+export const config = {
   USE_PHOTODIODE,
   USE_EEG,
   USE_ELECTRON,
@@ -52,15 +58,4 @@ const config = {
   USE_CAMERA,
   USE_PROLIFIC,
   USE_FIREBASE,
-};
-
-/** Export the settings so they can be used anywhere in the app */
-export {
-  language as LANGUAGE, // TODO #373: Check language in Firebase
-  settings as SETTINGS, // TODO #374: Check settings in Firebase
-  config,
-  eventCodes,
-  taskName,
-  taskVersion,
-  turkUniqueId,
 };

@@ -1,13 +1,14 @@
 import audioKeyboardResponse from "@jspsych/plugin-audio-keyboard-response";
 
-import { config, eventCodes, LANGUAGE } from "../../config/main";
+import { config, LANGUAGE } from "../../config/main";
+import { eventCodes } from "../../config/trigger";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 import { h1 } from "../../lib/markup/tags";
 
 // TODO #364: Refactor to use JsPsych audio trial
 // TODO #364: Remove "USE_VOLUME"
 // TODO #364: "Setting up" is a separate trial that runs ALL of the needed setup
-const startCodeTrial = {
+export const startCodeTrial = {
   type: audioKeyboardResponse,
   stimulus: "assets/audio/beep.mp3",
   choices: "NO_KEYS",
@@ -23,5 +24,3 @@ const startCodeTrial = {
     if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.open_task);
   },
 };
-
-export { startCodeTrial };

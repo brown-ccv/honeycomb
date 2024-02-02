@@ -4,11 +4,9 @@ import { LANGUAGE } from "../../config/main";
 import { h1 } from "../../lib/markup/tags";
 
 /** Trial that displays a completion message for 5 seconds */
-const conclusionTrial = {
+export const conclusionTrial = {
   type: htmlKeyboardResponse,
   stimulus: h1(LANGUAGE.trials.conclusion),
   choices: "NO_KEYS",
   trial_duration: 5000,
 };
-
-export { conclusionTrial };

@@ -1,7 +1,8 @@
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 
-import { config, eventCodes, SETTINGS } from "../../config/main";
-import { photodiodeGhostBox, pdSpotEncode } from "../../lib/markup/photodiode";
+import { config, SETTINGS } from "../../config/main";
+import { eventCodes } from "../../config/trigger";
+import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 import { buildFixationTrial } from "../trials/fixation";
 
 /**
@@ -14,7 +15,7 @@ import { buildFixationTrial } from "../trials/fixation";
  * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych (nested) timeline object
  */
-function buildHoneycombBlock(jsPsych) {
+export function buildHoneycombBlock(jsPsych) {
   const honeycombSettings = SETTINGS.honeycomb;
 
   const fixationTrial = buildFixationTrial(jsPsych);
@@ -70,5 +71,3 @@ function buildHoneycombBlock(jsPsych) {
   };
   return honeycombBlock;
 }
-
-export { buildHoneycombBlock };

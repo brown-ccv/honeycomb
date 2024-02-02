@@ -3,7 +3,7 @@
  * @param {number} ms The number of milliseconds to sleep for
  * @returns A resolved promise after ms milliseconds
  */
-function sleep(ms) {
+export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -13,7 +13,7 @@ function sleep(ms) {
  * @param {number} offset The maximum addition to base
  * @returns The base number jittered by the offset
  */
-function jitter(base, offset) {
+export function jitter(base, offset) {
   return base + Math.floor(Math.random() * Math.floor(offset));
 }
 
@@ -22,7 +22,7 @@ function jitter(base, offset) {
  * @param {number} base The starting number
  * @returns The base number jittered by 50
  */
-function jitter50(base) {
+export function jitter50(base) {
   return jitter(base, 50);
 }
 
@@ -30,7 +30,7 @@ function jitter50(base) {
  * Flips a coin
  * @returns Returns true or false randomly
  */
-function randomTrue() {
+export function randomTrue() {
   return Math.random() > 0.5;
 }
 
@@ -39,7 +39,7 @@ function randomTrue() {
  * @param {Object} obj The starting object
  * @returns An exact copy of obj
  */
-function deepCopy(obj) {
+export function deepCopy(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
@@ -48,7 +48,7 @@ function deepCopy(obj) {
  * @param {number} amount Dollar amount
  * @returns The string representation of amount in USD
  */
-function formatDollars(amount) {
+export function formatDollars(amount) {
   return "$" + parseFloat(amount).toFixed(2);
 }
 
@@ -56,7 +56,7 @@ function formatDollars(amount) {
  * Starts the JsPsych keyboard response listener
  * @param  jsPsych The jsPsych instance running the task.
  */
-function startKeypressListener(jsPsych) {
+export function startKeypressListener(jsPsych) {
   const keypressResponse = (info) => {
     const data = { key_press: info.key };
     jsPsych.finishTrial(data);
@@ -76,7 +76,7 @@ function startKeypressListener(jsPsych) {
  * @param {string} queryParameter The key of the variable in the search parameters
  * @returns {string} The value of variable in the search parameters
  */
-function getSearchParam(queryParameter) {
+export function getSearchParam(queryParameter) {
   const params = new URLSearchParams(window.location.search);
   return params.get(queryParameter);
 }
@@ -85,7 +85,7 @@ function getSearchParam(queryParameter) {
  * Gets the ID of a prolific user from the URL search parameters
  * @returns
  */
-function getProlificId() {
+export function getProlificId() {
   const prolificId = getSearchParam("PROLIFIC_PID");
   return prolificId;
 }
@@ -97,19 +97,6 @@ function getProlificId() {
  * @param {boolean} addBefore Whether to add val before or after each element in array
  * @returns The original array with val interleaved between every element
  */
-function interleave(arr, val, addBefore = true) {
+export function interleave(arr, val, addBefore = true) {
   return [].concat(...arr.map((n) => (addBefore ? [val, n] : [n, val])));
 }
-
-export {
-  deepCopy,
-  formatDollars,
-  getProlificId,
-  getSearchParam,
-  interleave,
-  jitter,
-  jitter50,
-  randomTrue,
-  sleep,
-  startKeypressListener,
-};
