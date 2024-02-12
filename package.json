@@ -26,8 +26,12 @@
     "commit": "git-cz",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "dev": "node src/index.js",
-    "prepare": "husky"
+    "prepare": "husky",
+    "index": "node src/index.js",
+    "dataStructures": "node src/dataStructures.js",
+    "conditionals": "node src/conditionals.js",
+    "loops": "node src/loops.js",
+    "functions": "node src/functions.js"
   },
   "config": {
     "commitizen": {

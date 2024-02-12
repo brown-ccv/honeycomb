@@ -10,24 +10,36 @@ If you use Honeycomb in your work, please cite:
 
 ## codespace-javascript-basics
 
-This branch of the Honeycomb repository was created for the "JavaScript for JsPsych" DSCoV workshop by @RobertGemmaJr. It contains 4 files used to demonstrate the basics of JavaScript programming.
+This branch of the Honeycomb repository was created for the "JavaScript for JsPsych" DSCoV workshop by @RobertGemmaJr. It does not contain any Honeycomb functionality and is intended to be explored in a [GitHub Codespace](https://docs.github.com/en/codespaces/overview). It contains 5 files used to demonstrate the basics of JavaScript programming.
 
-1. `index.js`
+1. [src/index.js](src/index.js)
 
-   ```shell
-   npm run index
-   ```
-
-2. `test.js`
+   - A simple JavaScript file that logs "Hello, world!" to the console.
 
    ```shell
    npm run index
    ```
 
-3. `test.js`
+2. [src/dataStructures.js](src/dataStructures.js)
 
    ```shell
-   npm run index
+   npm run dataStructures
    ```
 
-4. `test.js`
+3. [src/conditionals.js](src/conditionals.js)
+
+   ```shell
+   npm run conditionals
+   ```
+
+4. [src/loops.js](src/loops.js)
+
+   ```shell
+   npm run loops
+   ```
+
+5. [src/functions.js](src/functions.js)
+
+   ```shell
+   npm run functions
+   ```
