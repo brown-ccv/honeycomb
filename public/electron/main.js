@@ -33,7 +33,7 @@ let OUT_FILE; // Name of the final output file
 let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
 let TRIGGER_PORT; // Port that the EEG machine is talking through
 
-const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../config/version.json")));
+const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../version.json")));
 
 /************ APP LIFECYCLE ***********/
 
