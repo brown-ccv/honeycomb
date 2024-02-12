@@ -1,15 +1,3 @@
-/* Custom styling for the default button. This targets a built-in class from jsPsych. */
-/* TODO: Remove custom styling */
-.jspsych-btn {
-  padding: 0.5rem 1rem;
-  font-weight: bold;
-  border-radius: 5px;
-  box-shadow: 5px 5px 5px #efefef;
-  background-color: #d3d3d3;
-  margin: 1rem;
-  width: 10rem !important;
-}
-
 /* Custom styling for the photodiode box. */
 #photodiode-box {
   position: fixed;
