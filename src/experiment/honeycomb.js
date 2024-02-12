@@ -1,6 +1,6 @@
-import { buildEndBlock } from "./blocks/endBlock";
-import { buildHoneycombBlock } from "./blocks/honeycombBlock";
-import { buildStartBlock } from "./blocks/startBlock";
+import { buildEndProcedure } from "./procedures/endProcedure";
+import { buildHoneycombProcedure } from "./procedures/honeycombProcedure";
+import { buildStartProcedure } from "./procedures/startProcedure";
 
 import { buildDebriefTrial, instructionsTrial, preloadTrial } from "./trials/honeycombTrials";
 
@@ -28,25 +28,25 @@ export const honeycombOptions = {
  * @returns {Object} A jsPsych timeline object
  */
 export function buildHoneycombTimeline(jsPsych) {
-  // Build the trials that make up the start block
-  const startBlock = buildStartBlock(jsPsych);
+  // Build the trials that make up the start procedure
+  const startProcedure = buildStartProcedure(jsPsych);
 
-  // Build the trials that make up the Honeycomb block
-  const honeycombBlock = buildHoneycombBlock(jsPsych);
+  // Build the trials that make up the task procedure
+  const honeycombProcedure = buildHoneycombProcedure(jsPsych);
 
   // Builds the trial needed to debrief the participant on their performance
   const debriefTrial = buildDebriefTrial(jsPsych);
 
-  // Builds the trials that make up the end block
-  const endBlock = buildEndBlock(jsPsych);
+  // Builds the trials that make up the end procedure
+  const endProcedure = buildEndProcedure(jsPsych);
 
   const timeline = [
-    startBlock,
+    startProcedure,
     preloadTrial,
     instructionsTrial,
-    honeycombBlock,
+    honeycombProcedure,
     debriefTrial,
-    endBlock,
+    endProcedure,
   ];
   return timeline;
 }
