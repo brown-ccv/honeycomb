@@ -10,7 +10,7 @@ If you use Honeycomb in your work, please cite:
 
 ## codespace-javascript-basics
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/brown-ccv/honeycomb?quickstart=1)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/brown-ccv/honeycomb)
 
 This branch of the Honeycomb repository was created for the "JavaScript for JsPsych" DSCoV workshop by @RobertGemmaJr. It does not contain any Honeycomb functionality and is intended to be explored in a [GitHub Codespace](https://docs.github.com/en/codespaces/overview). It contains 5 files used to demonstrate the basics of JavaScript programming.
 
