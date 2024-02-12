@@ -38,15 +38,3 @@
   width: 15px;
   border-radius: 50%;
 }
-
-/* Styles the jsPsych stimulus such that the prompt will appear at the bottom of the window */
-/* TODO: Remove custom styling */
-.bottom-prompt {
-  height: 100vh;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center !important;
-  margin-top: -10%;
-  margin-bottom: -5%;
-}

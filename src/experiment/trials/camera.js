@@ -37,7 +37,7 @@ export function buildCameraStartTrial(jsPsych) {
             // TODO @brown-ccv #344: Get rid of bootstrap (this is just centering it)
             class: "d-flex flex-column align-items-center",
           });
-          return div(trialMarkup, { class: "bottom-prompt" });
+          return div(trialMarkup);
         },
         choices: [LANGUAGE.prompts.continue.button],
         response_ends_trial: true,
