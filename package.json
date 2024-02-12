@@ -13,19 +13,19 @@
   "main": "public/electron/main.js",
   "homepage": ".",
   "repository": "https://github.com/brown-ccv/honeycomb",
-  "dependencies": {},
   "devDependencies": {
     "cz-conventional-changelog": "^3.2.0",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.29.0",
     "husky": "^9.0.10",
-    "lint-staged": "^15.0.2"
+    "lint-staged": "^15.0.2",
+    "prettier": "^3.2.5"
   },
   "scripts": {
     "commit": "git-cz",
     "lint": "eslint .",
-    "format": "prettier --write .",
+    "format": "npx prettier --write .",
     "prepare": "husky",
     "index": "node src/index.js",
     "dataStructures": "node src/dataStructures.js",
