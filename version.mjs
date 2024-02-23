@@ -19,6 +19,6 @@ if (process.env.CI) {
 }
 
 fsExtra
-  .writeFile("public/config/version.json", JSON.stringify(git))
+  .writeFile("public/version.json", JSON.stringify(git))
   .then(() => console.log(`Saved version file with rev: ${git.sha}, branch: ${git.ref}`))
   .catch((error) => console.log(error));

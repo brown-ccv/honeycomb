@@ -9,7 +9,7 @@ export const introductionTrial = {
   response_ends_trial: true,
   stimulus: function () {
     const welcomeMarkup = h1(LANGUAGE.trials.welcome);
-    return div(welcomeMarkup, { class: "bottom-prompt" });
+    return div(welcomeMarkup);
   },
   prompt: LANGUAGE.prompts.continue.prompt,
 };

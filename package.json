@@ -62,6 +62,7 @@
     "firebase-tools": "^13.1.0",
     "husky": "^9.0.10",
     "lint-staged": "^15.0.2",
+    "prettier": "^3.2.5",
     "wait-on": "^7.2.0"
   },
   "scripts": {
@@ -71,7 +72,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "react-scripts test",
-    "prepare": "husky install",
+    "prepare": "husky",
     "firebase:emulators:start": "firebase emulators:start --import emulator_data",
     "firebase:emulators:save": "firebase emulators:export emulator_data",
     "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",

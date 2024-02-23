@@ -13,7 +13,7 @@ export const holdUpMarkerTrial = {
     const eventMarkerMarkup = h1(LANGUAGE.trials.eventMarker.connected, {
       style: "color: green;",
     });
-    return div(eventMarkerMarkup, { class: "bottom-prompt" });
+    return div(eventMarkerMarkup);
   },
   prompt: function () {
     let holdUpMarkerPrompt = p(LANGUAGE.trials.holdUpMarker);
