@@ -15,7 +15,7 @@ import { buildFixationTrial } from "../trials/fixation";
  * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych (nested) timeline object
  */
-export function buildHoneycombBlock(jsPsych) {
+export function buildHoneycombProcedure(jsPsych) {
   const honeycombSettings = SETTINGS.honeycomb;
 
   const fixationTrial = buildFixationTrial(jsPsych);
