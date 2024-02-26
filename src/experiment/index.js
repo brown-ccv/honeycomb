@@ -38,6 +38,5 @@ export function buildTimeline(jsPsych, studyID, participantID) {
    * TODO @brown-ccv: Link "Quick Start" step once's it's built into the docs
    */
   const timeline = buildHoneycombTimeline(jsPsych);
-
   return timeline;
 }
