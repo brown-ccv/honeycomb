@@ -6,7 +6,7 @@
     "email": "ccv-bot@brown.edu",
     "url": "https://ccv.brown.edu"
   },
-  "version": "3.2.6",
+  "version": "3.3.0",
   "honeycombVersion": "",
   "license": "MIT",
   "private": true,
