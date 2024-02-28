@@ -58,7 +58,11 @@ jobs:
         run: npm run package:windows
       - name: 📦 Package app installer - Mac
         if: startsWith(matrix.os, 'mac')
-        run: npm run package:mac
+        # TEMP
+        # run: npm run package:mac
+        run: |
+          npm run package:mac
+          ls out/make/
       - name: 📦 Package app installer - Linux
         if: startsWith(matrix.os, 'ubuntu')
         run: npm run package:linux
