@@ -96,6 +96,7 @@ jobs:
           tag: ${{ github.ref }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
 
+  # TODO: This should only run on "latest-release" tag on main
   deploy-gh-pages:
     name: Deploy to GH Pages
     runs-on: ubuntu-latest
