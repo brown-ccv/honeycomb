@@ -59,14 +59,18 @@ jobs:
         run: npm run package:windows
       - name: 📦 Package app installer - Mac
         if: startsWith(matrix.os, 'mac')
+        # TODO @brown-ccv #318: Universal may not work between Intel and Apple Silicon?
+        # TODO @brown-ccv #318: Will have to run seperate makes for `arm64` and `x64`
         run: npm run package:mac
       - name: 📦 Package app installer - Linux
         if: startsWith(matrix.os, 'ubuntu')
         run: npm run package:linux
 
       # TEMP
+      # TODO: Delete
       - name: "LS Directory"
         run: ls -R out/
+
       # Get package info
       - name: Get package name and version
         id: package_info
@@ -88,8 +92,8 @@ jobs:
         if: startsWith(matrix.os, 'mac')
         uses: svenstaro/upload-release-action@v2
         with:
-          file: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-x64.dmg
-          asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-${{ matrix.setting }}-x64.dmg
+          file: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-universal.dmg
+          asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-${{ matrix.setting }}-universal.dmg
           tag: ${{ github.ref }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
       - name: ⬆ Upload installer to release - Linux
