@@ -17,7 +17,8 @@ jobs:
     name: Package and Upload
     runs-on: ${{ matrix.os }}
 
-    # Run build script for [home/clinic] in [windows/macOS/ubuntu]
+    # Run build script for [home/clinic] in [windows/macOS/ubuntu]+
+    # TODO: Split OS as seperate jobs with matrix for just the build environments
     strategy:
       matrix:
         setting: [home, clinic]
