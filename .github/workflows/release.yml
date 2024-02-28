@@ -4,8 +4,10 @@ name: 🚀 Release
 # Note that this runs for both releases and pre-releases: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#release
 on:
   release:
+    # TODO @brown-ccv: I need to figure out which ones to do here?
+    # TODO @brown-ccv: Should occur whenever a release is created or edited, prelease or otherwise
     # types: created
-    types: [created, edited]
+    types: [created, edited, prereleased]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
