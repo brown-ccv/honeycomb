@@ -20,6 +20,7 @@ log.initialize({ preload: true });
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process?
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process?
 // TODO @brown-ccv #398: Separate log files for each run through?
+// TODO @brown-ccv: Use app.getPath('temp') for temporary JSON file
 
 /************ GLOBALS ***********/
 
@@ -268,6 +269,9 @@ function createWindow() {
   let mainWindow;
   let appURL;
 
+  console.log(__dirname);
+  console.log(path.join(__dirname, "index.html"));
+
   if (process.env.ELECTRON_START_URL) {
     // Running in development
 
@@ -289,25 +293,20 @@ function createWindow() {
 
     // Load app from the local bundle created by the build process
     appURL = url.format({
-      pathname: path.join(__dirname, "index.html"),
+      // Moves from path of the electron file (/public/electron/main.js) to build folder (build/index.html)
+      // TODO @brown-ccv: This means we're using the non-built Electron file?
+      // TODO @brown-ccv: electron-forge should only be packaging the build folder (package.json needs to point to that file?)
+      pathname: path.join(__dirname, "../../build/index.html"),
       protocol: "file:",
       slashes: true,
     });
 
-    // Create a fullscreen window with the menu hidden
-    // Note that in production the user cannot interact with the window
+    // Create a fullscreen window with the menu bar hidden
     mainWindow = new BrowserWindow({
       icon: "./favicon.ico",
       webPreferences: { preload: path.join(__dirname, "preload.js") },
       fullscreen: true,
       menuBarVisible: false,
-      // TODO @brown-ccv: kiosk mode doesn't seem to be preventing user actions? MUST still allow force quitt
-      kiosk: true, // Restrict user actions
-      alwaysOnTop: true,
-      resizable: false,
-      minimizable: false,
-      maximizable: false,
-      movable: false,
     });
 
     // Hide the menu bar
