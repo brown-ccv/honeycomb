@@ -294,20 +294,12 @@ function createWindow() {
       slashes: true,
     });
 
-    // Create a fullscreen window with the menu hidden
-    // Note that in production the user cannot interact with the window
+    // Create a fullscreen window with the menu bar hidden
     mainWindow = new BrowserWindow({
       icon: "./favicon.ico",
       webPreferences: { preload: path.join(__dirname, "preload.js") },
       fullscreen: true,
       menuBarVisible: false,
-      // TODO @brown-ccv: kiosk mode doesn't seem to be preventing user actions? MUST still allow force quitt
-      kiosk: true, // Restrict user actions
-      alwaysOnTop: true,
-      resizable: false,
-      minimizable: false,
-      maximizable: false,
-      movable: false,
     });
 
     // Hide the menu bar
