@@ -24,6 +24,7 @@ log.initialize({ preload: true });
 /************ GLOBALS ***********/
 
 let CONFIG; // Honeycomb configuration object
+// TODO @brown-ccv: Rename, this is running in development AND user hit "Continue Anyway"
 let DEV_MODE; // Whether or not the application is running in dev mode
 
 let TEMP_FILE; // Path to the temporary output file
@@ -259,36 +260,63 @@ function handleSaveVideo(event, data) {
 
 /********** HELPERS **********/
 
-/** Creates a new Electron window. */
+/**
+ * Load the app into the Electron window
+ * In production it loads the local bundle created by the build process
+ */
 function createWindow() {
-  const mainWindow = new BrowserWindow({
-    width: 1500,
-    height: 900,
-    icon: "./favicon.ico",
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-    },
-  });
+  let mainWindow;
+  let appURL;
 
-  /**
-   * Load the app into the Electron window
-   * In production it loads the local bundle created by the build process
-   * In development we use ELECTRON_START_URL (This allows hot-reloading)
-   */
-  const appURL =
-    process.env.ELECTRON_START_URL ||
-    url.format({
+  if (process.env.ELECTRON_START_URL) {
+    // Running in development
+
+    // Load app from localhost (This allows hot-reloading)
+    appURL = process.env.ELECTRON_START_URL;
+
+    // Create a 1500x900 window with the dev tools open
+    mainWindow = new BrowserWindow({
+      icon: "./favicon.ico",
+      webPreferences: { preload: path.join(__dirname, "preload.js") },
+      width: 1500,
+      height: 900,
+    });
+
+    // Open the dev tools
+    mainWindow.webContents.openDevTools();
+  } else {
+    // Running in production
+
+    // Load app from the local bundle created by the build process
+    appURL = url.format({
       pathname: path.join(__dirname, "index.html"),
       protocol: "file:",
       slashes: true,
     });
+
+    // Create a fullscreen window with the menu hidden
+    // Note that in production the user cannot interact with the window
+    mainWindow = new BrowserWindow({
+      icon: "./favicon.ico",
+      webPreferences: { preload: path.join(__dirname, "preload.js") },
+      fullscreen: true,
+      menuBarVisible: false,
+      // TODO @brown-ccv: kiosk mode doesn't seem to be preventing user actions? MUST still allow force quitt
+      kiosk: true, // Restrict user actions
+      alwaysOnTop: true,
+      resizable: false,
+      minimizable: false,
+      maximizable: false,
+      movable: false,
+    });
+
+    // Hide the menu bar
+    mainWindow.setMenuBarVisibility(false);
+  }
+
+  // Load web contents at the given URL
   log.info("Loading URL: ", appURL);
   mainWindow.loadURL(appURL);
-
-  // Open the dev tools in development
-  if (process.env.ELECTRON_START_URL) mainWindow.webContents.openDevTools();
-  // Maximize the window in production
-  else mainWindow.maximize();
 }
 
 /**
