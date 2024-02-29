@@ -95,7 +95,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           file: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-x64.dmg
-          asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-${{ matrix.setting }}-universal.dmg
+          asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-${{ matrix.setting }}-x64.dmg
           tag: ${{ github.ref }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
       - name: ⬆ Upload installer to release - Linux
