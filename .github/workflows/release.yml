@@ -68,11 +68,6 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: npm run package:linux
 
-      # TEMP
-      # TODO: Delete
-      - name: "LS Directory"
-        run: ls -R out/
-
       # Get package info
       - name: Get package name and version
         id: package_info
