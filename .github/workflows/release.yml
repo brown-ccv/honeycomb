@@ -7,7 +7,7 @@ on:
     # TODO @brown-ccv: I need to figure out which ones to do here?
     # TODO @brown-ccv: Should occur whenever a release is created or edited, prelease or otherwise
     # types: created
-    types: [created, edited, prereleased]
+    types: [created, edited]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
