@@ -31,12 +31,12 @@ export default function JsPsychExperiment({
       ...jsPsychOptions,
       display_element: EXPERIMENT_ID,
       on_data_update: (data) => {
-        dataUpdateFunction(data); // Call Honeycomb's on_data_update function
         jsPsychOptions.on_data_update && jsPsychOptions.on_data_update(data); // Call custom on_data_update function (if provided)
+        dataUpdateFunction(data); // Call Honeycomb's on_data_update function
       },
       on_finish: (data) => {
-        dataFinishFunction(data); // Call Honeycomb's on_finish function
         jsPsychOptions.on_finish && jsPsychOptions.on_finish(data); // Call custom on_finish function (if provided)
+        dataFinishFunction(data); // Call Honeycomb's on_finish function
       },
     });
 

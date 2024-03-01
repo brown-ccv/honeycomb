@@ -21,6 +21,8 @@ export const honeycombOptions = {
   // Called when the experiment finishes
   on_finish: function (data) {
     console.log("The experiment has finished:", data);
+    // Reload the page for another run-through of the experiment
+    window.location.reload();
   },
 };
 

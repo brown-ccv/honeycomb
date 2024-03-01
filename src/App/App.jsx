@@ -132,10 +132,8 @@ export default function App() {
   const defaultFinishFunction = (data) => {
     data.localSave("csv", "task.csv");
   };
-  // Reload the page
-  const firebaseFinishFunction = () => {
-    window.location.reload();
-  };
+  // Do nothing
+  const firebaseFinishFunction = () => {};
   // Execute the 'on_finish' callback function (see public/electron/main.js)
   const desktopFinishFunction = async () => {
     await window.electronAPI.on_finish();
