@@ -4,14 +4,12 @@ name: 🚀 Release
 # Note that this runs for both releases and pre-releases: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#release
 on:
   release:
-    # TODO @brown-ccv: I need to figure out which ones to do here?
-    # TODO @brown-ccv: Should occur whenever a release is created or edited, prelease or otherwise
-    # types: created
-    types: [created, edited]
+    types: created
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -61,8 +59,7 @@ jobs:
         run: npm run package:windows
       - name: 📦 Package app installer - Mac
         if: startsWith(matrix.os, 'mac')
-        # TODO @brown-ccv #318: Universal may not work between Intel and Apple Silicon?
-        # TODO @brown-ccv #318: Will have to run seperate makes for `arm64` and `x64`
+        # TODO @brown-ccv #318: Universal opening with Rosetta?
         run: npm run package:mac
       - name: 📦 Package app installer - Linux
         if: startsWith(matrix.os, 'ubuntu')
@@ -89,8 +86,8 @@ jobs:
         if: startsWith(matrix.os, 'mac')
         uses: svenstaro/upload-release-action@v2
         with:
-          file: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-x64.dmg
-          asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-${{ matrix.setting }}-x64.dmg
+          file: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-universal.dmg
+          asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-${{ matrix.setting }}-universal.dmg
           tag: ${{ github.ref }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
       - name: ⬆ Upload installer to release - Linux
