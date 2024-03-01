@@ -113,11 +113,11 @@ export default function App() {
 
   // Default to no operation
   const defaultFunction = () => {};
-  // Add trial data to Firestore
+  // Add trial data to Firestore (see src/App/deployments/firebase.js)
   const firebaseUpdateFunction = (data) => {
     addToFirebase(data);
   };
-  // Execute the 'data' callback function (see public/electron.js)
+  // Execute the 'on_data_update' callback function (see public/electron/main.js)
   const desktopUpdateFunction = async (data) => {
     await window.electronAPI.on_data_update(data);
   };
@@ -130,9 +130,13 @@ export default function App() {
 
   // Save the experiment data on the desktop
   const defaultFinishFunction = (data) => {
-    data.localSave("csv", "neuro-task.csv");
+    data.localSave("csv", "task.csv");
   };
-  // Execute the 'end' callback function (see public/electron.js)
+  // Reload the page
+  const firebaseFinishFunction = () => {
+    window.location.reload();
+  };
+  // Execute the 'on_finish' callback function (see public/electron/main.js)
   const desktopFinishFunction = async () => {
     await window.electronAPI.on_finish();
   };
@@ -178,7 +182,7 @@ export default function App() {
             {
               desktop: desktopFinishFunction,
               mturk: psiturkFinishFunction,
-              firebase: defaultFunction,
+              firebase: firebaseFinishFunction,
               default: defaultFinishFunction,
             }[currentMethod]
           }
