@@ -15,12 +15,7 @@ import "../lib/markup/trials.css";
  *
  * Custom options for your experiment should be added in your own file inside the experiment folder
  */
-export const jsPsychOptions = {
-  ...honeycombOptions,
-  on_trial_finish: function (data) {
-    console.log(`Trial ${data.internal_node_id} just finished:`, data);
-  },
-};
+export const jsPsychOptions = honeycombOptions;
 
 /**
  * Builds the experiment's timeline that jsPsych will run
