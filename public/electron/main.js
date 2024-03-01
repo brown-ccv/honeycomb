@@ -226,11 +226,12 @@ function handleOnFinish() {
   try {
     fs.mkdirSync(OUT_PATH, { recursive: true });
     fs.copyFileSync(TEMP_FILE, filePath);
+    log.info("Successfully saved experiment data to ", filePath);
   } catch (e) {
     log.error.error("Unable to save file: ", filePath);
     log.error.error(e);
   }
-  log.info("Successfully saved experiment data to ", filePath);
+  app.quit();
 }
 
 // Save webm video file
