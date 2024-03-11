@@ -20,12 +20,12 @@ log.initialize({ preload: true });
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process?
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process?
 // TODO @brown-ccv #398: Separate log files for each run through?
-// TODO @brown-ccv: Use app.getPath('temp') for temporary JSON file
+// TODO @brown-ccv #429: Use app.getPath('temp') for temporary JSON file
 
 /************ GLOBALS ***********/
 
 let CONFIG; // Honeycomb configuration object
-// TODO @brown-ccv: Rename, this is running in development AND user hit "Continue Anyway"
+// TODO @brown-ccv #428: Rename, this is running in development AND user hit "Continue Anyway"
 let DEV_MODE; // Whether or not the application is running in dev mode
 
 let TEMP_FILE; // Path to the temporary output file
@@ -295,8 +295,7 @@ function createWindow() {
     // Load app from the local bundle created by the build process
     appURL = url.format({
       // Moves from path of the electron file (/public/electron/main.js) to build folder (build/index.html)
-      // TODO @brown-ccv: This means we're using the non-built Electron file?
-      // TODO @brown-ccv: electron-forge should only be packaging the build folder (package.json needs to point to that file?)
+      // TODO @brown-ccv #424: electron-forge should only be packaging the build folder (package.json needs to point to that file?)
       pathname: path.join(__dirname, "../../build/index.html"),
       protocol: "file:",
       slashes: true,
