@@ -54,7 +54,7 @@
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.2.0",
     "dotenv-cli": "^7.0.0",
-    "electron": "^28.2.1",
+    "electron": "^29.1.1",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.29.0",
@@ -78,6 +78,7 @@
     "dev:firebase": "dotenv -e env/.env.firebase npm run start:browser",
     "firebase:emulators:start": "firebase emulators:start --import emulator_data",
     "firebase:emulators:save": "firebase emulators:export emulator_data",
+    "prebuild": "electron-rebuild",
     "build": "react-scripts build",
     "build:home": "dotenv -e env/.env.home npm run build",
     "build:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run build",
@@ -95,8 +96,7 @@
     "format": "prettier --write .",
     "lint": "eslint .",
     "postinstall": "node version.mjs && npm run rebuild",
-    "prepare": "husky",
-    "prebuild": "electron-rebuild"
+    "prepare": "husky"
   },
   "browserslist": {
     "production": [
