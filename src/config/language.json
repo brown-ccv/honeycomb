@@ -8,7 +8,7 @@
     "settingUp": "Setting up..."
   },
   "trials": {
-    "welcome": "Welcome to the experiment. Press any key to begin.",
+    "introduction": "Welcome to the experiment. Press any key to begin.",
     "honeycomb": {
       "instructions": {
         "read": "Please read the following instructions carefully.",
