@@ -268,7 +268,6 @@ function handleSaveVideo(event, data) {
 function createWindow() {
   let mainWindow;
   let appURL;
-
   console.log(__dirname);
   console.log(path.join(__dirname, "index.html"));
 
