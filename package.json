@@ -6,13 +6,13 @@
     "email": "ccv-bot@brown.edu",
     "url": "https://ccv.brown.edu"
   },
-  "version": "3.3.0",
   "honeycombVersion": "",
+  "version": "3.3.0",
+  "repository": "https://github.com/brown-ccv/honeycomb",
   "license": "MIT",
   "private": true,
   "main": "public/electron/main.js",
   "homepage": ".",
-  "repository": "https://github.com/brown-ccv/honeycomb",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.4.2",
     "@jspsych/plugin-audio-keyboard-response": "^1.1.3",
