@@ -58,7 +58,6 @@ jobs:
         run: npm run package:windows
       - name: 📦 Package app installer - Mac
         if: startsWith(matrix.os, 'mac')
-        # TODO @brown-ccv #318: Universal opening with Rosetta?
         run: npm run package:mac
       - name: 📦 Package app installer - Linux
         if: startsWith(matrix.os, 'ubuntu')
