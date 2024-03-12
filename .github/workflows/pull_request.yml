@@ -5,7 +5,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Runs the builds on PR
 jobs:
   build:
     name: 🧪 Build
