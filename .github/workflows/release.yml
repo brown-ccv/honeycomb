@@ -71,7 +71,7 @@ jobs:
           echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
         shell: bash
 
-      # Upload installers to github release
+      # Upload installers to GitHub release
       - name: ⬆ Upload installer to release - Windows
         if: startsWith(matrix.os, 'windows')
         uses: svenstaro/upload-release-action@v2
