@@ -122,8 +122,8 @@ function handleSetConfig(event, config) {
  * @param {Object} trigger The metadata for the event code trigger
  * @param {string} trigger.comName The COM name of the serial port
  * @param {Object} trigger.eventCodes The list of possible event codes to be triggered
- * @param {string} productID The name of the product connected to the serial port
- * @param {string} vendorID The name of the vendor connected to the serial prot
+ * @param {string} trigger.productID The name of the product connected to the serial port
+ * @param {string} trigger.vendorID The name of the vendor connected to the serial prot
  */
 function handleSetTrigger(event, trigger) {
   TRIGGER_CODES = trigger;
