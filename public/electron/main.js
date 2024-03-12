@@ -57,8 +57,7 @@ app.whenReady().then(() => {
   ipcMain.on("saveVideo", handleSaveVideo);
   ipcMain.handle("checkSerialPort", handleCheckSerialPort);
 
-  // Setup min files and create the Electron window
-  setupLocalFilesNormalizerProxy();
+  // Create the Electron window
   createWindow();
 
   /**
