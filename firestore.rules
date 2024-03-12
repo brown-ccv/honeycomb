@@ -1,14 +1,12 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // participantID must be in the registered_participants array in the registered_studies/{studyID} document
     match /participant_responses/{studyID}/participants/{participantID} {
       allow create, read: 
-      
       if 
         // Allows any combination of studyID and participantID to be created in Firebase
         true
-        // Forces participantID and studyID to already be in Firebase to log in
+        // participantID must be in the registered_participants array in the registered_studies/{studyID} document
         // participantID in get(/databases/$(database)/documents/registered_studies/$(studyID)).data.registered_participants;
 
       // experimentID must be in the data subcollection
