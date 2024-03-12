@@ -317,23 +317,6 @@ function createWindow() {
   mainWindow.loadURL(appURL);
 }
 
-/**
- * Set up a local proxy to adjust the paths of requested files
- * when loading them from the production bundle (e.g. local fonts, etc...).
- */
-// TODO @brown-ccv #395: Delete this and local min files when PsiTurk is deprecated
-function setupLocalFilesNormalizerProxy() {
-  // protocol.registerHttpProtocol(
-  //   "file",
-  //   (request, callback) => {
-  //     const url = request.url.substr(8);
-  //     callback({ path: path.normalize(`${__dirname}/${url}`) });
-  //   },
-  //   (error) => {
-  //     if (error) console.error("Failed to register protocol");
-  //   }
-  // );
-}
 
 /** SERIAL PORT SETUP & COMMUNICATION (EVENT MARKER) */
 
