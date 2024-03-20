@@ -361,7 +361,7 @@ async function setUpPort() {
             // Quit app when user selects "OK"
             app.exit();
           } else {
-            // User selected "Continue Anyway", we must be in dev mode
+            // User selected "Continue Anyway", trigger port is not connected
             CONTINUE_ANYWAY = true;
             TRIGGER_PORT = undefined;
           }
