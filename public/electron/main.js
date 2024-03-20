@@ -25,8 +25,7 @@ log.initialize({ preload: true });
 /************ GLOBALS ***********/
 
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../version.json")));
-
-// TODO @brown-ccv #443 : Use NODE_ENV here for dev vs production
+// TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
 const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
 
 let CONFIG; // Honeycomb configuration object
