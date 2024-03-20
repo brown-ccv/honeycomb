@@ -24,7 +24,11 @@ log.initialize({ preload: true });
 
 /************ GLOBALS ***********/
 
+const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../version.json")));
+
 // TODO @brown-ccv #443 : Use NODE_ENV here for dev vs production
+const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
+
 let CONFIG; // Honeycomb configuration object
 let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected (option is only available in dev mode)
 
@@ -34,8 +38,6 @@ let OUT_FILE; // Name of the final output file
 
 let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
 let TRIGGER_PORT; // Port that the EEG machine is talking through
-
-const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../version.json")));
 
 /************ APP LIFECYCLE ***********/
 
@@ -269,11 +271,11 @@ function createWindow() {
   let mainWindow;
   let appURL;
 
-  if (process.env.ELECTRON_START_URL) {
+  if (ELECTRON_START_URL) {
     // Running in development
 
     // Load app from localhost (This allows hot-reloading)
-    appURL = process.env.ELECTRON_START_URL;
+    appURL = ELECTRON_START_URL;
 
     // Create a 1500x900 window with the dev tools open
     mainWindow = new BrowserWindow({
@@ -351,7 +353,7 @@ async function setUpPort() {
           buttons: [
             "OK",
             // Allow continuation when running in development mode
-            ...(process.env.ELECTRON_START_URL ? ["Continue Anyway"] : []),
+            ...(ELECTRON_START_URL ? ["Continue Anyway"] : []),
           ],
           defaultId: 0,
         })
@@ -398,7 +400,7 @@ function handleEventSend(code) {
         "Quit",
         "Retry",
         // Allow continuation when running in development mode
-        ...(process.env.ELECTRON_START_URL ? ["Continue Anyway"] : []),
+        ...(ELECTRON_START_URL ? ["Continue Anyway"] : []),
       ],
       detail: "heres some detail",
     });
