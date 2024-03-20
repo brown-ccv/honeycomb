@@ -1,4 +1,3 @@
-import $ from "jquery";
 import { config } from "../../config/main";
 import { div, span } from "./tags";
 
@@ -24,7 +23,6 @@ export function pdSpotEncode(taskCode) {
   if (!config.USE_ELECTRON) {
     throw new Error("photodiodeSpot trial is only available when running inside Electron");
   }
-  console.log($("#photodiode-spot"), document.getElementById("#photodiode-spot"));
 
   if (config.USE_PHOTODIODE) {
     // TODO @brown-ccv #333: Get blink time from config.json (equipment.trigger_box.event_codes) (40ms is the default)
@@ -36,17 +34,20 @@ export function pdSpotEncode(taskCode) {
   }
 
   /**
-   * Pulses the photodiode spot from black (on) to white (off) and runs a callback function
+   * Pulses the photodiode spot from visible to white invisible and runs a callback function
    * @param {number} ms The amount of time to flash the photodiode spot
    * @param {function} callback A callback function to execute after the flash
    */
-  // TODO @brown-ccv #331: Single photodiode color, pulse between visible and invisible here
-  function pulseFor(ms, callback) {
-    $("#photodiode-spot").css({ visibility: "visible" });
+  // TODO @brown-ccv #331: Remove jquery dependency, need visibility to last through all flashes?
+  function pulseFor(msVisible, callback) {
+    const photodiodeSpot = document.getElementById("photodiode-spot");
+    if (!photodiodeSpot) throw new Error("photodiodeGhostBox is not present on the document");
+
+    photodiodeSpot.style.visibility = "visible";
     setTimeout(() => {
-      $("#photodiode-spot").css({ visibility: "hidden" });
+      photodiodeSpot.style.visibility = "hidden";
       callback();
-    }, ms);
+    }, msVisible);
   }
 
   /**
