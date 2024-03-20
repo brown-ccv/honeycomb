@@ -25,8 +25,8 @@ log.initialize({ preload: true });
 /************ GLOBALS ***********/
 
 let CONFIG; // Honeycomb configuration object
-// TODO @brown-ccv #428: Rename, this is running in development AND user hit "Continue Anyway"
-let DEV_MODE; // Whether or not the application is running in dev mode
+// let CONTINUE_ANYWAY; // Whether or not the application is running in dev mode
+let CONTINUE_ANYWAY; // true if in dev mode and the user elects "continue anyway"
 
 let TEMP_FILE; // Path to the temporary output file
 let OUT_PATH; // Path to the final output folder (on the Desktop)
@@ -314,7 +314,6 @@ function createWindow() {
   mainWindow.loadURL(appURL);
 }
 
-
 /** SERIAL PORT SETUP & COMMUNICATION (EVENT MARKER) */
 
 /**
@@ -363,7 +362,7 @@ async function setUpPort() {
             app.exit();
           } else {
             // User selected "Continue Anyway", we must be in dev mode
-            DEV_MODE = true;
+            CONTINUE_ANYWAY = true;
             TRIGGER_PORT = undefined;
           }
         });
@@ -383,7 +382,7 @@ function handleEventSend(code) {
   log.info(`Sending USB event ${code} to port ${TRIGGER_PORT}`);
 
   // Early return when running in development (no trigger port is expected)
-  if (DEV_MODE) return;
+  if (CONTINUE_ANYWAY) return;
 
   if (TRIGGER_PORT !== undefined) {
     sendToPort(TRIGGER_PORT, code);
@@ -415,7 +414,7 @@ function handleEventSend(code) {
         break;
       case 2:
         // User selects "Continue Anyway", we must be in dev mode
-        DEV_MODE = true;
+        CONTINUE_ANYWAY = true;
         break;
     }
   }
