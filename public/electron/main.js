@@ -24,9 +24,9 @@ log.initialize({ preload: true });
 
 /************ GLOBALS ***********/
 
+// TODO @brown-ccv #443 : Use NODE_ENV here for dev vs production
 let CONFIG; // Honeycomb configuration object
-// let CONTINUE_ANYWAY; // Whether or not the application is running in dev mode
-let CONTINUE_ANYWAY; // true if in dev mode and the user elects "continue anyway"
+let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected (option is only available in dev mode)
 
 let TEMP_FILE; // Path to the temporary output file
 let OUT_PATH; // Path to the final output folder (on the Desktop)
