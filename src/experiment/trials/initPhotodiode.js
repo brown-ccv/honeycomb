@@ -8,17 +8,11 @@ export const initPhotodiodeTrial = {
   type: htmlKeyboardResponse,
   choices: "NO_KEYS",
   trial_duration: 1600,
-  stimulus: function () {
+  stimulus: photodiodeGhostBox,
+  on_load: function () {
     if (!config.USE_ELECTRON) {
       throw new Error("photodiode recording is only available when running inside Electron");
     }
-    if (!config.USE_PHOTODIODE) {
-      console.warn("photodiode trial was run but USE_PHOTODIODE is set to false ");
-    }
-
-    return photodiodeGhostBox;
-  },
-  on_load: function () {
     if (!config.USE_PHOTODIODE) {
       console.warn("photodiode trial was run but USE_PHOTODIODE is set to false ");
     }
