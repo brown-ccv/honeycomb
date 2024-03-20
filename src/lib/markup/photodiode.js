@@ -39,9 +39,11 @@ export function pdSpotEncode(taskCode) {
    * @param {function} callback A callback function to execute after the flash
    */
   // TODO @brown-ccv #331: Remove jquery dependency, need visibility to last through all flashes?
+  // TODO @brown-ccv: Prevent trial from changing until pdSpotEncode finishes (need to use jsPsych.pluginAPI.setTimeout)
   function pulseFor(msVisible, callback) {
     const photodiodeSpot = document.getElementById("photodiode-spot");
-    if (!photodiodeSpot) throw new Error("photodiodeGhostBox is not present on the document");
+    // TODO @brown-ccv: This should error once we handle the timeout correctly
+    if (!photodiodeSpot) return;
 
     photodiodeSpot.style.visibility = "visible";
     setTimeout(() => {
