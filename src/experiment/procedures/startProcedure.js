@@ -4,7 +4,6 @@ import { buildCameraStartTrial } from "../trials/camera";
 import { enterFullscreenTrial } from "../trials/fullscreen";
 import { holdUpMarkerTrial } from "../trials/holdUpMarker";
 import { nameTrial } from "../trials/name";
-import { startCodeTrial } from "../trials/startCode";
 import { introductionTrial } from "../trials/introduction";
 
 /**
@@ -24,7 +23,6 @@ export function buildStartProcedure(jsPsych) {
   // Conditionally add the photodiode setup trials
   if (config.USE_PHOTODIODE) {
     procedure.push(holdUpMarkerTrial);
-    procedure.push(startCodeTrial);
   }
 
   // Conditionally add the camera setup trials
