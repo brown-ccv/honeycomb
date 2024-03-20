@@ -19,7 +19,11 @@ export const initPhotodiodeTrial = {
     return photodiodeGhostBox;
   },
   on_load: function () {
-    // Conditionally flashes the photodiode when the trial first loads
-    if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.open_task);
+    if (!config.USE_PHOTODIODE) {
+      console.warn("photodiode trial was run but USE_PHOTODIODE is set to false ");
+    }
+
+    // Flashes the photodiode when the trial first loads
+    pdSpotEncode(eventCodes.open_task);
   },
 };
