@@ -24,6 +24,7 @@ export function pdSpotEncode(taskCode) {
   if (!config.USE_ELECTRON) {
     throw new Error("photodiodeSpot trial is only available when running inside Electron");
   }
+  console.log($("#photodiode-spot"), document.getElementById("#photodiode-spot"));
 
   if (config.USE_PHOTODIODE) {
     // TODO @brown-ccv #333: Get blink time from config.json (equipment.trigger_box.event_codes) (40ms is the default)
@@ -41,9 +42,9 @@ export function pdSpotEncode(taskCode) {
    */
   // TODO @brown-ccv #331: Single photodiode color, pulse between visible and invisible here
   function pulseFor(ms, callback) {
-    $("#photodiode-spot").css({ "background-color": "black" });
+    $("#photodiode-spot").css({ visibility: "visible" });
     setTimeout(() => {
-      $("#photodiode-spot").css({ "background-color": "white" });
+      $("#photodiode-spot").css({ visibility: "hidden" });
       callback();
     }, ms);
   }
