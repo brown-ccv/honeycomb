@@ -1,11 +1,12 @@
+import PropTypes from "prop-types";
 import React, { useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 
 export default function Login({
-  handleLogin,
-  initialParticipantID,
   initialStudyID,
+  initialParticipantID,
   validationFunction,
+  handleLogin,
 }) {
   // State variables for login screen
   const [participantID, setParticipantID] = React.useState(initialParticipantID);
@@ -72,3 +73,10 @@ export default function Login({
     </div>
   );
 }
+
+Login.propTypes = {
+  initialStudyID: PropTypes.string,
+  initialParticipantID: PropTypes.string,
+  validationFunction: PropTypes.func,
+  handleLogin: PropTypes.func,
+};
