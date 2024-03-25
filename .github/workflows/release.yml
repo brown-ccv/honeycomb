@@ -9,6 +9,7 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -20,8 +21,8 @@ jobs:
     # Run build script for [home/clinic] in [windows/macOS/ubuntu]
     strategy:
       matrix:
-        setting: [home, clinic]
         os: [windows-latest, macOS-latest, ubuntu-latest]
+        setting: [home, clinic]
       fail-fast: true
 
     steps:
@@ -62,9 +63,6 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: npm run package:linux
 
-      # Upload installers to github release
-      # TODO: Can these be combined based on matrix.os???
-      # TODO: Overwrite files if they exist?
       # Get package info
       - name: Get package name and version
         id: package_info
@@ -73,6 +71,7 @@ jobs:
           echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
         shell: bash
 
+      # Upload installers to GitHub release
       - name: ⬆ Upload installer to release - Windows
         if: startsWith(matrix.os, 'windows')
         uses: svenstaro/upload-release-action@v2
@@ -85,8 +84,8 @@ jobs:
         if: startsWith(matrix.os, 'mac')
         uses: svenstaro/upload-release-action@v2
         with:
-          file: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-x64.dmg
-          asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-${{ matrix.setting }}-x64.dmg
+          file: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-universal.dmg
+          asset_name: ${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-${{ matrix.setting }}-universal.dmg
           tag: ${{ github.ref }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
       - name: ⬆ Upload installer to release - Linux

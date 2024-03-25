@@ -23,6 +23,7 @@ Brewfile.lock.json
 
 # Versioning
 public/config/version.json
+public/version.json
 Brewfile.lock.json
 
 # Firebase private key

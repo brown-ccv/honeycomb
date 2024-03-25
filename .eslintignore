@@ -21,8 +21,6 @@ psiturkit/*_turk
 /.vscode
 /.env
 .env
-/.pnp
-.pnp.js
-.gitignore
 .DS_Store
+.gitignore
 **/firebase-service-account.json

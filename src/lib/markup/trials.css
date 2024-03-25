@@ -1,0 +1,28 @@
+/* Custom styling for the photodiode box. */
+#photodiode-box {
+  position: fixed;
+  bottom: 3px;
+  right: 3px;
+  display: flex;
+  outline: 3px solid rgb(80, 80, 80);
+  margin: auto;
+  height: 50px;
+  width: 50px;
+}
+
+/* Custom styling for the photodiode spot. */
+#photodiode-spot {
+  width: 50px;
+  height: 50px;
+  background-color: black;
+  border-radius: 50%;
+  position: absolute;
+}
+
+/* Custom styling for the fixation dot.  */
+#fixation-dot {
+  background-color: black;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+}

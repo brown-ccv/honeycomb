@@ -1,0 +1,21 @@
+{
+  "fixation": {
+    "default_duration": 1000,
+    "randomize_duration": true,
+    "durations": [250, 500, 750, 1000, 1250, 1500, 1750, 2000]
+  },
+  "honeycomb": {
+    "randomize_order": true,
+    "repetitions": 5,
+    "timeline_variables": [
+      {
+        "stimulus": "assets/images/blue.png",
+        "correct_response": "f"
+      },
+      {
+        "stimulus": "assets/images/orange.png",
+        "correct_response": "j"
+      }
+    ]
+  }
+}

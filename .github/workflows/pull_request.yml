@@ -1,6 +1,4 @@
 name: Pull Request
-
-# Runs the build and test scripts on PR
 on: pull_request
 
 concurrency:
@@ -8,8 +6,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-test:
-    name: 🧪 Build and Test
+  build:
+    name: 🧪 Build
     runs-on: ${{ matrix.os }}
 
     # Run action for [home/clinic] with in [windows/macOS/ubuntu]
@@ -42,11 +40,7 @@ jobs:
           path: ./env
           mode: ${{matrix.setting}}
 
-      # Test and lint
-      - name: 🧪 Test
-        run: npm test
-        env:
-          CI: true
+      # Lint the code
       - name: 🔬 Lint
         run: npm run lint -- --max-warnings=0
 

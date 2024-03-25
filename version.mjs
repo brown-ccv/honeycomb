@@ -1,5 +1,7 @@
-// Get Git Commit SHA and Branch
-// TODO #173: Is there a better way to keep track of versioning? Just use x.x.x?
+/**
+ * Get Git Commit SHA and Branch
+ * The version file is written into public/config/version.json
+ */
 
 import fsExtra from "fs-extra";
 import { execaCommandSync } from "execa";
@@ -17,6 +19,6 @@ if (process.env.CI) {
 }
 
 fsExtra
-  .writeFile("public/config/version.json", JSON.stringify(git))
+  .writeFile("public/version.json", JSON.stringify(git))
   .then(() => console.log(`Saved version file with rev: ${git.sha}, branch: ${git.ref}`))
   .catch((error) => console.log(error));

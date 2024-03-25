@@ -1,7 +1,9 @@
 import { checkbox, confirm, expand, input, select } from "@inquirer/prompts";
+import fsExtra from "fs-extra";
+
+// TODO @brown-ccv #183: Upgrade to modular SDK instead of compat
 import { cert, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import fsExtra from "fs-extra";
 
 /** -------------------- GLOBALS -------------------- */
 
@@ -18,12 +20,13 @@ const INVALID_DEPLOYMENT_ERROR = new Error("Invalid deployment: " + DEPLOYMENT);
 
 /** -------------------- MAIN -------------------- */
 
+// TODO @brown-ccv #289: Pass CLI arguments with commander (especially for action)
 async function main() {
-  // TODO #289: User should be able to pass command line arguments OR inquirer (especially for action)
-
   ACTION = await actionPrompt();
   DEPLOYMENT = await deploymentPrompt();
+  // TODO @brown-ccv #291: Enable downloading all study data at once
   STUDY_ID = await studyIDPrompt();
+  // TODO @brown-ccv #291: Enable downloading all participant data at once
   PARTICIPANT_ID = await participantIDPrompt();
   EXPERIMENT_IDS = await experimentIDPrompt();
 
@@ -55,6 +58,8 @@ main();
 
 /** -------------------- DOWNLOAD ACTION -------------------- */
 
+/** Download data that's stored in Firebase */
+// TODO @brown-ccv #300: Download as either CSV or JSON
 async function downloadDataFirebase() {
   let overwriteAll = false;
 
@@ -83,7 +88,6 @@ async function downloadDataFirebase() {
       `${STUDY_ID}/${PARTICIPANT_ID}/${experimentID}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names)
 
     // Determine if the file should be saved
-    // TODO #300: Download as either CSV or JSON
     let shouldDownload;
     if (fsExtra.existsSync(outputFile)) {
       // File exists, check if user wants to overwrite
@@ -119,6 +123,7 @@ async function downloadDataFirebase() {
 
 /** -------------------- DELETE ACTION -------------------- */
 
+/** Delete data that's stored in Firebase */
 async function deleteDataFirebase() {
   const confirmation = await confirmDeletionPrompt();
   if (confirmation) {
@@ -156,8 +161,8 @@ async function actionPrompt() {
 }
 
 /** Prompt the user for the deployment they are trying to access */
+// TODO @brown-ccv #290: Add other deployments!
 async function deploymentPrompt() {
-  // TODO #290: Add other deployments!
   const response = "firebase";
 
   // Initialize Firestore
@@ -213,7 +218,6 @@ async function participantIDPrompt() {
   };
 
   return await input({
-    // TODO #291: Enable downloading all study data at once
     message: "Select a participant:",
     validate: async (input) => {
       const invalid = "Please enter a valid participant from your Firestore database";
@@ -232,7 +236,6 @@ async function participantIDPrompt() {
 
 /** Prompt the user to select one or more experiments of the PARTICIPANT_ID on STUDY_ID */
 async function experimentIDPrompt() {
-  // TODO #291: Enable downloading all participant data at once
   const dataSnapshot = await getDataRef(STUDY_ID, PARTICIPANT_ID).get();
 
   // Sort experiment choices by most recent first
