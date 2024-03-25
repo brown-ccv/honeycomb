@@ -17,9 +17,9 @@ if (require("electron-squirrel-startup")) app.quit();
 // Initialize the logger for any renderer process
 log.initialize({ preload: true });
 
-// TODO @brown-ccv #192: Handle data writing to desktop in a utility process?
-// TODO @brown-ccv #192: Handle video data writing to desktop in a utility process?
-// TODO @brown-ccv #398: Separate log files for each run through?
+// TODO @brown-ccv #192: Handle data writing to desktop in a utility process
+// TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
+// TODO @brown-ccv #398: Separate log files for each run through
 // TODO @brown-ccv #429: Use app.getPath('temp') for temporary JSON file
 
 /************ GLOBALS ***********/
@@ -57,8 +57,7 @@ app.whenReady().then(() => {
   ipcMain.on("saveVideo", handleSaveVideo);
   ipcMain.handle("checkSerialPort", handleCheckSerialPort);
 
-  // Setup min files and create the Electron window
-  setupLocalFilesNormalizerProxy();
+  // Create the Electron window
   createWindow();
 
   /**
@@ -123,8 +122,8 @@ function handleSetConfig(event, config) {
  * @param {Object} trigger The metadata for the event code trigger
  * @param {string} trigger.comName The COM name of the serial port
  * @param {Object} trigger.eventCodes The list of possible event codes to be triggered
- * @param {string} productID The name of the product connected to the serial port
- * @param {string} vendorID The name of the vendor connected to the serial prot
+ * @param {string} trigger.productID The name of the product connected to the serial port
+ * @param {string} trigger.vendorID The name of the vendor connected to the serial prot
  */
 function handleSetTrigger(event, trigger) {
   TRIGGER_CODES = trigger;
@@ -270,9 +269,6 @@ function createWindow() {
   let mainWindow;
   let appURL;
 
-  console.log(__dirname);
-  console.log(path.join(__dirname, "index.html"));
-
   if (process.env.ELECTRON_START_URL) {
     // Running in development
 
@@ -318,23 +314,6 @@ function createWindow() {
   mainWindow.loadURL(appURL);
 }
 
-/**
- * Set up a local proxy to adjust the paths of requested files
- * when loading them from the production bundle (e.g. local fonts, etc...).
- */
-// TODO @brown-ccv #395: Delete this and local min files when PsiTurk is deprecated
-function setupLocalFilesNormalizerProxy() {
-  // protocol.registerHttpProtocol(
-  //   "file",
-  //   (request, callback) => {
-  //     const url = request.url.substr(8);
-  //     callback({ path: path.normalize(`${__dirname}/${url}`) });
-  //   },
-  //   (error) => {
-  //     if (error) console.error("Failed to register protocol");
-  //   }
-  // );
-}
 
 /** SERIAL PORT SETUP & COMMUNICATION (EVENT MARKER) */
 
