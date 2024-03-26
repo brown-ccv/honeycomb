@@ -190,6 +190,8 @@ export default function App() {
     } else {
       return (
         <Login
+          initialStudyID={studyID}
+          initialParticipantID={participantID}
           validationFunction={
             {
               desktop: defaultValidation,
@@ -197,8 +199,6 @@ export default function App() {
               firebase: firebaseValidation,
             }[currentMethod]
           }
-          initialStudyID={studyID}
-          initialParticipantID={participantID}
           handleLogin={handleLogin}
         />
       );
