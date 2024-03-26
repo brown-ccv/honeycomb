@@ -1,4 +1,3 @@
-import $ from "jquery";
 import { config } from "../../config/main";
 import { div, span } from "./tags";
 
@@ -35,17 +34,21 @@ export function pdSpotEncode(taskCode) {
   }
 
   /**
-   * Pulses the photodiode spot from black (on) to white (off) and runs a callback function
+   * Pulses the photodiode spot from visible to white invisible and runs a callback function
    * @param {number} ms The amount of time to flash the photodiode spot
    * @param {function} callback A callback function to execute after the flash
    */
-  // TODO @brown-ccv #331: Single photodiode color, pulse between visible and invisible here
-  function pulseFor(ms, callback) {
-    $("#photodiode-spot").css({ "background-color": "black" });
+  // TODO @brown-ccv: Prevent trial from changing until pdSpotEncode finishes (need to use jsPsych.pluginAPI.setTimeout)
+  function pulseFor(msVisible, callback) {
+    const photodiodeSpot = document.getElementById("photodiode-spot");
+    // TODO @brown-ccv: This should error once we handle the timeout correctly
+    if (!photodiodeSpot) return;
+
+    photodiodeSpot.style.visibility = "visible";
     setTimeout(() => {
-      $("#photodiode-spot").css({ "background-color": "white" });
+      photodiodeSpot.style.visibility = "hidden";
       callback();
-    }, ms);
+    }, msVisible);
   }
 
   /**

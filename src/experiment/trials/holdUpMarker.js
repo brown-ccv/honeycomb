@@ -7,6 +7,7 @@ import { div, h1, p } from "../../lib/markup/tags";
 
 // TODO @brown-ccv #330: Custom extension for EEG - this is initializeTriggerBox
 // TODO @brown-ccv #330: Need to ping the serial part - this isn't doing anything yet
+// TODO @brown-ccv: Prevent user from pressing continue until pdSpotEncode finishes (need to use jsPsych.pluginAPI.setTimeout)
 export const holdUpMarkerTrial = {
   type: htmlButtonResponse,
   stimulus: function () {
