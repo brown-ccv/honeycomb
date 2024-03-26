@@ -24,9 +24,12 @@ log.initialize({ preload: true });
 
 /************ GLOBALS ***********/
 
+const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../version.json")));
+// TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
+const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
+
 let CONFIG; // Honeycomb configuration object
-// TODO @brown-ccv #428: Rename, this is running in development AND user hit "Continue Anyway"
-let DEV_MODE; // Whether or not the application is running in dev mode
+let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected (option is only available in dev mode)
 
 let TEMP_FILE; // Path to the temporary output file
 let OUT_PATH; // Path to the final output folder (on the Desktop)
@@ -34,8 +37,6 @@ let OUT_FILE; // Name of the final output file
 
 let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
 let TRIGGER_PORT; // Port that the EEG machine is talking through
-
-const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../version.json")));
 
 /************ APP LIFECYCLE ***********/
 
@@ -269,11 +270,11 @@ function createWindow() {
   let mainWindow;
   let appURL;
 
-  if (process.env.ELECTRON_START_URL) {
+  if (ELECTRON_START_URL) {
     // Running in development
 
     // Load app from localhost (This allows hot-reloading)
-    appURL = process.env.ELECTRON_START_URL;
+    appURL = ELECTRON_START_URL;
 
     // Create a 1500x900 window with the dev tools open
     mainWindow = new BrowserWindow({
@@ -314,7 +315,6 @@ function createWindow() {
   mainWindow.loadURL(appURL);
 }
 
-
 /** SERIAL PORT SETUP & COMMUNICATION (EVENT MARKER) */
 
 /**
@@ -352,7 +352,7 @@ async function setUpPort() {
           buttons: [
             "OK",
             // Allow continuation when running in development mode
-            ...(process.env.ELECTRON_START_URL ? ["Continue Anyway"] : []),
+            ...(ELECTRON_START_URL ? ["Continue Anyway"] : []),
           ],
           defaultId: 0,
         })
@@ -362,8 +362,8 @@ async function setUpPort() {
             // Quit app when user selects "OK"
             app.exit();
           } else {
-            // User selected "Continue Anyway", we must be in dev mode
-            DEV_MODE = true;
+            // User selected "Continue Anyway", trigger port is not connected
+            CONTINUE_ANYWAY = true;
             TRIGGER_PORT = undefined;
           }
         });
@@ -383,7 +383,7 @@ function handleEventSend(code) {
   log.info(`Sending USB event ${code} to port ${TRIGGER_PORT}`);
 
   // Early return when running in development (no trigger port is expected)
-  if (DEV_MODE) return;
+  if (CONTINUE_ANYWAY) return;
 
   if (TRIGGER_PORT !== undefined) {
     sendToPort(TRIGGER_PORT, code);
@@ -399,7 +399,7 @@ function handleEventSend(code) {
         "Quit",
         "Retry",
         // Allow continuation when running in development mode
-        ...(process.env.ELECTRON_START_URL ? ["Continue Anyway"] : []),
+        ...(ELECTRON_START_URL ? ["Continue Anyway"] : []),
       ],
       detail: "heres some detail",
     });
@@ -415,7 +415,7 @@ function handleEventSend(code) {
         break;
       case 2:
         // User selects "Continue Anyway", we must be in dev mode
-        DEV_MODE = true;
+        CONTINUE_ANYWAY = true;
         break;
     }
   }
