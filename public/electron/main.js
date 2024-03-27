@@ -9,7 +9,8 @@ const log = require("electron-log");
 const _ = require("lodash");
 
 // TODO @brown-ccv #340: Use Electron's web serial API (remove event-marker dependency)
-const { getPort, sendToPort } = require("event-marker");
+// const { getPort, sendToPort } = require("event-marker");
+const SerialPort = require("serialport");
 
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 if (require("electron-squirrel-startup")) app.quit();
@@ -420,3 +421,77 @@ function handleEventSend(code) {
     }
   }
 }
+
+// TODO @RobertGemmaJr: THIS SHOULD ALL BE IN ITS OWN FILE
+// TODO @RobertGemmaJr: // export { isPort, getPort, sendToPort };
+// TODO @RobertGemmaJr: Refactor to function syntax
+
+const deviceByComName = (portList, comName) => {
+  const device = portList.filter((device) => {
+    return device.comName === comName.toUpperCase() || device.comName === comName;
+  });
+  return device;
+};
+
+const deviceByProductId = (portList, vendorId, productId) => {
+  const device = portList.filter((device) => {
+    return (
+      (device.vendorId === vendorId.toUpperCase() || device.vendorId === vendorId) &&
+      device.productId === productId
+    );
+  });
+  return device;
+};
+
+// dispatcher based on one argument to ids or two
+const getDevice = (portList, comVendorName, productId) => {
+  if (productId === undefined) {
+    return deviceByComName(portList, comVendorName);
+  } else {
+    return deviceByProductId(portList, comVendorName, productId);
+  }
+};
+
+const isPort = async (comVendorName, productId) => {
+  let portList;
+  try {
+    portList = await SerialPort.list();
+  } catch {
+    return false;
+  }
+  const device = getDevice(portList, comVendorName, productId);
+  if (device.length === 1) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const getPort = async (comVendorName, productId) => {
+  let portList;
+  try {
+    portList = await SerialPort.list();
+  } catch {
+    return false;
+  }
+
+  const device = getDevice(portList, comVendorName, productId);
+  try {
+    const path = device[0].comName;
+    const port = new SerialPort(path);
+    return port;
+  } catch {
+    return false;
+  }
+};
+
+const sendToPort = async (port, event_code) => {
+  // try {
+  //   port.write(Buffer.from([event_code]));
+  // } catch (e) {
+  //   throw e;
+  // }
+  port.write(Buffer.from([event_code]));
+};
+
+// export { isPort, getPort, sendToPort };
