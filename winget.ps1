@@ -4,6 +4,8 @@
 winget install -e --id Git.Git;
 winget install -e --id GitHub.GitHubDesktop;
 winget install -e --id CoreyButler.NVMforWindows
+# TODO @brown-ccv: Mac install doesn't include python?
+# TODO: If it's only needed for PsiTurk I think we can leave it out
 winget install -e --id Python.Python.3.11;
 winget install -e --id ojdkbuild.ojdkbuild
 winget install -e --id Microsoft.VisualStudioCode;
