@@ -8,14 +8,18 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const log = require("electron-log");
 const _ = require("lodash");
 
+// TODO @RobertGemmaJr: Add serialport's MockBinding for the "Continue Anyway": https://serialport.io/docs/guide-testing
+// TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
+
 // TODO @brown-ccv #340: Use Electron's web serial API (remove event-marker dependency)
 // const { getPort, sendToPort } = require("event-marker");
 const SerialPort = require("serialport");
 
-// TODO: @RobertGemmaJr: Serial port doesn't work with node 3.12?
-// TODO: Only windows installs a Python version?
-// Homebrew is installing it on Mac when it installs openjdk
-// I'm using pyenv on windows with Python 3.10
+// TODO @RobertGemmaJr: Serial port doesn't work with node 3.12?
+// TODO @RobertGemmaJr: Only windows installs a Python version?
+// Mac: Homebrew is installing python@3.12 when it installs openjdk
+// pyenv: python@3.10 and @3.12 seem to work okay on windows with pyenv?
+// TODO @RobertGemmaJr: I should handle the change to 'electron-forge dev" at the same time to make sure the rebuild stuff still works correctly
 
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 if (require("electron-squirrel-startup")) app.quit();
