@@ -12,6 +12,11 @@ const _ = require("lodash");
 // const { getPort, sendToPort } = require("event-marker");
 const SerialPort = require("serialport");
 
+// TODO: @RobertGemmaJr: Serial port doesn't work with node 3.12?
+// TODO: Only windows installs a Python version?
+// Homebrew is installing it on Mac when it installs openjdk
+// I'm using pyenv on windows with Python 3.10
+
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 if (require("electron-squirrel-startup")) app.quit();
 
