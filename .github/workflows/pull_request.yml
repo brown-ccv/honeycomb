@@ -29,11 +29,16 @@ jobs:
       - name: 🐍 Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.12"
+          python-version: 3.12
+          cache: pip
 
-      # Install dependencies and set up environment
+      # Install dependencies
+      - name: 🅿️ Install Python tools
+        run: pip install setuptools
       - name: 📥 Install Dependencies
         run: npm ci
+
+      # Set up the environment
       - name: 🔃 Load .env file (.env.${{matrix.setting}})
         uses: xom9ikk/dotenv@v2
         with:
