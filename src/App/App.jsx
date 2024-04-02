@@ -58,6 +58,7 @@ export default function App() {
 
       // If on desktop
       if (config.USE_ELECTRON) {
+        // TODO @brown-ccv #443 : Pass NODE_ENV here as well
         await window.electronAPI.setConfig(config); // Pass config to Electron ipcMain
         await window.electronAPI.setTrigger(trigger); // Pass trigger to Electron ipcMain
 
