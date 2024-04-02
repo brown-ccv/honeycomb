@@ -3,6 +3,7 @@
 brew "git"
 cask "github"
 brew "openjdk"
+brew "python-setuputils"
 cask "visual-studio-code"
 
 # TODO @brown-ccv #278: Python management (miniconda)? [Python is only needed for PsiTurk]
