@@ -1,4 +1,5 @@
 import { initJsPsych } from "jspsych";
+import PropTypes from "prop-types";
 import React from "react";
 
 import { config, taskVersion } from "../../config/main";
@@ -59,3 +60,10 @@ export default function JsPsychExperiment({
 
   return <div id={EXPERIMENT_ID} />;
 }
+
+JsPsychExperiment.propTypes = {
+  studyID: PropTypes.string,
+  participantID: PropTypes.string,
+  dataUpdateFunction: PropTypes.func,
+  dataFinishFunction: PropTypes.func,
+};
