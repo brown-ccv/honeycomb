@@ -7,13 +7,10 @@ const fs = require("node:fs");
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const log = require("electron-log");
 const _ = require("lodash");
+const SerialPort = require("serialport");
 
 // TODO @RobertGemmaJr: Add serialport's MockBinding for the "Continue Anyway": https://serialport.io/docs/guide-testing
 // TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
-
-// TODO @brown-ccv #340: Use Electron's web serial API (remove event-marker dependency)
-// const { getPort, sendToPort } = require("event-marker");
-const SerialPort = require("serialport");
 
 // TODO @RobertGemmaJr: Serial port doesn't work with node 3.12?
 // TODO @RobertGemmaJr: Only windows installs a Python version?
@@ -432,51 +429,59 @@ function handleEventSend(code) {
 }
 
 // TODO @RobertGemmaJr: THIS SHOULD ALL BE IN ITS OWN FILE
-// TODO @RobertGemmaJr: // export { isPort, getPort, sendToPort };
-// TODO @RobertGemmaJr: Refactor to function syntax
+// TODO: Test connections with MockBindings (e.g. CONTINUE_ANYWAY)  https://serialport.io/docs/api-binding-mock
 
-const deviceByComName = (portList, comName) => {
-  const device = portList.filter((device) => {
-    return device.comName === comName.toUpperCase() || device.comName === comName;
-  });
-  return device;
-};
+/**
+ * Retrieve's a serial port device by its COM name
+ * @param {*} portList A list of available serial port devices
+ * @param {string} comName The COM name of the desired device
+ * @returns
+ */
+function deviceByComName(portList, comName) {
+  return portList.filter(
+    (device) => device.comName === comName.toUpperCase() || device.comName === comName
+  );
+}
 
-const deviceByProductId = (portList, vendorId, productId) => {
-  const device = portList.filter((device) => {
-    return (
+/**
+ * Retrieve's a serial port device by its product identifier
+ * @param {*} portList A list of available serial port devices
+ * @param {string} vendorId The vendor identifier of the desired device
+ * @param {string} productId The product identifier of the desired device
+ * @returns
+ */
+function deviceByProductId(portList, vendorId, productId) {
+  return portList.filter(
+    (device) =>
+      // Ensure vendorID's match
       (device.vendorId === vendorId.toUpperCase() || device.vendorId === vendorId) &&
+      // Ensure productID's match
       device.productId === productId
-    );
-  });
-  return device;
-};
+  );
+}
 
-// dispatcher based on one argument to ids or two
-const getDevice = (portList, comVendorName, productId) => {
-  if (productId === undefined) {
-    return deviceByComName(portList, comVendorName);
-  } else {
-    return deviceByProductId(portList, comVendorName, productId);
-  }
-};
+/**
+ * Retrieve's a serial port device based on either the COM name or product identifier
+ * If productID is undefined then comVendorName is the COM name, otherwise it's the vendorID
+ * @param {*} portList
+ * @param {string} comVendorName EITHER a com name or the vendor identifier of the desired device
+ * @param {string | undefined} productId The product identifier of the desired device
+ * @returns
+ */
+function getDevice(portList, comVendorName, productId) {
+  if (productId === undefined) return deviceByComName(portList, comVendorName);
+  else return deviceByProductId(portList, comVendorName, productId);
+}
 
-const isPort = async (comVendorName, productId) => {
-  let portList;
-  try {
-    portList = await SerialPort.list();
-  } catch {
-    return false;
-  }
-  const device = getDevice(portList, comVendorName, productId);
-  if (device.length === 1) {
-    return true;
-  } else {
-    return false;
-  }
-};
-
-const getPort = async (comVendorName, productId) => {
+/**
+ * Retrieve's a serial port device based on either the COM name or product identifier
+ * Returns false if the desired device was not found
+ * @param {string} comVendorName EITHER a com name or the vendor identifier of the desired device
+ * @param {string | undefined} productId The product identifier of the desired device
+ * @returns The
+ */
+// TODO @brown-ccv: This should fail, not return false
+async function getPort(comVendorName, productId) {
   let portList;
   try {
     portList = await SerialPort.list();
@@ -492,15 +497,13 @@ const getPort = async (comVendorName, productId) => {
   } catch {
     return false;
   }
-};
+}
 
-const sendToPort = async (port, event_code) => {
-  // try {
-  //   port.write(Buffer.from([event_code]));
-  // } catch (e) {
-  //   throw e;
-  // }
+/**
+ * Sends event code data to a serial port device
+ * @param {SerialPort} port A SerialPort device
+ * @param {number} event_code The numeric code to write to the device
+ */
+async function sendToPort(port, event_code) {
   port.write(Buffer.from([event_code]));
-};
-
-// export { isPort, getPort, sendToPort };
+}
