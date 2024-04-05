@@ -23,6 +23,10 @@ export const LANGUAGE = language;
 // TODO @brown-ccv #374: Save settings in Firebase
 export const SETTINGS = settings;
 
+// TEMP - I don't want to change everything yet
+const process = import.meta;
+console.log(process.env, import.meta.env.MODE);
+
 /**
  *
  * As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
