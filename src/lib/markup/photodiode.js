@@ -3,15 +3,17 @@ import { div, span } from "./tags";
 
 // TODO @brown-ccv #329: Refactor photodiode logic to be a custom jsPsych extension
 
+// The id of the photodiode elements (see trials.css)
+const BOX_ID = "photodiode-box";
+const SPOT_ID = "photodiode-spot";
+
 /**
  * Markup for a box in the bottom right corner of the screen and a photodiode spot inside the ghost box
  *
  * Note the box will only be visible if USE_PHOTODIODE is true
  * Note that this trial is only available when running in Electron
  */
-export const photodiodeGhostBox = div(span("", { id: "photodiode-spot" }), {
-  id: "photodiode-box",
-});
+export const photodiodeGhostBox = div(span("", { id: SPOT_ID }), { id: BOX_ID });
 
 /**
  * Conditionally flashes a spot inside the photodiodeGhostBox and sends event codes to the serial port
@@ -40,7 +42,7 @@ export function pdSpotEncode(taskCode) {
    */
   // TODO @brown-ccv: Prevent trial from changing until pdSpotEncode finishes (need to use jsPsych.pluginAPI.setTimeout)
   function pulseFor(msVisible, callback) {
-    const photodiodeSpot = document.getElementById("photodiode-spot");
+    const photodiodeSpot = document.getElementById(SPOT_ID);
     // TODO @brown-ccv: This should error once we handle the timeout correctly
     if (!photodiodeSpot) return;
 
