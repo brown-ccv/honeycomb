@@ -13,7 +13,6 @@ const { getPort, sendToPort } = require("./serialPort");
 // TODO @RobertGemmaJr: Add serialport's MockBinding for the "Continue Anyway": https://serialport.io/docs/guide-testing
 // TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
 
-
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 if (require("electron-squirrel-startup")) app.quit();
 
