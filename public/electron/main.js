@@ -20,7 +20,6 @@ log.initialize({ preload: true });
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
 // TODO @brown-ccv #398: Separate log files for each run through
-
 // TODO @brown-ccv #429: Use app.getPath('temp') for temporary JSON file
 
 /************ GLOBALS ***********/
