@@ -1,8 +1,11 @@
-import $ from "jquery";
 import { config } from "../../config/main";
 import { div, span } from "./tags";
 
 // TODO @brown-ccv #329: Refactor photodiode logic to be a custom jsPsych extension
+
+// The id of the photodiode elements (see trials.css)
+const BOX_ID = "photodiode-box";
+const SPOT_ID = "photodiode-spot";
 
 /**
  * Markup for a box in the bottom right corner of the screen and a photodiode spot inside the ghost box
@@ -10,9 +13,7 @@ import { div, span } from "./tags";
  * Note the box will only be visible if USE_PHOTODIODE is true
  * Note that this trial is only available when running in Electron
  */
-export const photodiodeGhostBox = div(span("", { id: "photodiode-spot" }), {
-  id: "photodiode-box",
-});
+export const photodiodeGhostBox = div(span("", { id: SPOT_ID }), { id: BOX_ID });
 
 /**
  * Conditionally flashes a spot inside the photodiodeGhostBox and sends event codes to the serial port
@@ -35,17 +36,21 @@ export function pdSpotEncode(taskCode) {
   }
 
   /**
-   * Pulses the photodiode spot from black (on) to white (off) and runs a callback function
+   * Pulses the photodiode spot from visible to white invisible and runs a callback function
    * @param {number} ms The amount of time to flash the photodiode spot
    * @param {function} callback A callback function to execute after the flash
    */
-  // TODO @brown-ccv #331: Single photodiode color, pulse between visible and invisible here
-  function pulseFor(ms, callback) {
-    $("#photodiode-spot").css({ "background-color": "black" });
+  // TODO @brown-ccv #425: Prevent trial from changing until pdSpotEncode finishes (need to use jsPsych.pluginAPI.setTimeout) https://www.jspsych.org/7.0/reference/jspsych-pluginAPI/#jspsychpluginapiclearalltimeouts
+  function pulseFor(msVisible, callback) {
+    const photodiodeSpot = document.getElementById(SPOT_ID);
+    // TODO @brown-ccv #425: This should error once we handle the timeout correctly
+    if (!photodiodeSpot) return;
+
+    photodiodeSpot.style.visibility = "visible";
     setTimeout(() => {
-      $("#photodiode-spot").css({ "background-color": "white" });
+      photodiodeSpot.style.visibility = "hidden";
       callback();
-    }, ms);
+    }, msVisible);
   }
 
   /**
