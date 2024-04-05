@@ -40,10 +40,10 @@ export function pdSpotEncode(taskCode) {
    * @param {number} ms The amount of time to flash the photodiode spot
    * @param {function} callback A callback function to execute after the flash
    */
-  // TODO @brown-ccv: Prevent trial from changing until pdSpotEncode finishes (need to use jsPsych.pluginAPI.setTimeout)
+  // TODO @brown-ccv #425: Prevent trial from changing until pdSpotEncode finishes (need to use jsPsych.pluginAPI.setTimeout) https://www.jspsych.org/7.0/reference/jspsych-pluginAPI/#jspsychpluginapiclearalltimeouts
   function pulseFor(msVisible, callback) {
     const photodiodeSpot = document.getElementById(SPOT_ID);
-    // TODO @brown-ccv: This should error once we handle the timeout correctly
+    // TODO @brown-ccv #425: This should error once we handle the timeout correctly
     if (!photodiodeSpot) return;
 
     photodiodeSpot.style.visibility = "visible";
