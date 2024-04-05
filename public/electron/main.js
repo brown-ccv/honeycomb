@@ -5,10 +5,12 @@ import { resolve, join, dirname, basename, extname } from "node:path";
 import { readFileSync, mkdirSync, appendFileSync, copyFileSync, writeFileSync } from "node:fs";
 
 import { app, BrowserWindow, ipcMain, dialog } from "electron";
-import { initialize, info, warn, error as _error } from "electron-log";
+import log from "electron-log";
 import { invert } from "lodash";
 
-import { getPort, sendToPort } from "./serialPort";
+// TODO: SPlit this back into a separate file
+import { SerialPort } from "serialport";
+// import { getPort, sendToPort } from "./serialPort";
 
 // TODO @RobertGemmaJr: Add serialport's MockBinding for the "Continue Anyway": https://serialport.io/docs/guide-testing
 // TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
@@ -17,7 +19,7 @@ import { getPort, sendToPort } from "./serialPort";
 if (require("electron-squirrel-startup")) app.quit();
 
 // Initialize the logger for any renderer process
-initialize({ preload: true });
+log.initialize({ preload: true });
 
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
@@ -48,7 +50,7 @@ let TRIGGER_PORT; // Port that the EEG machine is talking through
  * @mac Builds the Electron window
  */
 app.whenReady().then(() => {
-  info("App Ready: ", app.name);
+  log.info("App Ready: ", app.name);
 
   // Handle ipcRenderer events (on is renderer -> main, handle is renderer <--> main)
   ipcMain.on("setConfig", handleSetConfig);
@@ -84,26 +86,26 @@ app.on("window-all-closed", () => {
 
 /** Executed before the application begins closing its windows */
 app.on("before-quit", () => {
-  info("Attempting to quit application");
+  log.info("Attempting to quit application");
   try {
     JSON.parse(readFileSync(TEMP_FILE));
   } catch (error) {
     if (error instanceof TypeError) {
       // TEMP_FILE is undefined at this point
-      warn("Application quit before the participant started the experiment");
+      log.warn("Application quit before the participant started the experiment");
     } else if (error instanceof SyntaxError) {
       // Trials are still being written (i.e. hasn't hit handleOnFinish function)
-      warn("Application quit while the participant was completing the experiment");
+      log.warn("Application quit while the participant was completing the experiment");
     } else {
-      _error("Electron encountered an error while quitting:");
-      _error(error);
+      log.error("Electron encountered an error while quitting:");
+      log.error(error);
     }
   }
 });
 
 /** Log any uncaught exceptions before quitting */
 process.on("uncaughtException", (error) => {
-  _error(error);
+  log.error(error);
   app.quit();
 });
 
@@ -116,7 +118,7 @@ process.on("uncaughtException", (error) => {
  */
 function handleSetConfig(event, config) {
   CONFIG = config;
-  info("Honeycomb Configuration: ", CONFIG);
+  log.info("Honeycomb Configuration: ", CONFIG);
 }
 
 /**
@@ -130,7 +132,7 @@ function handleSetConfig(event, config) {
  */
 function handleSetTrigger(event, trigger) {
   TRIGGER_CODES = trigger;
-  info("Trigger Codes: ", TRIGGER_CODES);
+  log.info("Trigger Codes: ", TRIGGER_CODES);
 }
 
 /**
@@ -141,8 +143,8 @@ function handleSetTrigger(event, trigger) {
 function handleGetCredentials() {
   const studyID = process.env.REACT_APP_STUDY_ID;
   const participantID = process.env.REACT_APP_PARTICIPANT_ID;
-  if (studyID) info("Received study from ENV: ", studyID);
-  if (participantID) info("Received participant from ENV: ", participantID);
+  if (studyID) log.info("Received study from ENV: ", studyID);
+  if (participantID) log.info("Received participant from ENV: ", participantID);
   return { studyID, participantID };
 }
 
@@ -160,10 +162,10 @@ function handleCheckSerialPort() {
  */
 function handlePhotodiodeTrigger(event, code) {
   if (code !== undefined) {
-    info(`Event: ${invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
+    log.info(`Event: ${invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
     handleEventSend(code);
   } else {
-    warn("Photodiode event triggered but no code was sent");
+    log.warn("Photodiode event triggered but no code was sent");
   }
 }
 
@@ -195,7 +197,7 @@ function handleOnDataUpdate(event, data) {
 
     // Write initial bracket
     appendFileSync(TEMP_FILE, "{");
-    info("Temporary file created at ", TEMP_FILE);
+    log.info("Temporary file created at ", TEMP_FILE);
 
     // Write useful information and the beginning of the trials array
     appendFileSync(TEMP_FILE, `"start_time": "${start_date}",`);
@@ -209,7 +211,7 @@ function handleOnDataUpdate(event, data) {
   // Write trial data
   appendFileSync(TEMP_FILE, JSON.stringify(data));
 
-  info(`Trial ${trial_index} successfully written to TempData`);
+  log.info(`Trial ${trial_index} successfully written to TempData`);
 }
 
 /**
@@ -217,21 +219,21 @@ function handleOnDataUpdate(event, data) {
  * File is saved inside ~/Desktop/[appName]/[studyID]/[participantID]/
  */
 function handleOnFinish() {
-  info("Experiment Finished");
+  log.info("Experiment Finished");
 
   // Finish writing JSON
   appendFileSync(TEMP_FILE, "]}");
-  info("Finished writing experiment data to TempData");
+  log.info("Finished writing experiment data to TempData");
 
   // Move temp file to the output location
   const filePath = resolve(OUT_PATH, OUT_FILE);
   try {
     mkdirSync(OUT_PATH, { recursive: true });
     copyFileSync(TEMP_FILE, filePath);
-    info("Successfully saved experiment data to ", filePath);
+    log.info("Successfully saved experiment data to ", filePath);
   } catch (e) {
-    _error.error("Unable to save file: ", filePath);
-    _error.error(e);
+    log.error.error("Unable to save file: ", filePath);
+    log.error.error(e);
   }
   app.quit();
 }
@@ -242,7 +244,7 @@ function handleSaveVideo(event, data) {
   // Video file is the same as OUT_FILE except it's mp4, not json
   const filePath = join(dirname(OUT_FILE), basename(OUT_FILE, extname(OUT_FILE)) + ".webm");
 
-  info(filePath);
+  log.info(filePath);
 
   // Save video file to the desktop
   try {
@@ -253,10 +255,10 @@ function handleSaveVideo(event, data) {
     // TODO @brown-ccv #342: Convert to mp4 before final save? https://gist.github.com/AVGP/4c2ce4ab3c67760a0f30a9d54544a060
     writeFileSync(join(OUT_PATH, filePath), videoData);
   } catch (e) {
-    _error.error("Unable to save file: ", filePath);
-    _error.error(e);
+    log.error.error("Unable to save file: ", filePath);
+    log.error.error(e);
   }
-  info("Successfully saved video file to ", filePath);
+  log.info("Successfully saved video file to ", filePath);
 }
 
 /********** HELPERS **********/
@@ -310,7 +312,7 @@ function createWindow() {
   }
 
   // Load web contents at the given URL
-  info("Loading URL: ", appURL);
+  log.info("Loading URL: ", appURL);
   mainWindow.loadURL(appURL);
 }
 
@@ -320,17 +322,17 @@ function createWindow() {
  * Checks the connection to an EEG machine via USB ports
  */
 async function setUpPort() {
-  info("Setting up USB port");
+  log.info("Setting up USB port");
   const { productID, comName, vendorID } = TRIGGER_CODES;
 
   let maybePort;
   if (productID) {
     // Check port based on productID
-    info("Received a product ID:", productID);
+    log.info("Received a product ID:", productID);
     maybePort = await getPort(vendorID, productID);
   } else {
     // Check port based on COM name
-    info("No product ID, defaulting to COM:", comName);
+    log.info("No product ID, defaulting to COM:", comName);
     maybePort = await getPort(comName);
   }
 
@@ -339,7 +341,7 @@ async function setUpPort() {
 
     // Show dialog box if trigger port has any errors
     TRIGGER_PORT.on("error", (err) => {
-      _error(err);
+      log.error(err);
 
       // Displays as a dialog if there Electron is unable to communicate with the event marker's serial port
       // TODO @brown-ccv #400: Let this just be dialog.showErrorBox?
@@ -356,7 +358,7 @@ async function setUpPort() {
           defaultId: 0,
         })
         .then((opt) => {
-          info(opt);
+          log.info(opt);
           if (opt.response === 0) {
             // Quit app when user selects "OK"
             app.exit();
@@ -370,7 +372,7 @@ async function setUpPort() {
   } else {
     // Unable to connect to a port
     TRIGGER_PORT = undefined;
-    warn("USB port was not connected");
+    log.warn("USB port was not connected");
   }
 }
 
@@ -379,7 +381,7 @@ async function setUpPort() {
  * @param code The code to send via USB
  */
 function handleEventSend(code) {
-  info(`Sending USB event ${code} to port ${TRIGGER_PORT}`);
+  log.info(`Sending USB event ${code} to port ${TRIGGER_PORT}`);
 
   // Early return when running in development (no trigger port is expected)
   if (CONTINUE_ANYWAY) return;
@@ -387,7 +389,7 @@ function handleEventSend(code) {
   if (TRIGGER_PORT !== undefined) {
     sendToPort(TRIGGER_PORT, code);
   } else {
-    _error(`Trigger port is undefined - Event Marker is not connected`);
+    log.error(`Trigger port is undefined - Event Marker is not connected`);
 
     // Display error menu
     const response = dialog.showMessageBoxSync(null, {
@@ -418,4 +420,69 @@ function handleEventSend(code) {
         break;
     }
   }
+}
+
+// TODO: SPLIT THIS BACK INTO A SEPARATE FILE
+
+// TODO: Test connections with MockBindings (e.g. CONTINUE_ANYWAY)  https://serialport.io/docs/api-binding-mock
+
+/**
+ * Retrieve's a serial port device based on either the COM name or product identifier
+ * If productID is undefined then comVendorName is the COM name, otherwise it's the vendorID
+ * @param {Array} portList A list of available serial port devices
+ * @param {string} comVendorName EITHER a com name or the vendor identifier of the desired device
+ * @param {string | undefined} productId The product identifier of the desired device
+ * @returns The SerialPort device
+ */
+function getDevice(portList, comVendorName, productId) {
+  if (productId === undefined) {
+    const comName = comVendorName;
+    return portList.filter(
+      // Find the device with the matching comName
+      (device) => device.comName === comName.toUpperCase() || device.comName === comName
+    );
+  } else {
+    const vendorId = comVendorName;
+    return portList.filter(
+      // Find the device with the matching vendorId and productId
+      (device) =>
+        (device.vendorId === vendorId.toUpperCase() || device.vendorId === vendorId) &&
+        device.productId === productId
+    );
+  }
+}
+
+/**
+ * Retrieve's a serial port device based on either the COM name or product identifier
+ * Returns false if the desired device was not found
+ * @param {string} comVendorName EITHER a com name or the vendor identifier of the desired device
+ * @param {string | undefined} productId The product identifier of the desired device
+ * @returns The SerialPort device
+ */
+// TODO @brown-ccv: This should fail, not return false
+export async function getPort(comVendorName, productId) {
+  let portList;
+  try {
+    portList = await SerialPort.list();
+  } catch {
+    return false;
+  }
+
+  const device = getDevice(portList, comVendorName, productId);
+  try {
+    const path = device[0].comName;
+    const port = new SerialPort(path);
+    return port;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Sends event code data to a serial port device
+ * @param {SerialPort} port A SerialPort device
+ * @param {number} event_code The numeric code to write to the device
+ */
+export async function sendToPort(port, event_code) {
+  port.write(Buffer.from([event_code]));
 }
