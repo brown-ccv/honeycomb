@@ -12,6 +12,9 @@ import settings from "./settings.json";
 
 // TODO @brown-ccv #363: Separate into index.js (for exporting) and env.js
 
+const ENV = import.meta.env;
+console.log(ENV); // TEMP
+
 // Re-export the package name and version
 export const taskName = packageInfo.name;
 export const taskVersion = packageInfo.version;
@@ -22,10 +25,6 @@ export const LANGUAGE = language;
 // Re-export the settings object
 // TODO @brown-ccv #374: Save settings in Firebase
 export const SETTINGS = settings;
-
-// TEMP - I don't want to change everything yet
-const process = import.meta;
-console.log(process.env, import.meta.env.MODE);
 
 /**
  *
@@ -44,13 +43,13 @@ export const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`; // 
 
 const USE_ELECTRON = window.electronAPI !== undefined; // Whether or not the experiment is running in Electron (local app)
 const USE_PROLIFIC = (getProlificId() && !USE_MTURK) || false; // Whether or not the experiment is running with Prolific
-const USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true"; // Whether or not the experiment is running in Firebase (web app)
+const USE_FIREBASE = ENV.REACT_APP_FIREBASE === "true"; // Whether or not the experiment is running in Firebase (web app)
 
-const USE_VOLUME = process.env.REACT_APP_VOLUME === "true"; // Whether or not to use audio cues in the task
-const USE_CAMERA = process.env.REACT_APP_VIDEO === "true" && USE_ELECTRON; // Whether or not to use video recording
+const USE_VOLUME = ENV.REACT_APP_VOLUME === "true"; // Whether or not to use audio cues in the task
+const USE_CAMERA = ENV.REACT_APP_VIDEO === "true" && USE_ELECTRON; // Whether or not to use video recording
 // TODO @brown-ccv #341: Remove USE_EEG - separate variables for USE_PHOTODIODE and USE_EVENT_MARKER
-const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON; // Whether or not the EEG/event marker is available (TODO @brown-ccv: This is only used for sending event codes)
-const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON; // whether or not the photodiode is in use
+const USE_EEG = ENV.REACT_APP_USE_EEG === "true" && USE_ELECTRON; // Whether or not the EEG/event marker is available (TODO @brown-ccv: This is only used for sending event codes)
+const USE_PHOTODIODE = ENV.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON; // whether or not the photodiode is in use
 
 // Configuration object for Honeycomb
 export const config = {
