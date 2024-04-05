@@ -2,7 +2,9 @@ import { checkbox, confirm, expand, input, select } from "@inquirer/prompts";
 import fsExtra from "fs-extra";
 
 // TODO @brown-ccv #183: Upgrade to modular SDK instead of compat
+// eslint-disable-next-line import/no-unresolved
 import { cert, initializeApp } from "firebase-admin/app";
+// eslint-disable-next-line import/no-unresolved
 import { getFirestore } from "firebase-admin/firestore";
 
 /** -------------------- GLOBALS -------------------- */
