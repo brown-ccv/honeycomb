@@ -7,4 +7,8 @@ import App from "./App/App.jsx";
  *
  * This file renders the React application inside the given location (the browser or Electron)
  */
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
