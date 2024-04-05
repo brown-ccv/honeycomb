@@ -1,9 +1,3 @@
-/**
- * This is the main configuration file where universal and default settings should be placed.
- * These setting can then be imported anywhere in the app
- */
-import { initJsPsych } from "jspsych";
-
 import packageInfo from "../../package.json";
 import { getProlificId } from "../lib/utils";
 
