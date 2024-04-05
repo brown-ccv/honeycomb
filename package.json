@@ -71,7 +71,7 @@
   "scripts": {
     "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" vite",
     "start:browser": "vite",
-    "start:electron": "wait-on http://127.0.0.1:3000 && cross-env ELECTRON_START_URL=\"http://127.0.0.1:3000\" electron .",
+    "start:electron": "wait-on http://localhost:3000 && cross-env ELECTRON_START_URL=\"http://localhost:3000\" electron-forge start",
     "dev": "concurrently -k npm:start npm:start:electron",
     "dev:home": "dotenv -e env/.env.home npm run dev",
     "dev:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run dev",
