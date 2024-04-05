@@ -36,7 +36,7 @@ function getDevice(portList, comVendorName, productId) {
  * @returns The SerialPort device
  */
 // TODO @brown-ccv: This should fail, not return false
-export async function getPort(comVendorName, productId) {
+async function getPort(comVendorName, productId) {
   let portList;
   try {
     portList = await SerialPort.list();
@@ -59,6 +59,11 @@ export async function getPort(comVendorName, productId) {
  * @param {SerialPort} port A SerialPort device
  * @param {number} event_code The numeric code to write to the device
  */
-export async function sendToPort(port, event_code) {
+async function sendToPort(port, event_code) {
   port.write(Buffer.from([event_code]));
 }
+
+module.exports = {
+  getPort,
+  sendToPort,
+};
