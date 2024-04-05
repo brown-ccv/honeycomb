@@ -1,6 +1,5 @@
 const SerialPort = require("serialport");
 
-// TODO @RobertGemmaJr: THIS SHOULD ALL BE IN ITS OWN FILE
 // TODO: Test connections with MockBindings (e.g. CONTINUE_ANYWAY)  https://serialport.io/docs/api-binding-mock
 
 /**
