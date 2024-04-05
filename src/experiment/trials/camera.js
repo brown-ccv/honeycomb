@@ -5,6 +5,8 @@ import initializeCamera from "@jspsych/plugin-initialize-camera";
 import { LANGUAGE, config } from "../../config/main";
 import { div, h1, p, tag } from "../../lib/markup/tags";
 
+const WEBCAM_ID = "webcam";
+
 /**
  * A trial that begins recording the participant using their computer's default camera
  * @param {Object} jsPsych The jsPsych instance being used to run the task
@@ -27,7 +29,7 @@ export function buildCameraStartTrial(jsPsych) {
         type: htmlButtonResponse,
         stimulus: function () {
           const videoMarkup = tag("video", "", {
-            id: "webcam",
+            id: WEBCAM_ID,
             width: 640,
             height: 480,
             autoplay: true,
@@ -73,7 +75,7 @@ export function buildCameraStartTrial(jsPsych) {
         },
         on_load: function () {
           // Assign camera feed to the <video> element
-          const camera = document.getElementById("webcam");
+          const camera = document.getElementById(WEBCAM_ID);
 
           camera.srcObject = jsPsych.pluginAPI.getCameraRecorder().stream;
         },
