@@ -36,7 +36,6 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
     "serialport": "^12.0.0"
   },
   "devDependencies": {
@@ -59,6 +58,7 @@
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-react": "^7.34.1",
     "firebase-admin": "^12.0.0",
     "firebase-tools": "^13.1.0",
     "husky": "^9.0.10",
@@ -68,8 +68,8 @@
     "wait-on": "^7.2.0"
   },
   "scripts": {
-    "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" react-scripts start",
-    "start:browser": "react-scripts start",
+    "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" vite",
+    "start:browser": "vite",
     "start:electron": "wait-on http://127.0.0.1:3000 && cross-env ELECTRON_START_URL=\"http://127.0.0.1:3000\" electron .",
     "dev": "concurrently -k npm:start npm:start:electron",
     "dev:home": "dotenv -e env/.env.home npm run dev",
@@ -81,7 +81,7 @@
     "firebase:emulators:start": "firebase emulators:start --import emulator_data",
     "firebase:emulators:save": "firebase emulators:export emulator_data",
     "prebuild": "npm run rebuild",
-    "build": "react-scripts build",
+    "build": "vite build",
     "build:home": "dotenv -e env/.env.home npm run build",
     "build:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run build",
     "build:clinic": "dotenv -e env/.env.clinic npm run build",
