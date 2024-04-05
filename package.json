@@ -66,8 +66,8 @@
     "wait-on": "^7.2.0"
   },
   "scripts": {
-    "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
-    "start:browser": "cross-env IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
+    "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" react-scripts start",
+    "start:browser": "react-scripts start",
     "start:electron": "wait-on http://127.0.0.1:3000 && cross-env ELECTRON_START_URL=\"http://127.0.0.1:3000\" electron .",
     "dev": "concurrently -k npm:start npm:start:electron",
     "dev:home": "dotenv -e env/.env.home npm run dev",
