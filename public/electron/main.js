@@ -1,14 +1,14 @@
 /** ELECTRON MAIN PROCESS */
 
-const url = require("url");
-const path = require("node:path");
-const fs = require("node:fs");
+import { format } from "url";
+import { resolve, join, dirname, basename, extname } from "node:path";
+import { readFileSync, mkdirSync, appendFileSync, copyFileSync, writeFileSync } from "node:fs";
 
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
-const log = require("electron-log");
-const _ = require("lodash");
+import { app, BrowserWindow, ipcMain, dialog } from "electron";
+import { initialize, info, warn, error as _error } from "electron-log";
+import { invert } from "lodash";
 
-const { getPort, sendToPort } = require("./serialPort");
+import { getPort, sendToPort } from "./serialPort";
 
 // TODO @RobertGemmaJr: Add serialport's MockBinding for the "Continue Anyway": https://serialport.io/docs/guide-testing
 // TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
@@ -17,7 +17,7 @@ const { getPort, sendToPort } = require("./serialPort");
 if (require("electron-squirrel-startup")) app.quit();
 
 // Initialize the logger for any renderer process
-log.initialize({ preload: true });
+initialize({ preload: true });
 
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
@@ -26,7 +26,7 @@ log.initialize({ preload: true });
 
 /************ GLOBALS ***********/
 
-const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../version.json")));
+const GIT_VERSION = JSON.parse(readFileSync(resolve(__dirname, "../version.json")));
 // TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
 const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
 
@@ -48,7 +48,7 @@ let TRIGGER_PORT; // Port that the EEG machine is talking through
  * @mac Builds the Electron window
  */
 app.whenReady().then(() => {
-  log.info("App Ready: ", app.name);
+  info("App Ready: ", app.name);
 
   // Handle ipcRenderer events (on is renderer -> main, handle is renderer <--> main)
   ipcMain.on("setConfig", handleSetConfig);
@@ -84,26 +84,26 @@ app.on("window-all-closed", () => {
 
 /** Executed before the application begins closing its windows */
 app.on("before-quit", () => {
-  log.info("Attempting to quit application");
+  info("Attempting to quit application");
   try {
-    JSON.parse(fs.readFileSync(TEMP_FILE));
+    JSON.parse(readFileSync(TEMP_FILE));
   } catch (error) {
     if (error instanceof TypeError) {
       // TEMP_FILE is undefined at this point
-      log.warn("Application quit before the participant started the experiment");
+      warn("Application quit before the participant started the experiment");
     } else if (error instanceof SyntaxError) {
       // Trials are still being written (i.e. hasn't hit handleOnFinish function)
-      log.warn("Application quit while the participant was completing the experiment");
+      warn("Application quit while the participant was completing the experiment");
     } else {
-      log.error("Electron encountered an error while quitting:");
-      log.error(error);
+      _error("Electron encountered an error while quitting:");
+      _error(error);
     }
   }
 });
 
 /** Log any uncaught exceptions before quitting */
 process.on("uncaughtException", (error) => {
-  log.error(error);
+  _error(error);
   app.quit();
 });
 
@@ -116,7 +116,7 @@ process.on("uncaughtException", (error) => {
  */
 function handleSetConfig(event, config) {
   CONFIG = config;
-  log.info("Honeycomb Configuration: ", CONFIG);
+  info("Honeycomb Configuration: ", CONFIG);
 }
 
 /**
@@ -130,7 +130,7 @@ function handleSetConfig(event, config) {
  */
 function handleSetTrigger(event, trigger) {
   TRIGGER_CODES = trigger;
-  log.info("Trigger Codes: ", TRIGGER_CODES);
+  info("Trigger Codes: ", TRIGGER_CODES);
 }
 
 /**
@@ -141,8 +141,8 @@ function handleSetTrigger(event, trigger) {
 function handleGetCredentials() {
   const studyID = process.env.REACT_APP_STUDY_ID;
   const participantID = process.env.REACT_APP_PARTICIPANT_ID;
-  if (studyID) log.info("Received study from ENV: ", studyID);
-  if (participantID) log.info("Received participant from ENV: ", participantID);
+  if (studyID) info("Received study from ENV: ", studyID);
+  if (participantID) info("Received participant from ENV: ", participantID);
   return { studyID, participantID };
 }
 
@@ -160,10 +160,10 @@ function handleCheckSerialPort() {
  */
 function handlePhotodiodeTrigger(event, code) {
   if (code !== undefined) {
-    log.info(`Event: ${_.invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
+    info(`Event: ${invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
     handleEventSend(code);
   } else {
-    log.warn("Photodiode event triggered but no code was sent");
+    warn("Photodiode event triggered but no code was sent");
   }
 }
 
@@ -180,7 +180,7 @@ function handleOnDataUpdate(event, data) {
   // Set the output path and file name if they are not set yet
   if (!OUT_PATH) {
     // The final OUT_FILE will be nested inside subfolders on the Desktop
-    OUT_PATH = path.resolve(app.getPath("desktop"), app.getName(), study_id, participant_id);
+    OUT_PATH = resolve(app.getPath("desktop"), app.getName(), study_id, participant_id);
     // TODO @brown-ccv #307: ISO 8061 data string? Doesn't include the punctuation
     OUT_FILE = `${start_date}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names);
   }
@@ -189,27 +189,27 @@ function handleOnDataUpdate(event, data) {
   // TODO @brown-ccv #397: Initialize file stream on login, not here
   if (!TEMP_FILE) {
     // The tempFile is nested inside "TempData" in the user's local app data folder
-    const tempPath = path.resolve(app.getPath("userData"), "TempData", study_id, participant_id);
-    fs.mkdirSync(tempPath, { recursive: true });
-    TEMP_FILE = path.resolve(tempPath, OUT_FILE);
+    const tempPath = resolve(app.getPath("userData"), "TempData", study_id, participant_id);
+    mkdirSync(tempPath, { recursive: true });
+    TEMP_FILE = resolve(tempPath, OUT_FILE);
 
     // Write initial bracket
-    fs.appendFileSync(TEMP_FILE, "{");
-    log.info("Temporary file created at ", TEMP_FILE);
+    appendFileSync(TEMP_FILE, "{");
+    info("Temporary file created at ", TEMP_FILE);
 
     // Write useful information and the beginning of the trials array
-    fs.appendFileSync(TEMP_FILE, `"start_time": "${start_date}",`);
-    fs.appendFileSync(TEMP_FILE, `"git_version": ${JSON.stringify(GIT_VERSION)},`);
-    fs.appendFileSync(TEMP_FILE, `"trials": [`);
+    appendFileSync(TEMP_FILE, `"start_time": "${start_date}",`);
+    appendFileSync(TEMP_FILE, `"git_version": ${JSON.stringify(GIT_VERSION)},`);
+    appendFileSync(TEMP_FILE, `"trials": [`);
   }
 
   // Prepend comma for all trials except first
-  if (trial_index > 0) fs.appendFileSync(TEMP_FILE, ",");
+  if (trial_index > 0) appendFileSync(TEMP_FILE, ",");
 
   // Write trial data
-  fs.appendFileSync(TEMP_FILE, JSON.stringify(data));
+  appendFileSync(TEMP_FILE, JSON.stringify(data));
 
-  log.info(`Trial ${trial_index} successfully written to TempData`);
+  info(`Trial ${trial_index} successfully written to TempData`);
 }
 
 /**
@@ -217,21 +217,21 @@ function handleOnDataUpdate(event, data) {
  * File is saved inside ~/Desktop/[appName]/[studyID]/[participantID]/
  */
 function handleOnFinish() {
-  log.info("Experiment Finished");
+  info("Experiment Finished");
 
   // Finish writing JSON
-  fs.appendFileSync(TEMP_FILE, "]}");
-  log.info("Finished writing experiment data to TempData");
+  appendFileSync(TEMP_FILE, "]}");
+  info("Finished writing experiment data to TempData");
 
   // Move temp file to the output location
-  const filePath = path.resolve(OUT_PATH, OUT_FILE);
+  const filePath = resolve(OUT_PATH, OUT_FILE);
   try {
-    fs.mkdirSync(OUT_PATH, { recursive: true });
-    fs.copyFileSync(TEMP_FILE, filePath);
-    log.info("Successfully saved experiment data to ", filePath);
+    mkdirSync(OUT_PATH, { recursive: true });
+    copyFileSync(TEMP_FILE, filePath);
+    info("Successfully saved experiment data to ", filePath);
   } catch (e) {
-    log.error.error("Unable to save file: ", filePath);
-    log.error.error(e);
+    _error.error("Unable to save file: ", filePath);
+    _error.error(e);
   }
   app.quit();
 }
@@ -240,26 +240,23 @@ function handleOnFinish() {
 // TODO @brown-ccv #342: Rolling save of webm video, remux to mp4 at the end?
 function handleSaveVideo(event, data) {
   // Video file is the same as OUT_FILE except it's mp4, not json
-  const filePath = path.join(
-    path.dirname(OUT_FILE),
-    path.basename(OUT_FILE, path.extname(OUT_FILE)) + ".webm"
-  );
+  const filePath = join(dirname(OUT_FILE), basename(OUT_FILE, extname(OUT_FILE)) + ".webm");
 
-  log.info(filePath);
+  info(filePath);
 
   // Save video file to the desktop
   try {
     // Note the video data is sent to the main process as a base64 string
     const videoData = Buffer.from(data.split(",")[1], "base64");
 
-    fs.mkdirSync(OUT_PATH, { recursive: true });
+    mkdirSync(OUT_PATH, { recursive: true });
     // TODO @brown-ccv #342: Convert to mp4 before final save? https://gist.github.com/AVGP/4c2ce4ab3c67760a0f30a9d54544a060
-    fs.writeFileSync(path.join(OUT_PATH, filePath), videoData);
+    writeFileSync(join(OUT_PATH, filePath), videoData);
   } catch (e) {
-    log.error.error("Unable to save file: ", filePath);
-    log.error.error(e);
+    _error.error("Unable to save file: ", filePath);
+    _error.error(e);
   }
-  log.info("Successfully saved video file to ", filePath);
+  info("Successfully saved video file to ", filePath);
 }
 
 /********** HELPERS **********/
@@ -281,7 +278,7 @@ function createWindow() {
     // Create a 1500x900 window with the dev tools open
     mainWindow = new BrowserWindow({
       icon: "./favicon.ico",
-      webPreferences: { preload: path.join(__dirname, "preload.js") },
+      webPreferences: { preload: join(__dirname, "preload.js") },
       width: 1500,
       height: 900,
     });
@@ -292,10 +289,10 @@ function createWindow() {
     // Running in production
 
     // Load app from the local bundle created by the build process
-    appURL = url.format({
+    appURL = format({
       // Moves from path of the electron file (/public/electron/main.js) to build folder (build/index.html)
       // TODO @brown-ccv #424: electron-forge should only be packaging the build folder (package.json needs to point to that file?)
-      pathname: path.join(__dirname, "../../build/index.html"),
+      pathname: join(__dirname, "../../build/index.html"),
       protocol: "file:",
       slashes: true,
     });
@@ -303,7 +300,7 @@ function createWindow() {
     // Create a fullscreen window with the menu bar hidden
     mainWindow = new BrowserWindow({
       icon: "./favicon.ico",
-      webPreferences: { preload: path.join(__dirname, "preload.js") },
+      webPreferences: { preload: join(__dirname, "preload.js") },
       fullscreen: true,
       menuBarVisible: false,
     });
@@ -313,7 +310,7 @@ function createWindow() {
   }
 
   // Load web contents at the given URL
-  log.info("Loading URL: ", appURL);
+  info("Loading URL: ", appURL);
   mainWindow.loadURL(appURL);
 }
 
@@ -323,17 +320,17 @@ function createWindow() {
  * Checks the connection to an EEG machine via USB ports
  */
 async function setUpPort() {
-  log.info("Setting up USB port");
+  info("Setting up USB port");
   const { productID, comName, vendorID } = TRIGGER_CODES;
 
   let maybePort;
   if (productID) {
     // Check port based on productID
-    log.info("Received a product ID:", productID);
+    info("Received a product ID:", productID);
     maybePort = await getPort(vendorID, productID);
   } else {
     // Check port based on COM name
-    log.info("No product ID, defaulting to COM:", comName);
+    info("No product ID, defaulting to COM:", comName);
     maybePort = await getPort(comName);
   }
 
@@ -342,7 +339,7 @@ async function setUpPort() {
 
     // Show dialog box if trigger port has any errors
     TRIGGER_PORT.on("error", (err) => {
-      log.error(err);
+      _error(err);
 
       // Displays as a dialog if there Electron is unable to communicate with the event marker's serial port
       // TODO @brown-ccv #400: Let this just be dialog.showErrorBox?
@@ -359,7 +356,7 @@ async function setUpPort() {
           defaultId: 0,
         })
         .then((opt) => {
-          log.info(opt);
+          info(opt);
           if (opt.response === 0) {
             // Quit app when user selects "OK"
             app.exit();
@@ -373,7 +370,7 @@ async function setUpPort() {
   } else {
     // Unable to connect to a port
     TRIGGER_PORT = undefined;
-    log.warn("USB port was not connected");
+    warn("USB port was not connected");
   }
 }
 
@@ -382,7 +379,7 @@ async function setUpPort() {
  * @param code The code to send via USB
  */
 function handleEventSend(code) {
-  log.info(`Sending USB event ${code} to port ${TRIGGER_PORT}`);
+  info(`Sending USB event ${code} to port ${TRIGGER_PORT}`);
 
   // Early return when running in development (no trigger port is expected)
   if (CONTINUE_ANYWAY) return;
@@ -390,7 +387,7 @@ function handleEventSend(code) {
   if (TRIGGER_PORT !== undefined) {
     sendToPort(TRIGGER_PORT, code);
   } else {
-    log.error(`Trigger port is undefined - Event Marker is not connected`);
+    _error(`Trigger port is undefined - Event Marker is not connected`);
 
     // Display error menu
     const response = dialog.showMessageBoxSync(null, {
