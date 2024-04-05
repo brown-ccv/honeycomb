@@ -1,22 +1,25 @@
 /** ELECTRON MAIN PROCESS */
 
+import { appendFileSync, copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { basename, dirname, extname, join, resolve } from "node:path";
 import { format } from "url";
-import { resolve, join, dirname, basename, extname } from "node:path";
-import { readFileSync, mkdirSync, appendFileSync, copyFileSync, writeFileSync } from "node:fs";
 
-import { app, BrowserWindow, ipcMain, dialog } from "electron";
+import { BrowserWindow, app, dialog, ipcMain } from "electron";
 import log from "electron-log";
-import { invert } from "lodash";
+import _ from "lodash";
 
 // TODO: SPlit this back into a separate file
 import { SerialPort } from "serialport";
 // import { getPort, sendToPort } from "./serialPort";
 
+// TEMP
+const __dirname = "public/";
+
 // TODO @RobertGemmaJr: Add serialport's MockBinding for the "Continue Anyway": https://serialport.io/docs/guide-testing
 // TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
 
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
-if (require("electron-squirrel-startup")) app.quit();
+if (import("electron-squirrel-startup")) app.quit();
 
 // Initialize the logger for any renderer process
 log.initialize({ preload: true });
@@ -28,7 +31,8 @@ log.initialize({ preload: true });
 
 /************ GLOBALS ***********/
 
-const GIT_VERSION = JSON.parse(readFileSync(resolve(__dirname, "../version.json")));
+// const GIT_VERSION = JSON.parse(readFileSync(resolve(__dirname, "../version.json")));
+const GIT_VERSION = JSON.parse(readFileSync(resolve(__dirname, "version.json")));
 // TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
 const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
 
@@ -162,7 +166,7 @@ function handleCheckSerialPort() {
  */
 function handlePhotodiodeTrigger(event, code) {
   if (code !== undefined) {
-    log.info(`Event: ${invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
+    log.info(`Event: ${_.invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
     handleEventSend(code);
   } else {
     log.warn("Photodiode event triggered but no code was sent");
