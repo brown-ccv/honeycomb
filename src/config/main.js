@@ -23,23 +23,8 @@ export const LANGUAGE = language;
 // TODO @brown-ccv #374: Save settings in Firebase
 export const SETTINGS = settings;
 
-/**
- *
- * As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
- * The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
- * The actual task and related utils will use a different instance of jsPsych created after login.
- * TODO @brown-ccv #395: Use instance from jsPsychExperiment
- */
-const jsPsych = initJsPsych();
-
-// Whether or not the experiment is running on mechanical turk
-// TODO @brown-ccv #395: Deprecate PsiTurk and MTurk
-const turkInfo = jsPsych.turk.turkInfo();
-const USE_MTURK = !turkInfo.outsideTurk;
-export const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`; // ID of the user in mechanical turk
-
 const USE_ELECTRON = window.electronAPI !== undefined; // Whether or not the experiment is running in Electron (local app)
-const USE_PROLIFIC = (getProlificId() && !USE_MTURK) || false; // Whether or not the experiment is running with Prolific
+const USE_PROLIFIC = getProlificId() || false; // Whether or not the experiment is running with Prolific
 const USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true"; // Whether or not the experiment is running in Firebase (web app)
 
 const USE_VOLUME = process.env.REACT_APP_VOLUME === "true"; // Whether or not to use audio cues in the task
@@ -53,7 +38,6 @@ export const config = {
   USE_PHOTODIODE,
   USE_EEG,
   USE_ELECTRON,
-  USE_MTURK,
   USE_VOLUME,
   USE_CAMERA,
   USE_PROLIFIC,
