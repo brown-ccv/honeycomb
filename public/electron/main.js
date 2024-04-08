@@ -8,8 +8,11 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const log = require("electron-log");
 const _ = require("lodash");
 
-// TODO @brown-ccv #340: Use Electron's web serial API (remove event-marker dependency)
-const { getPort, sendToPort } = require("event-marker");
+const { getPort, sendToPort } = require("./serialPort");
+
+// TODO @RobertGemmaJr: Add serialport's MockBinding for the "Continue Anyway": https://serialport.io/docs/guide-testing
+// TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
+
 
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 if (require("electron-squirrel-startup")) app.quit();
