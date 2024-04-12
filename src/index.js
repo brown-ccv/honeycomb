@@ -89,7 +89,7 @@ const test = {
 /* define test procedure */
 const test_procedure = {
   timeline: [fixation, test],
-  timeline_constiables: test_stimuli,
+  timeline_variables: test_stimuli,
   repetitions: 5,
   randomize_order: true,
 };
