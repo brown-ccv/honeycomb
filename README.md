@@ -16,15 +16,11 @@ This branch of the Honeycomb repository was created for the "JavaScript for JsPs
 
 1. [src/index.js](src/index.js)
 
-   - Basic explanation of a variable
-
    ```shell
    npm run index
    ```
 
 2. [src/dataStructures.js](src/dataStructures.js)
-
-   - Overview of primitives and data structures in JavaScript
 
    ```shell
    npm run dataStructures
