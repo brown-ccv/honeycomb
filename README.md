@@ -14,7 +14,7 @@ If you use Honeycomb in your work, please cite:
 
 This branch of the Honeycomb repository was created for the "JavaScript for JsPsych" DSCoV workshop by @RobertGemmaJr. It does not contain any Honeycomb functionality and is intended to be explored in a [GitHub Codespace](https://docs.github.com/en/codespaces/overview).
 
-This branch showcases jsPsych's "Hello World" tutorial using option 3. Additional details can be read in the [jsPsych documentation](https://www.jspsych.org/7.3/tutorials/hello-world/#option-3-using-npm).
+This branch showcases jsPsych's "Simple Reaction Time Task" demo experiment. Additional details can be read in the [jsPsych documentation](https://www.jspsych.org/7.3/tutorials/rt-task/#part-2-display-welcome-message).
 
 To run the example, open the terminal in the Codespace and run the following commands:
 
@@ -25,11 +25,11 @@ npm run dev
 ### Files of Interest
 
 1. [src/index.js](src/index.js)
-
    - This file contains the jsPsych experiment code.
-
 2. [public/index.html](public/index.html)
    - This file is the entrypoint of the website
    - It is the structure that contains the jsPsych experiment
-3. [public/favicon.ico](public/favicon.ico)
+3. [public/img](public/img)
+   - This folder contains the images used in the experiment
+4. [public/favicon.ico](public/favicon.ico)
    - This file is the icon for the website that appears in the browser tab
