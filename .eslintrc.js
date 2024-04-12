@@ -20,6 +20,9 @@ module.exports = {
   rules: {
     "no-unused-vars": "warn",
     "import/order": "warn",
+    // Codespace rules
+    "no-constant-condition": "warn",
+    "no-unreachable": "warn",
   },
   settings: {
     react: {
