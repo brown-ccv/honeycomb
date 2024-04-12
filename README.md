@@ -12,38 +12,24 @@ If you use Honeycomb in your work, please cite:
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/brown-ccv/honeycomb)
 
-This branch of the Honeycomb repository was created for the "JavaScript for JsPsych" DSCoV workshop by @RobertGemmaJr. It does not contain any Honeycomb functionality and is intended to be explored in a [GitHub Codespace](https://docs.github.com/en/codespaces/overview). It contains 5 files used to demonstrate the basics of JavaScript programming.
+This branch of the Honeycomb repository was created for the "JavaScript for JsPsych" DSCoV workshop by @RobertGemmaJr. It does not contain any Honeycomb functionality and is intended to be explored in a [GitHub Codespace](https://docs.github.com/en/codespaces/overview).
+
+This branch showcases jsPsych's "Hello World" tutorial using option 3. Additional details can be read in the [jsPsych documentation](https://www.jspsych.org/7.3/tutorials/hello-world/#option-3-using-npm).
+
+To run the example, open the terminal in the Codespace and run the following commands:
+
+```shell
+npm run dev
+```
+
+### Files of Interest
 
 1. [src/index.js](src/index.js)
 
-   - Basic explanation of a variable
+   - This file contains the jsPsych experiment code.
 
-   ```shell
-   npm run index
-   ```
-
-2. [src/dataStructures.js](src/dataStructures.js)
-
-   - Overview of primitives and data structures in JavaScript
-
-   ```shell
-   npm run dataStructures
-   ```
-
-3. [src/conditionals.js](src/conditionals.js)
-
-   ```shell
-   npm run conditionals
-   ```
-
-4. [src/loops.js](src/loops.js)
-
-   ```shell
-   npm run loops
-   ```
-
-5. [src/functions.js](src/functions.js)
-
-   ```shell
-   npm run functions
-   ```
+2. [public/index.html](public/index.html)
+   - This file is the entrypoint of the website
+   - It is the structure that contains the jsPsych experiment
+3. [public/favicon.ico](public/favicon.ico)
+   - This file is the icon for the website that appears in the browser tab

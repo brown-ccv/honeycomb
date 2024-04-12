@@ -34,7 +34,7 @@
     "lint": "eslint .",
     "format": "npx prettier --write .",
     "prepare": "husky",
-    "start": "react-scripts start"
+    "dev": "react-scripts start"
   },
   "browserslist": {
     "production": [
