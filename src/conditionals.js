@@ -3,15 +3,15 @@
 let a = "a";
 let b = "b";
 let nothing = null;
-let nonExistant = undefined;
+let nonExistent = undefined;
 
 /* == means "loose equality" */
 // loose false true true
-console.log("Loose", a == b, nothing == nonExistant, 0 == "0");
+console.log("Loose", a == b, nothing == nonExistent, 0 == "0");
 
 /* === means "strict equality" */
 // Strict false false false
-console.log("Strict", a === b, nothing === nonExistant, 0 === "0");
+console.log("Strict", a === b, nothing === nonExistent, 0 === "0");
 
 console.log();
 let trueValue = true;
@@ -20,7 +20,7 @@ let trueValue = true;
 // Not true false true
 console.log("Not", trueValue, !trueValue, !!trueValue);
 // Notequal true true true
-console.log("Notequal", a !== b, nothing !== nonExistant, 0 !== "0");
+console.log("Notequal", a !== b, nothing !== nonExistent, 0 !== "0");
 
 console.log();
 let five = 5;
@@ -30,7 +30,7 @@ let five = 5;
 console.log("Less", 4 < five, 5 < five);
 
 /* > means "greater than" */
-// Greater flase false
+// Greater false false
 console.log("Greater", 4 > five, 5 > five);
 
 /* "Or equal to" only needs one = */
