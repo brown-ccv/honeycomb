@@ -51,7 +51,7 @@ const instructions = {
 };
 timeline.push(instructions);
 
-/* define trial stimuli array for timeline constiables */
+/* define trial stimuli array for timeline variables */
 const test_stimuli = [
   { stimulus: "img/blue.png", correct_response: "f" },
   { stimulus: "img/orange.png", correct_response: "j" },
