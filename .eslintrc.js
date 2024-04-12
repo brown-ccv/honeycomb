@@ -18,11 +18,11 @@ module.exports = {
   },
   plugins: ["react"],
   rules: {
-    "no-unused-vars": "warn",
     "import/order": "warn",
     // Codespace rules
     "no-constant-condition": "warn",
     "no-unreachable": "warn",
+    "no-unused-vars": "off",
   },
   settings: {
     react: {
