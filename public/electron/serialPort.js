@@ -1,6 +1,6 @@
 const SerialPort = require("serialport");
 
-// TODO: Test connections with MockBindings (e.g. CONTINUE_ANYWAY)  https://serialport.io/docs/api-binding-mock
+// TODO @brown-ccv #460: Test connections with MockBindings (e.g. CONTINUE_ANYWAY)  https://serialport.io/docs/api-binding-mock
 
 /**
  * Retrieve's a serial port device based on either the COM name or product identifier
