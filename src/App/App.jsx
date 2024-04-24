@@ -65,7 +65,8 @@ export default function App() {
         if (credentials.studyID) setStudyID(credentials.studyID);
         setMethod("desktop");
       } else {
-        // TODO: Enable USE_PROLIFIC, always get URL
+        // TODO @brown-ccv #227: Deprecate USE_PROLIFIC, always get URL
+        // TODO @brown-ccv #416: Match USE_PROLIFIC variable names, include session
         if (config.USE_PROLIFIC) {
           const pID = getProlificId();
           if (config.USE_FIREBASE && pID) {
