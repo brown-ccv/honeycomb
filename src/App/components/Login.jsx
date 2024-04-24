@@ -56,7 +56,6 @@ export default function Login({
           </Form.Group>
           <Button
             style={{ width: "100%" }}
-            block
             size="lg"
             type="submit"
             disabled={studyID.length === 0 || participantID.length === 0}
