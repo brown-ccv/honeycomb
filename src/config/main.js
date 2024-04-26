@@ -18,7 +18,7 @@ export const LANGUAGE = language;
 export const SETTINGS = settings;
 
 const USE_ELECTRON = window.electronAPI !== undefined; // Whether or not the experiment is running in Electron (local app)
-const USE_PROLIFIC = getProlificId() || false; // Whether or not the experiment is running with Prolific
+const USE_PROLIFIC = getProlificId() !== undefined; // Whether or not the experiment is running with Prolific
 const USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true"; // Whether or not the experiment is running in Firebase (web app)
 
 const USE_VOLUME = process.env.REACT_APP_VOLUME === "true"; // Whether or not to use audio cues in the task
