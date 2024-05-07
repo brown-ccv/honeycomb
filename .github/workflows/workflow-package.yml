@@ -66,10 +66,6 @@ jobs:
           path: ./env
           mode: ${{github.event.inputs.setting}}
 
-      # Build the app
-      - name: ⚒ Build
-        run: npm run build
-
       # Package the app installers
       - name: 📦 Package app installer - Windows
         if: startsWith(matrix.os, 'windows')
