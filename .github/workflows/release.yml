@@ -22,7 +22,8 @@ jobs:
     # Run build script for [home/clinic] in [windows/macOS/ubuntu]
     strategy:
       matrix:
-        os: [windows-latest, macOS-latest, ubuntu-latest]
+        # os: [windows-latest, macOS-latest, ubuntu-latest]
+        os: [windows-latest, macos-13, ubuntu-latest]
         setting: [home, clinic]
       fail-fast: true
 
