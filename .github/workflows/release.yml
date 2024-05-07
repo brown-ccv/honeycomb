@@ -25,7 +25,8 @@ jobs:
         # os: [windows-latest, macOS-latest, ubuntu-latest]
         os: [windows-latest, macos-13, ubuntu-latest]
         setting: [home, clinic]
-      fail-fast: true
+      # fail-fast: true
+      fail-fast: false
 
     steps:
       # Set up runner
@@ -55,9 +56,9 @@ jobs:
           path: ./env
           mode: ${{matrix.setting}}
 
-      # Build the app
-      - name: ⚒ Build
-        run: npm run build
+      # # Build the app
+      # - name: ⚒ Build
+      #   run: npm run build
 
       # Package the app installers
       - name: 📦 Package app installer - Windows
