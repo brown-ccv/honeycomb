@@ -22,8 +22,8 @@ jobs:
     # Run build script for [home/clinic] in [windows/macOS/ubuntu]
     strategy:
       matrix:
-        # os: [windows-latest, macOS-latest, ubuntu-latest]
-        os: [windows-latest, macos-13, ubuntu-latest]
+        os: [windows-latest, macOS-latest, ubuntu-latest]
+        # os: [windows-latest, macos-13, ubuntu-latest]
         setting: [home, clinic]
       # fail-fast: true
       fail-fast: false
@@ -40,7 +40,6 @@ jobs:
       - name: 🐍 Setup Python
         uses: actions/setup-python@v4
         with:
-          # python-version: "3.10"
           python-version: 3.12
 
       # Install dependencies and set up environment
