@@ -2,10 +2,9 @@ name: 🚀 Release
 
 # Runs the build and package scripts when a new tagged release is created
 # Note that this runs for both releases and pre-releases: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#release
-# on:
-#   release:
-#     types: created
-on: pull_request
+on:
+  release:
+    types: created
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -24,8 +23,7 @@ jobs:
       matrix:
         os: [windows-latest, macOS-latest, ubuntu-latest]
         setting: [home, clinic]
-      # fail-fast: true
-      fail-fast: false
+      fail-fast: true
 
     steps:
       # Set up runner
