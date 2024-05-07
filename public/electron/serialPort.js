@@ -35,7 +35,7 @@ function getDevice(portList, comVendorName, productId) {
  * @param {string | undefined} productId The product identifier of the desired device
  * @returns The SerialPort device
  */
-// TODO @brown-ccv: This should fail, not return false
+// TODO @brown-ccv #460: This should fail, not return false
 async function getPort(comVendorName, productId) {
   let portList;
   try {
