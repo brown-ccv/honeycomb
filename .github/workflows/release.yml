@@ -23,7 +23,6 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macOS-latest, ubuntu-latest]
-        # os: [windows-latest, macos-13, ubuntu-latest]
         setting: [home, clinic]
       # fail-fast: true
       fail-fast: false
@@ -54,11 +53,6 @@ jobs:
         with:
           path: ./env
           mode: ${{matrix.setting}}
-
-      # # Build the app
-      # TODO: It looks like electron-forge builds for us?
-      # - name: ⚒ Build
-      #   run: npm run build
 
       # Package the app installers
       - name: 📦 Package app installer - Windows
