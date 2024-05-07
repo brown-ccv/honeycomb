@@ -57,6 +57,7 @@ jobs:
           mode: ${{matrix.setting}}
 
       # # Build the app
+      # TODO: It looks like electron-forge builds for us?
       # - name: ⚒ Build
       #   run: npm run build
 
