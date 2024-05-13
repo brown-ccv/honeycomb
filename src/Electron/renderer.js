@@ -26,7 +26,9 @@
  * ```
  */
 
-// TODO: I'm sure this will change with vite for the browser?
+// TODO: Need to fix the typing here
+console.log(import.meta.env);
+
 import "../index";
 
 console.log('👋 This message is being logged by "renderer.js", included via Vite');
