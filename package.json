@@ -13,6 +13,13 @@
   "private": true,
   "main": ".vite/build/main.js",
   "homepage": ".",
+  "keywords": [
+    "react",
+    "vite",
+    "electron",
+    "electron-forge",
+    "jsPsych"
+  ],
   "dependencies": {
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron/fuses": "^1.8.0",
