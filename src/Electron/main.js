@@ -38,8 +38,11 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 // TODO: Just handle the commit id? I think that's probably fine
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
 
+console.log(import.meta.env);
+
 // TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
-const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
+// const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
+const IS_DEV = import.meta.env.DEV;
 
 let CONFIG; // Honeycomb configuration object
 let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected (option is only available in dev mode)
@@ -384,7 +387,7 @@ async function setUpPort() {
           buttons: [
             "OK",
             // Allow continuation when running in development mode
-            ...(ELECTRON_START_URL ? ["Continue Anyway"] : []),
+            ...(IS_DEV ? ["Continue Anyway"] : []),
           ],
           defaultId: 0,
         })
@@ -431,7 +434,7 @@ function handleEventSend(code) {
         "Quit",
         "Retry",
         // Allow continuation when running in development mode
-        ...(ELECTRON_START_URL ? ["Continue Anyway"] : []),
+        ...(IS_DEV ? ["Continue Anyway"] : []),
       ],
       detail: "heres some detail",
     });

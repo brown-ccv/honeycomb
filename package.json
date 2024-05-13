@@ -103,7 +103,8 @@
     "format": "prettier --write .",
     "lint": "eslint .",
     "postinstall": "node version.mjs && npm run rebuild",
-    "prepare": "husky"
+    "prepare": "husky",
+    "new-start": "dotenv -e env/.env.clinic electron-forge start"
   },
   "browserslist": {
     "production": [

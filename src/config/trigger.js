@@ -19,3 +19,11 @@ export const eventCodes = {
   open_task: 18, // Opening task for setting up the experiment
   test_connect: 32, // Initial test connection
 };
+
+// TODO: We should think of a cleaner way of exporting all this
+export const trigger = {
+  vendorID,
+  productID,
+  comName,
+  eventCodes,
+};

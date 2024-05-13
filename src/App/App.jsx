@@ -7,7 +7,7 @@ import "./index.css";
 
 // Import configurations and utilities
 import { config, SETTINGS } from "../config/main";
-import * as trigger from "../config/trigger";
+import { trigger } from "../config/trigger";
 import { getProlificId, getSearchParam } from "../lib/utils";
 
 // Import deployment functions
