@@ -1,6 +1,7 @@
-/**
- * Configuration file for Electron Forge
- */
+const { FusesPlugin } = require("@electron-forge/plugin-fuses");
+const { FuseV1Options, FuseVersion } = require("@electron/fuses");
+
+/** Configuration file for Electron Forge */
 module.exports = {
   packagerConfig: {
     asar: true,
@@ -43,11 +44,23 @@ module.exports = {
       name: "@electron-forge/plugin-vite",
       config: {
         build: [
-          { entry: "src/electron/main.js", config: "vite.main.config.js" },
-          { entry: "src/electron/preload.js", config: "vite.preload.config.js" },
+          { entry: "src/electron/main.js", config: "vite.main.config.mjs" },
+          { entry: "src/electron/preload.js", config: "vite.preload.config.mjs" },
         ],
-        renderer: [{ name: "main_window", config: "vite.renderer.config.js" }],
+        renderer: [{ name: "main_window", config: "vite.renderer.config.mjs" }],
       },
     },
+    // Fuses are used to enable/disable various Electron functionality
+    // at package time, before code signing the application
+    // TODO: Fuses configuration for Honeycomb
+    new FusesPlugin({
+      version: FuseVersion.V1,
+      [FuseV1Options.RunAsNode]: false,
+      [FuseV1Options.EnableCookieEncryption]: true,
+      [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
+      [FuseV1Options.EnableNodeCliInspectArguments]: false,
+      [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
+      [FuseV1Options.OnlyLoadAppFromAsar]: true,
+    }),
   ],
 };

@@ -13,6 +13,7 @@
 /coverage
 
 # Production
+.vite
 /build
 /dist
 /out
