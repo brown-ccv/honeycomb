@@ -26,10 +26,7 @@ log.initialize({ preload: true });
 
 /************ GLOBALS ***********/
 
-// TODO @RobertGemmaJr: Need to build this version file as part of the
-// TODO @RobertGemmaJr: Just handle the logic here instead?
-// const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../version.json")));
-const GIT_VERSION = { sha: "26d3d0f3a787fe32137e1eece784cf8d6552cd5a", ref: "feat-forge-vite" };
+const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../version.json")));
 
 // TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
 const ELECTRON_START_URL = process.env.ELECTRON_START_URL;

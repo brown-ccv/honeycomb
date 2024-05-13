@@ -8,8 +8,8 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const log = require("electron-log");
 const _ = require("lodash");
 
+// TODO @RobertGemmaJr: Figure out how to install the dev tools
 // import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
-const { REACT_DEVELOPER_TOOLS, installExtension } = require("electron-devtools-installer");
 
 // const { getPort, sendToPort } = require("./serialPort");
 
@@ -32,7 +32,11 @@ log.initialize({ preload: true });
 
 /************ GLOBALS ***********/
 
-const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../version.json")));
+// TODO @RobertGemmaJr: Need to build this version file as part of the
+// TODO @RobertGemmaJr: Just handle the logic here instead?
+// const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../version.json")));
+const GIT_VERSION = { sha: "26d3d0f3a787fe32137e1eece784cf8d6552cd5a", ref: "feat-forge-vite" };
+
 // TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
 const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
 
@@ -57,9 +61,10 @@ app.whenReady().then(() => {
   log.info("App Ready: ", app.name);
 
   // Installs the react developer tools extension
-  installExtension(REACT_DEVELOPER_TOOLS)
-    .then((name) => console.info(`Added Extension:  ${name}`))
-    .catch((err) => console.info("An error occurred: ", err));
+  // installExtension
+  //   .installExtension(installExtension.REACT_DEVELOPER_TOOLS)
+  //   .then((name) => console.info(`Added Extension:  ${name}`))
+  //   .catch((err) => console.info("An error occurred: ", err));
 
   // Handle ipcRenderer events (on is renderer -> main, handle is renderer <--> main)
   ipcMain.on("setConfig", handleSetConfig);

@@ -27,6 +27,6 @@
  */
 
 // TODO: I'm sure this will change with vite for the browser?
-import "../index.js";
+import "../index";
 
 console.log('👋 This message is being logged by "renderer.js", included via Vite');
