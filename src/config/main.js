@@ -28,7 +28,7 @@ export const SETTINGS = settings;
 // const USE_PHOTODIODE = process.env.VITE_USE_PHOTODIODE === "true" && USE_ELECTRON; // whether or not the photodiode is in use
 
 const USE_ELECTRON = window.electronAPI !== undefined; // Whether or not the experiment is running in Electron (local app)
-const USE_PROLIFIC = getProlificId() !== undefined; // Whether or not the experiment is running with Prolific
+const USE_PROLIFIC = getProlificId() !== null; // Whether or not the experiment is running with Prolific
 const USE_FIREBASE = import.meta.env.VITE_FIREBASE === "true"; // Whether or not the experiment is running in Firebase (web app)
 
 const USE_VOLUME = import.meta.env.VITE_VOLUME === "true"; // Whether or not to use audio cues in the task
