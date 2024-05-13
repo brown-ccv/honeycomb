@@ -38,8 +38,11 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 // TODO: Just handle the commit id? I think that's probably fine
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
 
+console.log(import.meta.env);
+
 // TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
-const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
+// const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
+const IS_DEV = import.meta.env.DEV;
 
 let CONFIG; // Honeycomb configuration object
 let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected (option is only available in dev mode)
@@ -50,6 +53,8 @@ let OUT_FILE; // Name of the final output file
 
 let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
 let TRIGGER_PORT; // Port that the EEG machine is talking through
+
+console.log(process.env.NODE_ENV, import.meta.env.MODE);
 
 /************ APP LIFECYCLE ***********/
 
@@ -151,13 +156,13 @@ function handleSetTrigger(event, trigger) {
 }
 
 /**
- * Checks for REACT_APP_STUDY_ID and REACT_APP_PARTICIPANT_ID environment variables
+ * Checks for VITE_STUDY_ID and VITE_PARTICIPANT_ID environment variables
  * Note that studyID and participantID are undefined when the environment variables are not given
  * @returns An object containing a studyID and participantID
  */
 function handleGetCredentials() {
-  const studyID = process.env.REACT_APP_STUDY_ID;
-  const participantID = process.env.REACT_APP_PARTICIPANT_ID;
+  const studyID = process.env.VITE_STUDY_ID;
+  const participantID = process.env.VITE_PARTICIPANT_ID;
   if (studyID) log.info("Received study from ENV: ", studyID);
   if (participantID) log.info("Received participant from ENV: ", participantID);
   return { studyID, participantID };
@@ -382,7 +387,7 @@ async function setUpPort() {
           buttons: [
             "OK",
             // Allow continuation when running in development mode
-            ...(ELECTRON_START_URL ? ["Continue Anyway"] : []),
+            ...(IS_DEV ? ["Continue Anyway"] : []),
           ],
           defaultId: 0,
         })
@@ -429,7 +434,7 @@ function handleEventSend(code) {
         "Quit",
         "Retry",
         // Allow continuation when running in development mode
-        ...(ELECTRON_START_URL ? ["Continue Anyway"] : []),
+        ...(IS_DEV ? ["Continue Anyway"] : []),
       ],
       detail: "heres some detail",
     });
