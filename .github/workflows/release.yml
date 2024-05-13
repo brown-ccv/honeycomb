@@ -48,20 +48,16 @@ jobs:
           path: ./env
           mode: ${{matrix.setting}}
 
-      # Build the app
-      - name: ⚒ Build
-        run: npm run build
-
-      # Package the app installers
-      - name: 📦 Package app installer - Windows
+      # Package the app and make the installers
+      - name: 📦 Make app installer - Windows
         if: startsWith(matrix.os, 'windows')
-        run: npm run package:windows
-      - name: 📦 Package app installer - Mac
+        run: npm run make:windows
+      - name: 📦 Make app installer - Mac
         if: startsWith(matrix.os, 'mac')
-        run: npm run package:mac
-      - name: 📦 Package app installer - Linux
+        run: npm run make:mac
+      - name: 📦 Make app installer - Linux
         if: startsWith(matrix.os, 'ubuntu')
-        run: npm run package:linux
+        run: npm run make:linux
 
       # Get package info
       - name: Get package name and version
@@ -72,6 +68,7 @@ jobs:
         shell: bash
 
       # Upload installers to GitHub release
+      # TODO: Use the Publish command: https://www.electronforge.io/cli#publish
       - name: ⬆ Upload installer to release - Windows
         if: startsWith(matrix.os, 'windows')
         uses: svenstaro/upload-release-action@v2
