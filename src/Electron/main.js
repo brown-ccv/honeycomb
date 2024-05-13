@@ -1,9 +1,7 @@
 /** ELECTRON MAIN PROCESS */
 
-const url = require("url");
 const path = require("node:path");
 const fs = require("node:fs");
-
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const log = require("electron-log");
 const _ = require("lodash");
@@ -31,6 +29,10 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 // TODO @brown-ccv #429: Use app.getPath('temp') for temporary JSON file
 
 /************ GLOBALS ***********/
+
+// These global variables are created by electron-forge
+/* global MAIN_WINDOW_VITE_DEV_SERVER_URL */
+/* global MAIN_WINDOW_VITE_NAME */
 
 // TODO: Handle version in renderer - pass into jspsych?
 // TODO: Just handle the commit id? I think that's probably fine
@@ -285,16 +287,15 @@ function handleSaveVideo(event, data) {
  */
 function createWindow() {
   // TODO: The windows are different in dev and production
-  // Create the browser window.
+  // Create the browser window
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-    },
+    icon: "./favicon.ico",
+    webPreferences: { preload: path.join(__dirname, "preload.js") },
+    width: 1500,
+    height: 900,
   });
 
-  // and load the index.html of the app.
+  // Load the index.html of the app
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
