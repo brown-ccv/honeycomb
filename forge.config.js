@@ -42,25 +42,11 @@ module.exports = {
     {
       name: "@electron-forge/plugin-vite",
       config: {
-        // `build` can specify multiple entry builds, which can be
-        // Main process, Preload scripts, Worker process, etc.
         build: [
-          {
-            // TODO: Update paths to these files
-            entry: "src/main.js",
-            config: "vite.main.config.mjs",
-          },
-          {
-            entry: "src/preload.js",
-            config: "vite.preload.config.mjs",
-          },
+          { entry: "src/electron/main.js", config: "vite.main.config.js" },
+          { entry: "src/electron/preload.js", config: "vite.preload.config.js" },
         ],
-        renderer: [
-          {
-            name: "main_window",
-            config: "vite.renderer.config.mjs",
-          },
-        ],
+        renderer: [{ name: "main_window", config: "vite.renderer.config.js" }],
       },
     },
   ],
