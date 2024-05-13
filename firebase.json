@@ -12,7 +12,7 @@
       }
     ],
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "predeploy": ["npm run build:firebase"]
+    "predeploy": ["npm ci", "npm run build:firebase"]
   },
   "emulators": {
     "firestore": {
