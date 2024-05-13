@@ -22,8 +22,8 @@ if (require("electron-squirrel-startup")) app.quit();
 // Initialize the logger for any renderer process
 log.initialize({ preload: true });
 
-// TODO: Is this useful?
-// process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+// TODO: Fix the security policy instead of ignoring
+process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
@@ -32,10 +32,9 @@ log.initialize({ preload: true });
 
 /************ GLOBALS ***********/
 
-// TODO @RobertGemmaJr: Need to build this version file as part of the
-// TODO @RobertGemmaJr: Just handle the logic here instead?
-// const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../version.json")));
-const GIT_VERSION = { sha: "26d3d0f3a787fe32137e1eece784cf8d6552cd5a", ref: "feat-forge-vite" };
+// TODO: Handle version in renderer - pass into jspsych?
+// TODO: Just handle the commit id? I think that's probably fine
+const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
 
 // TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
 const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
