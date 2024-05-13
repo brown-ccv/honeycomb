@@ -4,14 +4,10 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "public": "build",
+    "public": "dist",
+    "rewrites": [{ "source": "**", "destination": "/index.html" }],
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
+    "predeploy": ["npm run build:firebase"]
   },
   "emulators": {
     "firestore": {
