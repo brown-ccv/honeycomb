@@ -1,13 +1,37 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <title>Hello World!</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Adds a security policy to Honeycomb
+      default (images, scripts): Only content from within the app may be loaded
+      style: Only content from within the app may be loaded, but it may be loaded inline
+      fonts: Fonts may be loaded to the application via data and http sources
+  -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src http: data:"
+    />
+
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" href="afavicon.ico" />
+
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="manifest.json" />
+
+    <title>Honeycomb</title>
   </head>
 
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <!-- Root div that holds the react application -->
+    <div id="root"></div>
     <script type="module" src="/src/Electron/renderer.js"></script>
   </body>
 </html>
