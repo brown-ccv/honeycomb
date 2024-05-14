@@ -1,4 +1,5 @@
 import { defineConfig, mergeConfig } from "vite";
+
 import { getBuildConfig, getBuildDefine, external, pluginHotRestart } from "./vite.base.config.js";
 
 export default defineConfig((env) => {
@@ -10,8 +11,10 @@ export default defineConfig((env) => {
     build: {
       lib: {
         entry: forgeConfigSelf.entry,
-        fileName: () => "[name].js",
+        // fileName: () => "[name].js",
+        fileName: () => "[name].cjs",
         formats: ["cjs"],
+        // formats: ["mjs"],
       },
       rollupOptions: { external },
     },
@@ -24,10 +27,3 @@ export default defineConfig((env) => {
   };
   return mergeConfig(getBuildConfig(forgeEnv), config);
 });
-
-// export default defineConfig({
-//   build: {
-//     // Load our native node modules
-//     rollupOptions: { external: ["serialport"] },
-//   },
-// });

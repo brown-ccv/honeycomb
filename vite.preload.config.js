@@ -15,10 +15,13 @@ export default defineConfig((env) => {
         input: forgeConfigSelf.entry,
         output: {
           format: "cjs",
+          // format: "mjs",
           // It should not be split chunks.
           inlineDynamicImports: true,
-          entryFileNames: "[name].js",
-          chunkFileNames: "[name].js",
+          // entryFileNames: "[name].js",
+          // chunkFileNames: "[name].js",
+          entryFileNames: "[name].cjs",
+          chunkFileNames: "[name].cjs",
           assetFileNames: "[name].[ext]",
         },
       },

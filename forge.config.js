@@ -44,10 +44,12 @@ export default {
       name: "@electron-forge/plugin-vite",
       config: {
         build: [
-          { entry: "src/electron/main.js", config: "vite.main.config.mjs" },
-          { entry: "src/electron/preload.js", config: "vite.preload.config.mjs" },
+          // Build files that run on the main process
+          { entry: "src/electron/main.js", config: "vite.main.config.js" },
+          // Build files that run on the preload process
+          { entry: "src/electron/preload.js", config: "vite.preload.config.js" },
         ],
-        renderer: [{ name: "main_window", config: "vite.renderer.config.mjs" }],
+        renderer: [{ name: "main_window", config: "vite.renderer.config.js" }],
       },
     },
     // Fuses are used to enable/disable various Electron functionality

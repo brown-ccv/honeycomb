@@ -19,7 +19,7 @@
   "license": "MIT",
   "private": true,
   "type": "module",
-  "main": ".vite/build/main.js",
+  "main": ".vite/build/main.cjs",
   "homepage": ".",
   "dependencies": {
     "@electron-forge/plugin-fuses": "^7.4.0",

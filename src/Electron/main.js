@@ -1,10 +1,10 @@
 /** ELECTRON MAIN PROCESS */
 
-const path = require("node:path");
-const fs = require("node:fs");
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
-const log = require("electron-log");
-const _ = require("lodash");
+import path from "node:path";
+import fs from "node:fs";
+import { app, BrowserWindow, ipcMain, dialog } from "electron";
+import log from "electron-log";
+import _ from "lodash";
 
 // TODO @RobertGemmaJr: Figure out how to install the dev tools
 // import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
@@ -295,7 +295,8 @@ function createWindow() {
   // Create the browser window
   const mainWindow = new BrowserWindow({
     icon: "./favicon.ico",
-    webPreferences: { preload: path.join(__dirname, "preload.js") },
+    // webPreferences: { preload: path.join(__dirname, "preload.js") },
+    webPreferences: { preload: path.join(__dirname, "preload.cjs") },
     width: 1500,
     height: 900,
   });
