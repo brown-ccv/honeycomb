@@ -52,8 +52,6 @@ let OUT_FILE; // Name of the final output file
 let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
 let TRIGGER_PORT; // Port that the EEG machine is talking through
 
-console.log(process.env.NODE_ENV, import.meta.env.MODE);
-
 /************ APP LIFECYCLE ***********/
 
 /**
