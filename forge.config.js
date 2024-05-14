@@ -45,10 +45,9 @@ export default {
       config: {
         build: [
           // Build files that use the main config
-          // TODO: Add serialPort.js here
           { entry: "src/electron/main.js", config: "vite.main.config.js" },
           // Build files that use the preload config
-          { entry: "src/electron/preload.js", config: "vite.preload.config.js" },
+          { entry: "src/Electron/preload.js", config: "vite.preload.config.js" },
         ],
         renderer: [{ name: "main_window", config: "vite.renderer.config.js" }],
       },
