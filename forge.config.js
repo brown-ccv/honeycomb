@@ -1,8 +1,8 @@
-const { FusesPlugin } = require("@electron-forge/plugin-fuses");
-const { FuseV1Options, FuseVersion } = require("@electron/fuses");
+import { FusesPlugin } from "@electron-forge/plugin-fuses";
+import { FuseV1Options, FuseVersion } from "@electron/fuses";
 
 /** Configuration file for Electron Forge */
-module.exports = {
+export default {
   packagerConfig: {
     asar: true,
     icon: "assets/icons/icon",
