@@ -14,15 +14,6 @@ import _ from "lodash";
 // TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
 // TODO @brown-ccv #460: Add serialport's MockBinding for the "Continue Anyway": https://serialport.io/docs/guide-testing
 
-// Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
-if (require("electron-squirrel-startup")) app.quit();
-
-// Initialize the logger for any renderer process
-log.initialize({ preload: true });
-
-// TODO: Fix the security policy instead of ignoring
-process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
-
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
 // TODO @brown-ccv #398: Separate log files for each run through
@@ -37,10 +28,7 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 // TODO: Handle version in renderer - pass into jspsych?
 // TODO: Just handle the commit id? I think that's probably fine
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
-
-// TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
-// const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
-const IS_DEV = import.meta.env.DEV;
+const IS_DEV = import.meta.env.DEV && !app.isPackaged;
 
 let CONFIG; // Honeycomb configuration object
 let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected (option is only available in dev mode)
@@ -52,7 +40,17 @@ let OUT_FILE; // Name of the final output file
 let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
 let TRIGGER_PORT; // Port that the EEG machine is talking through
 
+// TODO: Fix the security policy instead of ignoring
+process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
+
 /************ APP LIFECYCLE ***********/
+
+// Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
+if (require("electron-squirrel-startup")) app.quit();
+
+// Initialize the logger
+// TODO: Spy on the renderer process too?
+log.initialize({ preload: true });
 
 /**
  * Executed when the app is initialized
