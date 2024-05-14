@@ -6,8 +6,8 @@ export default defineConfig((env) => {
   /** @type {import('vite').ConfigEnv<'build'>} */
   const forgeEnv = env;
   const { forgeConfigSelf } = forgeEnv;
-  /** @type {import('vite').UserConfig} */
-  const config = {
+
+  return mergeConfig(getBuildConfig(forgeEnv), {
     build: {
       rollupOptions: {
         external,
@@ -15,11 +15,9 @@ export default defineConfig((env) => {
         input: forgeConfigSelf.entry,
         output: {
           format: "cjs",
-          // format: "mjs",
           // It should not be split chunks.
+          // TODO: We probably want some basic chunking? Getting a warning
           inlineDynamicImports: true,
-          // entryFileNames: "[name].js",
-          // chunkFileNames: "[name].js",
           entryFileNames: "[name].cjs",
           chunkFileNames: "[name].cjs",
           assetFileNames: "[name].[ext]",
@@ -27,7 +25,5 @@ export default defineConfig((env) => {
       },
     },
     plugins: [pluginHotRestart("reload")],
-  };
-
-  return mergeConfig(getBuildConfig(forgeEnv), config);
+  });
 });

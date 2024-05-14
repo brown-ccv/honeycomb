@@ -38,8 +38,6 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 // TODO: Just handle the commit id? I think that's probably fine
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
 
-console.log(import.meta.env);
-
 // TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
 // const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
 const IS_DEV = import.meta.env.DEV;
@@ -291,11 +289,10 @@ function handleSaveVideo(event, data) {
  * In production it loads the local bundle created by the build process
  */
 function createWindow() {
-  // TODO: The windows are different in dev and production
   // Create the browser window
+  // TODO: The windows are different in dev and production
   const mainWindow = new BrowserWindow({
     icon: "./favicon.ico",
-    // webPreferences: { preload: path.join(__dirname, "preload.js") },
     webPreferences: { preload: path.join(__dirname, "preload.cjs") },
     width: 1500,
     height: 900,
@@ -305,6 +302,7 @@ function createWindow() {
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
+    // TODO: JsPsych protections for loading from a file://
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
 

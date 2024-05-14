@@ -11,10 +11,9 @@ export default defineConfig((env) => {
     build: {
       lib: {
         entry: forgeConfigSelf.entry,
-        // fileName: () => "[name].js",
+        // The files are built in CJS format, update the extensions
         fileName: () => "[name].cjs",
         formats: ["cjs"],
-        // formats: ["mjs"],
       },
       rollupOptions: { external },
     },
