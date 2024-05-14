@@ -1,18 +1,13 @@
 {
   "name": "honeycomb",
   "description": "All-in-one task starter app with jsPsych + React + Electron",
+  "version": "4.0.0",
+  "honeycombVersion": "",
   "author": {
     "name": "Brown CCV",
     "email": "ccv-bot@brown.edu",
     "url": "https://ccv.brown.edu"
   },
-  "honeycombVersion": "",
-  "version": "4.0.0",
-  "repository": "https://github.com/brown-ccv/honeycomb",
-  "license": "MIT",
-  "private": true,
-  "main": ".vite/build/main.js",
-  "homepage": ".",
   "keywords": [
     "react",
     "vite",
@@ -20,6 +15,12 @@
     "electron-forge",
     "jsPsych"
   ],
+  "repository": "https://github.com/brown-ccv/honeycomb",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "main": ".vite/build/main.js",
+  "homepage": ".",
   "dependencies": {
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron/fuses": "^1.8.0",
