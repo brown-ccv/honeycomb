@@ -1,7 +1,7 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-import { pluginExposeRenderer } from "./vite.base.config.mjs";
+import { pluginExposeRenderer } from "./vite.base.config.js";
 
 export default defineConfig((env) => {
   /** @type {import('vite').ConfigEnv<'renderer'>} */
