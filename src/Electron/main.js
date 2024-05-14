@@ -294,57 +294,20 @@ function createWindow() {
     webPreferences: { preload: path.join(__dirname, "preload.cjs") },
     width: 1500,
     height: 900,
+    // TODO @brown-ccv: Settings for preventing the menu bar from ever showing up
+    menuBarVisible: IS_DEV,
+    fullscreen: !IS_DEV,
   });
+  if (IS_DEV) mainWindow.webContents.openDevTools();
 
-  // Load the index.html of the app
+  // Load the renderer process (index.html)
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
-    // TODO: JsPsych protections for loading from a file://
+    // TODO @brown-ccv: JsPsych protections for loading from a file://
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
-
-  // let mainWindow;
-  // let appURL;
-  // if (ELECTRON_START_URL) {
-  //   // Running in development
-  //   // Load app from localhost (This allows hot-reloading)
-  //   appURL = ELECTRON_START_URL;
-  //   // Create a 1500x900 window with the dev tools open
-  //   mainWindow = new BrowserWindow({
-  //     icon: "./favicon.ico",
-  //     webPreferences: { preload: path.join(__dirname, "preload.js") },
-  //     width: 1500,
-  //     height: 900,
-  //   });
-  //   // Open the dev tools
-  //   mainWindow.webContents.openDevTools();
-  // } else {
-  //   // Running in production
-  //   // Load app from the local bundle created by the build process
-  //   appURL = url.format({
-  //     // Moves from path of the electron file (/public/electron/main.js) to build folder (build/index.html)
-  //     // TODO @brown-ccv #424: electron-forge should only be packaging the build folder (package.json needs to point to that file?)
-  //     pathname: path.join(__dirname, "../../build/index.html"),
-  //     protocol: "file:",
-  //     slashes: true,
-  //   });
-  //   // Create a fullscreen window with the menu bar hidden
-  //   mainWindow = new BrowserWindow({
-  //     icon: "./favicon.ico",
-  //     webPreferences: { preload: path.join(__dirname, "preload.js") },
-  //     fullscreen: true,
-  //     menuBarVisible: false,
-  //   });
-  //   // Hide the menu bar
-  //   mainWindow.setMenuBarVisibility(false);
-  // }
-  // // Load web contents at the given URL
-  // log.info("Loading URL: ", appURL);
-  // mainWindow.loadURL(appURL);
+  log.info("Loaded Renderer Process");
 }
 
 /** SERIAL PORT SETUP & COMMUNICATION (EVENT MARKER) */
