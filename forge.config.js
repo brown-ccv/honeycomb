@@ -44,10 +44,10 @@ export default {
       name: "@electron-forge/plugin-vite",
       config: {
         build: [
-          // Build files that run on the main process
-          // TODO: Add serialPort here
+          // Build files that use the main config
+          // TODO: Add serialPort.js here
           { entry: "src/electron/main.js", config: "vite.main.config.js" },
-          // Build files that run on the preload process
+          // Build files that use the preload config
           { entry: "src/electron/preload.js", config: "vite.preload.config.js" },
         ],
         renderer: [{ name: "main_window", config: "vite.renderer.config.js" }],

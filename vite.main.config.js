@@ -4,13 +4,14 @@ import { getBuildConfig, getBuildDefine, external, pluginHotRestart } from "./vi
 
 export default defineConfig((env) => {
   /** @type {import('vite').ConfigEnv<'build'>} */
-  const forgeEnv = env;
-  const { forgeConfigSelf } = forgeEnv;
-  const define = getBuildDefine(forgeEnv);
-  const config = {
+  // const forgeEnv = env;
+  // const { forgeConfigSelf } = forgeEnv;
+
+  return mergeConfig(getBuildConfig(env), {
     build: {
       lib: {
-        entry: forgeConfigSelf.entry,
+        // Pulls the entries from forge.config.js
+        entry: env.forgeConfigSelf.entry,
         // The files are built in CJS format, update the extensions
         fileName: () => "[name].cjs",
         formats: ["cjs"],
@@ -18,11 +19,10 @@ export default defineConfig((env) => {
       rollupOptions: { external },
     },
     plugins: [pluginHotRestart("restart")],
-    define,
+    define: getBuildDefine(env),
     resolve: {
       // Load the Node.js entry.
       mainFields: ["module", "jsnext:main", "jsnext"],
     },
-  };
-  return mergeConfig(getBuildConfig(forgeEnv), config);
+  });
 });
