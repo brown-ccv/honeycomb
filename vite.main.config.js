@@ -3,10 +3,6 @@ import { defineConfig, mergeConfig } from "vite";
 import { getBuildConfig, getBuildDefine, external, pluginHotRestart } from "./vite.base.config.js";
 
 export default defineConfig((env) => {
-  /** @type {import('vite').ConfigEnv<'build'>} */
-  // const forgeEnv = env;
-  // const { forgeConfigSelf } = forgeEnv;
-
   return mergeConfig(getBuildConfig(env), {
     build: {
       lib: {
