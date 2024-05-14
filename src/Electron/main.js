@@ -286,7 +286,6 @@ function handleSaveVideo(event, data) {
  */
 function createWindow() {
   // Create the browser window
-  // TODO: The windows are different in dev and production
   const mainWindow = new BrowserWindow({
     icon: "./favicon.ico",
     webPreferences: { preload: path.join(__dirname, "preload.cjs") },
