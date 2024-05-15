@@ -37,20 +37,14 @@ const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.
 // TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
 // const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
 const IS_DEV = import.meta.env.DEV;
-
-let CONFIG; // Honeycomb configuration object
 let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected (option is only available in dev mode)
-
-// let TEMP_FILE; // Path to the temporary output file
-// let OUT_PATH; // Path to the final output folder (on the Desktop)
-// let OUT_FILE; // Name of the final output file
-// let FILE_NAME; // The name of the data file
 
 const DATA_DIR = path.resolve(app.getPath("userData")); // Path to the apps data directory
 // TODO @brown-ccv: Is there a way to make this configurable without touching code?
 const OUT_DIR = path.resolve(app.getPath("desktop"), app.getName()); // Path to the final output folder (on the Desktop)
 let FILE_PATH; // Relative path to the data file. Becomes absolute when combined with DATA_DIR or OUT_DIR
 
+let CONFIG; // Honeycomb configuration object
 let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
 let TRIGGER_PORT; // Port that the EEG machine is talking through
 
