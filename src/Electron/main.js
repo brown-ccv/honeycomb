@@ -361,12 +361,12 @@ function createWindow() {
 
 /** Returns the absolute path to the JSON file stored in userData */
 function getDataPath() {
-  path.resolve(DATA_DIR, FILE_PATH);
+  return path.resolve(DATA_DIR, FILE_PATH);
 }
 
 /** Returns the absolute path to the outputted JSON file */
 function getOutPath() {
-  path.resolve(OUT_DIR, FILE_PATH);
+  return path.resolve(OUT_DIR, FILE_PATH);
 }
 
 /** SERIAL PORT SETUP & COMMUNICATION (EVENT MARKER) */
