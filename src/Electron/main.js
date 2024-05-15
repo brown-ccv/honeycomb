@@ -6,18 +6,16 @@ import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import log from "electron-log";
 import _ from "lodash";
 
-// TODO @RobertGemmaJr: Figure out how to install the dev tools
-// import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
-
 // const { getPort, sendToPort } = require("./serialPort");
 
 // TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
-// TODO @brown-ccv #460: Add serialport's MockBinding for the "Continue Anyway": https://serialport.io/docs/guide-testing
 
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 if (require("electron-squirrel-startup")) app.quit();
 
 // Initialize the logger for any renderer process
+// TODO @brown-ccv #398: Handle logs in app.getPath('logs')
+// TODO @brown-ccv #398: Separate log files for each run through
 log.initialize({ preload: true });
 
 // TODO: Fix the security policy instead of ignoring
@@ -25,8 +23,6 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
-// TODO @brown-ccv #398: Separate log files for each run through
-// TODO @brown-ccv #429: Use app.getPath('temp') for temporary JSON file
 
 /************ GLOBALS ***********/
 
@@ -34,8 +30,8 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 /* global MAIN_WINDOW_VITE_DEV_SERVER_URL */
 /* global MAIN_WINDOW_VITE_NAME */
 
-// TODO: Handle version in renderer - pass into jspsych?
-// TODO: Just handle the commit id? I think that's probably fine
+// TODO: Preload function for passing this data into renderer - pass into jspsych?
+// TODO: Handle at runtime in a separate file not postinstall
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
 
 // TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
@@ -198,6 +194,7 @@ function handleOnDataUpdate(event, data) {
   // Set the output path and file name if they are not set yet
   if (!OUT_PATH) {
     // The final OUT_FILE will be nested inside subfolders on the Desktop
+    // TODO @brown-ccv: Add a nested folder for development and production
     OUT_PATH = path.resolve(app.getPath("desktop"), app.getName(), study_id, participant_id);
     // TODO @brown-ccv #307: ISO 8061 data string? Doesn't include the punctuation
     OUT_FILE = `${start_date}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names);
