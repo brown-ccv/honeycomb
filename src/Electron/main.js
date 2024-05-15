@@ -283,6 +283,7 @@ function handleSaveVideo(event, data) {
   );
 
   // Save video file to the desktop
+  // TODO: The video here is broken?
   try {
     // Note the video data is sent to the main process as a base64 string
     const videoData = Buffer.from(data.split(",")[1], "base64");
