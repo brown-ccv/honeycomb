@@ -41,9 +41,15 @@ const IS_DEV = import.meta.env.DEV;
 let CONFIG; // Honeycomb configuration object
 let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected (option is only available in dev mode)
 
-let TEMP_FILE; // Path to the temporary output file
-let OUT_PATH; // Path to the final output folder (on the Desktop)
-let OUT_FILE; // Name of the final output file
+// let TEMP_FILE; // Path to the temporary output file
+// let OUT_PATH; // Path to the final output folder (on the Desktop)
+// let OUT_FILE; // Name of the final output file
+// let FILE_NAME; // The name of the data file
+
+const DATA_DIR = path.resolve(app.getPath("userData")); // Path to the apps data directory
+// TODO @brown-ccv: Is there a way to make this configurable without touching code?
+const OUT_DIR = path.resolve(app.getPath("desktop"), app.getName()); // Path to the final output folder (on the Desktop)
+let FILE_PATH; // Relative path to the data file. Becomes absolute when combined with DATA_DIR or OUT_DIR
 
 let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
 let TRIGGER_PORT; // Port that the EEG machine is talking through
@@ -100,7 +106,11 @@ app.on("window-all-closed", () => {
 app.on("before-quit", () => {
   log.info("Attempting to quit application");
   try {
-    JSON.parse(fs.readFileSync(TEMP_FILE));
+    // JSON.parse(fs.readFileSync(TEMP_FILE));
+
+    // TODO: getDataFile() and getOutFile() utility functions
+    const dataFile = path.resolve(DATA_DIR, FILE_PATH);
+    JSON.parse(fs.readFileSync(dataFile));
   } catch (error) {
     if (error instanceof TypeError) {
       // TEMP_FILE is undefined at this point
@@ -188,41 +198,47 @@ function handlePhotodiodeTrigger(event, code) {
  * @param {Event} event The Electron renderer event
  * @param {Object} data The trial data
  */
+// TODO @brown-ccv: Handle FILE_PATH creation when user logs in, not here
 function handleOnDataUpdate(event, data) {
   const { participant_id, study_id, start_date, trial_index } = data;
 
-  // Set the output path and file name if they are not set yet
-  if (!OUT_PATH) {
-    // The final OUT_FILE will be nested inside subfolders on the Desktop
-    // TODO @brown-ccv: Add a nested folder for development and production
-    OUT_PATH = path.resolve(app.getPath("desktop"), app.getName(), study_id, participant_id);
-    // TODO @brown-ccv #307: ISO 8061 data string? Doesn't include the punctuation
-    OUT_FILE = `${start_date}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names);
-  }
-
-  // Create the temporary folder & file if it hasn't been created
+  // The data file has not been created yet
   // TODO @brown-ccv #397: Initialize file stream on login, not here
-  if (!TEMP_FILE) {
-    // The tempFile is nested inside "TempData" in the user's local app data folder
-    const tempPath = path.resolve(app.getPath("userData"), "TempData", study_id, participant_id);
-    fs.mkdirSync(tempPath, { recursive: true });
-    TEMP_FILE = path.resolve(tempPath, OUT_FILE);
+  if (!FILE_PATH) {
+    // Build the relative file path to the file
+    FILE_PATH = path.join(
+      "data",
+      import.meta.env.MODE,
+      study_id,
+      participant_id,
+      // TODO @brown-ccv #307: Use ISO 8061 date? Doesn't include the punctuation (here and in Firebase)
+      `${start_date}.json`.replaceAll(":", "_") // (":" are replaced to prevent issues with invalid file names
+    );
 
-    // Write initial bracket
-    fs.appendFileSync(TEMP_FILE, "{");
-    log.info("Temporary file created at ", TEMP_FILE);
+    // TODO: getDataFile() and getOutFile() utility functions
+    const dataFile = path.resolve(DATA_DIR, FILE_PATH);
 
-    // Write useful information and the beginning of the trials array
-    fs.appendFileSync(TEMP_FILE, `"start_time": "${start_date}",`);
-    fs.appendFileSync(TEMP_FILE, `"git_version": ${JSON.stringify(GIT_VERSION)},`);
-    fs.appendFileSync(TEMP_FILE, `"trials": [`);
+    // Create the data file in userData
+    fs.mkdirSync(path.dirname(dataFile), { recursive: true });
+    fs.writeFileSync(dataFile, "");
+    log.info("Temporary file created at ", dataFile);
+
+    // Write basic data and initialize the trials array
+    // TODO @RobertGemmaJr: Handle this entirely in jsPsych, needs to match Firebase
+    fs.appendFileSync(dataFile, "{");
+    fs.appendFileSync(dataFile, `"start_time": "${start_date}",`);
+    fs.appendFileSync(dataFile, `"git_version": ${JSON.stringify(GIT_VERSION)},`);
+    fs.appendFileSync(dataFile, `"trials": [`);
   }
 
-  // Prepend comma for all trials except first
-  if (trial_index > 0) fs.appendFileSync(TEMP_FILE, ",");
+  // TODO: getDataFile() and getOutFile() utility functions
+  const dataFile = path.resolve(DATA_DIR, FILE_PATH);
 
+  // TODO @RobertGemmaJr: Always write "proper" json (read json and append to it). Will need to update "before-quit" logic
+  // TODO @brown-ccv #397: I can set a constant for the full path once the stream is created elsewhere
   // Write trial data
-  fs.appendFileSync(TEMP_FILE, JSON.stringify(data));
+  if (trial_index > 0) fs.appendFileSync(dataFile, ","); // Prepend comma if needed
+  fs.appendFileSync(dataFile, JSON.stringify(data));
 
   log.info(`Trial ${trial_index} successfully written to TempData`);
 }
@@ -234,47 +250,58 @@ function handleOnDataUpdate(event, data) {
 function handleOnFinish() {
   log.info("Experiment Finished");
 
+  // TODO: getDataFile() and getOutFile() utility functions
+  const dataFile = path.resolve(DATA_DIR, FILE_PATH);
+  const outFile = path.resolve(OUT_DIR, FILE_PATH);
+
   // Finish writing JSON
-  fs.appendFileSync(TEMP_FILE, "]}");
+  fs.appendFileSync(dataFile, "]}");
   log.info("Finished writing experiment data to TempData");
 
-  // Move temp file to the output location
-  const filePath = path.resolve(OUT_PATH, OUT_FILE);
   try {
-    fs.mkdirSync(OUT_PATH, { recursive: true });
-    fs.copyFileSync(TEMP_FILE, filePath);
-    log.info("Successfully saved experiment data to ", filePath);
+    // NEW
+    fs.mkdirSync(path.dirname(outFile), { recursive: true });
+    fs.copyFileSync(dataFile, outFile);
+    log.info("Successfully saved experiment data to ", outFile);
   } catch (e) {
-    log.error.error("Unable to save file: ", filePath);
-    log.error.error(e);
+    log.error("Unable to save file: ", outFile);
+    log.error(e);
   }
   app.quit();
 }
 
 // Save webm video file
 // TODO @brown-ccv #342: Rolling save of webm video, remux to mp4 at the end?
+// TODO @brown-ccv: Handle video recordings with jsPsych
 function handleSaveVideo(event, data) {
   // Video file is the same as OUT_FILE except it's mp4, not json
-  const filePath = path.join(
-    path.dirname(OUT_FILE),
-    path.basename(OUT_FILE, path.extname(OUT_FILE)) + ".webm"
-  );
+  // const filePath = path.join(
+  //   path.dirname(OUT_FILE),
+  //   path.basename(OUT_FILE, path.extname(OUT_FILE)) + ".webm"
+  // );
 
-  log.info(filePath);
+  // TODO: getDataFile() and getOutFile() utility functions
+  const outFile = path.resolve(OUT_DIR, FILE_PATH);
+  // Video file is the same as OUT_FILE except it's mp4, not json
+  const videoFile = path.join(
+    path.dirname(outFile),
+    path.basename(outFile, path.extname(outFile)) + ".webm"
+  );
 
   // Save video file to the desktop
   try {
     // Note the video data is sent to the main process as a base64 string
     const videoData = Buffer.from(data.split(",")[1], "base64");
 
-    fs.mkdirSync(OUT_PATH, { recursive: true });
+    // TODO: This should already have been created?
+    fs.mkdirSync(path.dirname(videoFile), { recursive: true });
     // TODO @brown-ccv #342: Convert to mp4 before final save? https://gist.github.com/AVGP/4c2ce4ab3c67760a0f30a9d54544a060
-    fs.writeFileSync(path.join(OUT_PATH, filePath), videoData);
+    fs.writeFileSync(videoFile, videoData);
   } catch (e) {
-    log.error.error("Unable to save file: ", filePath);
+    log.error.error("Unable to save video file: ", videoFile);
     log.error.error(e);
   }
-  log.info("Successfully saved video file to ", filePath);
+  log.info("Successfully saved video file: ", videoFile);
 }
 
 /********** HELPERS **********/
