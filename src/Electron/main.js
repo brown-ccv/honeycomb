@@ -106,17 +106,14 @@ app.on("window-all-closed", () => {
 app.on("before-quit", () => {
   log.info("Attempting to quit application");
   try {
-    // JSON.parse(fs.readFileSync(TEMP_FILE));
-
-    // TODO: getDataFile() and getOutFile() utility functions
-    const dataFile = path.resolve(DATA_DIR, FILE_PATH);
-    JSON.parse(fs.readFileSync(dataFile));
+    JSON.parse(fs.readFileSync(getDataPath()));
   } catch (error) {
     if (error instanceof TypeError) {
-      // TEMP_FILE is undefined at this point
+      // The JSON file has not been created yet
       log.warn("Application quit before the participant started the experiment");
     } else if (error instanceof SyntaxError) {
       // Trials are still being written (i.e. hasn't hit handleOnFinish function)
+      // NOTE: The error occurs because the file is not a valid JSON document
       log.warn("Application quit while the participant was completing the experiment");
     } else {
       log.error("Electron encountered an error while quitting:");
@@ -215,30 +212,28 @@ function handleOnDataUpdate(event, data) {
       `${start_date}.json`.replaceAll(":", "_") // (":" are replaced to prevent issues with invalid file names
     );
 
-    // TODO: getDataFile() and getOutFile() utility functions
-    const dataFile = path.resolve(DATA_DIR, FILE_PATH);
+    const dataPath = getDataPath();
 
     // Create the data file in userData
-    fs.mkdirSync(path.dirname(dataFile), { recursive: true });
-    fs.writeFileSync(dataFile, "");
-    log.info("Temporary file created at ", dataFile);
+    fs.mkdirSync(path.dirname(dataPath), { recursive: true });
+    fs.writeFileSync(dataPath, "");
+    log.info("Temporary file created at ", dataPath);
 
     // Write basic data and initialize the trials array
     // TODO @RobertGemmaJr: Handle this entirely in jsPsych, needs to match Firebase
-    fs.appendFileSync(dataFile, "{");
-    fs.appendFileSync(dataFile, `"start_time": "${start_date}",`);
-    fs.appendFileSync(dataFile, `"git_version": ${JSON.stringify(GIT_VERSION)},`);
-    fs.appendFileSync(dataFile, `"trials": [`);
+    fs.appendFileSync(dataPath, "{");
+    fs.appendFileSync(dataPath, `"start_time": "${start_date}",`);
+    fs.appendFileSync(dataPath, `"git_version": ${JSON.stringify(GIT_VERSION)},`);
+    fs.appendFileSync(dataPath, `"trials": [`);
   }
 
-  // TODO: getDataFile() and getOutFile() utility functions
-  const dataFile = path.resolve(DATA_DIR, FILE_PATH);
+  const dataPath = getDataPath();
 
   // TODO @RobertGemmaJr: Always write "proper" json (read json and append to it). Will need to update "before-quit" logic
   // TODO @brown-ccv #397: I can set a constant for the full path once the stream is created elsewhere
   // Write trial data
-  if (trial_index > 0) fs.appendFileSync(dataFile, ","); // Prepend comma if needed
-  fs.appendFileSync(dataFile, JSON.stringify(data));
+  if (trial_index > 0) fs.appendFileSync(dataPath, ","); // Prepend comma if needed
+  fs.appendFileSync(dataPath, JSON.stringify(data));
 
   log.info(`Trial ${trial_index} successfully written to TempData`);
 }
@@ -250,21 +245,20 @@ function handleOnDataUpdate(event, data) {
 function handleOnFinish() {
   log.info("Experiment Finished");
 
-  // TODO: getDataFile() and getOutFile() utility functions
-  const dataFile = path.resolve(DATA_DIR, FILE_PATH);
-  const outFile = path.resolve(OUT_DIR, FILE_PATH);
+  const dataPath = getDataPath();
+  const outPath = getOutPath();
 
   // Finish writing JSON
-  fs.appendFileSync(dataFile, "]}");
+  fs.appendFileSync(dataPath, "]}");
   log.info("Finished writing experiment data to TempData");
 
   try {
     // NEW
-    fs.mkdirSync(path.dirname(outFile), { recursive: true });
-    fs.copyFileSync(dataFile, outFile);
-    log.info("Successfully saved experiment data to ", outFile);
+    fs.mkdirSync(path.dirname(outPath), { recursive: true });
+    fs.copyFileSync(dataPath, outPath);
+    log.info("Successfully saved experiment data to ", outPath);
   } catch (e) {
-    log.error("Unable to save file: ", outFile);
+    log.error("Unable to save file: ", outPath);
     log.error(e);
   }
   app.quit();
@@ -274,12 +268,11 @@ function handleOnFinish() {
 // TODO @brown-ccv #342: Rolling save of webm video, remux to mp4 at the end?
 // TODO @brown-ccv: Handle video recordings with jsPsych
 function handleSaveVideo(event, data) {
-  // TODO: getDataFile() and getOutFile() utility functions
-  const outFile = path.resolve(OUT_DIR, FILE_PATH);
   // Video file is the same as OUT_FILE except it's mp4, not json
+  const outPath = getOutPath();
   const videoFile = path.join(
-    path.dirname(outFile),
-    path.basename(outFile, path.extname(outFile)) + ".webm"
+    path.dirname(outPath),
+    path.basename(outPath, path.extname(outPath)) + ".webm"
   );
 
   // Save video file to the desktop
@@ -364,6 +357,16 @@ function createWindow() {
   // // Load web contents at the given URL
   // log.info("Loading URL: ", appURL);
   // mainWindow.loadURL(appURL);
+}
+
+/** Returns the absolute path to the JSON file stored in userData */
+function getDataPath() {
+  path.resolve(DATA_DIR, FILE_PATH);
+}
+
+/** Returns the absolute path to the outputted JSON file */
+function getOutPath() {
+  path.resolve(OUT_DIR, FILE_PATH);
 }
 
 /** SERIAL PORT SETUP & COMMUNICATION (EVENT MARKER) */
