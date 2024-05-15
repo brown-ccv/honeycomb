@@ -260,7 +260,7 @@ function handleOnFinish() {
 
 // Save webm video file
 // TODO @brown-ccv #342: Rolling save of webm video, remux to mp4 at the end?
-// TODO @brown-ccv: Handle video recordings with jsPsych
+// TODO @brown-ccv #301: Handle video recordings with jsPsych
 function handleSaveVideo(event, data) {
   // Video file is the same as OUT_FILE except it's mp4, not json
   const outPath = getOutPath();
@@ -270,7 +270,7 @@ function handleSaveVideo(event, data) {
   );
 
   // Save video file to the desktop
-  // TODO: The video here is broken?
+  // TODO @brown-ccv #301: The outputted video is broken
   try {
     // Note the video data is sent to the main process as a base64 string
     const videoData = Buffer.from(data.split(",")[1], "base64");
