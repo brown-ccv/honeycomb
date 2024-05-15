@@ -26,7 +26,6 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
 /************ GLOBALS ***********/
 
-// These global variables are created by electron-forge
 /* global MAIN_WINDOW_VITE_DEV_SERVER_URL */
 /* global MAIN_WINDOW_VITE_NAME */
 
@@ -37,12 +36,12 @@ const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.
 // TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
 // const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
 const IS_DEV = import.meta.env.DEV;
-let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected (option is only available in dev mode)
+let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected
 
 const DATA_DIR = path.resolve(app.getPath("userData")); // Path to the apps data directory
 // TODO @brown-ccv: Is there a way to make this configurable without touching code?
-const OUT_DIR = path.resolve(app.getPath("desktop"), app.getName()); // Path to the final output folder (on the Desktop)
-let FILE_PATH; // Relative path to the data file. Becomes absolute when combined with DATA_DIR or OUT_DIR
+const OUT_DIR = path.resolve(app.getPath("desktop"), app.getName()); // Path to the final output folder
+let FILE_PATH; // Relative path to the data file.
 
 let CONFIG; // Honeycomb configuration object
 let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
@@ -185,16 +184,15 @@ function handlePhotodiodeTrigger(event, code) {
 /**
  * Receives the trial data and writes it to a temp file in AppData
  * The out path/file and writable stream are initialized if isn't yet
- * The temp file is written at ~/userData/[appName]/TempData/[studyID]/[participantID]/
+ * The temp file is written at ~/userData/[appName]/data/[mode]/[studyID]/[participantID]/[start_date].json
  * @param {Event} event The Electron renderer event
  * @param {Object} data The trial data
  */
-// TODO @brown-ccv: Handle FILE_PATH creation when user logs in, not here
+// TODO @brown-ccv #397: Handle FILE_PATH creation when user logs in, not here
 function handleOnDataUpdate(event, data) {
   const { participant_id, study_id, start_date, trial_index } = data;
 
   // The data file has not been created yet
-  // TODO @brown-ccv #397: Initialize file stream on login, not here
   if (!FILE_PATH) {
     // Build the relative file path to the file
     FILE_PATH = path.join(
@@ -206,12 +204,11 @@ function handleOnDataUpdate(event, data) {
       `${start_date}.json`.replaceAll(":", "_") // (":" are replaced to prevent issues with invalid file names
     );
 
-    const dataPath = getDataPath();
-
     // Create the data file in userData
+    const dataPath = getDataPath();
     fs.mkdirSync(path.dirname(dataPath), { recursive: true });
     fs.writeFileSync(dataPath, "");
-    log.info("Temporary file created at ", dataPath);
+    log.info("Data file created at ", dataPath);
 
     // Write basic data and initialize the trials array
     // TODO @RobertGemmaJr: Handle this entirely in jsPsych, needs to match Firebase
@@ -229,7 +226,7 @@ function handleOnDataUpdate(event, data) {
   if (trial_index > 0) fs.appendFileSync(dataPath, ","); // Prepend comma if needed
   fs.appendFileSync(dataPath, JSON.stringify(data));
 
-  log.info(`Trial ${trial_index} successfully written to TempData`);
+  log.info(`Trial ${trial_index} successfully written`);
 }
 
 /**
@@ -244,7 +241,7 @@ function handleOnFinish() {
 
   // Finish writing JSON
   fs.appendFileSync(dataPath, "]}");
-  log.info("Finished writing experiment data to TempData");
+  log.info(`Finished writing experiment data to ${dataPath}`);
 
   try {
     // NEW
