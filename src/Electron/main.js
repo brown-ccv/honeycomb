@@ -274,12 +274,6 @@ function handleOnFinish() {
 // TODO @brown-ccv #342: Rolling save of webm video, remux to mp4 at the end?
 // TODO @brown-ccv: Handle video recordings with jsPsych
 function handleSaveVideo(event, data) {
-  // Video file is the same as OUT_FILE except it's mp4, not json
-  // const filePath = path.join(
-  //   path.dirname(OUT_FILE),
-  //   path.basename(OUT_FILE, path.extname(OUT_FILE)) + ".webm"
-  // );
-
   // TODO: getDataFile() and getOutFile() utility functions
   const outFile = path.resolve(OUT_DIR, FILE_PATH);
   // Video file is the same as OUT_FILE except it's mp4, not json
