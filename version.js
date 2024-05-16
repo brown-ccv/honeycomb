@@ -16,5 +16,3 @@ try {
   console.error("Unable to determine git version");
   console.error(e);
 }
-
-console.log("VERSION WAS RAN");
