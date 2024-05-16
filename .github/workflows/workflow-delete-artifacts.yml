@@ -1,6 +1,6 @@
 # Workflow dispatch for deleting unneeded artifacts.
 # Used to clear storage budget when testing release/package creation
-name: Delete Artifacts Workflow
+name: 🗑️ Delete Artifacts Workflow
 on:
   workflow_dispatch:
     inputs:
