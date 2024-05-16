@@ -4,20 +4,14 @@ import { defineConfig } from "vite";
 import { pluginExposeRenderer } from "./vite.base.config.js";
 
 export default defineConfig((env) => {
-  const { root, mode, forgeConfigSelf } = env;
+  const { root, mode, forgeConfig, forgeConfigSelf } = env;
   const name = forgeConfigSelf.name ?? "";
+  console.log(env);
 
   return {
     root,
     mode,
-    // TODO: These should really be in the base config? Make them available everywhere?
-    // TODO: Can we include them in import.meta.env instead
-    define: {
-      APP_NAME: JSON.stringify(process.env.npm_package_name),
-      APP_VERSION: JSON.stringify(process.env.npm_package_version),
-      "import.meta.env.PACKAGE_NAME": JSON.stringify(process.env.npm_package_name),
-      "import.meta.env.PACKAGE_VERSION": JSON.stringify(process.env.npm_package_version),
-    },
+    define: forgeConfig.define,
     base: "./",
     build: { outDir: `.vite/renderer/${name}` },
     plugins: [react(), pluginExposeRenderer(name)],

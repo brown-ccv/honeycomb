@@ -50,6 +50,11 @@ export default {
           { entry: "src/Electron/preload.js", config: "vite.preload.config.js" },
         ],
         renderer: [{ name: "main_window", config: "vite.renderer.config.js" }],
+        define: {
+          // Add the package name and version to import.meta.env
+          "import.meta.env.PACKAGE_NAME": JSON.stringify(process.env.npm_package_name),
+          "import.meta.env.PACKAGE_VERSION": JSON.stringify(process.env.npm_package_version),
+        },
       },
     },
     // Fuses are used to enable/disable various Electron functionality at package time, before code signing the application

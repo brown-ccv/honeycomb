@@ -17,6 +17,8 @@ export default function JsPsychExperiment({
 }) {
   const [jsPsych, setJsPsych] = useState();
 
+  console.log(import.meta.env);
+
   /**
    * Create the instance of JsPsych whenever the studyID or participantID changes, which occurs then the user logs in.
    *
