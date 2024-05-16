@@ -1,4 +1,4 @@
-/** ELECTRON MAIN PROCESS */
+/* global MAIN_WINDOW_VITE_DEV_SERVER_URL MAIN_WINDOW_VITE_NAME */
 import fs from "node:fs";
 import path from "node:path";
 import { execSync } from "node:child_process";
@@ -15,9 +15,6 @@ import { getPort, sendToPort } from "./lib/serialport";
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
 
 /************ GLOBALS ***********/
-
-/* global MAIN_WINDOW_VITE_DEV_SERVER_URL */
-/* global MAIN_WINDOW_VITE_NAME */
 
 const IS_DEV = import.meta.env.DEV && !app.isPackaged;
 let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected
@@ -57,7 +54,7 @@ app.whenReady().then(() => {
   ipcMain.on("setConfig", handleSetConfig);
   ipcMain.on("setTrigger", handleSetTrigger);
   ipcMain.handle("getCredentials", handleGetCredentials);
-  ipcMain.handle("getGit", handleGetGit);
+  ipcMain.handle("getCommit", handleGetCommit);
   ipcMain.on("onDataUpdate", handleOnDataUpdate);
   ipcMain.handle("onFinish", handleOnFinish);
   ipcMain.on("photodiodeTrigger", handlePhotodiodeTrigger);
@@ -156,7 +153,7 @@ function handleGetCredentials() {
  * A version.json file is created during build-time that can be read from
  * @returns An object containing the git commit sha and branch of the codebase
  */
-async function handleGetGit() {
+async function handleGetCommit() {
   try {
     if (!IS_DEV) {
       // Get the Git Commit SHA and Branch of the repository

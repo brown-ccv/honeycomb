@@ -40,6 +40,7 @@ export const getDefineKeys = (names) => {
 };
 
 /** @type {(env: import('vite').ConfigEnv<'build'>) => Record<string, any>} */
+// TODO: This is only used in the main config
 export const getBuildDefine = (env) => {
   const { command, forgeConfig } = env;
   const names = forgeConfig.renderer.filter(({ name }) => name != null).map(({ name }) => name);
