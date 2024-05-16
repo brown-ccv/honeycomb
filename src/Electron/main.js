@@ -22,7 +22,6 @@ import { getPort, sendToPort } from "./lib/serialport";
 // TODO: Handle at runtime in a separate file not postinstall
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
 
-// TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
 const IS_DEV = import.meta.env.DEV && !app.isPackaged;
 let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected
 
