@@ -1,13 +1,12 @@
 /** ELECTRON MAIN PROCESS */
-
-import path from "node:path";
 import fs from "node:fs";
-import { app, BrowserWindow, ipcMain, dialog } from "electron";
+import path from "node:path";
+
+import { BrowserWindow, app, dialog, ipcMain } from "electron";
 import log from "electron-log";
 import _ from "lodash";
 
 // TODO @RobertGemmaJr: Figure out how to install the dev tools
-// import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 
 // const { getPort, sendToPort } = require("./serialPort");
 
@@ -59,12 +58,6 @@ log.initialize({ preload: true });
  */
 app.whenReady().then(() => {
   log.info("App Ready: ", app.name);
-
-  // Installs the react developer tools extension
-  // installExtension
-  //   .installExtension(installExtension.REACT_DEVELOPER_TOOLS)
-  //   .then((name) => console.info(`Added Extension:  ${name}`))
-  //   .catch((err) => console.info("An error occurred: ", err));
 
   // Handle ipcRenderer events (on is renderer -> main, handle is renderer <--> main)
   ipcMain.on("setConfig", handleSetConfig);
@@ -304,7 +297,7 @@ function createWindow() {
     // TODO @brown-ccv: JsPsych protections for loading from a file://
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
-  log.info("Loaded Renderer Process");
+  log.info("Loaded Renderer process");
 }
 
 /** SERIAL PORT SETUP & COMMUNICATION (EVENT MARKER) */

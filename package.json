@@ -51,8 +51,6 @@
     "serialport": "^12.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.20",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@electron-forge/cli": "^7.4.0",
     "@electron-forge/maker-deb": "^7.4.0",
     "@electron-forge/maker-rpm": "^7.4.0",
@@ -62,12 +60,9 @@
     "@electron-forge/plugin-vite": "^7.4.0",
     "@inquirer/prompts": "^3.0.3",
     "@vitejs/plugin-react": "^4.0.4",
-    "concurrently": "^8.2.1",
-    "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.2.0",
     "dotenv-cli": "^7.0.0",
     "electron": "^30.0.1",
-    "electron-devtools-installer": "^3.2.0",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.29.0",
@@ -76,9 +71,7 @@
     "husky": "^9.0.10",
     "lint-staged": "^15.0.2",
     "prettier": "^3.2.5",
-    "vite-plugin-checker": "^0.6.2",
-    "vite-tsconfig-paths": "^4.2.1",
-    "wait-on": "^7.2.0"
+    "vite": "^5.2.11"
   },
   "scripts": {
     "start:browser": "vite --port 3000",
@@ -98,10 +91,9 @@
     "build:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run build",
     "build:firebase": "dotenv -e env/.env.firebase npm run build",
     "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build",
-    "make": "electron-forge make",
-    "make:windows": "npm run make -- --arch x64 --targets @electron-forge/maker-squirrel",
-    "make:linux": "npm run make -- --arch x64 --targets @electron-forge/maker-deb",
-    "make:mac": "npm run make --  --arch universal --targets @electron-forge/maker-dmg",
+    "make:windows": "electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
+    "make:linux": "electron-forge make --arch x64 --targets @electron-forge/maker-deb",
+    "make:mac": "electron-forge make  --arch universal --targets @electron-forge/maker-dmg",
     "cli": "node cli.mjs",
     "commit": "git-cz",
     "format": "prettier --write .",
