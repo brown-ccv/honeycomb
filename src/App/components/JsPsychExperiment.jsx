@@ -6,8 +6,6 @@ import { config } from "../../config/main";
 import { buildTimeline, jsPsychOptions } from "../../experiment";
 import { initParticipant } from "../deployments/firebase";
 
-/* global APP_NAME APP_VERSION */
-
 // ID used to identify the DOM element that holds the experiment.
 const EXPERIMENT_ID = "experiment-window";
 
@@ -50,8 +48,8 @@ export default function JsPsychExperiment({
 
       // Adds experiment data into jsPsych directly. These properties will be added to all trials
       tempJsPsych.data.addProperties({
-        app_name: APP_NAME,
-        app_version: APP_VERSION,
+        app_name: import.meta.env.PACKAGE_NAME,
+        app_version: import.meta.env.PACKAGE_VERSION,
         app_commit: await window.electronAPI.getCommit(),
         study_id: studyID,
         participant_id: participantID,

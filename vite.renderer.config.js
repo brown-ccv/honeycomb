@@ -15,6 +15,8 @@ export default defineConfig((env) => {
     define: {
       APP_NAME: JSON.stringify(process.env.npm_package_name),
       APP_VERSION: JSON.stringify(process.env.npm_package_version),
+      "import.meta.env.PACKAGE_NAME": JSON.stringify(process.env.npm_package_name),
+      "import.meta.env.PACKAGE_VERSION": JSON.stringify(process.env.npm_package_version),
     },
     base: "./",
     build: { outDir: `.vite/renderer/${name}` },
