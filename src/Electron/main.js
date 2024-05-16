@@ -1,8 +1,8 @@
 /** ELECTRON MAIN PROCESS */
-
-import path from "node:path";
 import fs from "node:fs";
-import { app, BrowserWindow, ipcMain, dialog } from "electron";
+import path from "node:path";
+
+import { BrowserWindow, app, dialog, ipcMain } from "electron";
 import log from "electron-log";
 import _ from "lodash";
 
@@ -10,15 +10,6 @@ import { getPort, sendToPort } from "./lib/serialport";
 
 // TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
 // TODO @brown-ccv #460: Add serialport's MockBinding for the "Continue Anyway": https://serialport.io/docs/guide-testing
-
-// Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
-if (require("electron-squirrel-startup")) app.quit();
-
-// Initialize the logger for any renderer process
-log.initialize({ preload: true });
-
-// TODO: Fix the security policy instead of ignoring
-process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
@@ -34,10 +25,7 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 // TODO: Handle version in renderer - pass into jspsych?
 // TODO: Just handle the commit id? I think that's probably fine
 const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
-
-// TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
-// const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
-const IS_DEV = import.meta.env.DEV;
+const IS_DEV = import.meta.env.DEV && !app.isPackaged;
 
 let CONFIG; // Honeycomb configuration object
 let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected (option is only available in dev mode)
@@ -49,7 +37,17 @@ let OUT_FILE; // Name of the final output file
 let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
 let TRIGGER_PORT; // Port that the EEG machine is talking through
 
+// TODO: Fix the security policy instead of ignoring
+process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
+
 /************ APP LIFECYCLE ***********/
+
+// Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
+if (require("electron-squirrel-startup")) app.quit();
+
+// Initialize the logger
+// TODO: Spy on the renderer process too?
+log.initialize({ preload: true });
 
 /**
  * Executed when the app is initialized
@@ -58,12 +56,6 @@ let TRIGGER_PORT; // Port that the EEG machine is talking through
  */
 app.whenReady().then(() => {
   log.info("App Ready: ", app.name);
-
-  // Installs the react developer tools extension
-  // installExtension
-  //   .installExtension(installExtension.REACT_DEVELOPER_TOOLS)
-  //   .then((name) => console.info(`Added Extension:  ${name}`))
-  //   .catch((err) => console.info("An error occurred: ", err));
 
   // Handle ipcRenderer events (on is renderer -> main, handle is renderer <--> main)
   ipcMain.on("setConfig", handleSetConfig);
@@ -285,63 +277,25 @@ function handleSaveVideo(event, data) {
  */
 function createWindow() {
   // Create the browser window
-  // TODO: The windows are different in dev and production
   const mainWindow = new BrowserWindow({
     icon: "./favicon.ico",
     webPreferences: { preload: path.join(__dirname, "preload.cjs") },
     width: 1500,
     height: 900,
+    // TODO @brown-ccv: Settings for preventing the menu bar from ever showing up
+    menuBarVisible: IS_DEV,
+    fullscreen: !IS_DEV,
   });
+  if (IS_DEV) mainWindow.webContents.openDevTools();
 
-  // Load the index.html of the app
+  // Load the renderer process (index.html)
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
-    // TODO: JsPsych protections for loading from a file://
+    // TODO @brown-ccv: JsPsych protections for loading from a file://
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
-
-  // let mainWindow;
-  // let appURL;
-  // if (ELECTRON_START_URL) {
-  //   // Running in development
-  //   // Load app from localhost (This allows hot-reloading)
-  //   appURL = ELECTRON_START_URL;
-  //   // Create a 1500x900 window with the dev tools open
-  //   mainWindow = new BrowserWindow({
-  //     icon: "./favicon.ico",
-  //     webPreferences: { preload: path.join(__dirname, "preload.js") },
-  //     width: 1500,
-  //     height: 900,
-  //   });
-  //   // Open the dev tools
-  //   mainWindow.webContents.openDevTools();
-  // } else {
-  //   // Running in production
-  //   // Load app from the local bundle created by the build process
-  //   appURL = url.format({
-  //     // Moves from path of the electron file (/public/electron/main.js) to build folder (build/index.html)
-  //     // TODO @brown-ccv #424: electron-forge should only be packaging the build folder (package.json needs to point to that file?)
-  //     pathname: path.join(__dirname, "../../build/index.html"),
-  //     protocol: "file:",
-  //     slashes: true,
-  //   });
-  //   // Create a fullscreen window with the menu bar hidden
-  //   mainWindow = new BrowserWindow({
-  //     icon: "./favicon.ico",
-  //     webPreferences: { preload: path.join(__dirname, "preload.js") },
-  //     fullscreen: true,
-  //     menuBarVisible: false,
-  //   });
-  //   // Hide the menu bar
-  //   mainWindow.setMenuBarVisibility(false);
-  // }
-  // // Load web contents at the given URL
-  // log.info("Loading URL: ", appURL);
-  // mainWindow.loadURL(appURL);
+  log.info("Loaded Renderer process");
 }
 
 /** SERIAL PORT SETUP & COMMUNICATION (EVENT MARKER) */
