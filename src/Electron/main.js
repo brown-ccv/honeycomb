@@ -1,4 +1,4 @@
-/* global MAIN_WINDOW_VITE_DEV_SERVER_URL MAIN_WINDOW_VITE_NAME */
+/** ELECTRON MAIN PROCESS */
 import fs from "node:fs";
 import path from "node:path";
 import { execSync } from "node:child_process";
@@ -9,8 +9,9 @@ import _ from "lodash";
 
 import { getPort, sendToPort } from "./lib/serialport";
 
-// TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
+/* global MAIN_WINDOW_VITE_DEV_SERVER_URL MAIN_WINDOW_VITE_NAME */
 
+// TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
 
