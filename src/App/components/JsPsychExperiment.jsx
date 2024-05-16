@@ -27,6 +27,7 @@ export default function JsPsychExperiment({
   React.useEffect(() => {
     async function initializeJsPsych() {
       // Start date of the experiment - used as the UID of the session
+      // TODO @brown-ccv #307: Use ISO 8061 date? Doesn't include the punctuation so it's safe for file names
       const startDate = new Date().toISOString();
 
       // Write the initial record to Firestore
