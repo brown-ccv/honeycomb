@@ -35,7 +35,6 @@ export const getDefineKeys = (names) => {
       VITE_DEV_SERVER_URL: `${NAME}_VITE_DEV_SERVER_URL`,
       VITE_NAME: `${NAME}_VITE_NAME`,
     };
-
     return { ...acc, [name]: keys };
   }, define);
 };
