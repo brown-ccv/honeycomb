@@ -40,25 +40,6 @@ export const getDefineKeys = (names) => {
   }, define);
 };
 
-/** @type {(env: import('vite').ConfigEnv<'build'>) => Record<string, any>} */
-// TODO: This is only used in the main config
-export const getBuildDefine = (env) => {
-  const { command, forgeConfig } = env;
-  const names = forgeConfig.renderer.filter(({ name }) => name != null).map(({ name }) => name);
-  const defineKeys = getDefineKeys(names);
-  const define = Object.entries(defineKeys).reduce((acc, [name, keys]) => {
-    const { VITE_DEV_SERVER_URL, VITE_NAME } = keys;
-    const def = {
-      [VITE_DEV_SERVER_URL]:
-        command === "serve" ? JSON.stringify(process.env[VITE_DEV_SERVER_URL]) : undefined,
-      [VITE_NAME]: JSON.stringify(name),
-    };
-    return { ...acc, ...def };
-  }, {});
-
-  return define;
-};
-
 /** @type {(name: string) => import('vite').Plugin} */
 export const pluginExposeRenderer = (name) => {
   const { VITE_DEV_SERVER_URL } = getDefineKeys([name])[name];

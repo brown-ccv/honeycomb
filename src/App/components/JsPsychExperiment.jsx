@@ -1,6 +1,6 @@
 import { initJsPsych } from "jspsych";
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React from "react";
 
 import { config } from "../../config/main";
 import { buildTimeline, jsPsychOptions } from "../../experiment";
@@ -15,9 +15,7 @@ export default function JsPsychExperiment({
   dataUpdateFunction,
   dataFinishFunction,
 }) {
-  const [jsPsych, setJsPsych] = useState();
-
-  console.log(import.meta.env);
+  const [jsPsych, setJsPsych] = React.useState();
 
   /**
    * Create the instance of JsPsych whenever the studyID or participantID changes, which occurs then the user logs in.
