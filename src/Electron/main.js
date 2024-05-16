@@ -1,62 +1,52 @@
 /** ELECTRON MAIN PROCESS */
+import fs from "node:fs";
+import path from "node:path";
 
-const path = require("node:path");
-const fs = require("node:fs");
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
-const log = require("electron-log");
-const _ = require("lodash");
+import { BrowserWindow, app, dialog, ipcMain } from "electron";
+import log from "electron-log";
+import _ from "lodash";
 
-// TODO @RobertGemmaJr: Figure out how to install the dev tools
-// import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
-
-// const { getPort, sendToPort } = require("./serialPort");
+import { getPort, sendToPort } from "./lib/serialport";
 
 // TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
-// TODO @brown-ccv #460: Add serialport's MockBinding for the "Continue Anyway": https://serialport.io/docs/guide-testing
 
-// Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
-if (require("electron-squirrel-startup")) app.quit();
+// TODO @brown-ccv #192: Handle data writing to desktop in a utility process
+// TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
 
-// Initialize the logger for any renderer process
-log.initialize({ preload: true });
+/************ GLOBALS ***********/
+
+/* global MAIN_WINDOW_VITE_DEV_SERVER_URL */
+/* global MAIN_WINDOW_VITE_NAME */
+
+// TODO: Preload function for passing this data into renderer - pass into jspsych?
+// TODO: Handle at runtime in a separate file not postinstall
+const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
+
+const IS_DEV = import.meta.env.DEV && !app.isPackaged;
+let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected
+
+const DATA_DIR = path.resolve(app.getPath("userData")); // Path to the apps data directory
+// TODO @brown-ccv: Is there a way to make this configurable without touching code?
+const OUT_DIR = path.resolve(app.getPath("desktop"), app.getName()); // Path to the final output folder
+let FILE_PATH; // Relative path to the data file.
+
+let CONFIG; // Honeycomb configuration object
+let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
+let TRIGGER_PORT; // Port that the EEG machine is talking through
 
 // TODO: Fix the security policy instead of ignoring
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
-// TODO @brown-ccv #192: Handle data writing to desktop in a utility process
-// TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
-// TODO @brown-ccv #398: Separate log files for each run through
-// TODO @brown-ccv #429: Use app.getPath('temp') for temporary JSON file
-
-/************ GLOBALS ***********/
-
-// These global variables are created by electron-forge
-/* global MAIN_WINDOW_VITE_DEV_SERVER_URL */
-/* global MAIN_WINDOW_VITE_NAME */
-
-// TODO: Handle version in renderer - pass into jspsych?
-// TODO: Just handle the commit id? I think that's probably fine
-const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
-
-console.log(import.meta.env);
-
-// TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
-// const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
-const IS_DEV = import.meta.env.DEV;
-
-let CONFIG; // Honeycomb configuration object
-let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected (option is only available in dev mode)
-
-let TEMP_FILE; // Path to the temporary output file
-let OUT_PATH; // Path to the final output folder (on the Desktop)
-let OUT_FILE; // Name of the final output file
-
-let TRIGGER_CODES; // Trigger codes and IDs for the EEG machine
-let TRIGGER_PORT; // Port that the EEG machine is talking through
-
-console.log(process.env.NODE_ENV, import.meta.env.MODE);
-
 /************ APP LIFECYCLE ***********/
+
+// Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
+if (require("electron-squirrel-startup")) app.quit();
+
+// Initialize the logger
+// TODO @brown-ccv #398: Handle logs in app.getPath('logs')
+// TODO @brown-ccv #398: Separate log files for each run through
+// TODO @brown-ccv #398: Spy on the renderer process too?
+log.initialize({ preload: true });
 
 /**
  * Executed when the app is initialized
@@ -65,12 +55,6 @@ console.log(process.env.NODE_ENV, import.meta.env.MODE);
  */
 app.whenReady().then(() => {
   log.info("App Ready: ", app.name);
-
-  // Installs the react developer tools extension
-  // installExtension
-  //   .installExtension(installExtension.REACT_DEVELOPER_TOOLS)
-  //   .then((name) => console.info(`Added Extension:  ${name}`))
-  //   .catch((err) => console.info("An error occurred: ", err));
 
   // Handle ipcRenderer events (on is renderer -> main, handle is renderer <--> main)
   ipcMain.on("setConfig", handleSetConfig);
@@ -108,13 +92,14 @@ app.on("window-all-closed", () => {
 app.on("before-quit", () => {
   log.info("Attempting to quit application");
   try {
-    JSON.parse(fs.readFileSync(TEMP_FILE));
+    JSON.parse(fs.readFileSync(getDataPath()));
   } catch (error) {
     if (error instanceof TypeError) {
-      // TEMP_FILE is undefined at this point
+      // The JSON file has not been created yet
       log.warn("Application quit before the participant started the experiment");
     } else if (error instanceof SyntaxError) {
       // Trials are still being written (i.e. hasn't hit handleOnFinish function)
+      // NOTE: The error occurs because the file is not a valid JSON document
       log.warn("Application quit while the participant was completing the experiment");
     } else {
       log.error("Electron encountered an error while quitting:");
@@ -192,46 +177,48 @@ function handlePhotodiodeTrigger(event, code) {
 /**
  * Receives the trial data and writes it to a temp file in AppData
  * The out path/file and writable stream are initialized if isn't yet
- * The temp file is written at ~/userData/[appName]/TempData/[studyID]/[participantID]/
+ * The temp file is written at ~/userData/[appName]/data/[mode]/[studyID]/[participantID]/[start_date].json
  * @param {Event} event The Electron renderer event
  * @param {Object} data The trial data
  */
+// TODO @brown-ccv #397: Handle FILE_PATH creation when user logs in, not here
 function handleOnDataUpdate(event, data) {
   const { participant_id, study_id, start_date, trial_index } = data;
 
-  // Set the output path and file name if they are not set yet
-  if (!OUT_PATH) {
-    // The final OUT_FILE will be nested inside subfolders on the Desktop
-    OUT_PATH = path.resolve(app.getPath("desktop"), app.getName(), study_id, participant_id);
-    // TODO @brown-ccv #307: ISO 8061 data string? Doesn't include the punctuation
-    OUT_FILE = `${start_date}.json`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names);
+  // The data file has not been created yet
+  if (!FILE_PATH) {
+    // Build the relative file path to the file
+    FILE_PATH = path.join(
+      "data",
+      import.meta.env.MODE,
+      study_id,
+      participant_id,
+      // TODO @brown-ccv #307: Use ISO 8061 date? Doesn't include the punctuation (here and in Firebase)
+      `${start_date}.json`.replaceAll(":", "_") // (":" are replaced to prevent issues with invalid file names
+    );
+
+    // Create the data file in userData
+    const dataPath = getDataPath();
+    fs.mkdirSync(path.dirname(dataPath), { recursive: true });
+    fs.writeFileSync(dataPath, "");
+    log.info("Data file created at ", dataPath);
+
+    // Write basic data and initialize the trials array
+    // TODO @RobertGemmaJr: Handle this entirely in jsPsych, needs to match Firebase
+    fs.appendFileSync(dataPath, "{");
+    fs.appendFileSync(dataPath, `"start_time": "${start_date}",`);
+    fs.appendFileSync(dataPath, `"git_version": ${JSON.stringify(GIT_VERSION)},`);
+    fs.appendFileSync(dataPath, `"trials": [`);
   }
 
-  // Create the temporary folder & file if it hasn't been created
-  // TODO @brown-ccv #397: Initialize file stream on login, not here
-  if (!TEMP_FILE) {
-    // The tempFile is nested inside "TempData" in the user's local app data folder
-    const tempPath = path.resolve(app.getPath("userData"), "TempData", study_id, participant_id);
-    fs.mkdirSync(tempPath, { recursive: true });
-    TEMP_FILE = path.resolve(tempPath, OUT_FILE);
+  const dataPath = getDataPath();
 
-    // Write initial bracket
-    fs.appendFileSync(TEMP_FILE, "{");
-    log.info("Temporary file created at ", TEMP_FILE);
-
-    // Write useful information and the beginning of the trials array
-    fs.appendFileSync(TEMP_FILE, `"start_time": "${start_date}",`);
-    fs.appendFileSync(TEMP_FILE, `"git_version": ${JSON.stringify(GIT_VERSION)},`);
-    fs.appendFileSync(TEMP_FILE, `"trials": [`);
-  }
-
-  // Prepend comma for all trials except first
-  if (trial_index > 0) fs.appendFileSync(TEMP_FILE, ",");
-
+  // TODO @brown-ccv #397: I can set a constant for the full path once the stream is created elsewhere
   // Write trial data
-  fs.appendFileSync(TEMP_FILE, JSON.stringify(data));
+  if (trial_index > 0) fs.appendFileSync(dataPath, ","); // Prepend comma if needed
+  fs.appendFileSync(dataPath, JSON.stringify(data));
 
-  log.info(`Trial ${trial_index} successfully written to TempData`);
+  log.info(`Trial ${trial_index} successfully written`);
 }
 
 /**
@@ -241,47 +228,50 @@ function handleOnDataUpdate(event, data) {
 function handleOnFinish() {
   log.info("Experiment Finished");
 
-  // Finish writing JSON
-  fs.appendFileSync(TEMP_FILE, "]}");
-  log.info("Finished writing experiment data to TempData");
+  const dataPath = getDataPath();
+  const outPath = getOutPath();
 
-  // Move temp file to the output location
-  const filePath = path.resolve(OUT_PATH, OUT_FILE);
+  // Finish writing JSON
+  fs.appendFileSync(dataPath, "]}");
+  log.info(`Finished writing experiment data to ${dataPath}`);
+
   try {
-    fs.mkdirSync(OUT_PATH, { recursive: true });
-    fs.copyFileSync(TEMP_FILE, filePath);
-    log.info("Successfully saved experiment data to ", filePath);
+    fs.mkdirSync(path.dirname(outPath), { recursive: true });
+    fs.copyFileSync(dataPath, outPath);
+    log.info("Successfully saved experiment data to ", outPath);
   } catch (e) {
-    log.error.error("Unable to save file: ", filePath);
-    log.error.error(e);
+    log.error("Unable to save file: ", outPath);
+    log.error(e);
   }
   app.quit();
 }
 
 // Save webm video file
 // TODO @brown-ccv #342: Rolling save of webm video, remux to mp4 at the end?
+// TODO @brown-ccv #301: Handle video recordings with jsPsych
 function handleSaveVideo(event, data) {
   // Video file is the same as OUT_FILE except it's mp4, not json
-  const filePath = path.join(
-    path.dirname(OUT_FILE),
-    path.basename(OUT_FILE, path.extname(OUT_FILE)) + ".webm"
+  const outPath = getOutPath();
+  const videoFile = path.join(
+    path.dirname(outPath),
+    path.basename(outPath, path.extname(outPath)) + ".webm"
   );
 
-  log.info(filePath);
-
   // Save video file to the desktop
+  // TODO @brown-ccv #301: The outputted video is broken
   try {
     // Note the video data is sent to the main process as a base64 string
     const videoData = Buffer.from(data.split(",")[1], "base64");
 
-    fs.mkdirSync(OUT_PATH, { recursive: true });
+    // TODO: This should already have been created?
+    fs.mkdirSync(path.dirname(videoFile), { recursive: true });
     // TODO @brown-ccv #342: Convert to mp4 before final save? https://gist.github.com/AVGP/4c2ce4ab3c67760a0f30a9d54544a060
-    fs.writeFileSync(path.join(OUT_PATH, filePath), videoData);
+    fs.writeFileSync(videoFile, videoData);
   } catch (e) {
-    log.error.error("Unable to save file: ", filePath);
+    log.error.error("Unable to save video file: ", videoFile);
     log.error.error(e);
   }
-  log.info("Successfully saved video file to ", filePath);
+  log.info("Successfully saved video file: ", videoFile);
 }
 
 /********** HELPERS **********/
@@ -291,63 +281,36 @@ function handleSaveVideo(event, data) {
  * In production it loads the local bundle created by the build process
  */
 function createWindow() {
-  // TODO: The windows are different in dev and production
   // Create the browser window
   const mainWindow = new BrowserWindow({
     icon: "./favicon.ico",
-    webPreferences: { preload: path.join(__dirname, "preload.js") },
+    webPreferences: { preload: path.join(__dirname, "preload.cjs") },
     width: 1500,
     height: 900,
+    // TODO @brown-ccv: Settings for preventing the menu bar from ever showing up
+    menuBarVisible: IS_DEV,
+    fullscreen: !IS_DEV,
   });
+  if (IS_DEV) mainWindow.webContents.openDevTools();
 
-  // Load the index.html of the app
+  // Load the renderer process (index.html)
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
+    // TODO @brown-ccv: JsPsych protections for loading from a file://
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
+  log.info("Loaded Renderer process");
+}
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+/** Returns the absolute path to the JSON file stored in userData */
+function getDataPath() {
+  return path.resolve(DATA_DIR, FILE_PATH);
+}
 
-  // let mainWindow;
-  // let appURL;
-  // if (ELECTRON_START_URL) {
-  //   // Running in development
-  //   // Load app from localhost (This allows hot-reloading)
-  //   appURL = ELECTRON_START_URL;
-  //   // Create a 1500x900 window with the dev tools open
-  //   mainWindow = new BrowserWindow({
-  //     icon: "./favicon.ico",
-  //     webPreferences: { preload: path.join(__dirname, "preload.js") },
-  //     width: 1500,
-  //     height: 900,
-  //   });
-  //   // Open the dev tools
-  //   mainWindow.webContents.openDevTools();
-  // } else {
-  //   // Running in production
-  //   // Load app from the local bundle created by the build process
-  //   appURL = url.format({
-  //     // Moves from path of the electron file (/public/electron/main.js) to build folder (build/index.html)
-  //     // TODO @brown-ccv #424: electron-forge should only be packaging the build folder (package.json needs to point to that file?)
-  //     pathname: path.join(__dirname, "../../build/index.html"),
-  //     protocol: "file:",
-  //     slashes: true,
-  //   });
-  //   // Create a fullscreen window with the menu bar hidden
-  //   mainWindow = new BrowserWindow({
-  //     icon: "./favicon.ico",
-  //     webPreferences: { preload: path.join(__dirname, "preload.js") },
-  //     fullscreen: true,
-  //     menuBarVisible: false,
-  //   });
-  //   // Hide the menu bar
-  //   mainWindow.setMenuBarVisibility(false);
-  // }
-  // // Load web contents at the given URL
-  // log.info("Loading URL: ", appURL);
-  // mainWindow.loadURL(appURL);
+/** Returns the absolute path to the outputted JSON file */
+function getOutPath() {
+  return path.resolve(OUT_DIR, FILE_PATH);
 }
 
 /** SERIAL PORT SETUP & COMMUNICATION (EVENT MARKER) */
@@ -454,71 +417,4 @@ function handleEventSend(code) {
         break;
     }
   }
-}
-
-// TODO: SERPATE SERIAL PORT FILE
-
-const SerialPort = require("serialport");
-
-// TODO @brown-ccv #460: Test connections with MockBindings (e.g. CONTINUE_ANYWAY)  https://serialport.io/docs/api-binding-mock
-
-/**
- * Retrieve's a serial port device based on either the COM name or product identifier
- * If productID is undefined then comVendorName is the COM name, otherwise it's the vendorID
- * @param {Array} portList A list of available serial port devices
- * @param {string} comVendorName EITHER a com name or the vendor identifier of the desired device
- * @param {string | undefined} productId The product identifier of the desired device
- * @returns The SerialPort device
- */
-function getDevice(portList, comVendorName, productId) {
-  if (productId === undefined) {
-    const comName = comVendorName;
-    return portList.filter(
-      // Find the device with the matching comName
-      (device) => device.comName === comName.toUpperCase() || device.comName === comName
-    );
-  } else {
-    const vendorId = comVendorName;
-    return portList.filter(
-      // Find the device with the matching vendorId and productId
-      (device) =>
-        (device.vendorId === vendorId.toUpperCase() || device.vendorId === vendorId) &&
-        device.productId === productId
-    );
-  }
-}
-
-/**
- * Retrieve's a serial port device based on either the COM name or product identifier
- * Returns false if the desired device was not found
- * @param {string} comVendorName EITHER a com name or the vendor identifier of the desired device
- * @param {string | undefined} productId The product identifier of the desired device
- * @returns The SerialPort device
- */
-// TODO @brown-ccv #460: This should fail, not return false
-async function getPort(comVendorName, productId) {
-  let portList;
-  try {
-    portList = await SerialPort.list();
-  } catch {
-    return false;
-  }
-
-  const device = getDevice(portList, comVendorName, productId);
-  try {
-    const path = device[0].comName;
-    const port = new SerialPort(path);
-    return port;
-  } catch {
-    return false;
-  }
-}
-
-/**
- * Sends event code data to a serial port device
- * @param {SerialPort} port A SerialPort device
- * @param {number} event_code The numeric code to write to the device
- */
-async function sendToPort(port, event_code) {
-  port.write(Buffer.from([event_code]));
 }
