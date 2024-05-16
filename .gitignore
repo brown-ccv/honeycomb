@@ -28,6 +28,8 @@ logs
 *.log*
 
 # Versioning
+public/config/version.json
+public/version.json
 Brewfile.lock.json
 
 # Secrets

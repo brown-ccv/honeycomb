@@ -98,7 +98,8 @@
     "commit": "git-cz",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "postinstall": "node version.js"
   },
   "browserslist": {
     "production": [

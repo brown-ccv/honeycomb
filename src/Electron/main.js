@@ -1,6 +1,8 @@
 /** ELECTRON MAIN PROCESS */
 import fs from "node:fs";
 import path from "node:path";
+// import { execaCommandSync } from "execa";
+import { execSync } from "node:child_process";
 
 import { BrowserWindow, app, dialog, ipcMain } from "electron";
 import log from "electron-log";
@@ -17,10 +19,6 @@ import { getPort, sendToPort } from "./lib/serialport";
 
 /* global MAIN_WINDOW_VITE_DEV_SERVER_URL */
 /* global MAIN_WINDOW_VITE_NAME */
-
-// TODO: Preload function for passing this data into renderer - pass into jspsych?
-// TODO: Handle at runtime in a separate file not postinstall
-const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
 
 const IS_DEV = import.meta.env.DEV && !app.isPackaged;
 let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected
@@ -60,6 +58,7 @@ app.whenReady().then(() => {
   ipcMain.on("setConfig", handleSetConfig);
   ipcMain.on("setTrigger", handleSetTrigger);
   ipcMain.handle("getCredentials", handleGetCredentials);
+  ipcMain.handle("getGit", handleGetGit);
   ipcMain.on("onDataUpdate", handleOnDataUpdate);
   ipcMain.handle("onFinish", handleOnFinish);
   ipcMain.on("photodiodeTrigger", handlePhotodiodeTrigger);
@@ -154,6 +153,19 @@ function handleGetCredentials() {
 }
 
 /**
+ *
+ * @returns
+ */
+function handleGetGit() {
+  const git = {
+    sha: execSync("git rev-parse HEAD").toString().trim(),
+    ref: execSync("git branch --show-current").toString().trim(),
+  };
+  console.log("GIT MAIN", git);
+  return git;
+}
+
+/**
  * @returns {Boolean} Whether or not the EEG machine is connected to the computer
  */
 function handleCheckSerialPort() {
@@ -205,9 +217,9 @@ function handleOnDataUpdate(event, data) {
 
     // Write basic data and initialize the trials array
     // TODO @RobertGemmaJr: Handle this entirely in jsPsych, needs to match Firebase
+    // TODO: Same thing with the start data here?
     fs.appendFileSync(dataPath, "{");
     fs.appendFileSync(dataPath, `"start_time": "${start_date}",`);
-    fs.appendFileSync(dataPath, `"git_version": ${JSON.stringify(GIT_VERSION)},`);
     fs.appendFileSync(dataPath, `"trials": [`);
   }
 

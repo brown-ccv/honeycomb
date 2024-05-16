@@ -41,6 +41,10 @@ export default function JsPsychExperiment({
       },
     });
 
+    // TODO: This sens a promise
+    const git = window.electronAPI.getGit();
+    console.log("GIT RENDERER", git);
+
     // Adds experiment data into jsPsych directly. These properties will be added to all trials
     jsPsych.data.addProperties({
       study_id: studyID,
