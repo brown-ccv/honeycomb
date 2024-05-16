@@ -226,8 +226,6 @@ function handleOnDataUpdate(event, data) {
     // TODO @RobertGemmaJr: Handle this entirely in jsPsych, needs to match Firebase
     // TODO: Same thing with the start data here?
     fs.appendFileSync(dataPath, "{");
-    fs.appendFileSync(dataPath, `"start_time": "${start_date}",`);
-    fs.appendFileSync(dataPath, `"trials": [`);
   }
 
   const dataPath = getDataPath();
@@ -251,7 +249,7 @@ function handleOnFinish() {
   const outPath = getOutPath();
 
   // Finish writing JSON
-  fs.appendFileSync(dataPath, "]}");
+  fs.appendFileSync(dataPath, "}");
   log.info(`Finished writing experiment data to ${dataPath}`);
 
   try {
