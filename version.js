@@ -6,6 +6,9 @@
 import fsExtra from "fs-extra";
 import { execaCommandSync } from "execa";
 
+// TODO: Update with node stuff
+// TODO: CI shouldn't make a difference?
+
 let git;
 
 if (process.env.CI) {

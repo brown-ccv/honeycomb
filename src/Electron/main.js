@@ -1,7 +1,6 @@
 /** ELECTRON MAIN PROCESS */
 import fs from "node:fs";
 import path from "node:path";
-// import { execaCommandSync } from "execa";
 import { execSync } from "node:child_process";
 
 import { BrowserWindow, app, dialog, ipcMain } from "electron";
@@ -157,10 +156,23 @@ function handleGetCredentials() {
  * @returns
  */
 function handleGetGit() {
-  const git = {
-    sha: execSync("git rev-parse HEAD").toString().trim(),
-    ref: execSync("git branch --show-current").toString().trim(),
-  };
+  let git;
+  if (IS_DEV) {
+    console.log("IS_DEV");
+    // Determine git version directly from the command line
+    git = {
+      sha: execSync("git rev-parse HEAD").toString().trim(),
+      ref: execSync("git branch --show-current").toString().trim(),
+    };
+    // Determine git version from file created at build time
+  } else {
+    console.log("NOT DEV");
+    try {
+      git = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
+    } catch (e) {
+      log.error("Unable to determine git version");
+    }
+  }
   console.log("GIT MAIN", git);
   return git;
 }
