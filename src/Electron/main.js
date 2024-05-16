@@ -219,13 +219,8 @@ function handleOnDataUpdate(event, data) {
     // Create the data file in userData
     const dataPath = getDataPath();
     fs.mkdirSync(path.dirname(dataPath), { recursive: true });
-    fs.writeFileSync(dataPath, "");
+    fs.writeFileSync(dataPath, "[");
     log.info("Data file created at ", dataPath);
-
-    // Write basic data and initialize the trials array
-    // TODO @RobertGemmaJr: Handle this entirely in jsPsych, needs to match Firebase
-    // TODO: Same thing with the start data here?
-    fs.appendFileSync(dataPath, "{");
   }
 
   const dataPath = getDataPath();
@@ -249,7 +244,7 @@ function handleOnFinish() {
   const outPath = getOutPath();
 
   // Finish writing JSON
-  fs.appendFileSync(dataPath, "}");
+  fs.appendFileSync(dataPath, "]");
   log.info(`Finished writing experiment data to ${dataPath}`);
 
   try {
