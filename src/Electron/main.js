@@ -1,13 +1,12 @@
 /** ELECTRON MAIN PROCESS */
-
-import path from "node:path";
 import fs from "node:fs";
-import { app, BrowserWindow, ipcMain, dialog } from "electron";
+import path from "node:path";
+
+import { BrowserWindow, app, dialog, ipcMain } from "electron";
 import log from "electron-log";
 import _ from "lodash";
 
 // TODO @RobertGemmaJr: Figure out how to install the dev tools
-// import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 
 // const { getPort, sendToPort } = require("./serialPort");
 
@@ -21,7 +20,7 @@ if (require("electron-squirrel-startup")) app.quit();
 log.initialize({ preload: true });
 
 // TODO: Fix the security policy instead of ignoring
-process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
+// process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
@@ -61,12 +60,6 @@ let TRIGGER_PORT; // Port that the EEG machine is talking through
  */
 app.whenReady().then(() => {
   log.info("App Ready: ", app.name);
-
-  // Installs the react developer tools extension
-  // installExtension
-  //   .installExtension(installExtension.REACT_DEVELOPER_TOOLS)
-  //   .then((name) => console.info(`Added Extension:  ${name}`))
-  //   .catch((err) => console.info("An error occurred: ", err));
 
   // Handle ipcRenderer events (on is renderer -> main, handle is renderer <--> main)
   ipcMain.on("setConfig", handleSetConfig);
@@ -304,8 +297,8 @@ function createWindow() {
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // Install and open the DevTools.
+  if (IS_DEV) mainWindow.webContents.openDevTools();
 
   // let mainWindow;
   // let appURL;
