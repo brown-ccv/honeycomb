@@ -236,7 +236,6 @@ function handleOnFinish() {
   log.info(`Finished writing experiment data to ${dataPath}`);
 
   try {
-    // NEW
     fs.mkdirSync(path.dirname(outPath), { recursive: true });
     fs.copyFileSync(dataPath, outPath);
     log.info("Successfully saved experiment data to ", outPath);
