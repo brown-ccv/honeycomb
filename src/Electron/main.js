@@ -213,7 +213,6 @@ function handleOnDataUpdate(event, data) {
 
   const dataPath = getDataPath();
 
-  // TODO @RobertGemmaJr: Always write "proper" json (read json and append to it). Will need to update "before-quit" logic
   // TODO @brown-ccv #397: I can set a constant for the full path once the stream is created elsewhere
   // Write trial data
   if (trial_index > 0) fs.appendFileSync(dataPath, ","); // Prepend comma if needed
