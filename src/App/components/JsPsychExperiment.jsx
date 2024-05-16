@@ -1,6 +1,6 @@
 import { initJsPsych } from "jspsych";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useState } from "react";
 
 import { config, taskVersion } from "../../config/main";
 import { buildTimeline, jsPsychOptions } from "../../experiment";
@@ -15,51 +15,59 @@ export default function JsPsychExperiment({
   dataUpdateFunction,
   dataFinishFunction,
 }) {
+  const [jsPsych, setJsPsych] = useState();
+
   /**
    * Create the instance of JsPsych whenever the studyID or participantID changes, which occurs then the user logs in.
    *
    * This instance of jsPsych is passed to any trials that need it when the timeline is built.
    */
-  const jsPsych = React.useMemo(() => {
-    // Start date of the experiment - used as the UID of the session
-    const startDate = new Date().toISOString();
+  // TODO: The initialization of jsPsych should really happen onSubmit?
+  // TODO: JsPsychExperiment gets the instance of jsPsych and the timeline and just runs it?
+  React.useEffect(() => {
+    async function initializeJsPsych() {
+      // Start date of the experiment - used as the UID of the session
+      const startDate = new Date().toISOString();
 
-    // Write the initial record to Firestore
-    if (config.USE_FIREBASE) initParticipant(studyID, participantID, startDate);
+      // Write the initial record to Firestore
+      if (config.USE_FIREBASE) initParticipant(studyID, participantID, startDate);
 
-    const jsPsych = initJsPsych({
-      // Combine necessary Honeycomb options with custom ones (src/timelines/main.js)
-      ...jsPsychOptions,
-      display_element: EXPERIMENT_ID,
-      on_data_update: (data) => {
-        jsPsychOptions.on_data_update && jsPsychOptions.on_data_update(data); // Call custom on_data_update function (if provided)
-        dataUpdateFunction(data); // Call Honeycomb's on_data_update function
-      },
-      on_finish: (data) => {
-        jsPsychOptions.on_finish && jsPsychOptions.on_finish(data); // Call custom on_finish function (if provided)
-        dataFinishFunction(data); // Call Honeycomb's on_finish function
-      },
-    });
+      const tempJsPsych = initJsPsych({
+        // Combine necessary Honeycomb options with custom ones (src/timelines/main.js)
+        ...jsPsychOptions,
+        display_element: EXPERIMENT_ID,
+        on_data_update: (data) => {
+          jsPsychOptions.on_data_update && jsPsychOptions.on_data_update(data); // Call custom on_data_update function (if provided)
+          dataUpdateFunction(data); // Call Honeycomb's on_data_update function
+        },
+        on_finish: (data) => {
+          jsPsychOptions.on_finish && jsPsychOptions.on_finish(data); // Call custom on_finish function (if provided)
+          dataFinishFunction(data); // Call Honeycomb's on_finish function
+        },
+      });
 
-    // TODO: This sens a promise
-    const git = window.electronAPI.getGit();
-    console.log("GIT RENDERER", git);
-
-    // Adds experiment data into jsPsych directly. These properties will be added to all trials
-    jsPsych.data.addProperties({
-      study_id: studyID,
-      participant_id: participantID,
-      start_date: startDate,
-      task_version: taskVersion,
-    });
-
-    return jsPsych;
+      // Adds experiment data into jsPsych directly. These properties will be added to all trials
+      tempJsPsych.data.addProperties({
+        task_version: taskVersion,
+        git: await window.electronAPI.getGit(),
+        study_id: studyID,
+        participant_id: participantID,
+        start_date: startDate,
+      });
+      setJsPsych(tempJsPsych);
+    }
+    initializeJsPsych();
   }, [studyID, participantID]);
 
-  /** Build and run the experiment timeline */
+  /**
+   * Builds and runs the experiment timeline, which occurs whenever an instance of JsPsych is created
+   * NOTE: We must check if jsPsych is defined because it hasn't been created on first render
+   */
   React.useEffect(() => {
-    const timeline = buildTimeline(jsPsych, studyID, participantID);
-    jsPsych.run(timeline);
+    if (jsPsych) {
+      const timeline = buildTimeline(jsPsych, studyID, participantID);
+      jsPsych.run(timeline);
+    }
   }, [jsPsych]);
 
   return <div id={EXPERIMENT_ID} />;

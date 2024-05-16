@@ -152,29 +152,26 @@ function handleGetCredentials() {
 }
 
 /**
- *
- * @returns
+ * Retrieves the Git Commit SHA and Branch of the repository
+ * A version.json file is created during build-time that can be read from
+ * @returns An object containing the git commit sha and branch of the codebase
  */
-function handleGetGit() {
-  let git;
-  if (IS_DEV) {
-    console.log("IS_DEV");
-    // Determine git version directly from the command line
-    git = {
-      sha: execSync("git rev-parse HEAD").toString().trim(),
-      ref: execSync("git branch --show-current").toString().trim(),
-    };
-    // Determine git version from file created at build time
-  } else {
-    console.log("NOT DEV");
-    try {
-      git = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
-    } catch (e) {
-      log.error("Unable to determine git version");
+async function handleGetGit() {
+  try {
+    if (!IS_DEV) {
+      // Get the Git Commit SHA and Branch of the repository
+      return {
+        sha: execSync("git rev-parse HEAD").toString().trim(),
+        ref: execSync("git branch --show-current").toString().trim(),
+      };
+    } else {
+      // Load the Git Commit SHA and Branch that was created at build-time
+      return JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
     }
+  } catch (e) {
+    log.error("Unable to determine git version");
+    log.error(e);
   }
-  console.log("GIT MAIN", git);
-  return git;
 }
 
 /**
