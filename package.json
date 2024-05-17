@@ -91,6 +91,7 @@
     "build:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run build",
     "build:firebase": "dotenv -e env/.env.firebase npm run build",
     "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build",
+    "make": "electron-forge make",
     "make:windows": "electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
     "make:linux": "electron-forge make --arch x64 --targets @electron-forge/maker-deb",
     "make:mac": "electron-forge make  --arch universal --targets @electron-forge/maker-dmg",
