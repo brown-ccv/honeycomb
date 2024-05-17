@@ -64,7 +64,7 @@ jobs:
 
       # Package the app and make the installers
       - name: 📦 Make app installer
-        run: npm run make:${{matrix.os}}
+        run: npx electron-forge make
 
       # Package the app and make the installers
       # - name: 📦 Make app installer - Windows
