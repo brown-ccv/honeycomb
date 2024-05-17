@@ -1,4 +1,3 @@
-import { FusesPlugin } from "@electron-forge/plugin-fuses";
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
 
 /** Configuration file for Electron Forge */
@@ -52,17 +51,19 @@ export default {
         renderer: [{ name: "main_window", config: "vite.renderer.config.js" }],
       },
     },
-    // Fuses are used to enable/disable various Electron functionality at package time, before code signing the application
-    new FusesPlugin({
-      version: FuseVersion.V1,
-      [FuseV1Options.RunAsNode]: false, // Disables ELECTRON_RUN_AS_NODE
-      [FuseV1Options.GrantFileProtocolExtraPrivileges]: true, // Grants the file protocol extra privileges (for the built application)
-      [FuseV1Options.EnableCookieEncryption]: false, // Disables cookie encryption
-      [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false, // Disables the NODE_OPTIONS environment variable
-      [FuseV1Options.EnableNodeCliInspectArguments]: false, // Disables the --inspect and --inspect-brk family of CLI options
-      [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true, // Enforces validation of the app.asar archive on macOS
-      [FuseV1Options.OnlyLoadAppFromAsar]: true, // Enforces that Electron will only load your app from "app.asar" instead of its normal search paths
-      [FuseV1Options.LoadBrowserProcessSpecificV8Snapshot]: true, // Loads V8 Snapshot from `browser_v8_context_snapshot.bin` for the browser process
-    }),
+    {
+      name: "@electron-forge/plugin-fuses",
+      config: {
+        version: FuseVersion.V1,
+        [FuseV1Options.RunAsNode]: false, // Disables ELECTRON_RUN_AS_NODE
+        [FuseV1Options.GrantFileProtocolExtraPrivileges]: true, // Grants the file protocol extra privileges (for the built application)
+        [FuseV1Options.EnableCookieEncryption]: false, // Disables cookie encryption
+        [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false, // Disables the NODE_OPTIONS environment variable
+        [FuseV1Options.EnableNodeCliInspectArguments]: false, // Disables the --inspect and --inspect-brk family of CLI options
+        [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true, // Enforces validation of the app.asar archive on macOS
+        [FuseV1Options.OnlyLoadAppFromAsar]: true, // Enforces that Electron will only load your app from "app.asar" instead of its normal search paths
+        [FuseV1Options.LoadBrowserProcessSpecificV8Snapshot]: true, // Loads V8 Snapshot from `browser_v8_context_snapshot.bin` for the browser process
+      },
+    },
   ],
 };

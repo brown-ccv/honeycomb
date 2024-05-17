@@ -86,7 +86,7 @@ jobs:
         shell: bash
 
       # Upload installers to github action
-      # TODO @RobertGemmaJr: Can we use the publish command here?
+      # TODO @brown-ccv #247: Can we use the publish command here?
       - name: ⬆ Upload installer - Windows
         uses: actions/upload-artifact@v3
         if: startsWith(matrix.os, 'windows')
