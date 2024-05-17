@@ -58,16 +58,24 @@ jobs:
           path: ./env
           mode: ${{github.event.inputs.setting}}
 
+      # TEST - Redo the build
+      # - name: Build
+      # run: npm run build
+
       # Package the app and make the installers
-      - name: 📦 Make app installer - Windows
-        if: startsWith(matrix.os, 'windows')
-        run: npm run make:windows
-      - name: 📦 Make app installer - Mac
-        if: startsWith(matrix.os, 'mac')
-        run: npm run make:mac
-      - name: 📦 Make app installer - Linux
-        if: startsWith(matrix.os, 'ubuntu')
-        run: npm run make:linux
+      - name: 📦 Make app installer
+        run: npm run make:${{matrix.os}}
+
+      # Package the app and make the installers
+      # - name: 📦 Make app installer - Windows
+      #   if: startsWith(matrix.os, 'windows')
+      #   run: npm run make:windows
+      # - name: 📦 Make app installer - Mac
+      #   if: startsWith(matrix.os, 'mac')
+      #   run: npm run make:mac
+      # - name: 📦 Make app installer - Linux
+      #   if: startsWith(matrix.os, 'ubuntu')
+      #   run: npm run make:linux
 
       # Get package info
       - name: Get package name and version
