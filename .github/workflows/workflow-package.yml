@@ -31,10 +31,15 @@ jobs:
     # Run action for [home/clinic] in [windows/macOS/ubuntu] based on user input
     strategy:
       matrix:
+        # os: ${{
+        #   (github.event.inputs.os == 'All' && fromJSON('["ubuntu-latest", "macOS-latest", "windows-latest"]')) ||
+        #   (github.event.inputs.os == 'Windows' && fromJSON('["windows-latest"]')) ||
+        #   (github.event.inputs.os == 'macOS' && fromJSON('["macOS-latest"]')) ||
+        #   (github.event.inputs.os == 'Linux' && fromJSON('["ubuntu-latest"]')) }}
         os: ${{
-          (github.event.inputs.os == 'All' && fromJSON('["ubuntu-latest", "macOS-latest", "windows-latest"]')) ||
+          (github.event.inputs.os == 'All' && fromJSON('["ubuntu-latest", "macOS-13", "windows-latest"]')) ||
           (github.event.inputs.os == 'Windows' && fromJSON('["windows-latest"]')) ||
-          (github.event.inputs.os == 'macOS' && fromJSON('["macOS-latest"]')) ||
+          (github.event.inputs.os == 'macOS' && fromJSON('["macOS-13"]')) ||
           (github.event.inputs.os == 'Linux' && fromJSON('["ubuntu-latest"]')) }}
       fail-fast: false # A failed build will not end the other matrix jobs
 
