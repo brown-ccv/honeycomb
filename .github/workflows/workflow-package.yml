@@ -17,7 +17,8 @@ on:
         options:
           - "All"
           - "Windows"
-          - "macOS"
+          - "macOS (arm)"
+          - "macOS (intel)"
           - "Linux"
         default: "All"
         required: true
@@ -31,15 +32,12 @@ jobs:
     # Run action for [home/clinic] in [windows/macOS/ubuntu] based on user input
     strategy:
       matrix:
-        # os: ${{
-        #   (github.event.inputs.os == 'All' && fromJSON('["ubuntu-latest", "macOS-latest", "windows-latest"]')) ||
-        #   (github.event.inputs.os == 'Windows' && fromJSON('["windows-latest"]')) ||
-        #   (github.event.inputs.os == 'macOS' && fromJSON('["macOS-latest"]')) ||
-        #   (github.event.inputs.os == 'Linux' && fromJSON('["ubuntu-latest"]')) }}
+        # TODO: There's got to be a better way to handle this?
         os: ${{
-          (github.event.inputs.os == 'All' && fromJSON('["ubuntu-latest", "macOS-13", "windows-latest"]')) ||
+          (github.event.inputs.os == 'All' && fromJSON('["ubuntu-latest", "macos-latest", "macos-13" "windows-latest"]')) ||
           (github.event.inputs.os == 'Windows' && fromJSON('["windows-latest"]')) ||
-          (github.event.inputs.os == 'macOS' && fromJSON('["macOS-13"]')) ||
+          (github.event.inputs.os == 'macOS (arm)' && fromJSON('["macOS-latest"]')) ||
+          (github.event.inputs.os == 'macOS (intel)' && fromJSON('["macOS-13"]')) ||
           (github.event.inputs.os == 'Linux' && fromJSON('["ubuntu-latest"]')) }}
       fail-fast: false # A failed build will not end the other matrix jobs
 
@@ -71,16 +69,22 @@ jobs:
           path: ./env
           mode: ${{github.event.inputs.setting}}
 
+      - run: echo ${{matrix.os}}
+        shell: bash
+
       # Package the app and make the installers
-      - name: 📦 Make app installer - Windows
-        if: startsWith(matrix.os, 'windows')
-        run: npm run make:windows
-      - name: 📦 Make app installer - Mac
-        if: startsWith(matrix.os, 'mac')
-        run: npm run make:mac
-      - name: 📦 Make app installer - Linux
-        if: startsWith(matrix.os, 'ubuntu')
-        run: npm run make:linux
+      - name: 📦 Make app installer
+        run: npm run make
+
+      # - name: 📦 Make app installer - Windows
+      #   if: startsWith(matrix.os, 'windows')
+      #   run: npm run make:windows
+      # - name: 📦 Make app installer - Mac
+      #   if: startsWith(matrix.os, 'mac')
+      #   run: npm run make:mac
+      # - name: 📦 Make app installer - Linux
+      #   if: startsWith(matrix.os, 'ubuntu')
+      #   run: npm run make:linux
 
       # Get package info
       - name: Get package name and version
@@ -89,6 +93,11 @@ jobs:
           echo "name=$(cat package.json | jq -r '.name')" >> $GITHUB_OUTPUT
           echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
         shell: bash
+
+      - run: tree ./out/make
+        shell: bash
+
+      # TODO: These will fail
 
       # Upload installers to github action
       # TODO @brown-ccv #247: Can we use the publish command here?
