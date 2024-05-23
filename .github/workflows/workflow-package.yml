@@ -36,8 +36,8 @@ jobs:
         os: ${{
           (github.event.inputs.os == 'All' && fromJSON('["ubuntu-latest", "macos-latest", "macos-13" "windows-latest"]')) ||
           (github.event.inputs.os == 'Windows' && fromJSON('["windows-latest"]')) ||
-          (github.event.inputs.os == 'macOS (arm)' && fromJSON('["macOS-latest"]')) ||
-          (github.event.inputs.os == 'macOS (intel)' && fromJSON('["macOS-13"]')) ||
+          (github.event.inputs.os == 'macOS (arm)' && fromJSON('["macos-latest"]')) ||
+          (github.event.inputs.os == 'macOS (intel)' && fromJSON('["macos-13"]')) ||
           (github.event.inputs.os == 'Linux' && fromJSON('["ubuntu-latest"]')) }}
       fail-fast: false # A failed build will not end the other matrix jobs
 
