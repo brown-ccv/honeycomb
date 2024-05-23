@@ -92,7 +92,7 @@ jobs:
           echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
         shell: bash
 
-      - run: tree ./out/make
+      - run: ls ./out/make
         shell: bash
 
       # TODO: These will fail
