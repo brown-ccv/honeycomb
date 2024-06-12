@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import React from "react";
 import { Button, Form } from "react-bootstrap";
 
 export default function Login({
@@ -14,12 +14,12 @@ export default function Login({
   const [isError, setIsError] = React.useState(false);
 
   // Update local participantID if it changes upstream
-  useEffect(() => {
+  React.useEffect(() => {
     setParticipantID(initialParticipantID);
   }, [initialParticipantID]);
 
   // Update local studyID if it changes upstream
-  useEffect(() => {
+  React.useEffect(() => {
     setStudyID(initialStudyID);
   }, [initialStudyID]);
 
@@ -41,18 +41,13 @@ export default function Login({
             <Form.Label>Participant ID</Form.Label>
             <Form.Control
               autoFocus
-              type="participantID"
               value={participantID}
               onChange={(e) => setParticipantID(e.target.value)}
             />
           </Form.Group>
           <Form.Group className="width-100" size="lg" controlId="studyID">
             <Form.Label>Study ID</Form.Label>
-            <Form.Control
-              type="studyID"
-              value={studyID}
-              onChange={(e) => setStudyID(e.target.value)}
-            />
+            <Form.Control value={studyID} onChange={(e) => setStudyID(e.target.value)} />
           </Form.Group>
           <Button
             style={{ width: "100%" }}
