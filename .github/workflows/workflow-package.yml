@@ -14,14 +14,14 @@ on:
         description: Package the app for 'home' or 'clinic' use
       os:
         type: choice
+        description: Which operating system to make executables for
+        required: true
+        default: "All"
         options:
           - "All"
           - "Windows"
           - "macOS"
           - "Linux"
-        default: "All"
-        required: true
-        description: Which OS to package
 
 jobs:
   package-and-upload:
@@ -31,6 +31,7 @@ jobs:
     # Run action for [home/clinic] in [windows/macOS/ubuntu] based on user input
     strategy:
       matrix:
+        # TODO: There's got to be a better way to handle this?
         os: ${{
           (github.event.inputs.os == 'All' && fromJSON('["ubuntu-latest", "macOS-latest", "windows-latest"]')) ||
           (github.event.inputs.os == 'Windows' && fromJSON('["windows-latest"]')) ||
@@ -58,16 +59,22 @@ jobs:
           path: ./env
           mode: ${{github.event.inputs.setting}}
 
+      - run: echo ${{matrix.os}}
+        shell: bash
+
       # Package the app and make the installers
-      - name: 📦 Make app installer - Windows
-        if: startsWith(matrix.os, 'windows')
-        run: npm run make:windows
-      - name: 📦 Make app installer - Mac
-        if: startsWith(matrix.os, 'mac')
-        run: npm run make:mac
-      - name: 📦 Make app installer - Linux
-        if: startsWith(matrix.os, 'ubuntu')
-        run: npm run make:linux
+      - name: 📦 Make app installer
+        run: npm run make
+
+      # - name: 📦 Make app installer - Windows
+      #   if: startsWith(matrix.os, 'windows')
+      #   run: npm run make:windows
+      # - name: 📦 Make app installer - Mac
+      #   if: startsWith(matrix.os, 'mac')
+      #   run: npm run make:mac
+      # - name: 📦 Make app installer - Linux
+      #   if: startsWith(matrix.os, 'ubuntu')
+      #   run: npm run make:linux
 
       # Get package info
       - name: Get package name and version
@@ -76,6 +83,11 @@ jobs:
           echo "name=$(cat package.json | jq -r '.name')" >> $GITHUB_OUTPUT
           echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
         shell: bash
+
+      - run: ls ./out/make
+        shell: bash
+
+      # TODO: These will fail
 
       # Upload installers to github action
       # TODO @brown-ccv #247: Can we use the publish command here?
