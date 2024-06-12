@@ -49,21 +49,22 @@ export default function Login({
             <Form.Label>Participant ID</Form.Label>
             <Form.Control
               autoFocus
+              name="participantID"
+              required={true}
               value={participantID}
               onChange={(e) => setParticipantID(e.target.value)}
             />
           </Form.Group>
           <Form.Group className="width-100" size="lg" controlId="studyID">
             <Form.Label>Study ID</Form.Label>
-            <Form.Control value={studyID} onChange={(e) => setStudyID(e.target.value)} />
+            <Form.Control
+              name="studyID"
+              required={true}
+              value={studyID}
+              onChange={(e) => setStudyID(e.target.value)}
+            />
           </Form.Group>
-          <Button
-            style={{ width: "100%" }}
-            block
-            size="lg"
-            type="submit"
-            disabled={studyID.length === 0 || participantID.length === 0}
-          >
+          <Button style={{ width: "100%" }} block size="lg" type="submit">
             {isLoading ? "Submitting..." : "Log In"}
           </Button>
         </Form>
