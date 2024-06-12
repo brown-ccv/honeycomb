@@ -44,7 +44,7 @@ export default {
       config: {
         build: [
           // Build files that use the main config
-          { entry: "src/electron/main.js", config: "vite.main.config.js" },
+          { entry: "src/Electron/main.js", config: "vite.main.config.js" },
           // Build files that use the preload config
           { entry: "src/Electron/preload.js", config: "vite.preload.config.js" },
         ],
