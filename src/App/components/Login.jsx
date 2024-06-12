@@ -11,7 +11,12 @@ export default function Login({
   // State variables for login screen
   const [participantID, setParticipantID] = React.useState(initialParticipantID);
   const [studyID, setStudyID] = React.useState(initialStudyID);
+
+  // State variable for handling errors
   const [isError, setIsError] = React.useState(false);
+
+  // State variable for handling loading states
+  const [isLoading, setIsLoading] = React.useState(false);
 
   // Update local participantID if it changes upstream
   React.useEffect(() => {
@@ -26,8 +31,11 @@ export default function Login({
   // Function used to validate and log in participant
   function handleSubmit(e) {
     e.preventDefault();
+    setIsLoading(true);
+
     // Logs user in if a valid participant/study id combination is given
     validationFunction(studyID, participantID).then((isValid) => {
+      setIsLoading(false);
       setIsError(!isValid);
       if (isValid) handleLogin(studyID, participantID);
     });
@@ -56,7 +64,7 @@ export default function Login({
             type="submit"
             disabled={studyID.length === 0 || participantID.length === 0}
           >
-            Log In
+            {isLoading ? "Submitting..." : "Log In"}
           </Button>
         </Form>
         {isError ? (
