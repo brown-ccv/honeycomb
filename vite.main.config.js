@@ -13,8 +13,7 @@ export default defineConfig((env) => {
         formats: ["cjs"],
       },
       // TEMP: Test external
-      // rollupOptions: { external },
-      rollupOptions: { external: ["serialport"] },
+      rollupOptions: { external },
     },
     plugins: [pluginHotRestart("restart")],
     define: getBuildDefine(env),
