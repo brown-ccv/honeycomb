@@ -6,6 +6,9 @@ export default {
     asar: true,
     icon: "assets/icons/icon",
   },
+  rebuildConfig: {
+    force: true,
+  },
   makers: [
     {
       // Windows Distribution
