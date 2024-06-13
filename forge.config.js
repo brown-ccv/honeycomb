@@ -7,6 +7,7 @@ export default {
     icon: "assets/icons/icon",
   },
   rebuildConfig: {
+    // TEST: Test if force rebuild helps
     force: true,
   },
   makers: [
