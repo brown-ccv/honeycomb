@@ -241,11 +241,11 @@ jobs:
         os: [windows-latest, macOS-latest, ubuntu-latest]
         exclude:
           - os: ubuntu-latest
-            if: github.event.inputs.os != 'All' || github.event.inputs.os != 'Linux'
+            if: ${{ github.event.inputs.os != 'All' || github.event.inputs.os != 'Linux' }}
           - os: macOS-13
-            if: github.event.inputs.os != 'All' || github.event.inputs.os != 'macOS'
+            if: ${{ github.event.inputs.os != 'All' || github.event.inputs.os != 'macOS' }}
           - os: windows-latest
-            if: github.event.inputs.os != 'All' || github.event.inputs.os != 'Windows'
+            if: ${{ github.event.inputs.os != 'All' || github.event.inputs.os != 'Windows' }}
 
     steps:
       - name: ⬇️ Checkout repo
