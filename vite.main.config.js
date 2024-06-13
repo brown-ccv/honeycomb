@@ -1,4 +1,5 @@
 import { defineConfig, mergeConfig } from "vite";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 import { getBuildConfig, getBuildDefine, external, pluginHotRestart } from "./vite.base.config.js";
 
@@ -14,7 +15,8 @@ export default defineConfig((env) => {
       },
       rollupOptions: { external },
     },
-    plugins: [pluginHotRestart("restart")],
+    // TEMP: Test if the node polyfills fixes the issue
+    plugins: [nodePolyfills(), pluginHotRestart("restart")],
     define: getBuildDefine(env),
     resolve: {
       // Load the Node.js entry.
