@@ -13,7 +13,9 @@ export default defineConfig((env) => {
         fileName: () => "[name].cjs",
         formats: ["cjs"],
       },
-      rollupOptions: { external },
+      // TEMP: Test external
+      // rollupOptions: { external },
+      rollupOptions: { external: ["serialport"] },
     },
     // TEMP: Test if the node polyfills fixes the issue
     plugins: [nodePolyfills(), pluginHotRestart("restart")],
