@@ -164,11 +164,11 @@ jobs:
             # upload_name: win-installer-${{ github.event.inputs.setting }}
         exclude:
           - os: ubuntu-latest
-            if: github.event.inputs.os != 'All' && github.event.inputs.os != 'Linux'
+            if: github.event.inputs.os != 'All' || github.event.inputs.os != 'Linux'
           - os: macOS-13
-            if: github.event.inputs.os != 'All' && github.event.inputs.os != 'macOS'
+            if: github.event.inputs.os != 'All' || github.event.inputs.os != 'macOS'
           - os: windows-latest
-            if: github.event.inputs.os != 'All' && github.event.inputs.os != 'Windows'
+            if: github.event.inputs.os != 'All' || github.event.inputs.os != 'Windows'
 
     steps:
       - name: ⬇️ Checkout repo
