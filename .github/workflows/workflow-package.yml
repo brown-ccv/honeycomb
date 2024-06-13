@@ -162,13 +162,13 @@ jobs:
             # run: npm run make:windows
             # upload_path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
             # upload_name: win-installer-${{ github.event.inputs.setting }}
-        exclude:
-          - os: ubuntu-latest
-            if: github.event.inputs.os != 'All' || github.event.inputs.os != 'Linux'
-          - os: macOS-13
-            if: github.event.inputs.os != 'All' || github.event.inputs.os != 'macOS'
-          - os: windows-latest
-            if: github.event.inputs.os != 'All' || github.event.inputs.os != 'Windows'
+        # exclude:
+        #   - os: ubuntu-latest
+        #     if: github.event.inputs.os != 'All' || github.event.inputs.os != 'Linux'
+        #   - os: macOS-13
+        #     if: github.event.inputs.os != 'All' || github.event.inputs.os != 'macOS'
+        #   - os: windows-latest
+        #     if: github.event.inputs.os != 'All' || github.event.inputs.os != 'Windows'
 
     steps:
       - name: ⬇️ Checkout repo
