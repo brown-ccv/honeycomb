@@ -232,82 +232,19 @@ on:
 #       #     if-no-files-found: error
 
 jobs:
-  package-and-upload:
-    name: Package and Upload
+  test:
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [windows-latest, macOS-latest, ubuntu-latest]
-        exclude:
-          - os: ubuntu-latest
-            if: ${{ github.event.inputs.os != 'All' || github.event.inputs.os != 'Linux' }}
-          - os: macOS-13
-            if: ${{ github.event.inputs.os != 'All' || github.event.inputs.os != 'macOS' }}
-          - os: windows-latest
-            if: ${{ github.event.inputs.os != 'All' || github.event.inputs.os != 'Windows' }}
+        os:
+          - name: "ubuntu-latest"
+            exclude: ${{ github.event.inputs.os != 'All' && github.event.inputs.os != 'Linux' }}
+          - name: "macOS-latest"
+            exclude: ${{ github.event.inputs.os != 'All' && github.event.inputs.os != 'macOS' }}
+          - name: "windows-latest"
+            exclude: ${{ github.event.inputs.os != 'All' && github.event.inputs.os != 'Windows' }}
 
     steps:
-      # TEMP
       - name: Example Step
         run: echo "Running on ${{ runner.os }}"
-
-      - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
-
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-
-      - name: 🐍 Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.12
-
-      - name: 🅿️ Install Python tools
-        run: pip install setuptools
-
-      - name: 📥 Install Dependencies
-        run: npm ci
-
-      - name: 🔃 Load .env file (.env.${{ github.event.inputs.setting }})
-        uses: xom9ikk/dotenv@v2
-        with:
-          path: ./env
-          mode: ${{ github.event.inputs.setting }}
-
-      - run: echo ${{ matrix.os }}
-        shell: bash
-
-      - name: 📦 Make app installer
-        run: npm run make
-
-      # TODO: Can I handle this before the
-      - name: Get package name and version
-        id: package_info
-        run: |
-          echo "name=$(cat package.json | jq -r '.name')" >> $GITHUB_OUTPUT
-          echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
-        shell: bash
-
-      - run: ls ./out/make
-        shell: bash
-
-      - name: NEW - Get package name and version
-        id: new_package_info
-        run: |
-          PACKAGE_NAME=$(node -p "require('./package.json').name")
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          echo "Package Name: $PACKAGE_NAME"
-          echo "Package Version: $PACKAGE_VERSION"
-        shell: bash
-
-      # TODO: This will be based on the package name and version
-      # - name: ⬆ Upload installer
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: ${{ matrix.upload_name }}
-      #     path: ${{ matrix.upload_path }}
-      #     if-no-files-found: error
