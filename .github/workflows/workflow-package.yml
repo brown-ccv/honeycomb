@@ -151,6 +151,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
+            if: github.event.inputs.os == 'All' || github.event.inputs.os != 'Linux'
             # run: npm run make:linux
             # upload_path: out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
             # upload_name: linux-installer-${{ github.event.inputs.setting }}
