@@ -248,6 +248,10 @@ jobs:
             if: ${{ github.event.inputs.os != 'All' || github.event.inputs.os != 'Windows' }}
 
     steps:
+      # TEMP
+      - name: Example Step
+        run: echo "Running on ${{ runner.os }}"
+
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
