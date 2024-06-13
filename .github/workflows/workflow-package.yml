@@ -22,7 +22,6 @@ on:
           - "Windows"
           - "macOS"
           - "Linux"
-
 jobs:
   package-and-upload:
     name: Package and Upload
@@ -60,6 +59,10 @@ jobs:
       - name: 📥 Install Dependencies
         run: npm ci
 
+      # TEMP
+      - name: Test - electron rebuild
+        run: npx electron-rebuild
+
         # Set up the environment
       - name: 🔃 Load .env file (.env.${{github.event.inputs.setting}})
         uses: xom9ikk/dotenv@v2
@@ -67,13 +70,7 @@ jobs:
           path: ./env
           mode: ${{github.event.inputs.setting}}
 
-      - run: echo ${{matrix.os}}
-        shell: bash
-
       # Package the app and make the installers
-      # - name: 📦 Make app installer
-      # run: npm run make
-
       - name: 📦 Make app installer - Windows
         if: startsWith(matrix.os, 'windows')
         run: npm run make:windows
@@ -94,8 +91,6 @@ jobs:
 
       - run: ls ./out/make
         shell: bash
-
-      # TODO: These will fail
 
       # Upload installers to github action
       # TODO @brown-ccv #247: Can we use the publish command here?
