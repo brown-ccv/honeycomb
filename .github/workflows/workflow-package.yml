@@ -195,7 +195,7 @@ jobs:
           [ ${{ matrix.os }} == windows-latest ] && osShortName='windows'
           [ ${{ matrix.os }} == macOS-13 ] && osShortName='mac'
           [ ${{ matrix.os }} == ubuntu-latest ] && osShortName='linux'
-          echo osName=$os >> $GITHUB_OUTPUT
+          echo osName=$osShortName >> $GITHUB_OUTPUT
 
       # TEST
       - name: Echo stuff
