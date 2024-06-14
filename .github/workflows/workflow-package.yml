@@ -170,7 +170,6 @@ jobs:
       # Set up runner
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
-
       - name: ⎔ Setup node
         uses: actions/setup-node@v4
         with:
@@ -180,6 +179,17 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: 3.12
+      - name: Get package info
+        shell: bash
+        run: |
+          echo PACKAGE_NAME=$(jq -r '.name' package.json) >> $GITHUB_ENV
+          echo PACKAGE_VERSION=$(jq -r '.version' package.json) >> $GITHUB_ENV
+
+      # TEMP
+      - name: Check package info
+        run: |
+          echo $PACKAGE_NAME
+          echo $PACKAGE_VERSION
 
       # Install dependencies and set up environment
       - name: 🅿️ Install Python tools
@@ -194,17 +204,7 @@ jobs:
           path: ./env
           mode: ${{github.event.inputs.setting}}
 
-      # Package the app and make the installers
-      # - name: 📦 Make app installer - Windows
-      #   if: startsWith(matrix.os, 'windows')
-      #   run: npm run make:windows
-      # - name: 📦 Make app installer - Mac
-      #   if: startsWith(matrix.os, 'mac')
-      #   run: npm run make:mac
-      # - name: 📦 Make app installer - Linux
-      #   if: startsWith(matrix.os, 'ubuntu')
-      #   run: npm run make:linux
-
+      # Make the installers
       - name: 📦 Make app installer
         shell: bash
         run: |
@@ -214,17 +214,6 @@ jobs:
           echo "npm run make:$command"
           npm run make:$command
 
-      # Get package info
-      - name: Get package name and version
-        run: |
-          echo PACKAGE_NAME=$(jq -r '.name' package.json) >> $GITHUB_ENV
-          echo PACKAGE_VERSION=$(jq -r '.version' package.json) >> $GITHUB_ENV
-
-      # TEMP
-      - name: Check package name and version
-        run: |
-          echo $PACKAGE_NAME
-          echo $PACKAGE_VERSION
       - run: ls -R ./out/make
         shell: bash
 
@@ -263,7 +252,6 @@ jobs:
           # path: out/make/squirrel.windows/x64/$PACKAGE_NAME-$PACKAGE_VERSION Setup.exe
           path: ${{ format('out/make/squirrel.windows/x64/{0}-{1} Setup.exe',  env.PACKAGE_NAME , env.PACKAGE_VERSION )}}
           if-no-files-found: error
-
       - name: ⬆ Upload installer - Mac
         uses: actions/upload-artifact@v4
         if: startsWith(matrix.os, 'mac')
