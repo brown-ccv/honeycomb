@@ -162,8 +162,10 @@ jobs:
       - name: Set package info
         id: set-package-info
         run: |
-          echo "packageName=$(jq -r '.name' package.json)" >> $GITHUB_OUTPUT
-          echo "packageVersion=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
+          packageName=$(jq -r '.name' package.json)
+          packageVersion=$(jq -r '.version' package.json)
+          echo "packageName=$packageName" >> $GITHUB_OUTPUT
+          echo "packageVersion=$packageVersion" >> $GITHUB_OUTPUT
 
   package-and-upload:
     name: Package and Upload Installer(s)
