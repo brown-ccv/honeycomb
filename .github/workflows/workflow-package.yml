@@ -189,10 +189,24 @@ jobs:
           echo version=$(jq -r '.version' package.json) >> $GITHUB_OUTPUT
 
       # TEST
-      - name: test job
+      - name: Test package name and version
         run: |
           echo ${{steps.package_info.outputs.name }}
           echo ${{steps.package_info.outputs.version }}
+      - name: Test make command
+        shell: bash
+        run: |
+          [ ${{ matrix.os }} == windows-latest ] && command='windows'
+          [ ${{ matrix.os }} == macOS-13 ] && command='mac'
+          [ ${{ matrix.os }} == ubuntu-latest ] && command='linux'
+          echo "npm run make:$command"
+      - name: Test outfile name
+        shell: bash
+        run: |
+          [ ${{ matrix.os }} == windows-latest ] && command='windows'
+          [ ${{ matrix.os }} == macOS-13 ] && command='mac'
+          [ ${{ matrix.os }} == ubuntu-latest ] && command='linux'
+          echo ${{steps.package_info.outputs.name}}-${{steps.package_info.outputs.version}}-${{github.event.inputs.setting}}-$command
 
       # # Install dependencies and set up environment
       # - name: 🅿️ Install Python tools
