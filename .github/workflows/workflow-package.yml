@@ -152,7 +152,6 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
-      # Set up runner
       - name: Set matrix
         id: set-matrix
         run: |
@@ -163,9 +162,12 @@ jobs:
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
       - name: Test Step
-        run: echo ${{env.PACKAGE_NAME}}
+        run: |
+          echo ${{env.PACKAGE_NAME}}
+          echo ${{env.PACKAGE_VERSION}}
         env:
           PACKAGE_NAME: "$(jq -r '.name' package.json)"
+          PACKAGE_VERSION: $(jq -r '.version' package.json)
 
   package-and-upload:
     name: Package and Upload Installer(s)
