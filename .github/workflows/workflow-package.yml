@@ -293,5 +293,5 @@ jobs:
         with:
           name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
           # path: out/make/deb/x64/$PACKAGE_NAME_$PACKAGE_VERSION_amd64.deb
-          path: ${{ format('out/make/deb/x64/{0}_{1}_amd64.deb', env.PACKAGE_NAME , env.PACKAGE_VERSION)}}
+          path: ${{ format('out/make/deb/x64/{0}_{1}_amd64.deb', '$PACKAGE_NAME' , '$PACKAGE_VERSION')}}
           if-no-files-found: error
