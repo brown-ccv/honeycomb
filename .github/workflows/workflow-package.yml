@@ -210,12 +210,12 @@ jobs:
       - name: Extract OS name
         id: os_name
         shell: bash
-        run: osName=$(echo ${{ matrix.os }} | cut -d'-' -f1) >> $GITHUB_OUTPUT
+        run: osName='$(echo ${{ matrix.os }} | cut -d'-' -f1)' >> $GITHUB_OUTPUT
       - name: Test OS name
         run: |
           echo ${{ matrix.os }}
           echo ${{ matrix.os }} | cut -d'-' -f1 
-          $(echo ${{ matrix.os }} | cut -d'-' -f1)
+          echo osName=$(echo ${{ matrix.os }} | cut -d'-' -f1)
 
       # # Install dependencies and set up environment
       # - name: 🅿️ Install Python tools
