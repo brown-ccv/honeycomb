@@ -164,6 +164,8 @@ jobs:
               echo "Unknown operating system."
               echo 'matrix=["windows-latest", "macOS-13", "ubuntu-latest"]' >> $GITHUB_OUTPUT
           fi
+      - name: Print Matrix
+        run: echo $matrix
 
   test-dispatch:
     name: Test Dispatch
