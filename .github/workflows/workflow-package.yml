@@ -161,7 +161,7 @@ jobs:
         run: |
           echo "name=$(cat package.json | jq -r '.name')" 
           echo "version=$(cat package.json | jq -r '.version')"
-        shell: bashs
+        shell: bash
       - name: Test name and version (2)
         id: package_info
         run: |
