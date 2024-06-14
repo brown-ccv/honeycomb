@@ -176,8 +176,8 @@ jobs:
           echo $PACKAGE_NAME
           echo $PACKAGE_VERSION
 
-  test-dispatch:
-    name: Test Dispatch
+  package-and-upload:
+    name: Package and Upload Installer(s)
     needs: setup-matrix
     runs-on: ${{ matrix.os }}
     strategy:
