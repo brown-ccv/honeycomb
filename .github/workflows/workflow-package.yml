@@ -155,10 +155,9 @@ jobs:
           [ ${{ github.event.inputs.os }} == macOS ] && matrix='["macOS-13"]'
           [ ${{ github.event.inputs.os }} == Linux ] && matrix='["ubtuntu-latest"]'
           [ ${{ github.event.inputs.os }} == All ] && matrix='["windows-latest", "macOS-13", "ubuntu-latest"]'
-          echo ::set-output name=matrix::$matrix
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
-        # echo "matrix=$matrix" >> $GITHUB_OUTPUT
-        # TESTING
+      # TESTING
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
       - name: ⎔ Setup node
@@ -168,14 +167,17 @@ jobs:
           cache: npm
       - name: Send to output
         id: my_step
+        # run: |
+        #   echo "::set-output name=name::$(jq -r '.name' package.json)"
+        #   echo "::set-output name=version::$(jq -r '.version' package.json)"
         run: |
-          echo "::set-output name=name::$(jq -r '.name' package.json)"
-          echo "::set-output name=version::$(jq -r '.version' package.json)"
+          echo PACKAGE_NAME=$(jq -r '.name' package.json) >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
 
       - name: Check output
         run: |
-          echo ${{ steps.my_step.outputs.name }}
-          echo ${{ steps.my_step.outputs.version }}
+          echo $PACKAGE_NAME
+          echo $PACKAGE_VERSION
 
   test-dispatch:
     name: Test Dispatch
