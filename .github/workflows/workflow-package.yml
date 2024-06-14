@@ -195,15 +195,21 @@ jobs:
           mode: ${{github.event.inputs.setting}}
 
       # Package the app and make the installers
-      - name: 📦 Make app installer - Windows
-        if: startsWith(matrix.os, 'windows')
-        run: npm run make:windows
-      - name: 📦 Make app installer - Mac
-        if: startsWith(matrix.os, 'mac')
-        run: npm run make:mac
-      - name: 📦 Make app installer - Linux
-        if: startsWith(matrix.os, 'ubuntu')
-        run: npm run make:linux
+      # - name: 📦 Make app installer - Windows
+      #   if: startsWith(matrix.os, 'windows')
+      #   run: npm run make:windows
+      # - name: 📦 Make app installer - Mac
+      #   if: startsWith(matrix.os, 'mac')
+      #   run: npm run make:mac
+      # - name: 📦 Make app installer - Linux
+      #   if: startsWith(matrix.os, 'ubuntu')
+      #   run: npm run make:linux
+
+      - name: 📦 Make app installer
+        run: |
+          [ ${{ matrix.os }} == windows-latest ] && npm run make:windows
+          [ ${{ matrix.os }} == macOS-13 ] && npm run make:mac
+          [ ${{ matrix.os }} == ubuntu-latest ] && npm run make:linux
 
       # Get package info
       - name: Get package name and version
