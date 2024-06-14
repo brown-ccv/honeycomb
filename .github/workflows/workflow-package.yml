@@ -206,6 +206,7 @@ jobs:
       #   run: npm run make:linux
 
       - name: 📦 Make app installer
+        shell: bash
         run: |
           [ ${{ matrix.os }} == windows-latest ] && npm run make:windows
           [ ${{ matrix.os }} == macOS-13 ] && npm run make:mac
