@@ -143,7 +143,7 @@ on:
           - "Linux"
 
 jobs:
-  setup-matrix:
+  setup-job:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -157,13 +157,18 @@ jobs:
           [ ${{ github.event.inputs.os }} == All ] && matrix='["windows-latest", "macOS-13", "ubuntu-latest"]'
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
+      - name: Set package info
+        run: |
+          echo "packageName=$(jq -r '.name' package.json)" >> $GITHUB_OUTPUT
+          echo "packageVersion=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
+
   package-and-upload:
     name: Package and Upload Installer(s)
-    needs: setup-matrix
+    needs: setup-job
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
+        os: ${{ fromJson(needs.setup-job.outputs.matrix) }}
       fail-fast: false # A failed build will not end the other matrix jobs
 
     steps:
@@ -179,17 +184,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: 3.12
-      - name: Get package info
-        shell: bash
-        run: |
-          echo PACKAGE_NAME=$(jq -r '.name' package.json) >> $GITHUB_ENV
-          echo PACKAGE_VERSION=$(jq -r '.version' package.json) >> $GITHUB_ENV
 
       # TEMP
       - name: Check package info
         run: |
-          echo $PACKAGE_NAME
-          echo $PACKAGE_VERSION
+          echo ${{ needs.setup-job.outputs.packageName }}
+          echo ${{ needs.setup-job.outputs.packageVersion }}
 
       # Install dependencies and set up environment
       - name: 🅿️ Install Python tools
@@ -250,7 +250,7 @@ jobs:
         with:
           name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
           # path: out/make/squirrel.windows/x64/$PACKAGE_NAME-$PACKAGE_VERSION Setup.exe
-          path: ${{ format('out/make/squirrel.windows/x64/{0}-{1} Setup.exe',  env.PACKAGE_NAME , env.PACKAGE_VERSION )}}
+          path: ${{ format('out/make/squirrel.windows/x64/{0}-{1} Setup.exe',  needs.setup-job.outputs.packageName , needs.setup-job.outputs.packageVersion )}}
           if-no-files-found: error
       - name: ⬆ Upload installer - Mac
         uses: actions/upload-artifact@v4
@@ -258,7 +258,7 @@ jobs:
         with:
           name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
           # path: out/make/$PACKAGE_NAME-$PACKAGE_VERSION-universal.dmg
-          path: ${{ format('out/make/{0}-{1}-universal.dmg',  env.PACKAGE_NAME , env.PACKAGE_VERSION)}}
+          path: ${{ format('out/make/{0}-{1}-universal.dmg',  needs.setup-job.outputs.packageName , needs.setup-job.outputs.packageVersion)}}
           if-no-files-found: error
       - name: ⬆ Upload installer - Linux
         uses: actions/upload-artifact@v4
@@ -266,5 +266,5 @@ jobs:
         with:
           name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
           # path: out/make/deb/x64/$PACKAGE_NAME_$PACKAGE_VERSION_amd64.deb
-          path: ${{ format('out/make/deb/x64/{0}_{1}_amd64.deb',  env.PACKAGE_NAME , env.PACKAGE_VERSION)}}
+          path: ${{ format('out/make/deb/x64/{0}_{1}_amd64.deb',  needs.setup-job.outputs.packageName , needs.setup-job.outputs.packageVersion)}}
           if-no-files-found: error
