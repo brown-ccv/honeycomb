@@ -235,7 +235,7 @@ jobs:
       - name: Get package name and version
         run: |
           echo PACKAGE_NAME=$(jq -r '.name' package.json) >> $GITHUB_ENV
-          echo PACKAGE_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+          echo PACKAGE_VERSION=$(jq -r '.version' package.json) >> $GITHUB_ENV
       - name: Check package name and version
         run: |
           echo $PACKAGE_NAME
