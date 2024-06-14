@@ -208,9 +208,11 @@ jobs:
       - name: 📦 Make app installer
         shell: bash
         run: |
-          [ ${{ matrix.os }} == windows-latest ] && npm run make:windows
-          [ ${{ matrix.os }} == macOS-13 ] && npm run make:mac
-          [ ${{ matrix.os }} == ubuntu-latest ] && npm run make:linux
+          [ ${{ matrix.os }} == windows-latest ] && command='windows'
+          [ ${{ matrix.os }} == macOS-13 ] && command='mac'
+          [ ${{ matrix.os }} == ubuntu-latest ] && command='linux'
+          echo "npm run make:$command"
+          npm run make:$command
 
       # Get package info
       - name: Get package name and version
