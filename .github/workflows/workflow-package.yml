@@ -175,7 +175,7 @@ jobs:
               matrix='["windows-latest", "macOS-13", "ubuntu-latest"]'
           fi
           echo "Matrix: $matrix"
-          echo "matrix=$matrix" >> $GITHUB_ENV
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
       - run: |
           echo "Matrix value is: ${{ steps.set-matrix.outputs.matrix }}"
 
