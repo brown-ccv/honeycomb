@@ -150,6 +150,10 @@ jobs:
       packageName: ${{ steps.set-package-info.outputs.packageName }}
       packageVersion: ${{ steps.set-package-info.outputs.packageVersion }}
     steps:
+      # Set up runner
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+
       - name: Set matrix
         id: set-matrix
         run: |
