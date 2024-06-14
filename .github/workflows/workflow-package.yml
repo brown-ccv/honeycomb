@@ -117,7 +117,7 @@
 #           path: out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
 #           if-no-files-found: error
 
-name: 🧪 Test Dispatch
+name: 📦 Package Workflow
 
 # Workflow dispatch for packaging an electron executable
 on:
