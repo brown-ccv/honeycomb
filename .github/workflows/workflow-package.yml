@@ -147,6 +147,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+      packageName: ${{ steps.set-package-info.outputs.packageName }}
+      packageVersion: ${{ steps.set-package-info.outputs.packageVersion }}
     steps:
       - name: Set matrix
         id: set-matrix
@@ -158,6 +160,7 @@ jobs:
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
       - name: Set package info
+        id: set-package-info
         run: |
           echo "packageName=$(jq -r '.name' package.json)" >> $GITHUB_OUTPUT
           echo "packageVersion=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
