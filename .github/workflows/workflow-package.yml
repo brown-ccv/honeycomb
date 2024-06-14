@@ -150,21 +150,32 @@ jobs:
     steps:
       - name: Set matrix
         id: set-matrix
+        # run: |
+        #   if [ ${{ github.event.inputs.os }} == Windows ]; then
+        #       echo "The operating system is Windows."
+        #       echo 'matrix=["windows-latest"]' >> $GITHUB_OUTPUT
+        #   elif [ ${{ github.event.inputs.os }} == macOS ]; then
+        #       echo "The operating system is macOS."
+        #       echo 'matrix=["macOS-13"]' >> $GITHUB_OUTPUT
+        #   elif [ ${{ github.event.inputs.os }} == Linux ]; then
+        #       echo "The operating system is Linux."
+        #       echo 'matrix=["ubtuntu-latest"]' >> $GITHUB_OUTPUT
+        #   elif [ ${{ github.event.inputs.os }} == All ]; then
+        #       echo "Unknown operating system."
+        #       echo 'matrix=["windows-latest", "macOS-13", "ubuntu-latest"]' >> $GITHUB_OUTPUT
+        #   fi
         run: |
           if [ ${{ github.event.inputs.os }} == Windows ]; then
-              echo "The operating system is Windows."
-              echo 'matrix=["windows-latest"]' >> $GITHUB_OUTPUT
+              matrix=["windows-latest"]
           elif [ ${{ github.event.inputs.os }} == macOS ]; then
-              echo "The operating system is macOS."
-              echo 'matrix=["macOS-13"]' >> $GITHUB_OUTPUT
+              matrix=["macOS-13"]
           elif [ ${{ github.event.inputs.os }} == Linux ]; then
-              echo "The operating system is Linux."
-              echo 'matrix=["ubtuntu-latest"]' >> $GITHUB_OUTPUT
+              matrix=["ubtuntu-latest"]
           elif [ ${{ github.event.inputs.os }} == All ]; then
-              echo "Unknown operating system."
-              echo 'matrix=["windows-latest", "macOS-13", "ubuntu-latest"]' >> $GITHUB_OUTPUT
+              matrix=["windows-latest", "macOS-13", "ubuntu-latest"]
           fi
-          echo "Matrix value is: "$matrix" "$GITHUB_OUTPUT" "$GITHUB_OUTPUT.matrix""
+          echo $matrix >> $GITHUB_OUTPUT
+          echo $matrix
       - run: |
           echo "Matrix value is: ${{ steps.set-matrix.outputs.matrix }}"
 
