@@ -5,6 +5,7 @@ export default {
   packagerConfig: {
     asar: true,
     icon: "assets/icons/icon",
+    osxSign: {},
   },
   makers: [
     {
