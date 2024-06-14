@@ -223,15 +223,15 @@ jobs:
           mode: ${{github.event.inputs.setting}}
 
       # Package the app and make the installers
-      - name: 📦 Make app installer - Windows
-        if: startsWith(matrix.os, 'windows')
-        run: npm run make:windows
-      - name: 📦 Make app installer - Mac
-        if: startsWith(matrix.os, 'mac')
-        run: npm run make:mac
-      - name: 📦 Make app installer - Linux
-        if: startsWith(matrix.os, 'ubuntu')
-        run: npm run make:linux
+      # - name: 📦 Make app installer - Windows
+      #   if: startsWith(matrix.os, 'windows')
+      #   run: npm run make:windows
+      # - name: 📦 Make app installer - Mac
+      #   if: startsWith(matrix.os, 'mac')
+      #   run: npm run make:mac
+      # - name: 📦 Make app installer - Linux
+      #   if: startsWith(matrix.os, 'ubuntu')
+      #   run: npm run make:linux
 
       # Get package info
       - name: Get package name and version
@@ -241,30 +241,30 @@ jobs:
           echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
         shell: bash
 
-      - run: tree ./out/make
-        shell: bash
+      # - run: tree ./out/make
+      #   shell: bash
 
-      # Upload installers to github action
-      # TODO @brown-ccv #247: Can we use the publish command here?
-      - name: ⬆ Upload installer - Windows
-        uses: actions/upload-artifact@v4
-        if: startsWith(matrix.os, 'windows')
-        with:
-          name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
-          if-no-files-found: error
+      # # Upload installers to github action
+      # # TODO @brown-ccv #247: Can we use the publish command here?
+      # - name: ⬆ Upload installer - Windows
+      #   uses: actions/upload-artifact@v4
+      #   if: startsWith(matrix.os, 'windows')
+      #   with:
+      #     name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
+      #     path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
+      #     if-no-files-found: error
 
-      - name: ⬆ Upload installer - Mac
-        uses: actions/upload-artifact@v4
-        if: startsWith(matrix.os, 'mac')
-        with:
-          name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-universal.dmg
-          if-no-files-found: error
-      - name: ⬆ Upload installer - Linux
-        uses: actions/upload-artifact@v4
-        if: startsWith(matrix.os, 'ubuntu')
-        with:
-          name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
-          if-no-files-found: error
+      # - name: ⬆ Upload installer - Mac
+      #   uses: actions/upload-artifact@v4
+      #   if: startsWith(matrix.os, 'mac')
+      #   with:
+      #     name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
+      #     path: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-universal.dmg
+      #     if-no-files-found: error
+      # - name: ⬆ Upload installer - Linux
+      #   uses: actions/upload-artifact@v4
+      #   if: startsWith(matrix.os, 'ubuntu')
+      #   with:
+      #     name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
+      #     path: out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
+      #     if-no-files-found: error
