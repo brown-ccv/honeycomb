@@ -247,7 +247,7 @@ jobs:
           echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
         shell: bash
 
-      - run: ls ./out/make
+      - run: tree ./out/make
         shell: bash
 
       # Upload installers to github action
