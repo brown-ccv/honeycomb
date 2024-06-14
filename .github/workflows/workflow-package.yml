@@ -201,6 +201,10 @@ jobs:
           python-version: 3.12
 
       # TEST
+      - name: Send to environment
+        run: |
+          echo PACKAGE_NAME=$(jq -r '.name' package.json) >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
       - name: Check environment
         run: |
           echo $PACKAGE_NAME
