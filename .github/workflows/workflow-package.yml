@@ -164,7 +164,7 @@ jobs:
               echo "Unknown operating system."
               echo 'matrix=["windows-latest", "macOS-13", "ubuntu-latest"]' >> $GITHUB_OUTPUT
           fi
-          echo "Matrix value is: $matrix $GITHUB_OUTPUT"
+          echo "Matrix value is: "$matrix" "$GITHUB_OUTPUT" "$GITHUB_OUTPUT.matrix""
       - run: |
           echo "Matrix value is: ${{ steps.set-matrix.outputs.matrix }}"
 
