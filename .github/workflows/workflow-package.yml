@@ -149,6 +149,10 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       # Set up runner
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+
+      # Set up runner
       - name: Set matrix
         id: set-matrix
         run: |
