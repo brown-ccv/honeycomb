@@ -235,8 +235,11 @@ jobs:
       - name: Get package name and version
         run: |
           echo PACKAGE_NAME=$(jq -r '.name' package.json) >> $GITHUB_ENV
-          echo "PACKAGE_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
-
+          echo PACKAGE_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+      - name: Check package name and version
+        run: |
+          echo $PACKAGE_NAME
+          echo $PACKAGE_VERSION
       - run: tree ./out/make
         shell: bash
 
@@ -273,7 +276,7 @@ jobs:
         with:
           name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
           # path: out/make/squirrel.windows/x64/$PACKAGE_NAME-$PACKAGE_VERSION Setup.exe
-          path: ${{ format('out/make/squirrel.windows/x64/{0}-{1} Setup.exe', '$PACKAGE_NAME', '$PACKAGE_VERSION' )}}
+          path: ${{ format('out/make/squirrel.windows/x64/{0}-{1} Setup.exe',  env.PACKAGE_NAME , env.PACKAGE_VERSION )}}
           if-no-files-found: error
 
       - name: ⬆ Upload installer - Mac
@@ -282,7 +285,7 @@ jobs:
         with:
           name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
           # path: out/make/$PACKAGE_NAME-$PACKAGE_VERSION-universal.dmg
-          path: ${{ format('out/make/{0}-{1}-universal.dmg', '$PACKAGE_NAME', '$PACKAGE_VERSION')}}
+          path: ${{ format('out/make/{0}-{1}-universal.dmg',  env.PACKAGE_NAME , env.PACKAGE_VERSION)}}
           if-no-files-found: error
       - name: ⬆ Upload installer - Linux
         uses: actions/upload-artifact@v4
@@ -290,5 +293,5 @@ jobs:
         with:
           name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
           # path: out/make/deb/x64/$PACKAGE_NAME_$PACKAGE_VERSION_amd64.deb
-          path: ${{ format('out/make/deb/x64/{0}_{1}]_amd64.deb', '$PACKAGE_NAME', '$PACKAGE_VERSION')}}
+          path: ${{ format('out/make/deb/x64/{0}_{1}]_amd64.deb', env.PACKAGE_NAME , env.PACKAGE_VERSION)}}
           if-no-files-found: error
