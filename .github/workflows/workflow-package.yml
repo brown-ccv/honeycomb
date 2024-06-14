@@ -152,32 +152,23 @@ jobs:
         id: set-matrix
         # run: |
         #   if [ ${{ github.event.inputs.os }} == Windows ]; then
-        #       echo "The operating system is Windows."
-        #       echo 'matrix=["windows-latest"]' >> $GITHUB_OUTPUT
+        #       matrix='["windows-latest"]'
         #   elif [ ${{ github.event.inputs.os }} == macOS ]; then
-        #       echo "The operating system is macOS."
-        #       echo 'matrix=["macOS-13"]' >> $GITHUB_OUTPUT
+        #       matrix='["macOS-13"]'
         #   elif [ ${{ github.event.inputs.os }} == Linux ]; then
-        #       echo "The operating system is Linux."
-        #       echo 'matrix=["ubtuntu-latest"]' >> $GITHUB_OUTPUT
+        #       matrix='["ubtuntu-latest"]'
         #   elif [ ${{ github.event.inputs.os }} == All ]; then
-        #       echo "Unknown operating system."
-        #       echo 'matrix=["windows-latest", "macOS-13", "ubuntu-latest"]' >> $GITHUB_OUTPUT
+        #       matrix='["windows-latest", "macOS-13", "ubuntu-latest"]'
         #   fi
+        #   echo Matrix: $matrix
+        #   echo "matrix=$matrix" >> $GITHUB_OUTPUT
         run: |
-          if [ ${{ github.event.inputs.os }} == Windows ]; then
-              matrix='["windows-latest"]'
-          elif [ ${{ github.event.inputs.os }} == macOS ]; then
-              matrix='["macOS-13"]'
-          elif [ ${{ github.event.inputs.os }} == Linux ]; then
-              matrix='["ubtuntu-latest"]'
-          elif [ ${{ github.event.inputs.os }} == All ]; then
-              matrix='["windows-latest", "macOS-13", "ubuntu-latest"]'
-          fi
+          [ ${{ github.event.inputs.os }} == Windows ] && matrix='["windows-latest"]'
+          [ ${{ github.event.inputs.os }} == macOS ] && matrix='["macOS-13"]'
+          [ ${{ github.event.inputs.os }} == Linux ] && matrix='["ubtuntu-latest"]'
+          [ ${{ github.event.inputs.os }} == All ] && matrix='["windows-latest", "macOS-13", "ubuntu-latest"]'
           echo Matrix: $matrix
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
-      - run: |
-          echo "Matrix value is: ${{ steps.set-matrix.outputs.matrix }}"
 
   test-dispatch:
     name: Test Dispatch
