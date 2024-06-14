@@ -21,8 +21,6 @@ export default {
       name: "@electron-forge/maker-dmg",
       config: {
         icon: "assets/icons/icon.icns",
-        format: "ULFO",
-        debug: true,
         overwrite: true,
       },
     },
