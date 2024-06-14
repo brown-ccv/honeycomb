@@ -174,7 +174,7 @@ jobs:
           elif [ ${{ github.event.inputs.os }} == All ]; then
               matrix='["windows-latest", "macOS-13", "ubuntu-latest"]'
           fi
-          echo "Matrix: $matrix"
+          echo Matrix: $matrix
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
       - run: |
           echo "Matrix value is: ${{ steps.set-matrix.outputs.matrix }}"
