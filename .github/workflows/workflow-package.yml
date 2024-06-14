@@ -167,9 +167,6 @@ jobs:
           cache: npm
       - name: Send to output
         id: my_step
-        # run: |
-        #   echo "::set-output name=name::$(jq -r '.name' package.json)"
-        #   echo "::set-output name=version::$(jq -r '.version' package.json)"
         run: |
           echo PACKAGE_NAME=$(jq -r '.name' package.json) >> $GITHUB_ENV
           echo "PACKAGE_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
@@ -189,12 +186,6 @@ jobs:
       fail-fast: false # A failed build will not end the other matrix jobs
 
     steps:
-      # TEST
-      - name: Check environment
-        run: |
-          echo $PACKAGE_NAME
-          echo $PACKAGE_VERSION
-
       # Set up runner
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
@@ -208,6 +199,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: 3.12
+
+      # TEST
+      - name: Check environment
+        run: |
+          echo $PACKAGE_NAME
+          echo $PACKAGE_VERSION
 
       # Install dependencies and set up environment
       - name: 🅿️ Install Python tools
