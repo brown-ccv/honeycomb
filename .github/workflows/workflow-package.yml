@@ -157,25 +157,6 @@ jobs:
           [ ${{ github.event.inputs.os }} == All ] && matrix='["windows-latest", "macOS-13", "ubuntu-latest"]'
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
-      # TESTING
-      - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - name: Send to output
-        id: my_step
-        run: |
-          echo PACKAGE_NAME=$(jq -r '.name' package.json) >> $GITHUB_ENV
-          echo "PACKAGE_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
-
-      - name: Check output
-        run: |
-          echo $PACKAGE_NAME
-          echo $PACKAGE_VERSION
-
   package-and-upload:
     name: Package and Upload Installer(s)
     needs: setup-matrix
@@ -225,17 +206,12 @@ jobs:
         run: npm run make:linux
 
       # Get package info
-      # - name: Get package name and version
-      #   id: package_info
-      #   run: |
-      #     echo "name=$(cat package.json | jq -r '.name')" >> $GITHUB_OUTPUT
-      #     echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
-      #   shell: bash
-      # TEST
       - name: Get package name and version
         run: |
           echo PACKAGE_NAME=$(jq -r '.name' package.json) >> $GITHUB_ENV
           echo PACKAGE_VERSION=$(jq -r '.version' package.json) >> $GITHUB_ENV
+
+      # TEMP
       - name: Check package name and version
         run: |
           echo $PACKAGE_NAME
