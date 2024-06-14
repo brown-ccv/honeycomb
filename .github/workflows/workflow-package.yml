@@ -168,6 +168,7 @@ jobs:
     strategy:
       matrix:
         os: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
+      fail-fast: false # A failed build will not end the other matrix jobs
 
     steps:
       # Set up runner
