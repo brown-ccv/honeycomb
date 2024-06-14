@@ -157,6 +157,10 @@ jobs:
           [ ${{ github.event.inputs.os }} == All ] && matrix='["windows-latest", "macOS-13", "ubuntu-latest"]'
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
+      - name: Print name and version
+        run: |
+          echo "Package name: $npm_package_name"
+          echo "Package version: $npm_package_version"
   test-dispatch:
     name: Test Dispatch
     needs: setup-matrix
