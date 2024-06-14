@@ -189,6 +189,12 @@ jobs:
       fail-fast: false # A failed build will not end the other matrix jobs
 
     steps:
+      # TEST
+      - name: Check environment
+        run: |
+          echo $PACKAGE_NAME
+          echo $PACKAGE_VERSION
+
       # Set up runner
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
