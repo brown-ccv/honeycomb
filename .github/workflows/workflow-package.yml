@@ -212,7 +212,10 @@ jobs:
         shell: bash
         run: osName=$(echo ${{ matrix.os }} | cut -d'-' -f1) >> $GITHUB_OUTPUT
       - name: Test OS name
-        run: echo ${{steps.os_name.outputs.osName}}
+        run: |
+          echo ${{ matrix.os }}
+          echo ${{ matrix.os }} | cut -d'-' -f1 
+          $(echo ${{ matrix.os }} | cut -d'-' -f1)
 
       # # Install dependencies and set up environment
       # - name: 🅿️ Install Python tools
