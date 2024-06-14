@@ -200,16 +200,6 @@ jobs:
         with:
           python-version: 3.12
 
-      # TEST
-      - name: Send to environment
-        run: |
-          echo PACKAGE_NAME=$(jq -r '.name' package.json) >> $GITHUB_ENV
-          echo "PACKAGE_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
-      - name: Check environment
-        run: |
-          echo $PACKAGE_NAME
-          echo $PACKAGE_VERSION
-
       # Install dependencies and set up environment
       - name: 🅿️ Install Python tools
         run: pip install setuptools
@@ -224,26 +214,31 @@ jobs:
           mode: ${{github.event.inputs.setting}}
 
       # Package the app and make the installers
-      # - name: 📦 Make app installer - Windows
-      #   if: startsWith(matrix.os, 'windows')
-      #   run: npm run make:windows
-      # - name: 📦 Make app installer - Mac
-      #   if: startsWith(matrix.os, 'mac')
-      #   run: npm run make:mac
-      # - name: 📦 Make app installer - Linux
-      #   if: startsWith(matrix.os, 'ubuntu')
-      #   run: npm run make:linux
+      - name: 📦 Make app installer - Windows
+        if: startsWith(matrix.os, 'windows')
+        run: npm run make:windows
+      - name: 📦 Make app installer - Mac
+        if: startsWith(matrix.os, 'mac')
+        run: npm run make:mac
+      - name: 📦 Make app installer - Linux
+        if: startsWith(matrix.os, 'ubuntu')
+        run: npm run make:linux
 
       # Get package info
-      - name: Get package name and version
-        id: package_info
-        run: |
-          echo "name=$(cat package.json | jq -r '.name')" >> $GITHUB_OUTPUT
-          echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
-        shell: bash
-
-      # - run: tree ./out/make
+      # - name: Get package name and version
+      #   id: package_info
+      #   run: |
+      #     echo "name=$(cat package.json | jq -r '.name')" >> $GITHUB_OUTPUT
+      #     echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
       #   shell: bash
+      # TEST
+      - name: Get package name and version
+        run: |
+          echo PACKAGE_NAME=$(jq -r '.name' package.json) >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+
+      - run: tree ./out/make
+        shell: bash
 
       # # Upload installers to github action
       # # TODO @brown-ccv #247: Can we use the publish command here?
@@ -269,3 +264,28 @@ jobs:
       #     name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
       #     path: out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
       #     if-no-files-found: error
+
+      # Upload installers to github action
+      # TODO @brown-ccv #247: Can we use the publish command here?
+      - name: ⬆ Upload installer - Windows
+        uses: actions/upload-artifact@v4
+        if: startsWith(matrix.os, 'windows')
+        with:
+          name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
+          path: out/make/squirrel.windows/x64/$PACKAGE_NAME-$PACKAGE_VERSION Setup.exe
+          if-no-files-found: error
+
+      - name: ⬆ Upload installer - Mac
+        uses: actions/upload-artifact@v4
+        if: startsWith(matrix.os, 'mac')
+        with:
+          name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
+          path: out/make/$PACKAGE_NAME-$PACKAGE_VERSION-universal.dmg
+          if-no-files-found: error
+      - name: ⬆ Upload installer - Linux
+        uses: actions/upload-artifact@v4
+        if: startsWith(matrix.os, 'ubuntu')
+        with:
+          name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
+          path: out/make/deb/x64/$PACKAGE_NAME_$PACKAGE_VERSION_amd64.deb
+          if-no-files-found: error
