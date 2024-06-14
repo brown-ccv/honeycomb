@@ -155,9 +155,10 @@ jobs:
           [ ${{ github.event.inputs.os }} == macOS ] && matrix='["macOS-13"]'
           [ ${{ github.event.inputs.os }} == Linux ] && matrix='["ubtuntu-latest"]'
           [ ${{ github.event.inputs.os }} == All ] && matrix='["windows-latest", "macOS-13", "ubuntu-latest"]'
-          echo "matrix=$matrix" >> $GITHUB_OUTPUT
+          echo ::set-output name=matrix::$matrix
 
-      # TESTING
+        # echo "matrix=$matrix" >> $GITHUB_OUTPUT
+        # TESTING
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
       - name: ⎔ Setup node
