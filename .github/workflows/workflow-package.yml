@@ -166,13 +166,13 @@ jobs:
         #   fi
         run: |
           if [ ${{ github.event.inputs.os }} == Windows ]; then
-              matrix=["windows-latest"]
+              $matrix=["windows-latest"]
           elif [ ${{ github.event.inputs.os }} == macOS ]; then
-              matrix=["macOS-13"]
+              $matrix=["macOS-13"]
           elif [ ${{ github.event.inputs.os }} == Linux ]; then
-              matrix=["ubtuntu-latest"]
+              $matrix=["ubtuntu-latest"]
           elif [ ${{ github.event.inputs.os }} == All ]; then
-              matrix=["windows-latest", "macOS-13", "ubuntu-latest"]
+              $matrix=["windows-latest", "macOS-13", "ubuntu-latest"]
           fi
           echo $matrix >> $GITHUB_OUTPUT
           echo $matrix
