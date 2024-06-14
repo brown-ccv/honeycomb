@@ -160,7 +160,7 @@ jobs:
           elif [ "${{ github.event.inputs.os }}" == "Linux" ]; then
               echo "The operating system is Linux."
               echo 'matrix=["ubtuntu-latest"]' >> $GITHUB_OUTPUT
-          else
+          elif [ "${{ github.event.inputs.os }}" == "All" ]; then
               echo "Unknown operating system."
               echo 'matrix=["windows-latest", "macOS-13", "ubuntu-latest"]' >> $GITHUB_OUTPUT
           fi
