@@ -151,16 +151,16 @@ jobs:
       - name: Set matrix
         id: set-matrix
         run: |
-          if [ ${{ github.event.inputs.os }} == "Windows" ]; then
+          if [ ${{ github.event.inputs.os }} == Windows ]; then
               echo "The operating system is Windows."
               echo 'matrix=["windows-latest"]' >> $GITHUB_OUTPUT
-          elif [ "${{ github.event.inputs.os }}" == "macOS" ]; then
+          elif [ ${{ github.event.inputs.os }} == macOS ]; then
               echo "The operating system is macOS."
               echo 'matrix=["macOS-13"]' >> $GITHUB_OUTPUT
-          elif [ "${{ github.event.inputs.os }}" == "Linux" ]; then
+          elif [ ${{ github.event.inputs.os }} == Linux ]; then
               echo "The operating system is Linux."
               echo 'matrix=["ubtuntu-latest"]' >> $GITHUB_OUTPUT
-          elif [ "${{ github.event.inputs.os }}" == "All" ]; then
+          elif [ ${{ github.event.inputs.os }} == All ]; then
               echo "Unknown operating system."
               echo 'matrix=["windows-latest", "macOS-13", "ubuntu-latest"]' >> $GITHUB_OUTPUT
           fi
