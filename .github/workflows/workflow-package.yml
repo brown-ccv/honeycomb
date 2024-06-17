@@ -190,6 +190,33 @@ jobs:
         with:
           python-version: 3.12
 
+      # TEMP, move back down
+      - name: Extract artificact info
+        id: artifact_info
+        shell: bash
+        run: |
+          packageName=$(jq -r '.name' package.json)
+          packageVersion=$(jq -r '.version' package.json)
+
+          echo $packageName-$packageVersion-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}
+
+          outfile=$packageName-$packageVersion-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}
+          if [[ ${{ matrix.os }} == windows-latest ]]; then
+            filepath=out/make/squirrel.windows/x64/$packageName-$packageVersion Setup.exe
+          elif [[ ${{ matrix.os }} == macOS-13 ]]; then
+            filepath=out/make/$packageName-$packageVersion-x64.dmg
+          elif [[ ${{ matrix.os }} == ubuntu-latest ]]; then
+            filepath=out/make/deb/x64/$packageName_$packageVersion_amd64.deb
+          fi
+
+          echo $packageName
+          echo $packageVersion
+          echo $outfile
+          echo $filepath
+
+          echo outfile=$outfile >> $GITHUB_OUTPUT
+          echo filepath=$filepath >> $GITHUB_OUTPUT
+
       # Install dependencies and set up environment
       - name: 🅿️ Install Python tools
         run: pip install setuptools
@@ -225,31 +252,31 @@ jobs:
 
       # TESTING
       # TODO: Extract package name/info here, don't need extra step
-      - name: Extract artificact info
-        id: artifact_info
-        shell: bash
-        run: |
-          packageName=$(jq -r '.name' package.json)
-          packageVersion=$(jq -r '.version' package.json)
+      # - name: Extract artificact info
+      #   id: artifact_info
+      #   shell: bash
+      #   run: |
+      #     packageName=$(jq -r '.name' package.json)
+      #     packageVersion=$(jq -r '.version' package.json)
 
-          echo $packageName-$packageVersion-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}
+      #     echo $packageName-$packageVersion-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}
 
-          outfile=$packageName-$packageVersion-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}
-          if [[ ${{ matrix.os }} == windows-latest ]]; then
-            filepath=out/make/squirrel.windows/x64/$packageName-$packageVersion Setup.exe
-          elif [[ ${{ matrix.os }} == macOS-13 ]]; then
-            filepath=out/make/$packageName-$packageVersion-x64.dmg
-          elif [[ ${{ matrix.os }} == ubuntu-latest ]]; then
-            filepath=out/make/deb/x64/$packageName_$packageVersion_amd64.deb
-          fi
+      #     outfile=$packageName-$packageVersion-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}
+      #     if [[ ${{ matrix.os }} == windows-latest ]]; then
+      #       filepath=out/make/squirrel.windows/x64/$packageName-$packageVersion Setup.exe
+      #     elif [[ ${{ matrix.os }} == macOS-13 ]]; then
+      #       filepath=out/make/$packageName-$packageVersion-x64.dmg
+      #     elif [[ ${{ matrix.os }} == ubuntu-latest ]]; then
+      #       filepath=out/make/deb/x64/$packageName_$packageVersion_amd64.deb
+      #     fi
 
-          echo $packageName
-          echo $packageVersion
-          echo $outfile
-          echo $filepath
+      #     echo $packageName
+      #     echo $packageVersion
+      #     echo $outfile
+      #     echo $filepath
 
-          echo outfile=$outfile >> $GITHUB_OUTPUT
-          echo filepath=$filepath >> $GITHUB_OUTPUT
+      #     echo outfile=$outfile >> $GITHUB_OUTPUT
+      #     echo filepath=$filepath >> $GITHUB_OUTPUT
       - name: ⬆ Upload installer (TEST)
         uses: actions/upload-artifact@v4
         with:
