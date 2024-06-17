@@ -236,8 +236,8 @@ jobs:
           fi
           echo $name
           echo $path
-          echo $name >> $GITHUB_OUTPUT
-          echo $path >> $GITHUB_OUTPUT
+          echo name=$name >> $GITHUB_OUTPUT
+          echo path=$path >> $GITHUB_OUTPUT
       - name: ⬆ Upload installer (TEST)
         uses: actions/upload-artifact@v4
         with:
