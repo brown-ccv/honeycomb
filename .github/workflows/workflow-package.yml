@@ -177,6 +177,19 @@ jobs:
           echo $osShortName
           echo name=$osShortName >> $GITHUB_OUTPUT
 
+      # Set up runner
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
       # TESTING
       # TODO: Extract package name/info here, don't need extra step
       - name: Extract artificact info
@@ -204,19 +217,6 @@ jobs:
 
           echo outfile=$outfile >> $GITHUB_OUTPUT
           echo filepath=$filepath >> $GITHUB_OUTPUT
-
-      # Set up runner
-      - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - name: 🐍 Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.12
 
       # Install dependencies and set up environment
       - name: 🅿️ Install Python tools
