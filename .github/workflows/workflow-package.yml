@@ -174,7 +174,6 @@ jobs:
           [ ${{ matrix.os }} == windows-latest ] && osShortName='windows'
           [ ${{ matrix.os }} == macOS-13 ] && osShortName='mac'
           [ ${{ matrix.os }} == ubuntu-latest ] && osShortName='linux'
-          echo $osShortName
           echo name=$osShortName >> $GITHUB_OUTPUT
 
       # Set up runner
@@ -189,34 +188,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: 3.12
-
-      # TESTING
-      # TODO: Extract package name/info here, don't need extra step
-      - name: Extract artificact info
-        id: artifact_info
-        shell: bash
-        run: |
-          packageName=$(jq -r '.name' package.json)
-          packageVersion=$(jq -r '.version' package.json)
-
-          echo $packageName_$packageVersion_${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}
-
-          outfile="${packageName}-${packageVersion}-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}"
-          if [[ ${{ matrix.os }} == windows-latest ]]; then
-            filepath="out/make/squirrel.windows/x64/${packageName}-${packageVersion} Setup.exe"
-          elif [[ ${{ matrix.os }} == macOS-13 ]]; then
-            filepath="out/make/${packageName}-${packageVersion}-x64.dmg"
-          elif [[ ${{ matrix.os }} == ubuntu-latest ]]; then
-            filepath="out/make/deb/x64/${packageName}_${packageVersion}_amd64.deb"
-          fi
-
-          echo $packageName
-          echo $packageVersion
-          echo $outfile
-          echo $filepath
-
-          echo outfile=$outfile >> $GITHUB_OUTPUT
-          echo filepath=$filepath >> $GITHUB_OUTPUT
 
       # Install dependencies and set up environment
       - name: 🅿️ Install Python tools
@@ -239,9 +210,30 @@ jobs:
       - run: ls -R ./out/make
         shell: bash
 
+      # TESTING
+      # TODO: Extract package name/info here, don't need extra step
+      - name: Extract installer info
+        id: installer_info
+        shell: bash
+        run: |
+          packageName=$(jq -r '.name' package.json)
+          packageVersion=$(jq -r '.version' package.json)
+
+          name="${packageName}-${packageVersion}-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}"
+          echo name=$name >> $GITHUB_OUTPUT
+
+          if [[ ${{ matrix.os }} == windows-latest ]]; then
+            path="out/make/squirrel.windows/x64/${packageName}-${packageVersion} Setup.exe"
+          elif [[ ${{ matrix.os }} == macOS-13 ]]; then
+            path="out/make/${packageName}-${packageVersion}-x64.dmg"
+          elif [[ ${{ matrix.os }} == ubuntu-latest ]]; then
+            path="out/make/deb/x64/${packageName}_${packageVersion}_amd64.deb"
+          fi
+          echo path=$path >> $GITHUB_OUTPUT
+
       - name: ⬆ Upload installer
         uses: actions/upload-artifact@v4
         with:
-          name: ${{steps.artifact_info.outputs.outfile}}
-          path: ${{steps.artifact_info.outputs.filepath}}
+          name: ${{steps.installer_info.outputs.name}}
+          path: ${{steps.installer_info.outputs.path}}
           if-no-files-found: error
