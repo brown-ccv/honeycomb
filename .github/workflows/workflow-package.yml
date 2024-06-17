@@ -218,6 +218,8 @@ jobs:
         shell: bash
 
       # TODO: Use a single step to handle the package upload?
+      # The name should be good but we need the "path"
+      # It's probably easier to use setup from the "release" workflow so we don't need the extra
 
       # Upload installers to github action
       # TODO @brown-ccv #247: Can we use the publish command here?
