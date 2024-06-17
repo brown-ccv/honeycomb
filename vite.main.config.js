@@ -12,7 +12,6 @@ export default defineConfig((env) => {
         fileName: () => "[name].cjs",
         formats: ["cjs"],
       },
-      // TEMP: Test external
       rollupOptions: { external },
     },
     plugins: [pluginHotRestart("restart")],
