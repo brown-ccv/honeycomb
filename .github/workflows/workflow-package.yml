@@ -189,30 +189,18 @@ jobs:
         with:
           python-version: 3.12
 
-      # Install dependencies and set up environment
+      # Install dependencies
       - name: 🅿️ Install Python tools
         run: pip install setuptools
       - name: 📥 Install Dependencies
         run: npm ci
 
       # Set up the environment
-      # - name: 🔃 Load .env file (.env.${{github.event.inputs.setting}})
-      #   uses: xom9ikk/dotenv@v2
-      #   with:
-      #     path: ./env
-      #     mode: ${{github.event.inputs.setting}}
-      - name: "🔃 Load .env file: .env.${{github.event.inputs.setting}}"
+      - name: 🔃 Load .env file - .env.${{github.event.inputs.setting}}
         uses: xom9ikk/dotenv@v2.3.0
         with:
           path: ./env
           mode: ${{github.event.inputs.setting}}
-
-      - name: TEST
-        run: |
-          cat ./env/.env.${{github.event.inputs.setting}}
-          echo ${{env.VITE_USE_EEG}}
-          echo ${{env.VITE_USE_PHOTODIODE}}
-          echo ${{env.VITE_VOLUME }}
 
       # Make the installers
       - name: 📦 Make app installer
