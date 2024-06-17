@@ -232,7 +232,7 @@ jobs:
           packageName=$(jq -r '.name' package.json)
           packageVersion=$(jq -r '.version' package.json)
 
-          echo '$packageName-$packageVersion-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}
+          echo '$packageName-$packageVersion-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}'
 
           outfile='$packageName-$packageVersion-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}'
           if [[ ${{ matrix.os }} == windows-latest ]]; then
