@@ -225,6 +225,7 @@ jobs:
           elif [[ ${{ matrix.os }} == ubuntu-latest ]]; then
             path="out/make/deb/x64/${packageName}_${packageVersion}_amd64.deb"
           fi
+          echo "out/make/deb/x64/${packageName}_${packageVersion}_amd64.deb"
           echo $path
           echo path=$path >> $GITHUB_OUTPUT
 
