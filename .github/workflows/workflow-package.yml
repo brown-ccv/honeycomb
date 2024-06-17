@@ -158,7 +158,7 @@ jobs:
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
   package-and-upload:
-    name: Package and Upload Installer(s)
+    name: Package and Upload Installer
     needs: setup-job
     runs-on: ${{ matrix.os }}
     strategy:
