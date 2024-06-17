@@ -232,15 +232,15 @@ jobs:
           packageName=$(jq -r '.name' package.json)
           packageVersion=$(jq -r '.version' package.json)
 
-          echo '$packageName-$packageVersion-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}'
+          echo $packageName-$packageVersion-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}
 
-          outfile='$packageName-$packageVersion-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}'
+          outfile=$packageName-$packageVersion-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}
           if [[ ${{ matrix.os }} == windows-latest ]]; then
-            filepath='out/make/squirrel.windows/x64/$packageName-$packageVersion Setup.exe'
+            filepath=out/make/squirrel.windows/x64/$packageName-$packageVersion Setup.exe
           elif [[ ${{ matrix.os }} == macOS-13 ]]; then
-            filepath='out/make/$packageName-$packageVersion-x64.dmg'
+            filepath=out/make/$packageName-$packageVersion-x64.dmg
           elif [[ ${{ matrix.os }} == ubuntu-latest ]]; then
-            filepath='out/make/deb/x64/$packageName_$packageVersion_amd64.deb'
+            filepath=out/make/deb/x64/$packageName_$packageVersion_amd64.deb
           fi
 
           echo $packageName
