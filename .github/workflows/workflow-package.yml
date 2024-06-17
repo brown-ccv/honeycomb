@@ -167,6 +167,15 @@ jobs:
       fail-fast: false # A failed build will not end the other matrix jobs
 
     steps:
+      - name: Extact OS short name
+        id: os_name
+        shell: bash
+        run: |
+          [ ${{ matrix.os }} == windows-latest ] && osShortName='windows'
+          [ ${{ matrix.os }} == macOS-13 ] && osShortName='mac'
+          [ ${{ matrix.os }} == ubuntu-latest ] && osShortName='linux'
+          echo name=$osShortName >> $GITHUB_OUTPUT
+
       # Set up runner
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
@@ -179,22 +188,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: 3.12
-
-      # Extract needed variables
-      - name: Extract package name and version
-        id: package_info
-        shell: bash
-        run: |
-          echo name=$(jq -r '.name' package.json) >> $GITHUB_OUTPUT
-          echo version=$(jq -r '.version' package.json) >> $GITHUB_OUTPUT
-      - name: Extact OS short name
-        id: os_name
-        shell: bash
-        run: |
-          [ ${{ matrix.os }} == windows-latest ] && osShortName='windows'
-          [ ${{ matrix.os }} == macOS-13 ] && osShortName='mac'
-          [ ${{ matrix.os }} == ubuntu-latest ] && osShortName='linux'
-          echo osName=$osShortName >> $GITHUB_OUTPUT
 
       # Install dependencies and set up environment
       - name: 🅿️ Install Python tools
@@ -212,7 +205,7 @@ jobs:
       # Make the installers
       - name: 📦 Make app installer
         shell: bash
-        run: npm run make:${{ steps.os_name.outputs.osName }}
+        run: npm run make:${{ steps.os_name.outputs.name }}
 
       - run: ls -R ./out/make
         shell: bash
@@ -221,12 +214,21 @@ jobs:
       # The name should be good but we need the "path"
       # It's probably easier to use setup from the "release" workflow so we don't need the extra
 
+      # Extract needed variables
+      - name: Extract package name and version
+        id: package_info
+        shell: bash
+        run: |
+          echo name=$(jq -r '.name' package.json) >> $GITHUB_OUTPUT
+          echo version=$(jq -r '.version' package.json) >> $GITHUB_OUTPUT
+
       # TESTING
+      # TODO: Extract package name/info here, don't need extra step
       - name: Extract artificact info
         id: artifact_info
         shell: bash
         run: |
-          name='${{steps.package_info.outputs.name}}-${{github.event.inputs.setting}}-${{steps.os_name.outputs.osName}}'
+          name='${{steps.package_info.outputs.name}}-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}'
           if [[ ${{ matrix.os }} == windows-latest ]]; then
             path='out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe'
           elif [[ ${{ matrix.os }} == macOS-13 ]]; then
@@ -243,30 +245,31 @@ jobs:
         with:
           name: ${{steps.artifact_info.outputs.name}}
           path: ${{steps.artifact_info.outputs.path}}
+          if-no-files-found: error
 
       # Upload installers to github action
       # TODO @brown-ccv #247: Can we use the publish command here?
-      - name: ⬆ Upload installer - Windows
-        uses: actions/upload-artifact@v4
-        if: startsWith(matrix.os, 'windows')
-        with:
-          # name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
-          name: ${{steps.package_info.outputs.name}}-${{steps.package_info.outputs.version}}-${{github.event.inputs.setting}}-${{steps.os_name.outputs.osName}}
-          path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
-          if-no-files-found: error
-      - name: ⬆ Upload installer - Mac
-        uses: actions/upload-artifact@v4
-        if: startsWith(matrix.os, 'mac')
-        with:
-          # name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
-          name: ${{steps.package_info.outputs.name}}-${{steps.package_info.outputs.version}}-${{github.event.inputs.setting}}-${{steps.os_name.outputs.osName}}
-          path: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-universal.dmg
-          if-no-files-found: error
-      - name: ⬆ Upload installer - Linux
-        uses: actions/upload-artifact@v4
-        if: startsWith(matrix.os, 'ubuntu')
-        with:
-          # name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
-          name: ${{steps.package_info.outputs.name}}-${{steps.package_info.outputs.version}}-${{github.event.inputs.setting}}-${{steps.os_name.outputs.osName}}
-          path: out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
-          if-no-files-found: error
+      # - name: ⬆ Upload installer - Windows
+      #   uses: actions/upload-artifact@v4
+      #   if: startsWith(matrix.os, 'windows')
+      #   with:
+      #     # name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
+      #     name: ${{steps.package_info.outputs.name}}-${{steps.package_info.outputs.version}}-${{github.event.inputs.setting}}-${{steps.os_name.outputs.osName}}
+      #     path: out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe
+      #     if-no-files-found: error
+      # - name: ⬆ Upload installer - Mac
+      #   uses: actions/upload-artifact@v4
+      #   if: startsWith(matrix.os, 'mac')
+      #   with:
+      #     # name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
+      #     name: ${{steps.package_info.outputs.name}}-${{steps.package_info.outputs.version}}-${{github.event.inputs.setting}}-${{steps.os_name.outputs.osName}}
+      #     path: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-universal.dmg
+      #     if-no-files-found: error
+      # - name: ⬆ Upload installer - Linux
+      #   uses: actions/upload-artifact@v4
+      #   if: startsWith(matrix.os, 'ubuntu')
+      #   with:
+      #     # name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
+      #     name: ${{steps.package_info.outputs.name}}-${{steps.package_info.outputs.version}}-${{github.event.inputs.setting}}-${{steps.os_name.outputs.osName}}
+      #     path: out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
+      #     if-no-files-found: error
