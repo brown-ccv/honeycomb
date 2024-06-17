@@ -221,6 +221,29 @@ jobs:
       # The name should be good but we need the "path"
       # It's probably easier to use setup from the "release" workflow so we don't need the extra
 
+      # TESTING
+      - name: Extract artificact info
+        id: artifact_info
+        shell: bash
+        run: |
+          name='${{steps.package_info.outputs.name}}-${{github.event.inputs.setting}}-${{steps.os_name.outputs.osName}}'
+          if [[ ${{ matrix.os }} == windows-latest ]]; then
+            path='out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe'
+          elif [[ ${{ matrix.os }} == macOS-13 ]]; then
+            path='out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-universal.dmg'
+          elif [[ ${{ matrix.os }} == ubuntu-latest ]]; then
+            path='out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb'
+          fi
+          echo $name
+          echo $path
+          echo $name >> $GITHUB_OUTPUT
+          echo $path >> $GITHUB_OUTPUT
+      - name: ⬆ Upload installer (TEST)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{steps.artifact_info.outputs.name}}
+          path: ${{steps.artifact_info.outputs.path}}
+
       # Upload installers to github action
       # TODO @brown-ccv #247: Can we use the publish command here?
       - name: ⬆ Upload installer - Windows
@@ -247,28 +270,3 @@ jobs:
           name: ${{steps.package_info.outputs.name}}-${{steps.package_info.outputs.version}}-${{github.event.inputs.setting}}-${{steps.os_name.outputs.osName}}
           path: out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb
           if-no-files-found: error
-
-      # TESTING: THESE WILL MAYBE WORK WITH ENV
-      # Upload installers to github action
-      # TODO @brown-ccv #247: Can we use the publish command here?
-      # - name: ⬆ Upload installer - Windows
-      #   uses: actions/upload-artifact@v4
-      #   if: startsWith(matrix.os, 'windows')
-      #   with:
-      #     name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
-      #     path: out/make/squirrel.windows/x64/$PACKAGE_NAME-$PACKAGE_VERSION Setup.exe
-      #     if-no-files-found: error
-      # - name: ⬆ Upload installer - Mac
-      #   uses: actions/upload-artifact@v4
-      #   if: startsWith(matrix.os, 'mac')
-      #   with:
-      #     name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
-      #     path: out/make/$PACKAGE_NAME-$PACKAGE_VERSION-universal.dmg
-      #     if-no-files-found: error
-      # - name: ⬆ Upload installer - Linux
-      #   uses: actions/upload-artifact@v4
-      #   if: startsWith(matrix.os, 'ubuntu')
-      #   with:
-      #     name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
-      #     path: out/make/deb/x64/$PACKAGE_NAME_$PACKAGE_VERSION_amd64.deb
-      #     if-no-files-found: error
