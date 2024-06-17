@@ -93,7 +93,7 @@
     "make": "electron-forge make",
     "make:windows": "electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
     "make:mac-x64": "electron-forge make  --arch x64 --targets @electron-forge/maker-dmg",
-    "make:mac-arm64": "electron-forge make  --arch x64 --targets @electron-forge/maker-dmg",
+    "make:mac-arm64": "electron-forge make  --arch arm64 --targets @electron-forge/maker-dmg",
     "make:linux": "electron-forge make --arch x64 --targets @electron-forge/maker-deb",
     "cli": "node cli.mjs",
     "commit": "git-cz",

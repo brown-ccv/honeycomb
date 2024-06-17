@@ -109,7 +109,7 @@ jobs:
           elif [[ ${{ matrix.os }} == macOS-latest ]]; then
             path="out/make/${packageName}-${packageVersion}-arm64.dmg"
           elif [[ ${{ matrix.os }} == ubuntu-latest ]]; then
-            path="out/make/deb/x64/${packageName}_${packageVersion}_amd64.deb"
+            path="out/make/deb/x64/${packageName}_${packageVersion}_arm64.deb"
           fi
           echo path=$path >> $GITHUB_OUTPUT
 
