@@ -207,11 +207,7 @@ jobs:
         shell: bash
         run: npm run make:${{ steps.os_name.outputs.name }}
 
-      - run: ls -R ./out/make
-        shell: bash
-
-      # TESTING
-      # TODO: Extract package name/info here, don't need extra step
+      # Extract the file's path and outfile's name
       - name: Extract installer info
         id: installer_info
         shell: bash
