@@ -18,11 +18,11 @@ on:
         required: true
         default: "All"
         options:
-          - "All"
-          - "Windows"
-          - "macOS-x64"
-          - "macOS-arm64"
-          - "Linux"
+          - "all"
+          - "windows"
+          - "mac-x64"
+          - "mac-arm64"
+          - "linux"
 
 jobs:
   setup-job:
@@ -33,11 +33,11 @@ jobs:
       - name: Set matrix
         id: set-matrix
         run: |
-          [ ${{ github.event.inputs.os }} == Windows ] && matrix='["windows-latest"]'
-          [ ${{ github.event.inputs.os }} == macOS-x64 ] && matrix='["macOS-13"]'
-          [ ${{ github.event.inputs.os }} == macOS-arm64 ] && matrix='["macOS-latest"]'
-          [ ${{ github.event.inputs.os }} == Linux ] && matrix='["ubtuntu-latest"]'
-          [ ${{ github.event.inputs.os }} == All ] && matrix='["windows-latest", "macOS-13", "macOS-latest", "ubuntu-latest"]'
+          [ ${{ github.event.inputs.os }} == windows ] && matrix='["windows-latest"]'
+          [ ${{ github.event.inputs.os }} == mac-x64 ] && matrix='["macOS-13"]'
+          [ ${{ github.event.inputs.os }} == mac-arm64 ] && matrix='["macOS-latest"]'
+          [ ${{ github.event.inputs.os }} == linux ] && matrix='["ubtuntu-latest"]'
+          [ ${{ github.event.inputs.os }} == all ] && matrix='["windows-latest", "macOS-13", "macOS-latest", "ubuntu-latest"]'
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
   package-and-upload:
