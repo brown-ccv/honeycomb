@@ -216,12 +216,12 @@ jobs:
       # It's probably easier to use setup from the "release" workflow so we don't need the extra
 
       # Extract needed variables
-      - name: Extract package name and version
-        id: package_info
-        shell: bash
-        run: |
-          echo name=$(jq -r '.name' package.json) >> $GITHUB_OUTPUT
-          echo version=$(jq -r '.version' package.json) >> $GITHUB_OUTPUT
+      # - name: Extract package name and version
+      #   id: package_info
+      #   shell: bash
+      #   run: |
+      #     echo name=$(jq -r '.name' package.json) >> $GITHUB_OUTPUT
+      #     echo version=$(jq -r '.version' package.json) >> $GITHUB_OUTPUT
 
       # TESTING
       # TODO: Extract package name/info here, don't need extra step
@@ -230,14 +230,17 @@ jobs:
         shell: bash
         run: |
           packageName=$(jq -r '.name' package.json)
+          packageVersion=$(jq -r '.version' package.json)
 
-          outfile='$packageName-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}'
+          echo '$packageName-$packageVersion-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}
+
+          outfile='$packageName-$packageVersion-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}'
           if [[ ${{ matrix.os }} == windows-latest ]]; then
-            filepath='out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe'
+            filepath='out/make/squirrel.windows/x64/$packageName-$packageVersion Setup.exe'
           elif [[ ${{ matrix.os }} == macOS-13 ]]; then
-            filepath='out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-x64.dmg'
+            filepath='out/make/$packageName-$packageVersion-x64.dmg'
           elif [[ ${{ matrix.os }} == ubuntu-latest ]]; then
-            filepath='out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb'
+            filepath='out/make/deb/x64/$packageName_$packageVersion_amd64.deb'
           fi
 
           echo $packageName
