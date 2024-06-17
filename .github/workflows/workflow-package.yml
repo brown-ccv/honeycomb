@@ -174,7 +174,7 @@ jobs:
           [ ${{ matrix.os }} == windows-latest ] && osShortName='windows'
           [ ${{ matrix.os }} == macOS-13 ] && osShortName='mac'
           [ ${{ matrix.os }} == ubuntu-latest ] && osShortName='linux'
-          echo osShortName
+          echo $osShortName
           echo name=$osShortName >> $GITHUB_OUTPUT
 
       # Set up runner
