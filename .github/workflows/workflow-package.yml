@@ -229,23 +229,29 @@ jobs:
         id: artifact_info
         shell: bash
         run: |
-          name='${{steps.package_info.outputs.name}}-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}'
+          packageName=$(jq -r '.name' package.json)
+
+          outfile='$packageName-${{github.event.inputs.setting}}-${{steps.os_name.outputs.name}}'
           if [[ ${{ matrix.os }} == windows-latest ]]; then
-            path='out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe'
+            filepath='out/make/squirrel.windows/x64/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }} Setup.exe'
           elif [[ ${{ matrix.os }} == macOS-13 ]]; then
-            path='out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-x64.dmg'
+            filepath='out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-x64.dmg'
           elif [[ ${{ matrix.os }} == ubuntu-latest ]]; then
-            path='out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb'
+            filepath='out/make/deb/x64/${{ steps.package_info.outputs.name }}_${{ steps.package_info.outputs.version }}_amd64.deb'
           fi
-          echo $name
-          echo $path
-          echo name=$name >> $GITHUB_OUTPUT
-          echo path=$path >> $GITHUB_OUTPUT
+
+          echo $packageName
+          echo $packageVersion
+          echo $outfile
+          echo $filepath
+
+          echo outfile=$outfile >> $GITHUB_OUTPUT
+          echo filepath=$filepath >> $GITHUB_OUTPUT
       - name: ⬆ Upload installer (TEST)
         uses: actions/upload-artifact@v4
         with:
-          name: ${{steps.artifact_info.outputs.name}}
-          path: ${{steps.artifact_info.outputs.path}}
+          name: ${{steps.artifact_info.outputs.outfile}}
+          path: ${{steps.artifact_info.outputs.filepath}}
           if-no-files-found: error
 
       # Upload installers to github action
