@@ -3,7 +3,7 @@ import { FuseV1Options, FuseVersion } from "@electron/fuses";
 /** Configuration file for Electron Forge */
 export default {
   packagerConfig: {
-    asar: true,
+    // asar: true,
     icon: "assets/icons/icon",
   },
   makers: [
@@ -34,7 +34,7 @@ export default {
     },
   ],
   plugins: [
-    { name: "@electron-forge/plugin-auto-unpack-natives", config: {} },
+    // { name: "@electron-forge/plugin-auto-unpack-natives", config: {} },
     {
       name: "@electron-forge/plugin-vite",
       config: {
