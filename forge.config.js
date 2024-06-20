@@ -3,7 +3,7 @@ import { FuseV1Options, FuseVersion } from "@electron/fuses";
 /** Configuration file for Electron Forge */
 export default {
   packagerConfig: {
-    // asar: true,
+    asar: true,
     icon: "assets/icons/icon",
   },
   makers: [
@@ -34,7 +34,7 @@ export default {
     },
   ],
   plugins: [
-    // { name: "@electron-forge/plugin-auto-unpack-natives", config: {} },
+    { name: "@electron-forge/plugin-auto-unpack-natives", config: {} },
     {
       name: "@electron-forge/plugin-vite",
       config: {
@@ -47,18 +47,12 @@ export default {
         renderer: [{ name: "main_window", config: "vite.renderer.config.js" }],
       },
     },
-    //     [FuseV1Options.GrantFileProtocolExtraPrivileges]: true, // Grants the file protocol extra privileges (for the built application)
-    //     [FuseV1Options.LoadBrowserProcessSpecificV8Snapshot]: true, // Loads V8 Snapshot from `browser_v8_context_snapshot.bin` for the browser process
-    //
     {
       name: "@electron-forge/plugin-fuses",
       config: {
         version: FuseVersion.V1,
         [FuseV1Options.RunAsNode]: false, // Disables ELECTRON_RUN_AS_NODE
-
-        // TEST
-        // [FuseV1Options.GrantFileProtocolExtraPrivileges]: true, // Grants the file protocol extra privileges (for the built application)
-
+        [FuseV1Options.GrantFileProtocolExtraPrivileges]: true, // Grants the file protocol extra privileges (for the built application)
         [FuseV1Options.EnableCookieEncryption]: true, // Disables cookie encryption
         [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false, // Disables the NODE_OPTIONS environment variable
         [FuseV1Options.EnableNodeCliInspectArguments]: false, // Disables the --inspect and --inspect-brk family of CLI options
