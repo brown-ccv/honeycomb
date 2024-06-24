@@ -298,6 +298,7 @@ function createWindow() {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
     // TODO @brown-ccv: JsPsych protections for loading from a file://
+    log.info("LOADING RENDERER IN PRODUCTION");
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
   log.info("Loaded Renderer process");
