@@ -10,6 +10,7 @@ module.exports = {
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:import/recommended",
+    "plugin:import/electron",
     "prettier",
   ],
   parserOptions: {
@@ -22,14 +23,8 @@ module.exports = {
     "import/order": "warn",
   },
   settings: {
-    react: {
-      version: "detect",
-    },
-    "import/resolver": {
-      node: {
-        extensions: [".js", ".jsx"],
-      },
-    },
+    react: { version: "detect" },
+    "import/resolver": { node: { extensions: [".js", ".jsx"] } },
   },
   overrides: [{ files: ["*.jsx", "*.js"] }],
 };

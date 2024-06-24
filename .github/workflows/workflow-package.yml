@@ -44,7 +44,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -66,16 +66,16 @@ jobs:
           path: ./env
           mode: ${{github.event.inputs.setting}}
 
-      # Package the app installers
-      - name: 📦 Package app installer - Windows
+      # Package the app and make the installers
+      - name: 📦 Make app installer - Windows
         if: startsWith(matrix.os, 'windows')
-        run: npm run package:windows
-      - name: 📦 Package app installer - Mac
+        run: npm run make:windows
+      - name: 📦 Make app installer - Mac
         if: startsWith(matrix.os, 'mac')
-        run: npm run package:mac
-      - name: 📦 Package app installer - Linux
+        run: npm run make:mac
+      - name: 📦 Make app installer - Linux
         if: startsWith(matrix.os, 'ubuntu')
-        run: npm run package:linux
+        run: npm run make:linux
 
       # Get package info
       - name: Get package name and version
@@ -86,6 +86,7 @@ jobs:
         shell: bash
 
       # Upload installers to github action
+      # TODO @brown-ccv #247: Can we use the publish command here?
       - name: ⬆ Upload installer - Windows
         uses: actions/upload-artifact@v3
         if: startsWith(matrix.os, 'windows')
