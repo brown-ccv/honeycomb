@@ -30,7 +30,6 @@ export default {
       config: {
         options: {
           icon: "assets/icons/icon.png",
-          format: "ULFO",
         },
       },
     },
