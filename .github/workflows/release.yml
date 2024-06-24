@@ -72,7 +72,7 @@ jobs:
         shell: bash
 
       # Upload installers to GitHub release
-      # TODO: Use the Publish command: https://www.electronforge.io/cli#publish
+      # TODO @brown-ccv #247: Use the Publish command: https://www.electronforge.io/cli#publish
       - name: ⬆ Upload installer to release - Windows
         if: startsWith(matrix.os, 'windows')
         uses: svenstaro/upload-release-action@v2
