@@ -7,11 +7,12 @@ export const external = [...builtins, ...Object.keys(pkg.dependencies || {})];
 
 /** @type {(env: import('vite').ConfigEnv<'build'>) => import('vite').UserConfig} */
 export const getBuildConfig = (env) => {
-  const { root, mode, command } = env;
+  const { root, mode, command, forgeConfig } = env;
 
   return {
     root,
     mode,
+    define: forgeConfig.define,
     build: {
       // Prevent multiple builds from interfering with each other.
       emptyOutDir: false,
@@ -37,24 +38,6 @@ export const getDefineKeys = (names) => {
     };
     return { ...acc, [name]: keys };
   }, define);
-};
-
-/** @type {(env: import('vite').ConfigEnv<'build'>) => Record<string, any>} */
-export const getBuildDefine = (env) => {
-  const { command, forgeConfig } = env;
-  const names = forgeConfig.renderer.filter(({ name }) => name != null).map(({ name }) => name);
-  const defineKeys = getDefineKeys(names);
-  const define = Object.entries(defineKeys).reduce((acc, [name, keys]) => {
-    const { VITE_DEV_SERVER_URL, VITE_NAME } = keys;
-    const def = {
-      [VITE_DEV_SERVER_URL]:
-        command === "serve" ? JSON.stringify(process.env[VITE_DEV_SERVER_URL]) : undefined,
-      [VITE_NAME]: JSON.stringify(name),
-    };
-    return { ...acc, ...def };
-  }, {});
-
-  return define;
 };
 
 /** @type {(name: string) => import('vite').Plugin} */
