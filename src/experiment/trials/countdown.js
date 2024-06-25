@@ -4,7 +4,7 @@ import { h1 } from "../../lib/markup/tags";
 /**
  * Returns millisecond to minute
  *
- * @param {*} ms - millisecond
+ * @param {number} ms - millisecond
  * @returns minute value
  */
 function getMinute(ms) {
@@ -14,8 +14,8 @@ function getMinute(ms) {
 /**
  * Given total minute and total millisecond, return the seconds
  *
- * @param {*} ms - millisecond
- * @param {*} min - minute
+ * @param {number} ms - millisecond
+ * @param {number} min - minute
  * @returns the seconds in number
  */
 function getSeconds(ms, min) {
@@ -25,7 +25,7 @@ function getSeconds(ms, min) {
 /**
  * Gets a time in string format to display on screen
  *
- * @param {*} ms - millisecond
+ * @param {number} ms - millisecond
  * @returns return time string format as in 00:00
  */
 function getTimeString(ms) {
@@ -35,11 +35,10 @@ function getTimeString(ms) {
 /**
  * a sample countdown trial that counts down ms before another trial begins
  *
- * @param {*} ms - millisecond to countdown
+ * @param {number} ms - millisecond to countdown
  * @returns a JS object as a trial
  */
-export function buildCountdownTrial(ms) {
-  const waitTime = ms;
+export function buildCountdownTrial(waitTime) {
   return {
     type: htmlKeyboardResponse,
     stimulus:

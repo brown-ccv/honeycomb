@@ -48,8 +48,8 @@ export function buildHoneycombTimeline(jsPsych) {
   // Builds the trials that make up the end procedure
   const endProcedure = buildEndProcedure(jsPsych);
 
-  // Builds a countdown trial that counts down for 6000ms
-  const countdownTrial = buildCountdownTrial(6000);
+  // Builds a countdown trial that counts down for 3000ms
+  const countdownTrial = buildCountdownTrial(3000);
 
   const timeline = [
     startProcedure,
