@@ -3,6 +3,7 @@ import { buildHoneycombProcedure } from "./procedures/honeycombProcedure";
 import { buildStartProcedure } from "./procedures/startProcedure";
 
 import { buildDebriefTrial, instructionsTrial, preloadTrial } from "./trials/honeycombTrials";
+import { buildCountdownTrial } from "./trials/countdown";
 
 /**
  * ! This file should not be edited! Instead, create a new file with the name of your task
@@ -47,8 +48,12 @@ export function buildHoneycombTimeline(jsPsych) {
   // Builds the trials that make up the end procedure
   const endProcedure = buildEndProcedure(jsPsych);
 
+  // Builds a countdown trial that counts down for 3000ms
+  const countdownTrial = buildCountdownTrial(3000);
+
   const timeline = [
     startProcedure,
+    countdownTrial,
     preloadTrial,
     instructionsTrial,
     honeycombProcedure,

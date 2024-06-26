@@ -81,3 +81,33 @@ export function getProlificId() {
 export function interleave(arr, val, addBefore = true) {
   return [].concat(...arr.map((n) => (addBefore ? [val, n] : [n, val])));
 }
+
+/**
+ * Given a millisecond value, returns how many full minutes there are (rounding down)
+ *
+ * @param {number} ms - millisecond
+ * @returns total minutes within the provided ms
+ */
+export function getMinute(ms) {
+  return Math.floor(ms / 1000 / 60);
+}
+
+/**
+ * Given a millisecond value, calculates how many full minutes are within those milliseconds and return the left-over time as the seconds
+ *
+ * @param {number} ms - millisecond
+ * @returns how many seconds are left after excluding the full minutes within the provided ms
+ */
+export function getSeconds(ms) {
+  return Math.floor((ms - getMinute(ms) * 1000 * 60) / 1000);
+}
+
+/**
+ * Gets the time (millisecond) in string format to display on screen
+ *
+ * @param {number} ms - millisecond
+ * @returns return time string format, example: 00:03 (min:seconds)
+ */
+export function getTimeString(ms) {
+  return `${getMinute(ms)}:${getSeconds(ms).toString().padStart(2, "0")}`;
+}
