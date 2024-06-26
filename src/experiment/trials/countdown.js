@@ -1,36 +1,6 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import { h1 } from "../../lib/markup/tags";
-
-/**
- * Returns millisecond to minute
- *
- * @param {number} ms - millisecond
- * @returns minute value
- */
-function getMinute(ms) {
-  return Math.floor(ms / 1000 / 60);
-}
-
-/**
- * Given total minute and total millisecond, return the seconds
- *
- * @param {number} ms - millisecond
- * @param {number} min - minute
- * @returns the seconds in number
- */
-function getSeconds(ms, min) {
-  return Math.floor((ms - min * 1000 * 60) / 1000);
-}
-
-/**
- * Gets a time in string format to display on screen
- *
- * @param {number} ms - millisecond
- * @returns return time string format as in 00:00
- */
-function getTimeString(ms) {
-  return `${getMinute(ms)}:${getSeconds(ms, getMinute(ms)).toString().padStart(2, "0")}`;
-}
+import { getTimeString } from "../../lib/utils";
 
 /**
  * a sample countdown trial that counts down ms before another trial begins
