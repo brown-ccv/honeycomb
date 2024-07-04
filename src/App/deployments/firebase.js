@@ -21,7 +21,6 @@ export const db = getFirestore(app);
 
 // Use emulator if on localhost
 if (window.location.hostname === "localhost") {
-  // Point to the RTDB emulator running on localhost.
   connectFirestoreEmulator(db, "127.0.0.1", 8080);
 }
 
@@ -68,8 +67,11 @@ export async function validateParticipant(studyID, participantID) {
 export async function initParticipant(studyID, participantID, startDate) {
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate);
+    // TODO @brown-ccv #394: Write GIT SHA here
+    // TODO @brown-ccv #394: Store participantID and studyID here, not on each trial
     await setDoc(experiment, {
       start_time: startDate,
+      // TODO @brown-ccv #394: app_version and app_platform are deprecated
       app_version: window.navigator.appVersion,
       app_platform: window.navigator.platform,
     });
