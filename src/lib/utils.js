@@ -111,3 +111,13 @@ export function getSeconds(ms) {
 export function getTimeString(ms) {
   return `${getMinute(ms)}:${getSeconds(ms).toString().padStart(2, "0")}`;
 }
+
+/**
+ * Retrieves the data object from the last trial in JsPsych
+ * @param {JsPsych} jsPsych jsPsych instance being used to run the task
+ * @returns {Object}
+ */
+export function getLastTrialData(jsPsych) {
+  const dataCollection = jsPsych.data.getLastTrialData();
+  return dataCollection.trials[0];
+}
