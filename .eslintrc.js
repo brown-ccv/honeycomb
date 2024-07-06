@@ -25,6 +25,13 @@ module.exports = {
     react: {
       version: "detect",
     },
+    jsdoc: {
+      tagNamePreference: {
+        typedef: {
+          definedInFiles: ["src/lib/typedefs.js"],
+        },
+      },
+    },
     "import/resolver": {
       node: {
         extensions: [".js", ".jsx"],
