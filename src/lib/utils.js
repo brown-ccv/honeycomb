@@ -111,3 +111,13 @@ export function getSeconds(ms) {
 export function getTimeString(ms) {
   return `${getMinute(ms)}:${getSeconds(ms).toString().padStart(2, "0")}`;
 }
+
+/**
+ * Randomly retrieves a single element from an array
+ * @param {JsPsych} jsPsych The jsPsych instance being used to run the task
+ * @param {Array} array A given array of elements
+ * @returns
+ */
+export function getRandomElement(jsPsych, array) {
+  return jsPsych.randomization.sampleWithoutReplacement(array, 1)[0];
+}
