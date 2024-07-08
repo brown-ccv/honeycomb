@@ -113,6 +113,7 @@ export function getTimeString(ms) {
 }
 
 /**
+
  * Retrieves the data object from the last trial in JsPsych
  * @param {JsPsych} jsPsych jsPsych instance being used to run the task
  * @returns {Object}
@@ -120,4 +121,13 @@ export function getTimeString(ms) {
 export function getLastTrialData(jsPsych) {
   const dataCollection = jsPsych.data.getLastTrialData();
   return dataCollection.trials[0];
+
+ * Randomly retrieves a single element from an array
+ * @param {JsPsych} jsPsych The jsPsych instance being used to run the task
+ * @param {Array} array A given array of elements
+ * @returns
+ */
+export function getRandomElement(jsPsych, array) {
+  return jsPsych.randomization.sampleWithoutReplacement(array, 1)[0];
+
 }
