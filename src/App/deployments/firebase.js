@@ -1,31 +1,42 @@
-// TODO @brown-ccv #183: Upgrade to modular SDK instead of compat
-import firebase from "firebase/compat/app";
-import "firebase/compat/firestore";
+import { initializeApp } from "firebase/app";
+import {
+  getFirestore,
+  connectFirestoreEmulator,
+  doc,
+  setDoc,
+  addDoc,
+  collection,
+} from "firebase/firestore";
 
 // Initialize Firebase and Firestore
-firebase.initializeApp({
-  apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_PROJECT_ID ?? "no-firebase",
-  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_APP_ID,
+const APP = initializeApp({
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID ?? "no-firebase",
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
 });
-export const db = firebase.firestore();
+export const DB = getFirestore(APP);
 
 // Use emulator if on localhost
-if (window.location.hostname === "localhost") db.useEmulator("localhost", 8080);
+if (window.location.hostname === "localhost") {
+  connectFirestoreEmulator(DB, "127.0.0.1", 8080);
+}
 
 // Get a reference to the Firebase document at
 // "/participant_responses/{studyID}/participants/{participantID}"
-function getParticipantRef(studyID, participantID) {
-  return db.doc(`participant_responses/${studyID}/participants/${participantID}`);
+async function getParticipantRef(studyID, participantID) {
+  return doc(DB, `participant_responses/${studyID}/participants/${participantID}`);
 }
 
 // Get a reference to the Firebase document at
 // "/participant_responses/{studyID}/participants/{participantID}/data/{startDate}"
 export function getExperimentRef(studyID, participantID, startDate) {
-  return db.doc(`${getParticipantRef(studyID, participantID).path}/data/${startDate}`);
+  return doc(
+    DB,
+    `participant_responses/${studyID}/participants/${participantID}/data/${startDate}`
+  );
 }
 
 /**
@@ -37,7 +48,7 @@ export function getExperimentRef(studyID, participantID, startDate) {
 export async function validateParticipant(studyID, participantID) {
   try {
     // .get() will fail on an invalid path
-    await getParticipantRef(studyID, participantID).get();
+    await getParticipantRef(studyID, participantID);
     return true;
   } catch (error) {
     console.error("Unable to validate the experiment:\n", error);
@@ -56,9 +67,9 @@ export async function validateParticipant(studyID, participantID) {
 export async function initParticipant(studyID, participantID, startDate) {
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate);
-    await experiment.set({
-      // TODO @brown-ccv #394: Write GIT SHA here
-      // TODO @brown-ccv #394: Store participantID and studyID here, not on each trial
+    // TODO @brown-ccv #394: Write GIT SHA here
+    // TODO @brown-ccv #394: Store participantID and studyID here, not on each trial
+    await setDoc(experiment, {
       start_time: startDate,
       // TODO @brown-ccv #394: app_version and app_platform are deprecated
       app_version: window.navigator.appVersion,
@@ -81,10 +92,11 @@ export async function addToFirebase(data) {
   const studyID = data.study_id;
   const participantID = data.participant_id;
   const startDate = data.start_date;
-
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate);
-    await experiment.collection("trials").add(data);
+    await addDoc(collection(DB, `${experiment.path}/trials`), {
+      data,
+    });
   } catch (error) {
     console.error("Unable to add trial:\n", error);
   }

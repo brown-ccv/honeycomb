@@ -6,8 +6,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./index.css";
 
 // Import configurations and utilities
-import { config, SETTINGS, turkUniqueId } from "../config/main";
-import * as trigger from "../config/trigger";
+import { config, SETTINGS } from "../config/main";
+import { trigger } from "../config/trigger";
 import { getProlificId, getSearchParam } from "../lib/utils";
 
 // Import deployment functions
@@ -32,9 +32,6 @@ export default function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
   // Manage error state of the app
   const [isError, setIsError] = React.useState(false);
-
-  // Manage the psiturk object
-  const [psiturk, setPsiturk] = React.useState(false);
 
   // Manage the data used in the experiment
   const [participantID, setParticipantID] = React.useState("");
@@ -68,15 +65,9 @@ export default function App() {
         if (credentials.studyID) setStudyID(credentials.studyID);
         setMethod("desktop");
       } else {
-        // If MTURK
-        if (config.USE_MTURK) {
-          /* eslint-disable */
-          window.lodash = _.noConflict();
-          setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
-          setMethod("mturk");
-          handleLogin("mturk", turkUniqueId);
-          /* eslint-enable */
-        } else if (config.USE_PROLIFIC) {
+        // TODO @brown-ccv #227: Deprecate USE_PROLIFIC, always get URL
+        // TODO @brown-ccv #416: Match USE_PROLIFIC variable names, include session
+        if (config.USE_PROLIFIC) {
           const pID = getProlificId();
           if (config.USE_FIREBASE && pID) {
             setMethod("firebase");
@@ -122,10 +113,6 @@ export default function App() {
   const desktopUpdateFunction = async (data) => {
     await window.electronAPI.on_data_update(data);
   };
-  // Save the trial data to PsiTurk
-  const psiturkUpdateFunction = (data) => {
-    psiturk.recordTrialData(data);
-  };
 
   /** EXPERIMENT FINISH FUNCTIONS */
 
@@ -138,16 +125,6 @@ export default function App() {
   // Execute the 'on_finish' callback function (see public/electron/main.js)
   const desktopFinishFunction = async () => {
     await window.electronAPI.on_finish();
-  };
-  // Complete the PsiTurk experiment
-  const psiturkFinishFunction = () => {
-    const completePsiturk = async () => {
-      psiturk.saveData({
-        success: () => psiturk.completeHIT(),
-        error: () => setIsError(true),
-      });
-    };
-    completePsiturk();
   };
 
   /**
@@ -173,14 +150,12 @@ export default function App() {
             {
               desktop: desktopUpdateFunction,
               firebase: firebaseUpdateFunction,
-              mturk: psiturkUpdateFunction,
               default: defaultFunction,
             }[currentMethod]
           }
           dataFinishFunction={
             {
               desktop: desktopFinishFunction,
-              mturk: psiturkFinishFunction,
               firebase: firebaseFinishFunction,
               default: defaultFinishFunction,
             }[currentMethod]

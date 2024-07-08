@@ -1,4 +1,4 @@
-const SerialPort = require("serialport");
+import SerialPort from "serialport";
 
 // TODO @brown-ccv #460: Test connections with MockBindings (e.g. CONTINUE_ANYWAY)  https://serialport.io/docs/api-binding-mock
 
@@ -36,7 +36,7 @@ function getDevice(portList, comVendorName, productId) {
  * @returns The SerialPort device
  */
 // TODO @brown-ccv #460: This should fail, not return false
-async function getPort(comVendorName, productId) {
+export async function getPort(comVendorName, productId) {
   let portList;
   try {
     portList = await SerialPort.list();
@@ -59,11 +59,6 @@ async function getPort(comVendorName, productId) {
  * @param {SerialPort} port A SerialPort device
  * @param {number} event_code The numeric code to write to the device
  */
-async function sendToPort(port, event_code) {
+export async function sendToPort(port, event_code) {
   port.write(Buffer.from([event_code]));
 }
-
-module.exports = {
-  getPort,
-  sendToPort,
-};

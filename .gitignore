@@ -2,15 +2,19 @@
 
 # Dependencies
 /node_modules
-Brewfile.lock.json
 /.pnp
 .pnp.js
 .vite
+
+# Cache
+.npm
+.eslintcache
 
 # Testing
 /coverage
 
 # Production
+.vite
 /build
 /dist
 /out
@@ -19,6 +23,7 @@ Brewfile.lock.json
 /.vscode
 
 # Logs
+logs
 *.log
 *.log*
 
@@ -27,13 +32,12 @@ public/config/version.json
 public/version.json
 Brewfile.lock.json
 
-# Firebase private key
+# Secrets
 **/firebase-service-account.json
 
-# Live data
+# Data
 **/participant_responses
 
 # Misc
 .env
 .DS_Store
-psiturkit/*_turk
