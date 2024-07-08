@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 
 // Initialize Firebase and Firestore
-const app = initializeApp({
+const APP = initializeApp({
   apiKey: import.meta.env.VITE_API_KEY,
   authDomain: import.meta.env.VITE_AUTH_DOMAIN,
   projectId: import.meta.env.VITE_PROJECT_ID ?? "no-firebase",
@@ -17,24 +17,24 @@ const app = initializeApp({
   messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_APP_ID,
 });
-export const db = getFirestore(app);
+export const DB = getFirestore(APP);
 
 // Use emulator if on localhost
 if (window.location.hostname === "localhost") {
-  connectFirestoreEmulator(db, "127.0.0.1", 8080);
+  connectFirestoreEmulator(DB, "127.0.0.1", 8080);
 }
 
 // Get a reference to the Firebase document at
 // "/participant_responses/{studyID}/participants/{participantID}"
 async function getParticipantRef(studyID, participantID) {
-  return doc(db, `participant_responses/${studyID}/participants/${participantID}`);
+  return doc(DB, `participant_responses/${studyID}/participants/${participantID}`);
 }
 
 // Get a reference to the Firebase document at
 // "/participant_responses/{studyID}/participants/{participantID}/data/{startDate}"
 export function getExperimentRef(studyID, participantID, startDate) {
   return doc(
-    db,
+    DB,
     `participant_responses/${studyID}/participants/${participantID}/data/${startDate}`
   );
 }
@@ -94,7 +94,7 @@ export async function addToFirebase(data) {
   const startDate = data.start_date;
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate);
-    await addDoc(collection(db, `${experiment.path}/trials`), {
+    await addDoc(collection(DB, `${experiment.path}/trials`), {
       data,
     });
   } catch (error) {
