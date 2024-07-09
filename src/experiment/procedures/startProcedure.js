@@ -1,4 +1,3 @@
-import { JsPsych } from "jspsych";
 import { config } from "../../config/main";
 
 import { buildCameraStartTrial } from "../trials/camera";
@@ -8,6 +7,8 @@ import { nameTrial } from "../trials/name";
 import { initPhotodiodeTrial } from "../trials/initPhotodiode";
 import { introductionTrial } from "../trials/introduction";
 
+import * as Types from "../../lib/typedef";
+
 /**
  * Builds the block of trials needed to start and setup the experiment
  * 1) The name of the experiment is displayed
@@ -16,7 +17,7 @@ import { introductionTrial } from "../trials/introduction";
  * 4) Trials used to set up a photodiode and trigger box are displayed (if applicable)
  * 5) Trials used to set up the user's camera are displayed (if applicable)
  *
- * @param {JsPsych} jsPsych The jsPsych instance being used to run the task
+ * @param {Types.JsPsych} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych (nested) timeline object
  */
 export function buildStartProcedure(jsPsych) {

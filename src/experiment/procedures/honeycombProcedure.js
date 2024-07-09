@@ -1,10 +1,10 @@
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
-import { JsPsych } from "jspsych";
 
 import { config, SETTINGS } from "../../config/main";
 import { eventCodes } from "../../config/trigger";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 import { buildFixationTrial } from "../trials/fixation";
+import * as Types from "../../lib/typedef";
 
 /**
  * Builds the block of trials that form the core of the Honeycomb experiment
@@ -13,7 +13,7 @@ import { buildFixationTrial } from "../trials/fixation";
  *
  * Note that the block is conditionally rendered and repeated based on the task settings
  *
- * @param {JsPsych} jsPsych The jsPsych instance being used to run the task
+ * @param {Types.JsPsych} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych (nested) timeline object
  */
 export function buildHoneycombProcedure(jsPsych) {

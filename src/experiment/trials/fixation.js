@@ -1,14 +1,13 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import { JsPsych } from "jspsych";
-
 import { SETTINGS, config } from "../../config/main";
 import { eventCodes } from "../../config/trigger";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 import { div } from "../../lib/markup/tags";
+import * as Types from "../../lib/typedef";
 
 /**
  * Builds a trial with a fixation dot and optional photodiode box.
- * @param {JsPsych} jsPsych The global jsPsych object used to build the trial
+ * @param {Types.JsPsych} jsPsych The global jsPsych object used to build the trial
  * @returns {Object} A jsPsych trial object
  */
 export function buildFixationTrial(jsPsych) {

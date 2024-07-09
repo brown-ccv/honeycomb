@@ -1,15 +1,15 @@
-import { JsPsych } from "jspsych";
 import { config } from "../../config/main";
 import { buildCameraEndTrial } from "../trials/camera";
 import { conclusionTrial } from "../trials/conclusion";
 import { exitFullscreenTrial } from "../trials/fullscreen";
+import * as Types from "../../lib/typedef";
 
 /**
  * Builds the procedure needed to end the experiment
  * 1) Trial used to complete the user's camera recording is displayed
  * 2) The experiment exits fullscreen
  *
- * @param {JsPsych} jsPsych The jsPsych instance being used to run the task
+ * @param {Types.JsPsych} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych (nested) timeline object
  */
 export function buildEndProcedure(jsPsych) {
