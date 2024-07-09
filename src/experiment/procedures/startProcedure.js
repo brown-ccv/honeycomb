@@ -7,8 +7,6 @@ import { nameTrial } from "../trials/name";
 import { initPhotodiodeTrial } from "../trials/initPhotodiode";
 import { introductionTrial } from "../trials/introduction";
 
-import * as Types from "../../lib/typedef";
-
 /**
  * Builds the block of trials needed to start and setup the experiment
  * 1) The name of the experiment is displayed

@@ -28,7 +28,7 @@ module.exports = {
     jsdoc: {
       tagNamePreference: {
         typedef: {
-          definedInFiles: ["src/lib/typedefs.js"],
+          definedInFiles: ["src/lib/typedef.js"],
         },
       },
     },

@@ -9,8 +9,6 @@ import "jspsych/css/jspsych.css";
 // Add custom CSS styling for this task
 import "../lib/markup/trials.css";
 
-import * as Types from "../lib/typedef";
-
 /**
  * Experiment-wide settings for jsPsych: https://www.jspsych.org/7.3/overview/experiment-options/
  * Note that Honeycomb combines these with other options required for Honeycomb to operate correctly
@@ -22,7 +20,7 @@ export const jsPsychOptions = honeycombOptions;
 /**
  * Builds the experiment's timeline that jsPsych will run
  * The instance of jsPsych passed in will include jsPsychOptions from above
- * @param {Types.JsPsych} jsPsych The jsPsych instance that is running the experiment
+ * @param {JsPsych} jsPsych The jsPsych instance that is running the experiment
  * @param {string} studyID The ID of the study that was just logged into
  * @param {string} participantID The ID of the participant that was just logged in
  * @returns The timeline for JsPsych to run

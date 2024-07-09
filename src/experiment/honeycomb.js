@@ -1,11 +1,9 @@
-import * as Types from "../lib/typedef";
 import { buildEndProcedure } from "./procedures/endProcedure";
 import { buildHoneycombProcedure } from "./procedures/honeycombProcedure";
 import { buildStartProcedure } from "./procedures/startProcedure";
 
 import { buildDebriefTrial, instructionsTrial, preloadTrial } from "./trials/honeycombTrials";
 import { buildCountdownTrial } from "./trials/countdown";
-
 
 /**
  * ! This file should not be edited! Instead, create a new file with the name of your task
@@ -34,7 +32,7 @@ export const honeycombOptions = {
  * Take a look at how the code here compares to the jsPsych documentation!
  * See the jsPsych documentation for more: https://www.jspsych.org/7.3/tutorials/rt-task/
  *
- * @param {Types.JsPsych} jsPsych The jsPsych instance being used to run the task
+ * @param {JsPsych} jsPsych The jsPsych instance being used to run the task
  * @returns {object} A jsPsych timeline object
  */
 export function buildHoneycombTimeline(jsPsych) {
