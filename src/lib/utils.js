@@ -120,7 +120,7 @@ export function getTimeString(ms) {
 export function getCurrentTrialData(jsPsych) {
   return jsPsych.getCurrentTrial().data;
 }
-/** 
+/**
  * Retrieves the data object from the last trial in JsPsych
  * @param {JsPsych} jsPsych jsPsych instance being used to run the task
  * @returns {Object}
