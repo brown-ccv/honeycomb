@@ -3,7 +3,6 @@ import {
   getFirestore,
   connectFirestoreEmulator,
   doc,
-  setDoc,
   addDoc,
   collection,
 } from "firebase/firestore";
