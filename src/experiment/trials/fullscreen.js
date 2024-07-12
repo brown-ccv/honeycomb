@@ -7,6 +7,12 @@ import jsPsychFullscreen from "@jspsych/plugin-fullscreen";
 export const enterFullscreenTrial = {
   type: jsPsychFullscreen,
   fullscreen_mode: true,
+  on_finish: (data) => {
+    // Record some additional information about the user's screen
+    data.screen_width = screen.width;
+    data.screen_height = screen.height;
+    data.screen_pixel_ratio = window.devicePixelRatio;
+  },
 };
 
 /**
