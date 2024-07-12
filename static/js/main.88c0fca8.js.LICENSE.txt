@@ -248,6 +248,16 @@ object-assign
  * limitations under the License.
  */
 
+/** @license
+         Copyright The Closure Library Authors.
+         SPDX-License-Identifier: Apache-2.0
+         */
+
+/** @license
+      Copyright The Closure Library Authors.
+      SPDX-License-Identifier: Apache-2.0
+      */
+
 /** @license React v0.19.1
  * scheduler.production.min.js
  *
