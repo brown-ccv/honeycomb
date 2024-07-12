@@ -8,6 +8,8 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const log = require("electron-log");
 const _ = require("lodash");
 
+const { MockBinding } = require("@serialport/binding-mock");
+const { SerialPortStream } = require("@serialport/stream");
 const { getPort, sendToPort } = require("./serialPort");
 
 // TODO @brown-ccv #460: Add serialport's MockBinding for the "Continue Anyway": https://serialport.io/docs/guide-testing
@@ -416,7 +418,21 @@ function handleEventSend(code) {
         break;
       case 2:
         // User selects "Continue Anyway", we must be in dev mode
-        CONTINUE_ANYWAY = true;
+        // resolve variable unused warning
+        if (CONTINUE_ANYWAY == false) {
+          CONTINUE_ANYWAY = true;
+        }
+
+        // set-up mockbinding and open port for communication
+        MockBinding.createPort("/dev/ROBOT", {
+          echo: true,
+          record: true,
+        });
+        TRIGGER_PORT = new SerialPortStream({
+          binding: MockBinding,
+          path: "/dev/ROBOT",
+          baudRate: 14400,
+        });
         break;
     }
   }
