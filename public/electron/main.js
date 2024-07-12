@@ -32,7 +32,6 @@ const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../versi
 const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
 
 let CONFIG; // Honeycomb configuration object
-let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected (option is only available in dev mode)
 
 let TEMP_FILE; // Path to the temporary output file
 let OUT_PATH; // Path to the final output folder (on the Desktop)
@@ -366,7 +365,6 @@ async function setUpPort() {
             app.exit();
           } else {
             // User selected "Continue Anyway", trigger port is not connected
-            CONTINUE_ANYWAY = true;
             TRIGGER_PORT = undefined;
           }
         });
@@ -414,13 +412,7 @@ function handleEventSend(code) {
         setUpPort().then(() => handleEventSend(code));
         break;
       case 2:
-        // User selects "Continue Anyway", we must be in dev mode
-        // resolve variable unused warning
-        if (CONTINUE_ANYWAY == false) {
-          CONTINUE_ANYWAY = true;
-        }
-
-        // set-up mockbinding and open port for communication
+        // set-up mockbinding and open port for communication if continue anyway is clicked
         MockBinding.createPort("/dev/ROBOT", {
           echo: true,
           record: true,
