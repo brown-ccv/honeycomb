@@ -71,9 +71,8 @@ export async function initParticipant(studyID, participantID, startDate) {
     await experiment.set({
       // TODO @brown-ccv #394: Don't handle any of this here? Let everything be done in jsPsych
 
-    // TODO @brown-ccv #394: Write GIT SHA here
-    // TODO @brown-ccv #394: Store participantID and studyID here, not on each trial
-    await setDoc(experiment, {
+      // TODO @brown-ccv #394: Write GIT SHA here
+      // TODO @brown-ccv #394: Store participantID and studyID here, not on each trial
       start_time: startDate,
       // TODO @brown-ccv #394: app_version and app_platform are deprecated
       app_version: window.navigator.appVersion,
