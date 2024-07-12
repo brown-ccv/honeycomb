@@ -383,7 +383,7 @@ async function setUpPort() {
  * @param code The code to send via USB
  */
 function handleEventSend(code) {
-  log.info(`Sending USB event ${code} to port ${TRIGGER_PORT}`);
+  log.info(`Sending USB event: ${code}`);
 
   // Early return when running in development (no trigger port is expected)
   if (CONTINUE_ANYWAY) return;
