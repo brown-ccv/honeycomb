@@ -8,6 +8,8 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const log = require("electron-log");
 const _ = require("lodash");
 
+const { MockBinding } = require("@serialport/binding-mock");
+const { SerialPortStream } = require("@serialport/stream");
 const { getPort, sendToPort } = require("./serialPort");
 
 // TODO @brown-ccv #460: Add serialport's MockBinding for the "Continue Anyway": https://serialport.io/docs/guide-testing
@@ -30,7 +32,6 @@ const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../versi
 const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
 
 let CONFIG; // Honeycomb configuration object
-let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected (option is only available in dev mode)
 
 let TEMP_FILE; // Path to the temporary output file
 let OUT_PATH; // Path to the final output folder (on the Desktop)
@@ -364,7 +365,6 @@ async function setUpPort() {
             app.exit();
           } else {
             // User selected "Continue Anyway", trigger port is not connected
-            CONTINUE_ANYWAY = true;
             TRIGGER_PORT = undefined;
           }
         });
@@ -381,10 +381,7 @@ async function setUpPort() {
  * @param code The code to send via USB
  */
 function handleEventSend(code) {
-  log.info(`Sending USB event ${code} to port ${TRIGGER_PORT}`);
-
-  // Early return when running in development (no trigger port is expected)
-  if (CONTINUE_ANYWAY) return;
+  log.info(`Sending USB event: ${code}`);
 
   if (TRIGGER_PORT !== undefined) {
     sendToPort(TRIGGER_PORT, code);
@@ -415,8 +412,16 @@ function handleEventSend(code) {
         setUpPort().then(() => handleEventSend(code));
         break;
       case 2:
-        // User selects "Continue Anyway", we must be in dev mode
-        CONTINUE_ANYWAY = true;
+        // set-up mockbinding and open port for communication if continue anyway is clicked
+        MockBinding.createPort("/dev/ROBOT", {
+          echo: true,
+          record: true,
+        });
+        TRIGGER_PORT = new SerialPortStream({
+          binding: MockBinding,
+          path: "/dev/ROBOT",
+          baudRate: 14400,
+        });
         break;
     }
   }

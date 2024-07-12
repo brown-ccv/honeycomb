@@ -1,6 +1,6 @@
 /**
  * ! Your timeline and options should be built in a newly created file, not this one
- * TODO @brown-ccv: Link "Quick Start" step once's it's built into the docs
+ * https://brown-ccv.github.io/honeycomb-docs/docs/quick_start#2-add-a-file-for-the-task
  */
 import { buildHoneycombTimeline, honeycombOptions } from "./honeycomb";
 
@@ -20,7 +20,7 @@ export const jsPsychOptions = honeycombOptions;
 /**
  * Builds the experiment's timeline that jsPsych will run
  * The instance of jsPsych passed in will include jsPsychOptions from above
- * @param {Object} jsPsych The jsPsych instance that is running the experiment
+ * @param {JsPsych} jsPsych The jsPsych instance that is running the experiment
  * @param {string} studyID The ID of the study that was just logged into
  * @param {string} participantID The ID of the participant that was just logged in
  * @returns The timeline for JsPsych to run
@@ -30,7 +30,7 @@ export function buildTimeline(jsPsych, studyID, participantID) {
 
   /**
    * ! Your timeline should be built in a newly created function, not this one
-   * TODO @brown-ccv: Link "Quick Start" step once's it's built into the docs
+   * https://brown-ccv.github.io/honeycomb-docs/docs/quick_start#2-add-a-file-for-the-task
    */
   const timeline = buildHoneycombTimeline(jsPsych);
   return timeline;

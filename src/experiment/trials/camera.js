@@ -9,7 +9,7 @@ const WEBCAM_ID = "webcam";
 
 /**
  * A trial that begins recording the participant using their computer's default camera
- * @param {Object} jsPsych The jsPsych instance being used to run the task
+ * @param {JsPsych} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych trial object
  */
 // TODO @brown-ccv #301: Use jsPsych extension, deprecate this function
