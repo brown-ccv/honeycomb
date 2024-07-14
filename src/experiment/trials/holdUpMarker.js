@@ -6,7 +6,6 @@ import { photodiodeGhostBox } from "../../lib/markup/photodiode";
 export const holdUpMarkerTrial = {
   type: htmlButtonResponse,
   stimulus:
-    h1(LANGUAGE.trials.eventMarker.connected, { style: "color: green;" }) +
     h1(LANGUAGE.trials.holdUpMarker) +
     photodiodeGhostBox,
   choices: [LANGUAGE.prompts.continue.button],
