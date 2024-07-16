@@ -53,8 +53,8 @@ export function buildHoneycombTimeline(jsPsych) {
 
   const timeline = [
     startProcedure,
-    countdownTrial,
     preloadTrial,
+    countdownTrial,
     instructionsTrial,
     honeycombProcedure,
     debriefTrial,
