@@ -98,7 +98,7 @@ export function buildCameraEndTrial(jsPsych) {
 
   return {
     type: htmlKeyboardResponse,
-    stimulus: div(recordingEndMarkup, { class: "bottom-prompt" }),
+    stimulus: div(recordingEndMarkup),
     trial_duration: 5000,
     on_start: function () {
       // Complete the camera recording
