@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { Button, Form } from "react-bootstrap";
 
 export default function Login({
   initialStudyID,
@@ -44,30 +43,28 @@ export default function Login({
   return (
     <div className="centered-h-v">
       <div className="width-50">
-        <Form className="centered-h-v" onSubmit={handleSubmit}>
-          <Form.Group className="width-100" size="lg" controlId="participantID">
-            <Form.Label>Participant ID</Form.Label>
-            <Form.Control
-              autoFocus
-              name="participantID"
-              required={true}
-              value={participantID}
-              onChange={(e) => setParticipantID(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="width-100" size="lg" controlId="studyID">
-            <Form.Label>Study ID</Form.Label>
-            <Form.Control
-              name="studyID"
-              required={true}
-              value={studyID}
-              onChange={(e) => setStudyID(e.target.value)}
-            />
-          </Form.Group>
-          <Button style={{ width: "100%" }} block size="lg" type="submit">
+        <form className="centered-h-v" onSubmit={handleSubmit}>
+          <label htmlFor="participantID">Participant ID</label>
+          <input
+            autoFocus
+            name="participantID"
+            required={true}
+            value={participantID}
+            onChange={(e) => setParticipantID(e.target.value)}
+            className="width-100 form-input"
+          />
+          <label htmlFor="studyID">Study ID</label>
+          <input
+            name="studyID"
+            required={true}
+            value={studyID}
+            onChange={(e) => setStudyID(e.target.value)}
+            className="width-100 form-input"
+          />
+          <button className="login-btn width-100" type="submit">
             {isLoading ? "Submitting..." : "Log In"}
-          </Button>
-        </Form>
+          </button>
+        </form>
         {isError ? (
           <div className="alert alert-danger" role="alert">
             Unable to begin the study. Is your login information correct?
