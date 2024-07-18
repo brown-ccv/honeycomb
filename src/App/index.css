@@ -44,14 +44,16 @@ body,
 }
 
 .form-input {
+  width: 100%;
   margin-top: 4px;
-  padding: 8px 8px;
+  padding: 13px 0 13px 14px;
   border-radius: 8px;
   border: 1px solid rgb(222 226 230);
 }
 
 .login-btn {
   font-size: 18px;
+  width: 102%;
   background-color: rgb(13 110 253);
   padding: 1.5vh 0;
   color: white;
@@ -62,6 +64,7 @@ body,
 .login-btn:hover {
   background-color: rgb(8 81 200);
   transition: 0.2s;
+  cursor: pointer;
 }
 
 .alert-danger {
@@ -71,4 +74,11 @@ body,
   padding: 0.75rem 1.25rem;
   margin-bottom: 1rem;
   border-radius: 0.25rem;
+}
+
+.align-items-center-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

@@ -61,7 +61,7 @@ export default function Login({
             onChange={(e) => setStudyID(e.target.value)}
             className="width-100 form-input"
           />
-          <button className="login-btn width-100" type="submit">
+          <button className="login-btn" type="submit">
             {isLoading ? "Submitting..." : "Log In"}
           </button>
         </form>
