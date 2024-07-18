@@ -66,7 +66,7 @@ export default function Login({
           </button>
         </form>
         {isError ? (
-          <div className="alert alert-danger" role="alert">
+          <div className="alert-danger" role="alert">
             Unable to begin the study. Is your login information correct?
           </div>
         ) : null}
