@@ -44,16 +44,18 @@ body,
 }
 
 .form-input {
-  padding: 4px 8px;
-  border-radius: 10px;
+  margin-top: 4px;
+  padding: 8px 8px;
+  border-radius: 8px;
   border: 1px solid rgb(222 226 230);
 }
 
 .login-btn {
+  font-size: 18px;
   background-color: rgb(13 110 253);
   padding: 1.5vh 0;
   color: white;
-  border-radius: 10px;
+  border-radius: 8px;
   border: 1px solid rgb(222 226 230);
 }
 
