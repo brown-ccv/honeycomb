@@ -45,7 +45,7 @@ body,
 
 .form-input {
   width: 100%;
-  margin-top: 4px;
+  margin: 8px 0 2.8vh 0;
   padding: 13px 0 13px 14px;
   border-radius: 8px;
   border: 1px solid rgb(222 226 230);
@@ -55,7 +55,7 @@ body,
   font-size: 18px;
   width: 102%;
   background-color: rgb(13 110 253);
-  padding: 1.5vh 0;
+  padding: 1.8vh 0;
   color: white;
   border-radius: 8px;
   border: 1px solid rgb(222 226 230);
