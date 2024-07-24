@@ -34,7 +34,6 @@
     "@jspsych/plugin-instructions": "^1.1.3",
     "@jspsych/plugin-preload": "^1.1.2",
     "@jspsych/plugin-survey": "^1.0.1",
-    "bootstrap": "^5.2.0-beta1",
     "electron-log": "^5.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "execa": "^8.0.1",
@@ -44,7 +43,6 @@
     "lodash": "^4.17.19",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "serialport": "^12.0.0"
