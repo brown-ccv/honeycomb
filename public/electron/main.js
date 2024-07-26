@@ -146,6 +146,65 @@ function handleGetCredentials() {
   return { studyID, participantID };
 }
 
+/** SERIAL PORT SETUP & COMMUNICATION (EVENT MARKER) */
+
+/**
+ * Checks the connection to an EEG machine via USB ports
+ */
+async function setUpPort() {
+  log.info("Setting up USB port");
+  const { productID, comName, vendorID } = TRIGGER_CODES;
+
+  let maybePort;
+  if (productID) {
+    // Check port based on productID
+    log.info("Received a product ID:", productID);
+    maybePort = await getPort(vendorID, productID);
+  } else {
+    // Check port based on COM name
+    log.info("No product ID, defaulting to COM:", comName);
+    maybePort = await getPort(comName);
+  }
+
+  if (maybePort !== false) {
+    TRIGGER_PORT = maybePort;
+
+    // Show dialog box if trigger port has any errors
+    TRIGGER_PORT.on("error", (err) => {
+      log.error(err);
+
+      // Displays as a dialog if there Electron is unable to communicate with the event marker's serial port
+      // TODO @brown-ccv #400: Let this just be dialog.showErrorBox?
+      dialog
+        .showMessageBox(null, {
+          type: "error",
+          message: "There was an error with event marker's serial port.",
+          title: "USB Error",
+          buttons: [
+            "OK",
+            // Allow continuation when running in development mode
+            ...(ELECTRON_START_URL ? ["Continue Anyway"] : []),
+          ],
+          defaultId: 0,
+        })
+        .then((opt) => {
+          log.info(opt);
+          if (opt.response === 0) {
+            // Quit app when user selects "OK"
+            app.exit();
+          } else {
+            // User selected "Continue Anyway", trigger port is not connected
+            TRIGGER_PORT = undefined;
+          }
+        });
+    });
+  } else {
+    // Unable to connect to a port
+    TRIGGER_PORT = undefined;
+    log.warn("USB port was not connected");
+  }
+}
+
 /**
  * @returns {Boolean} Whether or not the EEG machine is connected to the computer
  */
@@ -315,65 +374,6 @@ function createWindow() {
   // Load web contents at the given URL
   log.info("Loading URL: ", appURL);
   mainWindow.loadURL(appURL);
-}
-
-/** SERIAL PORT SETUP & COMMUNICATION (EVENT MARKER) */
-
-/**
- * Checks the connection to an EEG machine via USB ports
- */
-async function setUpPort() {
-  log.info("Setting up USB port");
-  const { productID, comName, vendorID } = TRIGGER_CODES;
-
-  let maybePort;
-  if (productID) {
-    // Check port based on productID
-    log.info("Received a product ID:", productID);
-    maybePort = await getPort(vendorID, productID);
-  } else {
-    // Check port based on COM name
-    log.info("No product ID, defaulting to COM:", comName);
-    maybePort = await getPort(comName);
-  }
-
-  if (maybePort !== false) {
-    TRIGGER_PORT = maybePort;
-
-    // Show dialog box if trigger port has any errors
-    TRIGGER_PORT.on("error", (err) => {
-      log.error(err);
-
-      // Displays as a dialog if there Electron is unable to communicate with the event marker's serial port
-      // TODO @brown-ccv #400: Let this just be dialog.showErrorBox?
-      dialog
-        .showMessageBox(null, {
-          type: "error",
-          message: "There was an error with event marker's serial port.",
-          title: "USB Error",
-          buttons: [
-            "OK",
-            // Allow continuation when running in development mode
-            ...(ELECTRON_START_URL ? ["Continue Anyway"] : []),
-          ],
-          defaultId: 0,
-        })
-        .then((opt) => {
-          log.info(opt);
-          if (opt.response === 0) {
-            // Quit app when user selects "OK"
-            app.exit();
-          } else {
-            // User selected "Continue Anyway", trigger port is not connected
-            TRIGGER_PORT = undefined;
-          }
-        });
-    });
-  } else {
-    // Unable to connect to a port
-    TRIGGER_PORT = undefined;
-    log.warn("USB port was not connected");
-  }
 }
 
 /**

@@ -6,6 +6,7 @@ import { holdUpMarkerTrial } from "../trials/holdUpMarker";
 import { nameTrial } from "../trials/name";
 import { initPhotodiodeTrial } from "../trials/initPhotodiode";
 import { introductionTrial } from "../trials/introduction";
+import { buildCallFunctionTrial } from "../trials/callFunction";
 
 /**
  * Builds the block of trials needed to start and setup the experiment
@@ -24,6 +25,7 @@ export function buildStartProcedure(jsPsych) {
   // Conditionally add the photodiode setup trials
   if (config.USE_PHOTODIODE) {
     procedure.push(holdUpMarkerTrial);
+    procedure.push(buildCallFunctionTrial(window.electronAPI.checkSerialPort()));
     procedure.push(initPhotodiodeTrial);
   }
 
