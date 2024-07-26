@@ -36,8 +36,7 @@ export function buildCameraStartTrial(jsPsych) {
           });
           const cameraStartMarkup = p(LANGUAGE.trials.camera.start);
           const trialMarkup = div(cameraStartMarkup + videoMarkup, {
-            // TODO @brown-ccv #344: Get rid of bootstrap (this is just centering it)
-            class: "d-flex flex-column align-items-center",
+            class: "align-items-center-col",
           });
           return div(trialMarkup);
         },
@@ -99,7 +98,7 @@ export function buildCameraEndTrial(jsPsych) {
 
   return {
     type: htmlKeyboardResponse,
-    stimulus: div(recordingEndMarkup, { class: "bottom-prompt" }),
+    stimulus: div(recordingEndMarkup),
     trial_duration: 5000,
     on_start: function () {
       // Complete the camera recording
