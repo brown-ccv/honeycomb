@@ -83,7 +83,7 @@ async function main() {
   } else {
     // when args directly passed in through CLI, check if study is valid
     const hasStudy = await validateStudyFirebase(STUDY_ID);
-    if (hasStudy != true) {
+    if (hasStudy != true && ACTION != "register") {
       console.error(hasStudy);
       return;
     }
@@ -94,7 +94,7 @@ async function main() {
   } else {
     // when args directly passed in through CLI, check if participant is valid
     const hasParticipant = await validateParticipantFirebase(STUDY_ID);
-    if (hasParticipant != true) {
+    if (hasParticipant != true && ACTION != "register") {
       console.error(hasParticipant);
       return;
     }
