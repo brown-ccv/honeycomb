@@ -4,7 +4,6 @@ import fsExtra from "fs-extra";
 // TODO @brown-ccv #183: Upgrade to modular SDK instead of compat
 import { cert, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import { Command } from "commander";
 
 /** -------------------- GLOBALS -------------------- */
 
@@ -19,59 +18,16 @@ let OUTPUT_ROOT; // The root in which data is saved
 const INVALID_ACTION_ERROR = new Error("Invalid action: " + ACTION);
 const INVALID_DEPLOYMENT_ERROR = new Error("Invalid deployment: " + DEPLOYMENT);
 
-/** -------------------- COMMANDER -------------------- */
-const commander = new Command();
-// default: [download | delete ] not provided, run main() continuing with prompting
-commander.action(() => {});
-
-// download: optional argument studyID and participantID skips relative prompts
-commander
-  .command(`download`)
-  .argument(`[studyID]`)
-  .argument(`[participantID]`)
-  .description(`Download experiment data from Firebase provided study ID and participant ID`)
-  .action((studyID, participantID) => {
-    ACTION = "download";
-    STUDY_ID = studyID;
-    PARTICIPANT_ID = participantID;
-  });
-
-// delete: optional argument studyID and participantID skips relative prompts
-commander
-  .command(`delete`)
-  .argument(`[studyID]`)
-  .argument(`[participantID]`)
-  .description(`Delete experiment data from Firebase provided study ID and participant ID`)
-  .action((studyID, participantID) => {
-    ACTION = "delete";
-    STUDY_ID = studyID;
-    PARTICIPANT_ID = participantID;
-  });
-commander.parse();
-
-// print message if download or delete provided, along with optional args provided
-if (ACTION != undefined) {
-  console.log(
-    `${ACTION} data from Firebase given ${STUDY_ID == undefined ? "" : `study ID: ${STUDY_ID}`} ${PARTICIPANT_ID == undefined ? "" : `and participant ID: ${PARTICIPANT_ID}`}`
-  );
-}
-
 /** -------------------- MAIN -------------------- */
 
 // TODO @brown-ccv #289: Pass CLI arguments with commander (especially for action)
 async function main() {
-  if (ACTION == undefined) {
-    ACTION = await actionPrompt();
-  }
+  ACTION = await actionPrompt();
   DEPLOYMENT = await deploymentPrompt();
   // TODO @brown-ccv #291: Enable downloading all study data at once
-  if (STUDY_ID == undefined) {
-    STUDY_ID = await studyIDPrompt();
-  }
+  STUDY_ID = await studyIDPrompt();
   // TODO @brown-ccv #291: Enable downloading all participant data at once
-  if (PARTICIPANT_ID == undefined) {
-    PARTICIPANT_ID = await participantIDPrompt();
-  }
+  PARTICIPANT_ID = await participantIDPrompt();
   EXPERIMENT_IDS = await experimentIDPrompt();
 
   switch (ACTION) {
@@ -99,6 +55,7 @@ async function main() {
   }
 }
 main();
+
 /** -------------------- DOWNLOAD ACTION -------------------- */
 
 /** Download data that's stored in Firebase */
