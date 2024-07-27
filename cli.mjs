@@ -80,10 +80,24 @@ async function main() {
   // TODO @brown-ccv #291: Enable downloading all study data at once
   if (STUDY_ID == undefined) {
     STUDY_ID = await studyIDPrompt();
+  } else {
+    // when args directly passed in through CLI, check if study is valid
+    const hasStudy = await validateStudyFirebase(STUDY_ID);
+    if (hasStudy != true) {
+      console.error(hasStudy);
+      return;
+    }
   }
   // TODO @brown-ccv #291: Enable downloading all participant data at once
   if (PARTICIPANT_ID == undefined) {
     PARTICIPANT_ID = await participantIDPrompt();
+  } else {
+    // when args directly passed in through CLI, check if participant is valid
+    const hasParticipant = await validateParticipantFirebase(STUDY_ID);
+    if (hasParticipant != true) {
+      console.error(hasParticipant);
+      return;
+    }
   }
   EXPERIMENT_IDS = await experimentIDPrompt();
 
@@ -272,14 +286,15 @@ async function deploymentPrompt() {
 }
 
 /** Prompt the user to enter the ID of a study */
-async function studyIDPrompt() {
+// helper to check if the given study (input) is in firestore
+const validateStudyFirebase = async (input) => {
   const invalidMessage = "Please enter a valid study from your Firestore database";
-  const validateStudyFirebase = async (input) => {
-    // subcollection is programmatically generated, if it doesn't exist then input must not be a valid studyID
-    const studyIDCollections = await getStudyRef(input).listCollections();
-    return studyIDCollections.find((c) => c.id === PARTICIPANTS_COL) ? true : invalidMessage;
-  };
+  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid studyID
+  const studyIDCollections = await getStudyRef(input).listCollections();
+  return studyIDCollections.find((c) => c.id === PARTICIPANTS_COL) ? true : invalidMessage;
+};
 
+async function studyIDPrompt() {
   return await input({
     message: "Select a study:",
     validate: async (input) => {
@@ -299,14 +314,15 @@ async function studyIDPrompt() {
 }
 
 /** Prompt the user to enter the ID of a participant on the STUDY_ID study */
-async function participantIDPrompt() {
+// helper to check if the given participant (input) is in firestore under study
+const validateParticipantFirebase = async (input) => {
   const invalidMessage = `Please enter a valid participant on the study "${STUDY_ID}"`;
-  const validateParticipantFirebase = async (input) => {
-    // subcollection is programmatically generated, if it doesn't exist then input must not be a valid participantID
-    const studyIDCollections = await getParticipantRef(STUDY_ID, input).listCollections();
-    return studyIDCollections.find((c) => c.id === DATA_COL) ? true : invalidMessage;
-  };
+  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid participantID
+  const studyIDCollections = await getParticipantRef(STUDY_ID, input).listCollections();
+  return studyIDCollections.find((c) => c.id === DATA_COL) ? true : invalidMessage;
+};
 
+async function participantIDPrompt() {
   return await input({
     message: ACTION == "register" ? "Enter a new participant:" : "Select a participant:",
     validate: async (input) => {
