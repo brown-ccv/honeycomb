@@ -1,3 +1,5 @@
+import event_codes from "./eventCodes.json";
+
 // TODO @brown-ccv #333: Nest this data under "trigger_box" equipment in config.json
 
 // teensyduino
@@ -13,12 +15,7 @@ export const comName = import.meta.env.EVENT_MARKER_COM_NAME || "COM3";
 
 /** Custom codes for specific task events - used to identify the trials */
 // TODO @brown-ccv #354: Each event should have a code, name, and numBlinks
-export const eventCodes = {
-  fixation: 1, // Fixation trial
-  honeycomb: 2, // Main reaction-time trial for the Honeycomb task
-  open_task: 18, // Opening task for setting up the experiment
-  test_connect: 32, // Initial test connection
-};
+export const eventCodes = event_codes;
 
 // TODO: We should think of a cleaner way of exporting all this
 export const trigger = {
