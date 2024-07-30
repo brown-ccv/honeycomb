@@ -1,4 +1,4 @@
-import { config } from "../../config/index";
+import { CONFIG } from "../../config/index";
 import { buildCameraEndTrial } from "../trials/camera";
 import { conclusionTrial } from "../trials/conclusion";
 import { exitFullscreenTrial } from "../trials/fullscreen";
@@ -15,7 +15,7 @@ export function buildEndProcedure(jsPsych) {
   const procedure = [];
 
   // Conditionally add the camera breakdown trials
-  if (config.USE_CAMERA) {
+  if (CONFIG.USE_CAMERA) {
     procedure.push(buildCameraEndTrial(jsPsych));
   }
 

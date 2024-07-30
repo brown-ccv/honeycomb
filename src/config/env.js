@@ -8,7 +8,7 @@ const USE_EEG = import.meta.env.VITE_USE_EEG === "true" && USE_ELECTRON; // Whet
 const USE_PHOTODIODE = import.meta.env.VITE_USE_PHOTODIODE === "true" && USE_ELECTRON; // whether or not the photodiode is in use
 
 // Configuration object for Honeycomb
-export const config = {
+const config = {
   // Deployments
   USE_ELECTRON,
   USE_PROLIFIC,
@@ -18,3 +18,4 @@ export const config = {
   USE_EEG,
   USE_CAMERA,
 };
+export default config;
