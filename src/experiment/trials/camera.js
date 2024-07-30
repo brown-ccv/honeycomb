@@ -2,7 +2,7 @@ import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import initializeCamera from "@jspsych/plugin-initialize-camera";
 
-import { LANGUAGE, config } from "../../config/main";
+import { LANGUAGE, config } from "../../config/index";
 import { div, h1, p, tag } from "../../lib/markup/tags";
 
 const WEBCAM_ID = "webcam";

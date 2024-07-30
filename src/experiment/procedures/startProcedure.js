@@ -1,4 +1,4 @@
-import { config } from "../../config/main";
+import { config } from "../../config/index";
 
 import { buildCameraStartTrial } from "../trials/camera";
 import { enterFullscreenTrial } from "../trials/fullscreen";

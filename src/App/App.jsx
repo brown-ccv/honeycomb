@@ -5,7 +5,7 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import "./index.css";
 
 // Import configurations and utilities
-import { config, SETTINGS } from "../config/main";
+import { config, SETTINGS } from "../config/index";
 import { trigger } from "../config/trigger";
 import { getProlificId, getSearchParam } from "../lib/utils";
 

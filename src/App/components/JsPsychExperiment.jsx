@@ -2,7 +2,7 @@ import { initJsPsych } from "jspsych";
 import PropTypes from "prop-types";
 import React from "react";
 
-import { config, taskVersion } from "../../config/main";
+import { config, taskVersion } from "../../config/index";
 import { buildTimeline, jsPsychOptions } from "../../experiment";
 import { initParticipant } from "../deployments/firebase";
 
