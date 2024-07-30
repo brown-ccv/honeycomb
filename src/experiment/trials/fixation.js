@@ -1,6 +1,6 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { SETTINGS, config } from "../../config/index";
+import { SETTINGS, CONFIG } from "../../config/index";
 import { eventCodes } from "../../config/trigger";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 import { div } from "../../lib/markup/tags";
@@ -21,7 +21,7 @@ export function buildFixationTrial(jsPsych) {
     stimulus: div("", { id: "fixation-dot" }),
     prompt: function () {
       // Conditionally display the photodiodeGhostBox
-      if (config.USE_PHOTODIODE) return photodiodeGhostBox;
+      if (CONFIG.USE_PHOTODIODE) return photodiodeGhostBox;
       else return null;
     },
     trial_duration: function () {
@@ -38,7 +38,7 @@ export function buildFixationTrial(jsPsych) {
     },
     on_load: function () {
       // Conditionally flash the photodiode when the trial first loads
-      if (config.USE_PHOTODIODE) pdSpotEncode(fixationCode);
+      if (CONFIG.USE_PHOTODIODE) pdSpotEncode(fixationCode);
     },
   };
 }
