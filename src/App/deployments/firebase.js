@@ -3,6 +3,7 @@ import {
   getFirestore,
   connectFirestoreEmulator,
   doc,
+  setDoc,
   addDoc,
   collection,
 } from "firebase/firestore";
@@ -21,21 +22,6 @@ export const DB = getFirestore(APP);
 // Use emulator if on localhost
 if (window.location.hostname === "localhost") {
   connectFirestoreEmulator(DB, "127.0.0.1", 8080);
-}
-
-// Get a reference to the Firebase document at
-// "/participant_responses/{studyID}/participants/{participantID}"
-async function getParticipantRef(studyID, participantID) {
-  return doc(DB, `participant_responses/${studyID}/participants/${participantID}`);
-}
-
-// Get a reference to the Firebase document at
-// "/participant_responses/{studyID}/participants/{participantID}/data/{startDate}"
-export function getExperimentRef(studyID, participantID, startDate) {
-  return doc(
-    DB,
-    `participant_responses/${studyID}/participants/${participantID}/data/${startDate}`
-  );
 }
 
 /**
@@ -66,14 +52,10 @@ export async function validateParticipant(studyID, participantID) {
 export async function initParticipant(studyID, participantID, startDate) {
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate);
-
-    await experiment.set({
+    await setDoc(experiment, {
       // TODO @brown-ccv #394: Don't handle any of this here? Let everything be done in jsPsych
-
-      // TODO @brown-ccv #394: Write GIT SHA here
-      // TODO @brown-ccv #394: Store participantID and studyID here, not on each trial
-      start_time: startDate,
       // TODO @brown-ccv #394: app_version and app_platform are deprecated
+      start_time: startDate,
       app_version: window.navigator.appVersion,
       app_platform: window.navigator.platform,
     });
@@ -102,4 +84,30 @@ export async function addToFirebase(data) {
   } catch (error) {
     console.error("Unable to add trial:\n", error);
   }
+}
+
+// -------------------- HELPERS --------------------
+
+/**
+ * Get a reference to a given Firebase document
+ * @param {string} studyID The ID of the study in Firebase
+ * @param {string} participantID The ID of the participant on the given study in Firebase
+ * @returns "/participant_responses/{studyID}/participants/{participantID}"
+ */
+async function getParticipantRef(studyID, participantID) {
+  return doc(DB, `participant_responses/${studyID}/participants/${participantID}`);
+}
+
+/**
+ * Get a reference to a given Firebase document
+ * @param {string} studyID The ID of the study in Firebase
+ * @param {string} participantID The ID of the participant on the given study in Firebase
+ * @param {string} startDate The start date of the experiment, used as its ID
+ * @returns "/participant_responses/{studyID}/participants/{participantID}/data/{startDate}"
+ */
+export function getExperimentRef(studyID, participantID, startDate) {
+  return doc(
+    DB,
+    `participant_responses/${studyID}/participants/${participantID}/data/${startDate}`
+  );
 }
