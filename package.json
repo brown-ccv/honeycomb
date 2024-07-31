@@ -8,13 +8,8 @@
     "email": "ccv-bot@brown.edu",
     "url": "https://ccv.brown.edu"
   },
-  "keywords": [
-    "react",
-    "vite",
-    "electron",
-    "electron-forge",
-    "jsPsych"
-  ],
+  "honeycombVersion": "",
+  "version": "3.4.1",
   "repository": "https://github.com/brown-ccv/honeycomb",
   "license": "MIT",
   "private": true,

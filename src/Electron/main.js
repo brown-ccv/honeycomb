@@ -6,9 +6,17 @@ import { BrowserWindow, app, dialog, ipcMain } from "electron";
 import log from "electron-log";
 import _ from "lodash";
 
-import { getPort, sendToPort } from "./lib/serialport";
+const { MockBinding } = require("@serialport/binding-mock");
+const { SerialPortStream } = require("@serialport/stream");
+const { getPort, sendToPort } = require("./serialPort");
 
-// TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
+// TODO @brown-ccv #460: Add serialport's MockBinding for the "Continue Anyway": https://serialport.io/docs/guide-testing
+
+// Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
+if (require("electron-squirrel-startup")) app.quit();
+
+// Initialize the logger for any renderer process
+log.initialize({ preload: true });
 
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
@@ -361,7 +369,6 @@ async function setUpPort() {
             app.exit();
           } else {
             // User selected "Continue Anyway", trigger port is not connected
-            CONTINUE_ANYWAY = true;
             TRIGGER_PORT = undefined;
           }
         });
@@ -378,10 +385,7 @@ async function setUpPort() {
  * @param code The code to send via USB
  */
 function handleEventSend(code) {
-  log.info(`Sending USB event ${code} to port ${TRIGGER_PORT}`);
-
-  // Early return when running in development (no trigger port is expected)
-  if (CONTINUE_ANYWAY) return;
+  log.info(`Sending USB event: ${code}`);
 
   if (TRIGGER_PORT !== undefined) {
     sendToPort(TRIGGER_PORT, code);
@@ -412,8 +416,16 @@ function handleEventSend(code) {
         setUpPort().then(() => handleEventSend(code));
         break;
       case 2:
-        // User selects "Continue Anyway", we must be in dev mode
-        CONTINUE_ANYWAY = true;
+        // set-up mockbinding and open port for communication if continue anyway is clicked
+        MockBinding.createPort("/dev/ROBOT", {
+          echo: true,
+          record: true,
+        });
+        TRIGGER_PORT = new SerialPortStream({
+          binding: MockBinding,
+          path: "/dev/ROBOT",
+          baudRate: 14400,
+        });
         break;
     }
   }

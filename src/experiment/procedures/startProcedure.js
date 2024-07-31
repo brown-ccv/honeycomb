@@ -16,7 +16,7 @@ import { buildCallFunctionTrial } from "../trials/callFunction";
  * 4) Trials used to set up a photodiode and trigger box are displayed (if applicable)
  * 5) Trials used to set up the user's camera are displayed (if applicable)
  *
- * @param {Object} jsPsych The jsPsych instance being used to run the task
+ * @param {JsPsych} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych (nested) timeline object
  */
 export function buildStartProcedure(jsPsych) {

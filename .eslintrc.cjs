@@ -23,8 +23,21 @@ module.exports = {
     "import/order": "warn",
   },
   settings: {
-    react: { version: "detect" },
-    "import/resolver": { node: { extensions: [".js", ".jsx"] } },
+    react: {
+      version: "detect",
+    },
+    jsdoc: {
+      tagNamePreference: {
+        typedef: {
+          definedInFiles: ["src/lib/typedef.js"],
+        },
+      },
+    },
+    "import/resolver": {
+      node: {
+        extensions: [".js", ".jsx"],
+      },
+    },
   },
   overrides: [{ files: ["*.jsx", "*.js"] }],
 };
