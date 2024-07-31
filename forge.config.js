@@ -32,10 +32,6 @@ export default {
         },
       },
     },
-    {
-      // zip files
-      name: "@electron-forge/maker-zip",
-    },
   ],
   plugins: [
     { name: "@electron-forge/plugin-auto-unpack-natives", config: {} },
@@ -62,7 +58,7 @@ export default {
         version: FuseVersion.V1,
         [FuseV1Options.RunAsNode]: false, // Disables ELECTRON_RUN_AS_NODE
         [FuseV1Options.GrantFileProtocolExtraPrivileges]: true, // Grants the file protocol extra privileges (for the built application)
-        [FuseV1Options.EnableCookieEncryption]: false, // Disables cookie encryption
+        [FuseV1Options.EnableCookieEncryption]: true, // Enables cookie encryption
         [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false, // Disables the NODE_OPTIONS environment variable
         [FuseV1Options.EnableNodeCliInspectArguments]: false, // Disables the --inspect and --inspect-brk family of CLI options
         [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true, // Enforces validation of the app.asar archive on macOS
