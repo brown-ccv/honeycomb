@@ -21,6 +21,7 @@ const getBuildDefine = (env) => {
   return define;
 };
 
+/** Vite configuration for the main process */
 export default defineConfig((env) => {
   return mergeConfig(getBuildConfig(env), {
     build: {

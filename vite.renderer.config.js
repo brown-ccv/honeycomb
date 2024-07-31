@@ -3,11 +3,9 @@ import { defineConfig } from "vite";
 
 import { pluginExposeRenderer } from "./vite.base.config.js";
 
-export default defineConfig((env) => {
-  const { root, mode, forgeConfig, forgeConfigSelf } = env;
+/** Vite configuration for the render process */
+export default defineConfig(({ root, mode, forgeConfig, forgeConfigSelf }) => {
   const name = forgeConfigSelf.name ?? "";
-  console.log(env);
-
   return {
     root,
     mode,
