@@ -9,13 +9,14 @@ import _ from "lodash";
 
 import { getPort, sendToPort } from "./lib/serialport";
 
+/* global MAIN_WINDOW_VITE_DEV_SERVER_URL MAIN_WINDOW_VITE_NAME */
+// TODO: If we can get eslint to play nice we can remove this
+
 // TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
 
 /************ GLOBALS ***********/
-
-/* global MAIN_WINDOW_VITE_DEV_SERVER_URL MAIN_WINDOW_VITE_NAME */
 
 const IS_DEV = import.meta.env.DEV && !app.isPackaged;
 let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected
