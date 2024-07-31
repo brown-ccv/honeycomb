@@ -296,7 +296,7 @@ function createWindow() {
   // Create the browser window
   const mainWindow = new BrowserWindow({
     icon: "./favicon.ico",
-    webPreferences: { preload: path.join(__dirname, "preload.cjs") },
+    webPreferences: { preload: path.join(__dirname, "preload.js") },
     width: 1500,
     height: 900,
     // TODO @brown-ccv: Settings for preventing the menu bar from ever showing up
