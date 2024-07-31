@@ -6,9 +6,7 @@ export const builtins = ["electron", ...builtinModules.map((m) => [m, `node:${m}
 export const external = [...builtins, ...Object.keys(pkg.dependencies || {})];
 
 /** @type {(env: import('vite').ConfigEnv<'build'>) => import('vite').UserConfig} */
-export const getBuildConfig = (env) => {
-  const { root, mode, command, forgeConfig } = env;
-
+export const getBuildConfig = ({ root, mode, command, forgeConfig }) => {
   return {
     root,
     mode,
@@ -28,7 +26,6 @@ export const getBuildConfig = (env) => {
 export const getDefineKeys = (names) => {
   /** @type {{ [name: string]: VitePluginRuntimeKeys }} */
   const define = {};
-
   return names.reduce((acc, name) => {
     const NAME = name.toUpperCase();
     /** @type {VitePluginRuntimeKeys} */
@@ -43,14 +40,12 @@ export const getDefineKeys = (names) => {
 /** @type {(name: string) => import('vite').Plugin} */
 export const pluginExposeRenderer = (name) => {
   const { VITE_DEV_SERVER_URL } = getDefineKeys([name])[name];
-
   return {
     name: "@electron-forge/plugin-vite:expose-renderer",
     configureServer(server) {
       process.viteDevServers ??= {};
       // Expose server for preload scripts hot reload.
       process.viteDevServers[name] = server;
-
       server.httpServer?.once("listening", () => {
         /** @type {import('node:net').AddressInfo} */
         const addressInfo = server.httpServer?.address();

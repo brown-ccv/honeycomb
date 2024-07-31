@@ -1,4 +1,15 @@
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
+import { defineConfig } from "vite";
+
+/**
+ * Base vite config shared between electron-forge and the browser
+ */
+export const baseConfig = defineConfig({
+  define: {
+    "import.meta.env.PACKAGE_NAME": JSON.stringify(process.env.npm_package_name),
+    "import.meta.env.PACKAGE_VERSION": JSON.stringify(process.env.npm_package_version),
+  },
+});
 
 /** Configuration file for Electron Forge */
 export default {
@@ -46,11 +57,7 @@ export default {
           { entry: "src/Electron/preload.js", config: "vite.preload.config.js" },
         ],
         renderer: [{ name: "main_window", config: "vite.renderer.config.js" }],
-        define: {
-          // Add the package name and version to import.meta.env
-          "import.meta.env.PACKAGE_NAME": JSON.stringify(process.env.npm_package_name),
-          "import.meta.env.PACKAGE_VERSION": JSON.stringify(process.env.npm_package_version),
-        },
+        ...baseConfig,
       },
     },
     {
