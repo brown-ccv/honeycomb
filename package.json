@@ -53,7 +53,7 @@
     "@electron-forge/maker-zip": "^7.4.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
     "@electron-forge/plugin-vite": "^7.4.0",
-    "@inquirer/prompts": "^3.0.3",
+    "@inquirer/prompts": "^5.3.6",
     "@vitejs/plugin-react": "^4.0.4",
     "cz-conventional-changelog": "^3.2.0",
     "dotenv-cli": "^7.0.0",
