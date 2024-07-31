@@ -1,6 +1,6 @@
 import { defineConfig, mergeConfig } from "vite";
 
-import { getBuildConfig, external, pluginHotRestart } from "./vite.base.config.js";
+import { getBuildConfig, external, pluginHotRestart } from "./vite.base.config.mjs";
 
 export default defineConfig((env) => {
   return mergeConfig(getBuildConfig(env), {
@@ -12,10 +12,9 @@ export default defineConfig((env) => {
         output: {
           format: "cjs",
           // It should not be split chunks.
-          // TODO: We probably want some basic chunking? Getting a warning
           inlineDynamicImports: true,
-          entryFileNames: "[name].cjs",
-          chunkFileNames: "[name].cjs",
+          entryFileNames: "[name].js",
+          chunkFileNames: "[name].js",
           assetFileNames: "[name].[ext]",
         },
       },

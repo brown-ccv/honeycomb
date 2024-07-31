@@ -1,11 +1,9 @@
 import { defineConfig, mergeConfig } from "vite";
 
-import { getBuildConfig, getDefineKeys, external, pluginHotRestart } from "./vite.base.config.js";
+import { getBuildConfig, getDefineKeys, external, pluginHotRestart } from "./vite.base.config.mjs";
 
 /** @type {(env: import('vite').ConfigEnv<'build'>) => Record<string, any>} */
-const getBuildDefine = (env) => {
-  const { command, forgeConfig } = env;
-
+const getBuildDefine = ({ command, forgeConfig }) => {
   const names = forgeConfig.renderer.filter(({ name }) => name != null).map(({ name }) => name);
   const defineKeys = getDefineKeys(names);
   const define = Object.entries(defineKeys).reduce((acc, [name, keys]) => {
@@ -26,10 +24,8 @@ export default defineConfig((env) => {
   return mergeConfig(getBuildConfig(env), {
     build: {
       lib: {
-        // Pulls the entries from forge.config.js
-        entry: env.forgeConfigSelf.entry,
-        // The files are built in CJS format, update the extensions
-        fileName: () => "[name].cjs",
+        entry: env.forgeConfigSelf.entry, // Pulls the entries from forge.config.js
+        fileName: () => "[name].js",
         formats: ["cjs"],
       },
       rollupOptions: { external },

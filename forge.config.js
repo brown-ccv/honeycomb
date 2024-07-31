@@ -19,6 +19,7 @@ export default {
     icon: "assets/icons/icon",
     osxSign: {}, // TODO: From @eldu, confirm it's needed?
   },
+  rebuildConfig: {},
   makers: [
     {
       // Windows Distribution
@@ -53,11 +54,11 @@ export default {
       config: {
         build: [
           // Build files that use the main config
-          { entry: "src/Electron/main.js", config: "vite.main.config.js" },
+          { entry: "src/Electron/main.js", config: "vite.main.config.mjs" },
           // Build files that use the preload config
-          { entry: "src/Electron/preload.js", config: "vite.preload.config.js" },
+          { entry: "src/Electron/preload.js", config: "vite.preload.config.mjs" },
         ],
-        renderer: [{ name: "main_window", config: "vite.renderer.config.js" }],
+        renderer: [{ name: "main_window", config: "vite.renderer.config.mjs" }],
         ...baseConfig,
       },
     },

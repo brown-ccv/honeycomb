@@ -18,8 +18,7 @@
   "repository": "https://github.com/brown-ccv/honeycomb",
   "license": "MIT",
   "private": true,
-  "type": "module",
-  "main": ".vite/build/main.cjs",
+  "main": ".vite/build/main.js",
   "homepage": ".",
   "dependencies": {
     "@electron-forge/plugin-fuses": "^7.4.0",

@@ -1,7 +1,7 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-import { pluginExposeRenderer } from "./vite.base.config.js";
+import { pluginExposeRenderer } from "./vite.base.config.mjs";
 
 /** Vite configuration for the render process */
 export default defineConfig(({ root, mode, forgeConfig, forgeConfigSelf }) => {

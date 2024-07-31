@@ -7,10 +7,11 @@ export const external = [...builtins, ...Object.keys(pkg.dependencies || {})];
 
 /** @type {(env: import('vite').ConfigEnv<'build'>) => import('vite').UserConfig} */
 export const getBuildConfig = ({ root, mode, command, forgeConfig }) => {
+  const { define } = forgeConfig;
   return {
     root,
     mode,
-    define: forgeConfig.define,
+    define,
     build: {
       // Prevent multiple builds from interfering with each other.
       emptyOutDir: false,
