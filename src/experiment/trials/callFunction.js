@@ -1,9 +1,9 @@
 import callFunction from "@jspsych/plugin-call-function";
 
 /**
- * Trial to call the provided function
+ * Trial to execute the callback function passed in
  *
- * @param {function} func will call this function
+ * @param {function} func callback function to execute
  * @returns JS object as a trial
  */
 export function buildCallFunctionTrial(func) {
