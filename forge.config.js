@@ -5,6 +5,7 @@ export default {
   packagerConfig: {
     asar: true,
     icon: "assets/icons/icon",
+    // osxSign: {}, // TODO: From @eldu, do we need this to fix intel vs arm builds?
   },
   makers: [
     {
