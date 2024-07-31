@@ -9,8 +9,6 @@ import callFunction from "@jspsych/plugin-call-function";
 export function buildCallFunctionTrial(func) {
   return {
     type: callFunction,
-    func: () => {
-      func;
-    },
+    func: func,
   };
 }

@@ -25,7 +25,11 @@ export function buildStartProcedure(jsPsych) {
   // Conditionally add the photodiode setup trials
   if (config.USE_PHOTODIODE) {
     procedure.push(holdUpMarkerTrial);
-    procedure.push(buildCallFunctionTrial(window.electronAPI.checkSerialPort()));
+    procedure.push(
+      buildCallFunctionTrial(() => {
+        window.electronAPI.checkSerialPort();
+      })
+    );
     procedure.push(initPhotodiodeTrial);
   }
 
