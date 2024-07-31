@@ -3,6 +3,7 @@ import { defineConfig } from "vite";
 
 /**
  * Base vite config shared between electron-forge and the browser
+ * NOTE @RobertGemmaJr: Define here because of import issues with forge.config
  */
 export const baseConfig = defineConfig({
   define: {
@@ -16,7 +17,7 @@ export default {
   packagerConfig: {
     asar: true,
     icon: "assets/icons/icon",
-    // osxSign: {}, // TODO: From @eldu, do we need this to fix intel vs arm builds?
+    osxSign: {}, // TODO: From @eldu, confirm it's needed?
   },
   makers: [
     {
