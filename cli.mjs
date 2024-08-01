@@ -21,7 +21,7 @@ const INVALID_DEPLOYMENT_ERROR = new Error("Invalid deployment: " + DEPLOYMENT);
 
 /** -------------------- COMMANDER -------------------- */
 const commander = new Command();
-// default: [download | delete ] not provided, run main() as usual continuing with prompting
+// default: [download | delete | register ] not provided, run main() as usual continuing with prompting
 commander.action(() => {});
 
 // download: optional argument studyID and participantID skips relative prompts
@@ -53,7 +53,9 @@ commander
   .command(`register`)
   .argument(`[studyID]`)
   .argument(`[participantID]`)
-  .description(`Register new partipant under study provided a partipantID and studyID`)
+  .description(
+    `Register new partipant under study provided a partipantID and studyID; new study will be created if not found`
+  )
   .action((studyID, participantID) => {
     ACTION = "register";
     STUDY_ID = studyID;
@@ -62,23 +64,23 @@ commander
 
 commander.parse();
 
-// print message if download or delete provided, along with optional args provided
-if (ACTION != undefined) {
-  console.log(
-    `${ACTION} data from Firebase ${STUDY_ID == undefined ? "" : `given study ID: ${STUDY_ID}`} ${PARTICIPANT_ID == undefined ? "" : `and participant ID: ${PARTICIPANT_ID}`}`
-  );
-}
-
 /** -------------------- MAIN -------------------- */
 
 // TODO @brown-ccv #289: Pass CLI arguments with commander (especially for action)
 async function main() {
-  if (ACTION == undefined) {
+  // print message if download or delete provided, along with optional args provided
+  if (ACTION != undefined) {
+    console.log(
+      `${ACTION} data from Firebase ${STUDY_ID === undefined ? "" : `given study ID: ${STUDY_ID}`} ${PARTICIPANT_ID === undefined ? "" : `and participant ID: ${PARTICIPANT_ID}`}`
+    );
+  }
+
+  if (ACTION === undefined) {
     ACTION = await actionPrompt();
   }
   DEPLOYMENT = await deploymentPrompt();
   // TODO @brown-ccv #291: Enable downloading all study data at once
-  if (STUDY_ID == undefined) {
+  if (STUDY_ID === undefined) {
     STUDY_ID = await studyIDPrompt();
   } else {
     // when args directly passed in through CLI, check if study is valid
@@ -89,7 +91,7 @@ async function main() {
     }
   }
   // TODO @brown-ccv #291: Enable downloading all participant data at once
-  if (PARTICIPANT_ID == undefined) {
+  if (PARTICIPANT_ID === undefined) {
     PARTICIPANT_ID = await participantIDPrompt();
   } else {
     // when args directly passed in through CLI, check if participant is valid
@@ -299,7 +301,7 @@ async function studyIDPrompt() {
     message: "Select a study:",
     validate: async (input) => {
       if (!input) return invalidMessage;
-      if (ACTION == "register") {
+      if (ACTION === "register") {
         STUDY_ID = input;
         return true;
       }
@@ -324,12 +326,12 @@ const validateParticipantFirebase = async (input) => {
 
 async function participantIDPrompt() {
   return await input({
-    message: ACTION == "register" ? "Enter a new participant:" : "Select a participant:",
+    message: ACTION === "register" ? "Enter a new participant:" : "Select a participant:",
     validate: async (input) => {
       const invalid = "Please enter a valid participant from your Firestore database";
       if (!input) return invalid;
       else if (input === "*") return true;
-      if (ACTION == "register") {
+      if (ACTION === "register") {
         PARTICIPANT_ID = input;
         return true;
       }
@@ -346,7 +348,7 @@ async function participantIDPrompt() {
 /** Prompt the user to select one or more experiments of the PARTICIPANT_ID on STUDY_ID */
 async function experimentIDPrompt() {
   // register: adding/checking for existing new studies will be done in function
-  if (ACTION == "register") {
+  if (ACTION === "register") {
     return;
   }
 
