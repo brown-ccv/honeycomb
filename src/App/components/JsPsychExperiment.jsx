@@ -48,15 +48,17 @@ export default function JsPsychExperiment({
       });
 
       // Adds experiment data into jsPsych directly. These properties will be added to all trials
-      jsPsych.data.addProperties({
+      tempJsPsych.data.addProperties({
+        app_name: import.meta.env.PACKAGE_NAME,
+        app_version: import.meta.env.PACKAGE_VERSION,
+        app_commit: await window.electronAPI.getCommit(),
         study_id: studyID,
         participant_id: participantID,
         start_date: startDate,
-        task_version: import.meta.env.PACKAGE_VERSION,
       });
-
-      return jsPsych;
+      setJsPsych(tempJsPsych);
     }
+    initializeJsPsych();
   }, [studyID, participantID]);
 
   /**
