@@ -1,6 +1,6 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { LANGUAGE } from "../../config/index";
+import { LANGUAGE } from "../../config/";
 import { div, p, h1 } from "../../lib/markup/tags";
 
 /** Task that displays a introduction message with the photodiode ghost box */
