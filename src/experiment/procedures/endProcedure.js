@@ -1,4 +1,4 @@
-import { ENV } from "../../config/index";
+import { ENV } from "../../config/";
 import { buildCameraEndTrial } from "../trials/camera";
 import { conclusionTrial } from "../trials/conclusion";
 import { exitFullscreenTrial } from "../trials/fullscreen";
