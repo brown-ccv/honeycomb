@@ -2,7 +2,7 @@ import { initJsPsych } from "jspsych";
 import PropTypes from "prop-types";
 import React from "react";
 
-import { CONFIG, taskVersion } from "../../config/index";
+import { CONFIG } from "../../config/";
 import { buildTimeline, jsPsychOptions } from "../../experiment";
 import { initParticipant } from "../deployments/firebase";
 
@@ -46,7 +46,7 @@ export default function JsPsychExperiment({
       study_id: studyID,
       participant_id: participantID,
       start_date: startDate,
-      task_version: taskVersion,
+      task_version: import.meta.env.PACKAGE_VERSION,
     });
 
     return jsPsych;

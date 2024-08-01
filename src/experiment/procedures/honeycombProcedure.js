@@ -1,6 +1,6 @@
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 
-import { CONFIG, SETTINGS } from "../../config/index";
+import { CONFIG, SETTINGS } from "../../config/";
 import { eventCodes } from "../../config/trigger";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 import { buildFixationTrial } from "../trials/fixation";

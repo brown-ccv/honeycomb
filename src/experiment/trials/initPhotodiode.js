@@ -1,6 +1,6 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { CONFIG } from "../../config/index";
+import { CONFIG } from "../../config/";
 import { eventCodes } from "../../config/trigger";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 

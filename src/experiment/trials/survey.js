@@ -1,6 +1,6 @@
 import jsPsychSurveyPlugin from "@jspsych/plugin-survey";
 
-import { LANGUAGE } from "../../config/index";
+import { LANGUAGE } from "../../config/";
 
 // The survey plugin includes additional styling
 import "@jspsych/plugin-survey/css/survey.css";
