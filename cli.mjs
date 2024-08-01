@@ -47,19 +47,6 @@ commander
     STUDY_ID = studyID;
     PARTICIPANT_ID = participantID;
   });
-
-// register: optional argument studyID and participantID skips relative prompts
-commander
-  .command(`register`)
-  .argument(`[studyID]`)
-  .argument(`[participantID]`)
-  .description(`Register new partipant under study provided a partipantID and studyID`)
-  .action((studyID, participantID) => {
-    ACTION = "register";
-    STUDY_ID = studyID;
-    PARTICIPANT_ID = participantID;
-  });
-
 commander.parse();
 
 // print message if download or delete provided, along with optional args provided
@@ -116,15 +103,6 @@ async function main() {
       switch (DEPLOYMENT) {
         case "firebase":
           await deleteDataFirebase();
-          break;
-        default:
-          throw INVALID_DEPLOYMENT_ERROR;
-      }
-      break;
-    case "register":
-      switch (DEPLOYMENT) {
-        case "firebase":
-          await registerDataFirebase(STUDY_ID, PARTICIPANT_ID);
           break;
         default:
           throw INVALID_DEPLOYMENT_ERROR;
@@ -220,24 +198,6 @@ async function deleteDataFirebase() {
   } else console.log("Skipping deletion");
 }
 
-/** -------------------- REGISTER ACTION -------------------- */
-
-/** Register new data, write to Firestore */
-async function registerDataFirebase(studyID, participantID) {
-  const confirmation = await confirmRegisterPrompt(studyID, participantID);
-  if (confirmation) {
-    try {
-      await addStudyAndParticipant(studyID, participantID);
-    } catch (error) {
-      console.error(
-        `Unable to register new participant with participantID ${participantID} under studyID ${studyID}: ` +
-          error
-      );
-    }
-  } else console.log("Skipping registration");
-  return true;
-}
-
 /** -------------------- PROMPTS -------------------- */
 
 /** Prompt the user for the action they are trying to complete */
@@ -248,10 +208,6 @@ async function actionPrompt() {
       {
         name: "Download data",
         value: "download",
-      },
-      {
-        name: "Register new participant under study",
-        value: "register",
       },
       {
         name: "Delete data",
@@ -299,10 +255,6 @@ async function studyIDPrompt() {
     message: "Select a study:",
     validate: async (input) => {
       if (!input) return invalidMessage;
-      if (ACTION == "register") {
-        STUDY_ID = input;
-        return true;
-      }
       switch (DEPLOYMENT) {
         case "firebase":
           const res = await validateStudyFirebase(input);
@@ -325,15 +277,12 @@ async function validateParticipantFirebase(input) {
 async function participantIDPrompt() {
   const invalidMessage = `Please enter a valid participant on the study "${STUDY_ID}"`;
   return await input({
-    message: ACTION == "register" ? "Enter a new participant:" : "Select a participant:",
+    message: "Select a participant:",
     validate: async (input) => {
       const invalid = "Please enter a valid participant from your Firestore database";
       if (!input) return invalid;
       else if (input === "*") return true;
-      if (ACTION == "register") {
-        PARTICIPANT_ID = input;
-        return true;
-      }
+
       switch (DEPLOYMENT) {
         case "firebase":
           const res = await validateParticipantFirebase(input);
@@ -347,11 +296,6 @@ async function participantIDPrompt() {
 
 /** Prompt the user to select one or more experiments of the PARTICIPANT_ID on STUDY_ID */
 async function experimentIDPrompt() {
-  // register: adding/checking for existing new studies will be done in function
-  if (ACTION == "register") {
-    return;
-  }
-
   const dataSnapshot = await getDataRef(STUDY_ID, PARTICIPANT_ID).get();
 
   // Sort experiment choices by most recent first
@@ -395,20 +339,6 @@ async function confirmDeletionPrompt() {
   });
 }
 
-async function confirmRegisterPrompt(studyID, participantID) {
-  const currentParticipants = await getRegisteredParticipantArr(studyID);
-  const currentParticipantMessage =
-    currentParticipants.length == 0
-      ? "Currently, there are no participants under this study\n"
-      : `Currently, the participants under this study include: \n${currentParticipants.join("\n")}\n`;
-  return confirm({
-    message:
-      currentParticipantMessage +
-      `Continue? adding study with studyID: ${studyID} and participant ID: ${participantID}`,
-    default: false,
-  });
-}
-
 /**
  * Prompts the user to confirm continuation of the CLI, including future conflicts
  * @param {string} outputFile
@@ -446,7 +376,6 @@ async function confirmOverwritePrompt(file, overwriteAll) {
 /** -------------------- FIRESTORE HELPERS -------------------- */
 
 const RESPONSES_COL = "participant_responses";
-const REG_STUDY_COL = "registered_studies";
 const PARTICIPANTS_COL = "participants";
 const DATA_COL = "data";
 const TRIALS_COL = "trials";
@@ -465,54 +394,3 @@ const getDataRef = (studyID, participantID) =>
 // Get a reference to a participant's specific experiment data document in Firestore
 const getExperimentRef = (studyID, participantID, experimentID) =>
   getDataRef(studyID, participantID).doc(experimentID);
-
-// Get a reference to a registered study
-const getRegisteredfStudyRef = (studyID) => FIRESTORE.collection(REG_STUDY_COL).doc(studyID);
-
-// Get current registered participant array under the StudyID
-const getRegisteredParticipantArr = (studyID) => {
-  const res = getRegisteredfStudyRef(studyID)
-    .get()
-    .then((data) => {
-      if (data["_fieldsProto"] != undefined) {
-        return data["_fieldsProto"]["registered_participants"]["arrayValue"]["values"]
-          .filter((item) => item.valueType === "stringValue")
-          .map((item) => item.stringValue);
-      } else {
-        return [];
-      }
-    });
-
-  return res;
-};
-
-// Register new participantID under the provided studyID
-const registerNewParticipant = async (studyID, participantID) => {
-  const currParticipants = await getRegisteredParticipantArr(studyID);
-  const newParticipantArray = [...currParticipants, participantID];
-  const newData = { registered_participants: newParticipantArray };
-  getRegisteredfStudyRef(studyID).update(newData);
-  console.log(
-    `Successfully added study and participant. Current participantIDs under study ${studyID}: \n${newParticipantArray.join("\n")}`
-  );
-};
-
-// Add new participantID under studyID to Firestore under registered_studies,
-//  creates new study if studyID doesn't exist
-const addStudyAndParticipant = async (studyID, participantID) => {
-  getRegisteredfStudyRef(studyID)
-    .get()
-    .then((data) => {
-      // study not initated yet
-      if (data["_fieldsProto"] == undefined) {
-        getRegisteredfStudyRef(studyID)
-          .set({ registered_participants: [] })
-          .then(() => {
-            registerNewParticipant(studyID, participantID);
-          });
-      } else {
-        // study initiated, add to array holding registered participants
-        registerNewParticipant(studyID, participantID);
-      }
-    });
-};
