@@ -22,6 +22,9 @@ export default defineConfig((env) => {
   });
 });
 
+// TODO: In the template example the MAIN_WINDOW... variable is actually BUILT as the string in the build folder
+// TODO: Right now the variable stays as undefined in our build process
+
 /** @type {(env: import('vite').ConfigEnv<'build'>) => Record<string, any>} */
 function getBuildDefine({ command, forgeConfig }) {
   const names = forgeConfig.renderer.filter(({ name }) => name != null).map(({ name }) => name);
