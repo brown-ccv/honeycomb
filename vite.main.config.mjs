@@ -1,20 +1,25 @@
 import { defineConfig, mergeConfig } from "vite";
-
-import { getBuildConfig, getDefineKeys, external, pluginHotRestart } from "./vite.base.config.mjs";
+import { getBuildConfig, external, pluginHotRestart, getDefineKeys } from "./vite.base.config.mjs";
 
 /** Vite configuration for the main process */
 export default defineConfig((env) => {
-  return mergeConfig(getBuildConfig(env), {
+  /** @type {import('vite').ConfigEnv<'build'>} */
+  const forgeEnv = env;
+  const { forgeConfigSelf } = forgeEnv;
+  const define = getBuildDefine(forgeEnv);
+  return mergeConfig(getBuildConfig(forgeEnv), {
     build: {
       lib: {
-        entry: env.forgeConfigSelf.entry, // Pulls the entries from forge.config.js
+        entry: forgeConfigSelf.entry,
         fileName: () => "[name].js",
         formats: ["cjs"],
       },
-      rollupOptions: { external },
+      rollupOptions: {
+        external,
+      },
     },
     plugins: [pluginHotRestart("restart")],
-    define: getBuildDefine(env),
+    define,
     resolve: {
       // Load the Node.js entry.
       mainFields: ["module", "jsnext:main", "jsnext"],
@@ -22,11 +27,9 @@ export default defineConfig((env) => {
   });
 });
 
-// TODO: In the template example the MAIN_WINDOW... variable is actually BUILT as the string in the build folder
-// TODO: Right now the variable stays as undefined in our build process
-
 /** @type {(env: import('vite').ConfigEnv<'build'>) => Record<string, any>} */
-function getBuildDefine({ command, forgeConfig }) {
+export const getBuildDefine = (env) => {
+  const { command, forgeConfig } = env;
   const names = forgeConfig.renderer.filter(({ name }) => name != null).map(({ name }) => name);
   const defineKeys = getDefineKeys(names);
   const define = Object.entries(defineKeys).reduce((acc, [name, keys]) => {
@@ -40,4 +43,4 @@ function getBuildDefine({ command, forgeConfig }) {
   }, {});
 
   return define;
-}
+};

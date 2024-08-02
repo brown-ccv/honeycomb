@@ -68,7 +68,8 @@
     "vite": "^5.2.11"
   },
   "scripts": {
-    "start:browser": "vite --port 3000",
+    "start:browser": "vite",
+    "start:test": "vite",
     "start:electron": "electron-forge start",
     "dev:home": "dotenv -e env/.env.home npm run start:electron",
     "dev:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run start:electron",

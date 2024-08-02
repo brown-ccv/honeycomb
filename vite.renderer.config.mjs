@@ -1,19 +1,17 @@
 import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import { defineConfig, mergeConfig } from "vite";
 
-import { pluginExposeRenderer } from "./vite.base.config.mjs";
+import baseConfig, { pluginExposeRenderer } from "./vite.base.config.mjs";
 
 /** Vite configuration for the render process */
-export default defineConfig(({ root, mode, forgeConfig, forgeConfigSelf }) => {
+// TODO: Can we clean this up at all?
+export default defineConfig((env) => {
+  /** @type {import('vite').ConfigEnv<'renderer'>} */
+  const forgeEnv = env;
+  const { root, mode, forgeConfigSelf } = forgeEnv;
   const name = forgeConfigSelf.name ?? "";
-  return {
-    root,
-    mode,
-    define: forgeConfig.define,
-    base: "./",
+  return mergeConfig(baseConfig, {
     build: { outDir: `.vite/renderer/${name}` },
     plugins: [react(), pluginExposeRenderer(name)],
-    resolve: { preserveSymlinks: true },
-    clearScreen: false,
-  };
+  });
 });

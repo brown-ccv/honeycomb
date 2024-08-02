@@ -1,20 +1,22 @@
 import { builtinModules } from "node:module";
 import pkg from "./package.json";
+import { defineConfig } from "vite";
 
 export const builtins = ["electron", ...builtinModules.map((m) => [m, `node:${m}`]).flat()];
 
 export const external = [...builtins, ...Object.keys(pkg.dependencies || {})];
 
 /** @type {(env: import('vite').ConfigEnv<'build'>) => import('vite').UserConfig} */
-export const getBuildConfig = ({ root, mode, command, forgeConfig }) => {
-  const { define } = forgeConfig;
+export const getBuildConfig = (env) => {
+  const { root, mode, command } = env;
+
   return {
     root,
     mode,
-    define,
     build: {
       // Prevent multiple builds from interfering with each other.
       emptyOutDir: false,
+      // 🚧 Multiple builds may conflict.
       outDir: ".vite/build",
       watch: command === "serve" ? {} : null,
       minify: command === "build",
@@ -68,9 +70,26 @@ export const pluginHotRestart = (command) => {
           server.ws.send({ type: "full-reload" });
         }
       } else {
-        // Main process hot restart: https://github.com/electron/forge/blob/v7.2.0/packages/api/core/src/api/start.ts#L216-L223
+        // Main process hot restart.
+        // https://github.com/electron/forge/blob/v7.2.0/packages/api/core/src/api/start.ts#L216-L223
         process.stdin.emit("data", "rs");
       }
     },
   };
 };
+
+/**
+ * Base vite config shared between electron-forge and the browser
+ */
+export default defineConfig({
+  base: "./",
+  define: {
+    "import.meta.env.PACKAGE_NAME": JSON.stringify(process.env.npm_package_name),
+    "import.meta.env.PACKAGE_VERSION": JSON.stringify(process.env.npm_package_version),
+  },
+  server: {
+    port: 3000,
+  },
+  resolve: { preserveSymlinks: true },
+  clearScreen: false,
+});
