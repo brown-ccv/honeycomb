@@ -10,7 +10,8 @@ export default defineConfig((env) =>
         // Preload scripts may contain Web assets, so use the `build.rollupOptions.input` instead `build.lib.entry`.
         input: env.forgeConfigSelf.entry,
         output: {
-          format: "cjs", // TODO: Switch to ESM modules
+          // format: "cjs", // TODO: Switch to ESM modules
+          format: "es",
           // It should not be split chunks.
           inlineDynamicImports: true,
           entryFileNames: "[name].js",
