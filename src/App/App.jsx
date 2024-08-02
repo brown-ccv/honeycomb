@@ -52,6 +52,7 @@ export default function App() {
         "Task Settings": SETTINGS,
       });
 
+     // TEMP: Testing to ensure the config is setup correctly
       console.log(
         "ENVIRONMENT",
         import.meta.env.PACKAGE_NAME,
