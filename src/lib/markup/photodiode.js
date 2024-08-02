@@ -1,4 +1,4 @@
-import { config } from "../../config/main";
+import { CONFIG } from "../../config/";
 import { div, span } from "./tags";
 
 // TODO @brown-ccv #329: Refactor photodiode logic to be a custom jsPsych extension
@@ -22,11 +22,11 @@ export const photodiodeGhostBox = div(span("", { id: SPOT_ID }), { id: BOX_ID })
  * @param {number} taskCode The unique code for the given trial on which this function executes
  */
 export function pdSpotEncode(taskCode) {
-  if (!config.USE_ELECTRON) {
+  if (!CONFIG.USE_ELECTRON) {
     throw new Error("photodiodeSpot trial is only available when running inside Electron");
   }
 
-  if (config.USE_PHOTODIODE) {
+  if (CONFIG.USE_PHOTODIODE) {
     // TODO @brown-ccv #333: Get blink time from config.json (equipment.trigger_box.event_codes) (40ms is the default)
     const blinkTime = 40;
     // TODO @brown-ccv #354: Gen numBlinks from config.json (equipment.trigger_box.event_codes) (40ms is the default)
