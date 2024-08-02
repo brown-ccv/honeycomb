@@ -18,6 +18,7 @@
   "repository": "https://github.com/brown-ccv/honeycomb",
   "license": "MIT",
   "private": true,
+  "type": "module",
   "main": ".vite/build/main.js",
   "homepage": ".",
   "dependencies": {
