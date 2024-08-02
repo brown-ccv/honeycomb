@@ -94,7 +94,7 @@
     "format": "prettier --write .",
     "lint": "eslint .",
     "prepare": "husky",
-    "postinstall": "node version.js"
+    "postinstall": "node version.mjs"
   },
   "browserslist": {
     "production": [
