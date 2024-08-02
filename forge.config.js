@@ -42,11 +42,11 @@ export default {
       config: {
         build: [
           // Build files that use the main config
-          { entry: "src/Electron/main.js", config: "vite.main.config.mjs" },
+          { entry: "src/Electron/main.js", config: "vite.main.config.js" },
           // Build files that use the preload config
-          { entry: "src/Electron/preload.js", config: "vite.preload.config.mjs" },
+          { entry: "src/Electron/preload.js", config: "vite.preload.config.js" },
         ],
-        renderer: [{ name: "main_window", config: "vite.renderer.config.mjs" }],
+        renderer: [{ name: "main_window", config: "vite.renderer.config.js" }],
       },
     },
     {

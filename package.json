@@ -90,12 +90,12 @@
     "make:windows": "electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
     "make:linux": "electron-forge make --arch x64 --targets @electron-forge/maker-deb",
     "make:mac": "electron-forge make  --arch universal --targets @electron-forge/maker-dmg",
-    "cli": "node cli.mjs",
+    "cli": "node cli.js",
     "commit": "git-cz",
     "format": "prettier --write .",
     "lint": "eslint .",
     "prepare": "husky",
-    "postinstall": "node version.mjs"
+    "postinstall": "node version.js"
   },
   "browserslist": {
     "production": [

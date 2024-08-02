@@ -1,7 +1,7 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig, mergeConfig } from "vite";
 
-import baseConfig, { getDefineKeys } from "./vite.base.config.mjs";
+import baseConfig, { getDefineKeys } from "./vite.base.config.js";
 
 /** Vite configuration for the render process */
 export default defineConfig(({ forgeConfigSelf }) => {

@@ -1,3 +1,4 @@
+// TODO: Can I make you a module? Think I need to upgrade eslint
 module.exports = {
   root: true,
   env: {
