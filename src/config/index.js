@@ -4,8 +4,8 @@ import language from "./language.json";
 // Re-export the settings object
 // TODO @brown-ccv #374: Save settings in Firebase
 import settings from "./settings.json";
-import env from "./env.js";
+import ENV from "./env.js";
 
 export const LANGUAGE = language;
 export const SETTINGS = settings;
-export const ENV = env;
+export { ENV };
