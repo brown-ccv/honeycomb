@@ -2,21 +2,38 @@ import { builtinModules } from "node:module";
 import { defineConfig } from "vite";
 import pkg from "./package.json";
 
-export const builtins = ["electron", ...builtinModules.map((m) => [m, `node:${m}`]).flat()];
+/** Base vite config shared between electron-forge and the browser */
+export default defineConfig({
+  base: "./",
+  define: {
+    // TODO: Rename as __APP_NAME__ and __APP_VERSION__
+    "import.meta.env.PACKAGE_NAME": JSON.stringify(process.env.npm_package_name),
+    "import.meta.env.PACKAGE_VERSION": JSON.stringify(process.env.npm_package_version),
+  },
+  server: { port: 3000 },
+  resolve: { preserveSymlinks: true },
+  clearScreen: false,
+});
 
-export const external = [...builtins, ...Object.keys(pkg.dependencies || {})];
+/** The complete list of dependencies used in the project */
+export const external = [
+  // Builtin dependencies
+  ...["electron", ...builtinModules.map((m) => [m, `node:${m}`]).flat()],
+  // External dependencies
+  ...Object.keys(pkg.dependencies || {}),
+];
 
-/** @type {(env: import('vite').ConfigEnv<'build'>) => import('vite').UserConfig} */
-export const getBuildConfig = (env) => {
-  const { root, mode, command } = env;
-
+/**
+ * Helper function for building the Vite config shared across the electron-forge processes
+ * @type {(env: import('vite').ConfigEnv<'build'>) => import('vite').UserConfig}
+ */
+export const getBuildConfig = ({ root, mode, command }) => {
   return {
     root,
     mode,
     build: {
-      // Prevent multiple builds from interfering with each other.
+      // 🚧 Prevent multiple builds from interfering with each other.
       emptyOutDir: false,
-      // 🚧 Multiple builds may conflict.
       outDir: ".vite/build",
       watch: command === "serve" ? {} : null,
       minify: command === "build",
@@ -25,7 +42,10 @@ export const getBuildConfig = (env) => {
   };
 };
 
-/** @type {(names: string[]) => { [name: string]: VitePluginRuntimeKeys } }} */
+/**
+ * Helper function for generating the keys used to build the "define" configuration
+ * @type {(names: string[]) => { [name: string]: VitePluginRuntimeKeys } }
+ */
 export const getDefineKeys = (names) => {
   /** @type {{ [name: string]: VitePluginRuntimeKeys }} */
   const define = {};
@@ -40,26 +60,10 @@ export const getDefineKeys = (names) => {
   }, define);
 };
 
-/** @type {(name: string) => import('vite').Plugin} */
-export const pluginExposeRenderer = (name) => {
-  const { VITE_DEV_SERVER_URL } = getDefineKeys([name])[name];
-  return {
-    name: "@electron-forge/plugin-vite:expose-renderer",
-    configureServer(server) {
-      process.viteDevServers ??= {};
-      // Expose server for preload scripts hot reload.
-      process.viteDevServers[name] = server;
-      server.httpServer?.once("listening", () => {
-        /** @type {import('node:net').AddressInfo} */
-        const addressInfo = server.httpServer?.address();
-        // Expose env constant for main process use.
-        process.env[VITE_DEV_SERVER_URL] = `http://localhost:${addressInfo?.port}`;
-      });
-    },
-  };
-};
-
-/** @type {(command: 'reload' | 'restart') => import('vite').Plugin} */
+/**
+ * Plugin that enables hot reloading and hot restarting in the electron-forge processes
+ * @type {(command: 'reload' | 'restart') => import('vite').Plugin}
+ */
 export const pluginHotRestart = (command) => {
   return {
     name: "@electron-forge/plugin-vite:hot-restart",
@@ -70,26 +74,9 @@ export const pluginHotRestart = (command) => {
           server.ws.send({ type: "full-reload" });
         }
       } else {
-        // Main process hot restart.
-        // https://github.com/electron/forge/blob/v7.2.0/packages/api/core/src/api/start.ts#L216-L223
+        // Main process hot restart: https://github.com/electron/forge/blob/v7.2.0/packages/api/core/src/api/start.ts#L216-L223
         process.stdin.emit("data", "rs");
       }
     },
   };
 };
-
-/**
- * Base vite config shared between electron-forge and the browser
- */
-export default defineConfig({
-  base: "./",
-  define: {
-    "import.meta.env.PACKAGE_NAME": JSON.stringify(process.env.npm_package_name),
-    "import.meta.env.PACKAGE_VERSION": JSON.stringify(process.env.npm_package_version),
-  },
-  server: {
-    port: 3000,
-  },
-  resolve: { preserveSymlinks: true },
-  clearScreen: false,
-});
