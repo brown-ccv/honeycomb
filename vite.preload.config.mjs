@@ -1,5 +1,5 @@
 import { defineConfig, mergeConfig } from "vite";
-import { getBuildConfig, external, pluginHotRestart } from "./vite.base.config.mjs";
+import { external, getBuildConfig, pluginHotRestart } from "./vite.base.config.mjs";
 
 /** Vite configuration for the preload process */
 // TODO: Can we clean this up at all?

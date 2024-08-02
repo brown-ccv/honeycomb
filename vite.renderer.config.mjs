@@ -8,7 +8,7 @@ import baseConfig, { pluginExposeRenderer } from "./vite.base.config.mjs";
 export default defineConfig((env) => {
   /** @type {import('vite').ConfigEnv<'renderer'>} */
   const forgeEnv = env;
-  const { root, mode, forgeConfigSelf } = forgeEnv;
+  const { forgeConfigSelf } = forgeEnv;
   const name = forgeConfigSelf.name ?? "";
   return mergeConfig(baseConfig, {
     build: { outDir: `.vite/renderer/${name}` },

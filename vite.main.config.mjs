@@ -1,5 +1,5 @@
 import { defineConfig, mergeConfig } from "vite";
-import { getBuildConfig, external, pluginHotRestart, getDefineKeys } from "./vite.base.config.mjs";
+import { external, getBuildConfig, getDefineKeys, pluginHotRestart } from "./vite.base.config.mjs";
 
 /** Vite configuration for the main process */
 export default defineConfig((env) => {
