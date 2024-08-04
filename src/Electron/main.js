@@ -4,7 +4,6 @@ import path from "node:path";
 
 import { BrowserWindow, app, dialog, ipcMain } from "electron";
 import log from "electron-log";
-import _ from "lodash";
 
 import { getPort, sendToPort } from "./lib/serialport";
 
