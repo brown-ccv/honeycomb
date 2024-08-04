@@ -12,7 +12,7 @@ import { div } from "../../lib/markup/tags";
  */
 export function buildFixationTrial(jsPsych) {
   const fixationSettings = SETTINGS.fixation;
-  const fixationCode = eventCodes.fixation;
+  const fixationCode = eventCodes.fixation.code;
 
   return {
     type: htmlKeyboardResponse,

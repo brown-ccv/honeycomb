@@ -41,12 +41,12 @@ export function buildHoneycombProcedure(jsPsych) {
     choices: honeycombSettings.timeline_variables.map((variable) => variable.correct_response),
     data: {
       // Record the correct_response passed as a timeline variable
-      code: eventCodes.honeycomb,
+      code: eventCodes.honeycomb.code,
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
     on_load: function () {
       // Conditionally flashes the photodiode when the trial first loads
-      if (ENV.USE_PHOTODIODE) pdSpotEncode(eventCodes.honeycomb);
+      if (ENV.USE_PHOTODIODE) pdSpotEncode(eventCodes.honeycomb.code);
     },
     // Add a boolean value ("correct") to the data - if the user responded with the correct key or not
     on_finish: function (data) {

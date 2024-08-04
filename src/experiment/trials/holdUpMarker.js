@@ -27,6 +27,6 @@ export const holdUpMarkerTrial = {
   choices: [LANGUAGE.prompts.continue.button],
   on_load: function () {
     // Conditionally flash the photodiode when the trial first loads
-    if (ENV.USE_PHOTODIODE) pdSpotEncode(eventCodes.test_connect);
+    if (ENV.USE_PHOTODIODE) pdSpotEncode(eventCodes.test_connect.code);
   },
 };

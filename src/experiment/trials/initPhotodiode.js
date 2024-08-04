@@ -18,6 +18,6 @@ export const initPhotodiodeTrial = {
     }
 
     // Flashes the photodiode when the trial first loads
-    pdSpotEncode(eventCodes.open_task);
+    pdSpotEncode(eventCodes.open_task.code);
   },
 };

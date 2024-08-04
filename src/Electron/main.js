@@ -157,7 +157,7 @@ function handleGetCredentials() {
  * @returns {Boolean} Whether or not the EEG machine is connected to the computer
  */
 function handleCheckSerialPort() {
-  setUpPort().then(() => handleEventSend(TRIGGER_CODES.eventCodes.test_connect));
+  setUpPort().then(() => handleEventSend(TRIGGER_CODES.eventCodes.test_connect.code));
 }
 
 /**
@@ -167,7 +167,10 @@ function handleCheckSerialPort() {
  */
 function handlePhotodiodeTrigger(event, code) {
   if (code !== undefined) {
-    log.info(`Event: ${_.invert(TRIGGER_CODES.eventCodes)[code]}, code: ${code}`);
+    const eventName = Object.keys(TRIGGER_CODES.eventCodes).find(
+      (key) => TRIGGER_CODES.eventCodes[key].code === code
+    );
+    log.info(`Event: ${eventName}, code: ${code}`);
     handleEventSend(code);
   } else {
     log.warn("Photodiode event triggered but no code was sent");
