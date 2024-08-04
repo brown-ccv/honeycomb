@@ -85,7 +85,7 @@ async function main() {
   } else {
     // when args directly passed in through CLI, check if study is valid
     const hasStudy = await validateStudyFirebase(STUDY_ID);
-    if (hasStudy != true && ACTION != "register") {
+    if (hasStudy !== true && ACTION !== "register") {
       console.error(hasStudy);
       return;
     }
@@ -96,7 +96,7 @@ async function main() {
   } else {
     // when args directly passed in through CLI, check if participant is valid
     const hasParticipant = await validateParticipantFirebase(STUDY_ID);
-    if (hasParticipant != true && ACTION != "register") {
+    if (hasParticipant !== true && ACTION !== "register") {
       console.error(hasParticipant);
       return;
     }
@@ -398,7 +398,7 @@ async function confirmDeletionPrompt() {
 async function confirmRegisterPrompt(studyID, participantID) {
   const currentParticipants = await getRegisteredParticipantArr(studyID);
   const currentParticipantMessage =
-    currentParticipants.length == 0
+    currentParticipants.length === 0
       ? "Currently, there are no participants under this study\n"
       : `Currently, the participants under this study include: \n${currentParticipants.join("\n")}\n`;
   return confirm({
@@ -504,7 +504,7 @@ const addStudyAndParticipant = async (studyID, participantID) => {
     .get()
     .then((data) => {
       // study not initated yet
-      if (data["_fieldsProto"] == undefined) {
+      if (data["_fieldsProto"] === undefined) {
         getRegisteredfStudyRef(studyID)
           .set({ registered_participants: [] })
           .then(() => {
