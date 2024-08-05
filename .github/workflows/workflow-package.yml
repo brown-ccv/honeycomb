@@ -1,6 +1,7 @@
 name: 📦 Package Workflow
 
 # Workflow dispatch for packaging an electron executable
+# TODO: Update actions running on Node 16 (all workflows)
 on:
   workflow_dispatch:
     inputs:
