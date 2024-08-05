@@ -4,8 +4,7 @@ import log from "electron-log";
 log.info("PRELOAD");
 /** Load bridges between the main and renderer processes when the preload process is first loaded */
 process.once("loaded", () => {
-  // TODO: The "loaded" state is never executed for some reason
-  console.log("PRELOAD LOADED");
+  // TODO: "module" stuff is working but this "loaded" state is never finished
   log.info("PRELOAD LOADED");
   contextBridge.exposeInMainWorld("electronAPI", {
     setConfig: (config) => ipcRenderer.send("setConfig", config),
