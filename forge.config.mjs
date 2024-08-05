@@ -5,7 +5,6 @@ export default {
   packagerConfig: {
     asar: true,
     icon: "assets/icons/icon",
-    osxSign: {}, // TODO: From @eldu, confirm it's needed?
   },
   rebuildConfig: {},
   makers: [
