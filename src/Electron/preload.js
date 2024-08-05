@@ -6,6 +6,7 @@ process.once("loaded", () => {
     setConfig: (config) => ipcRenderer.send("setConfig", config),
     setTrigger: (triggerCodes) => ipcRenderer.send("setTrigger", triggerCodes),
     getCredentials: () => ipcRenderer.invoke("getCredentials"),
+    getCommit: () => ipcRenderer.invoke("getCommit"),
     on_data_update: (data) => ipcRenderer.send("onDataUpdate", data),
     on_finish: () => ipcRenderer.invoke("onFinish"),
     photodiodeTrigger: (data) => ipcRenderer.send("photodiodeTrigger", data),

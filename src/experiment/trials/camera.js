@@ -2,7 +2,7 @@ import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import initializeCamera from "@jspsych/plugin-initialize-camera";
 
-import { LANGUAGE, config } from "../../config/main";
+import { LANGUAGE, CONFIG } from "../../config/";
 import { div, h1, p, tag } from "../../lib/markup/tags";
 
 const WEBCAM_ID = "webcam";
@@ -36,8 +36,7 @@ export function buildCameraStartTrial(jsPsych) {
           });
           const cameraStartMarkup = p(LANGUAGE.trials.camera.start);
           const trialMarkup = div(cameraStartMarkup + videoMarkup, {
-            // TODO @brown-ccv #344: Get rid of bootstrap (this is just centering it)
-            class: "d-flex flex-column align-items-center",
+            class: "align-items-center-col",
           });
           return div(trialMarkup);
         },
@@ -45,7 +44,7 @@ export function buildCameraStartTrial(jsPsych) {
         response_ends_trial: true,
         on_start: function () {
           // Initialize and store the camera feed
-          if (!config.USE_ELECTRON) {
+          if (!CONFIG.USE_ELECTRON) {
             throw new Error("video recording is only available when running inside Electron");
           }
 
@@ -99,12 +98,12 @@ export function buildCameraEndTrial(jsPsych) {
 
   return {
     type: htmlKeyboardResponse,
-    stimulus: div(recordingEndMarkup, { class: "bottom-prompt" }),
+    stimulus: div(recordingEndMarkup),
     trial_duration: 5000,
     on_start: function () {
       // Complete the camera recording
 
-      if (!config.USE_ELECTRON) {
+      if (!CONFIG.USE_ELECTRON) {
         throw new Error("video recording is only available when running inside Electron");
       }
 
