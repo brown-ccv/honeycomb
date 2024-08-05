@@ -10,12 +10,14 @@ export default defineConfig((env) =>
         // Preload scripts may contain Web assets, so use the `build.rollupOptions.input` instead `build.lib.entry`.
         input: env.forgeConfigSelf.entry,
         output: {
-          // format: "cjs", // TODO: Switch to ESM modules
           format: "es",
           // It should not be split chunks.
           inlineDynamicImports: true,
-          entryFileNames: "[name].js",
-          chunkFileNames: "[name].js",
+          // NOTE: The preload script must be built with the .mjs extensions: https://www.electronjs.org/docs/latest/tutorial/esm#esm-preload-scripts-must-have-the-mjs-extension
+          // entryFileNames: "[name].js",
+          // chunkFileNames: "[name].js",
+          entryFileNames: "[name].mjs",
+          chunkFileNames: "[name].mjs",
           assetFileNames: "[name].[ext]",
         },
       },
