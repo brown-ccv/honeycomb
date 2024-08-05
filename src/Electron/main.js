@@ -16,8 +16,6 @@ import { getPort, sendToPort } from "./lib/serialport";
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
 
-console.log("MAIN", import.meta.dirname, import.meta.filename);
-
 /************ GLOBALS ***********/
 
 const IS_DEV = import.meta.env.DEV && !app.isPackaged;
@@ -303,7 +301,14 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     icon: "./favicon.ico",
     // webPreferences: { preload: path.join(__dirname, "preload.js") },
-    webPreferences: { preload: path.join(import.meta.dirname, "preload.js") },
+    webPreferences: {
+      // preload: path.join(import.meta.dirname, "preload.js"),
+      preload: path.join(import.meta.dirname, "preload.mjs"),
+      // TEST
+      sandbox: false,
+      contextIsolation: true,
+      // enableRemoteModule: false,
+    },
     width: 1500,
     height: 900,
     // TODO @brown-ccv: Settings for preventing the menu bar from ever showing up

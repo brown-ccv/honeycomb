@@ -1,7 +1,12 @@
 import { contextBridge, ipcRenderer } from "electron";
+import log from "electron-log";
 
+log.info("PRELOAD");
 /** Load bridges between the main and renderer processes when the preload process is first loaded */
 process.once("loaded", () => {
+  // TODO: The "loaded" state is never executed for some reason
+  console.log("PRELOAD LOADED");
+  log.info("PRELOAD LOADED");
   contextBridge.exposeInMainWorld("electronAPI", {
     setConfig: (config) => ipcRenderer.send("setConfig", config),
     setTrigger: (triggerCodes) => ipcRenderer.send("setTrigger", triggerCodes),
