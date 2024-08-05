@@ -18,4 +18,6 @@ const config = {
   USE_EEG,
   USE_CAMERA,
 };
+
+console.log("CONFIG", window.electronAPI, config);
 export default config;

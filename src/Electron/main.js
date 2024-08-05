@@ -36,7 +36,9 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 /************ APP LIFECYCLE ***********/
 
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
-if (require("electron-squirrel-startup")) app.quit();
+// if (require("electron-squirrel-startup")) app.quit();
+// TODO: This causes the app to quit right away, even in development
+// if (import("electron-squirrel-startup")) app.quit();
 
 // Initialize the logger
 // TODO @brown-ccv #398: Handle logs in app.getPath('logs')
@@ -165,7 +167,8 @@ async function handleGetCommit() {
       };
     } else {
       // Load the Git Commit SHA and Branch that was created at build-time
-      return JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
+      // return JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
+      return JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname, "version.json")));
     }
   } catch (e) {
     log.error("Unable to determine git version");
@@ -297,7 +300,15 @@ function createWindow() {
   // Create the browser window
   const mainWindow = new BrowserWindow({
     icon: "./favicon.ico",
-    webPreferences: { preload: path.join(__dirname, "preload.js") },
+    // webPreferences: { preload: path.join(__dirname, "preload.js") },
+    webPreferences: {
+      // preload: path.join(import.meta.dirname, "preload.js"),
+      preload: path.join(import.meta.dirname, "preload.mjs"),
+      // TEST
+      sandbox: false,
+      contextIsolation: true,
+      // enableRemoteModule: false,
+    },
     width: 1500,
     height: 900,
     // TODO @brown-ccv: Settings for preventing the menu bar from ever showing up
@@ -311,7 +322,10 @@ function createWindow() {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
     // TODO @brown-ccv: JsPsych protections for loading from a file://
-    mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+    // mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+    mainWindow.loadFile(
+      path.join(import.meta.dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
+    );
   }
   log.info("Loaded Renderer process");
 }
