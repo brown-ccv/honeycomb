@@ -1,6 +1,6 @@
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 
-import { config, SETTINGS } from "../../config/main";
+import { CONFIG, SETTINGS } from "../../config/";
 import { eventCodes } from "../../config/trigger";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 import { buildFixationTrial } from "../trials/fixation";
@@ -34,7 +34,7 @@ export function buildHoneycombProcedure(jsPsych) {
     stimulus: jsPsych.timelineVariable("stimulus"),
     prompt: function () {
       // Conditionally displays the photodiodeGhostBox
-      if (config.USE_PHOTODIODE) return photodiodeGhostBox;
+      if (CONFIG.USE_PHOTODIODE) return photodiodeGhostBox;
       else return null;
     },
     // Possible choices are the correct_responses from the task settings
@@ -46,7 +46,7 @@ export function buildHoneycombProcedure(jsPsych) {
     },
     on_load: function () {
       // Conditionally flashes the photodiode when the trial first loads
-      if (config.USE_PHOTODIODE) pdSpotEncode(eventCodes.honeycomb);
+      if (CONFIG.USE_PHOTODIODE) pdSpotEncode(eventCodes.honeycomb);
     },
     // Add a boolean value ("correct") to the data - if the user responded with the correct key or not
     on_finish: function (data) {
