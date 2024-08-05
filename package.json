@@ -36,7 +36,6 @@
     "@jspsych/plugin-survey": "^1.0.1",
     "electron-log": "^5.0.0",
     "electron-squirrel-startup": "^1.0.0",
-    "execa": "^8.0.1",
     "firebase": "^10.11.0",
     "fs-extra": "^11.1.1",
     "jspsych": "^7.2.3",
@@ -44,7 +43,6 @@
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
     "serialport": "^12.0.0"
   },
   "devDependencies": {
@@ -55,7 +53,7 @@
     "@electron-forge/maker-zip": "^7.4.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
     "@electron-forge/plugin-vite": "^7.4.0",
-    "@inquirer/prompts": "^3.0.3",
+    "@inquirer/prompts": "^5.3.6",
     "@vitejs/plugin-react": "^4.0.4",
     "cz-conventional-changelog": "^3.2.0",
     "dotenv-cli": "^7.0.0",
@@ -63,6 +61,7 @@
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-react": "^7.35.0",
     "firebase-admin": "^12.0.0",
     "firebase-tools": "^13.1.0",
     "husky": "^9.0.10",
