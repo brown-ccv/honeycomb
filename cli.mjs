@@ -60,7 +60,7 @@ if (ACTION !== undefined) {
 
 // TODO @brown-ccv #289: Pass CLI arguments with commander (especially for action)
 async function main() {
-  if (ACTION == undefined) {
+  if (ACTION === undefined) {
     ACTION = await actionPrompt();
   }
   DEPLOYMENT = await deploymentPrompt();
