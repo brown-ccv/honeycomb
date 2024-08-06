@@ -2,7 +2,7 @@ import { initJsPsych } from "jspsych";
 import PropTypes from "prop-types";
 import React from "react";
 
-import { CONFIG } from "../../config/";
+import { ENV } from "../../config/";
 import { buildTimeline, jsPsychOptions } from "../../experiment";
 import { initParticipant } from "../deployments/firebase";
 
@@ -31,7 +31,7 @@ export default function JsPsychExperiment({
       const startDate = new Date().toISOString();
 
       // Write the initial record to Firestore
-      if (CONFIG.USE_FIREBASE) initParticipant(studyID, participantID, startDate);
+      if (ENV.USE_FIREBASE) initParticipant(studyID, participantID, startDate);
 
       const tempJsPsych = initJsPsych({
         // Combine necessary Honeycomb options with custom ones (src/timelines/main.js)

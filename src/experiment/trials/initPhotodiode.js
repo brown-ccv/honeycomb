@@ -1,6 +1,6 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { CONFIG } from "../../config/";
+import { ENV } from "../../config/";
 import { eventCodes } from "../../config/trigger";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 
@@ -10,10 +10,10 @@ export const initPhotodiodeTrial = {
   trial_duration: 1600,
   stimulus: photodiodeGhostBox,
   on_load: function () {
-    if (!CONFIG.USE_ELECTRON) {
+    if (!ENV.USE_ELECTRON) {
       throw new Error("photodiode recording is only available when running inside Electron");
     }
-    if (!CONFIG.USE_PHOTODIODE) {
+    if (!ENV.USE_PHOTODIODE) {
       console.warn("photodiode trial was run but USE_PHOTODIODE is set to false ");
     }
 
