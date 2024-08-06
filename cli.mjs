@@ -50,7 +50,7 @@ commander
 commander.parse();
 
 // print message if download or delete provided, along with optional args provided
-if (ACTION != undefined) {
+if (ACTION !== undefined) {
   console.log(
     `${ACTION} data from Firebase given ${STUDY_ID === undefined ? "" : `study ID: ${STUDY_ID}`} ${PARTICIPANT_ID === undefined ? "" : `and participant ID: ${PARTICIPANT_ID}`}`
   );
