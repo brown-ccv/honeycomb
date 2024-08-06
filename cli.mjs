@@ -69,8 +69,8 @@ async function main() {
     STUDY_ID = await studyIDPrompt();
   } else {
     // when args directly passed in through CLI, check if study is valid
-    const hasStudy = await validateStudyFirebase(STUDY_ID);
-    if (!hasStudy) {
+    const studyCollection = await validateStudyFirebase(STUDY_ID);
+    if (!studyCollection) {
       console.error("Please enter a valid study from your Firestore database");
       return;
     }
@@ -80,8 +80,8 @@ async function main() {
     PARTICIPANT_ID = await participantIDPrompt();
   } else {
     // when args directly passed in through CLI, check if participant is valid
-    const hasParticipant = await validateParticipantFirebase(PARTICIPANT_ID);
-    if (!hasParticipant) {
+    const participantCollection = await validateParticipantFirebase(PARTICIPANT_ID);
+    if (!participantCollection) {
       console.error(`Please enter a valid participant on the study "${STUDY_ID}"`);
       return;
     }
@@ -242,13 +242,6 @@ async function deploymentPrompt() {
 }
 
 /** Prompt the user to enter the ID of a study */
-// helper to check if the given study (input) is in firestore
-async function validateStudyFirebase(input) {
-  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid studyID
-  const studyIDCollections = await getStudyRef(input).listCollections();
-  return studyIDCollections.find((c) => c.id === PARTICIPANTS_COL);
-}
-
 async function studyIDPrompt() {
   const invalidMessage = "Please enter a valid study from your Firestore database";
   return await input({
@@ -257,8 +250,8 @@ async function studyIDPrompt() {
       if (!input) return invalidMessage;
       switch (DEPLOYMENT) {
         case "firebase":
-          const res = await validateStudyFirebase(input);
-          return !res ? invalidMessage : true;
+          const studyCollection = await validateStudyFirebase(input);
+          return !studyCollection ? invalidMessage : true;
         default:
           throw INVALID_DEPLOYMENT_ERROR;
       }
@@ -267,13 +260,6 @@ async function studyIDPrompt() {
 }
 
 /** Prompt the user to enter the ID of a participant on the STUDY_ID study */
-// helper to check if the given participant (input) is in firestore under study
-async function validateParticipantFirebase(input) {
-  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid participantID
-  const studyIDCollections = await getParticipantRef(STUDY_ID, input).listCollections();
-  return studyIDCollections.find((c) => c.id === DATA_COL);
-}
-
 async function participantIDPrompt() {
   const invalidMessage = `Please enter a valid participant on the study "${STUDY_ID}"`;
   return await input({
@@ -285,8 +271,8 @@ async function participantIDPrompt() {
 
       switch (DEPLOYMENT) {
         case "firebase":
-          const res = await validateParticipantFirebase(input);
-          return !res ? invalidMessage : true;
+          const participantCollection = await validateParticipantFirebase(input);
+          return !participantCollection ? invalidMessage : true;
         default:
           throw INVALID_DEPLOYMENT_ERROR;
       }
@@ -371,6 +357,21 @@ async function confirmOverwritePrompt(file, overwriteAll) {
     ],
   });
   return answer;
+}
+
+/** -------------------- FIRESTORE VALIDATIONS -------------------- */
+/** helper to check if the given study (input) is in firestore */
+async function validateStudyFirebase(input) {
+  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid studyID
+  const studyIDCollections = await getStudyRef(input).listCollections();
+  return studyIDCollections.find((c) => c.id === PARTICIPANTS_COL);
+}
+
+/** helper to check if the given participant (input) is in firestore under study */
+async function validateParticipantFirebase(input) {
+  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid participantID
+  const studyIDCollections = await getParticipantRef(STUDY_ID, input).listCollections();
+  return studyIDCollections.find((c) => c.id === DATA_COL);
 }
 
 /** -------------------- FIRESTORE HELPERS -------------------- */
