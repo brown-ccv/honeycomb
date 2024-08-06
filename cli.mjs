@@ -76,7 +76,7 @@ async function main() {
     }
   }
   // TODO @brown-ccv #291: Enable downloading all participant data at once
-  if (PARTICIPANT_ID == undefined) {
+  if (PARTICIPANT_ID === undefined) {
     PARTICIPANT_ID = await participantIDPrompt();
   } else {
     // when args directly passed in through CLI, check if participant is valid
