@@ -62,12 +62,11 @@ commander
     PARTICIPANT_ID = participantID;
   });
 
-commander.parse();
 
 /** -------------------- MAIN -------------------- */
 
-// TODO @brown-ccv #289: Pass CLI arguments with commander (especially for action)
 async function main() {
+commander.parse();
   // print message if download or delete provided, along with optional args provided
   if (ACTION != undefined) {
     console.log(
