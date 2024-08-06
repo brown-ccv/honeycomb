@@ -65,7 +65,7 @@ async function main() {
   }
   DEPLOYMENT = await deploymentPrompt();
   // TODO @brown-ccv #291: Enable downloading all study data at once
-  if (STUDY_ID == undefined) {
+  if (STUDY_ID === undefined) {
     STUDY_ID = await studyIDPrompt();
   } else {
     // when args directly passed in through CLI, check if study is valid
