@@ -1,4 +1,4 @@
-import { config } from "../../config/main";
+import { ENV } from "../../config/";
 
 import { buildCameraStartTrial } from "../trials/camera";
 import { enterFullscreenTrial } from "../trials/fullscreen";
@@ -22,13 +22,13 @@ export function buildStartProcedure(jsPsych) {
   const procedure = [nameTrial, enterFullscreenTrial, introductionTrial];
 
   // Conditionally add the photodiode setup trials
-  if (config.USE_PHOTODIODE) {
+  if (ENV.USE_PHOTODIODE) {
     procedure.push(holdUpMarkerTrial);
     procedure.push(initPhotodiodeTrial);
   }
 
   // Conditionally add the camera setup trials
-  if (config.USE_CAMERA) {
+  if (ENV.USE_CAMERA) {
     procedure.push(buildCameraStartTrial(jsPsych));
   }
 

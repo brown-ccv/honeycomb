@@ -228,13 +228,13 @@ async function deploymentPrompt() {
       const app = initializeApp({ credential: cert("firebase-service-account.json") });
       FIRESTORE = getFirestore(app);
     } catch (error) {
-      throw new Error(
+      // Failed to connext to Firebase, exit
+      console.error(
         "Unable to connect to Firebase\n\n" +
-          'Your secret key must be called "firebase-service-account.json" ' +
-          "and stored in the root of your repository.\n" +
-          "More information: https://firebase.google.com/support/guides/service-accounts\n\n" +
-          error.stack
+          'Your secret key must be called "firebase-service-account.json" and stored in the root of your repository.\n' +
+          "More information: https://firebase.google.com/support/guides/service-accounts"
       );
+      process.exit(1);
     }
   }
 

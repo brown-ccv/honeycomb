@@ -5,7 +5,7 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import "./index.css";
 
 // Import configurations and utilities
-import { config, SETTINGS } from "../config/main";
+import { ENV, SETTINGS } from "../config/";
 import { trigger } from "../config/trigger";
 import { getProlificId, getSearchParam } from "../lib/utils";
 
@@ -48,14 +48,14 @@ export default function App() {
     async function setUpHoneycomb() {
       // For testing and debugging purposes
       console.log({
-        "Honeycomb Configuration": config,
+        "Honeycomb Configuration": ENV,
         "Task Settings": SETTINGS,
       });
 
       // If on desktop
-      if (config.USE_ELECTRON) {
+      if (ENV.USE_ELECTRON) {
         // TODO @brown-ccv #443 : Pass NODE_ENV here as well
-        await window.electronAPI.setConfig(config); // Pass config to Electron ipcMain
+        await window.electronAPI.setConfig(ENV); // Pass config to Electron ipcMain
         await window.electronAPI.setTrigger(trigger); // Pass trigger to Electron ipcMain
 
         // Fill in login fields based on environment variables (may still be blank)
@@ -66,16 +66,16 @@ export default function App() {
       } else {
         // TODO @brown-ccv #227: Deprecate USE_PROLIFIC, always get URL
         // TODO @brown-ccv #416: Match USE_PROLIFIC variable names, include session
-        if (config.USE_PROLIFIC) {
+        if (ENV.USE_PROLIFIC) {
           const pID = getProlificId();
-          if (config.USE_FIREBASE && pID) {
+          if (ENV.USE_FIREBASE && pID) {
             setMethod("firebase");
             handleLogin("prolific", pID);
           } else {
             // Error - Prolific must be used with Firebase
             setIsError(true);
           }
-        } else if (config.USE_FIREBASE) {
+        } else if (ENV.USE_FIREBASE) {
           // Fill in login fields based on query parameters (may still be blank)
           const maybeStudyID = getSearchParam("studyID");
           const maybeParticipantID = getSearchParam("participantID");
