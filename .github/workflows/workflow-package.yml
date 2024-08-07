@@ -2,6 +2,7 @@ name: 📦 Package Workflow
 
 # Workflow dispatch for packaging an electron executable
 # TODO: Update actions running on Node 16 (all workflows)
+# TODO: Rename as workflow-make
 on:
   workflow_dispatch:
     inputs:
@@ -33,9 +34,9 @@ jobs:
     strategy:
       matrix:
         os: ${{
-          (github.event.inputs.os == 'All' && fromJSON('["ubuntu-latest", "macOS-13", "windows-latest"]')) ||
+          (github.event.inputs.os == 'All' && fromJSON('["ubuntu-latest", "macOS-latest", "windows-latest"]')) ||
           (github.event.inputs.os == 'Windows' && fromJSON('["windows-latest"]')) ||
-          (github.event.inputs.os == 'macOS' && fromJSON('["macOS-13"]')) ||
+          (github.event.inputs.os == 'macOS' && fromJSON('["macOS-latest"]')) ||
           (github.event.inputs.os == 'Linux' && fromJSON('["ubuntu-latest"]')) }}
       fail-fast: false # A failed build will not end the other matrix jobs
 
@@ -101,7 +102,6 @@ jobs:
         if: startsWith(matrix.os, 'mac')
         with:
           name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
-          # path: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-universal.dmg
           path: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-x64.dmg
           if-no-files-found: error
       - name: ⬆ Upload installer - Linux
