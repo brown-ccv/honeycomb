@@ -5,7 +5,8 @@ export default {
   packagerConfig: {
     asar: true,
     icon: "assets/icons/icon",
-    // osxSign: {},
+    // NOTE: THis is needed for universal but crashes when not using the universal
+    osxSign: {},
   },
   rebuildConfig: {},
   makers: [
