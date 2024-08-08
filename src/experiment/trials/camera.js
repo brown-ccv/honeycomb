@@ -15,7 +15,7 @@ const WEBCAM_ID = "webcam";
 // TODO @brown-ccv #301: Use jsPsych extension, deprecate this function
 // TODO @brown-ccv #343: We should be able to make this work on both electron and browser?
 // TODO @brown-ccv #301: Rolling save to the deployment (webm is a subset of mkv)
-export function buildCameraStartTrial(jsPsych) {
+export function buildCameraStartTrial() {
   return {
     timeline: [
       {
@@ -48,7 +48,7 @@ export function buildCameraStartTrial(jsPsych) {
             throw new Error("video recording is only available when running inside Electron");
           }
 
-          const cameraRecorder = jsPsych.pluginAPI.getCameraRecorder();
+          const cameraRecorder = window.jsPsych.pluginAPI.getCameraRecorder();
           if (!cameraRecorder) {
             console.error("Camera is not initialized, no data will be recorded.");
             return;
@@ -76,11 +76,11 @@ export function buildCameraStartTrial(jsPsych) {
           // Assign camera feed to the <video> element
           const camera = document.getElementById(WEBCAM_ID);
 
-          camera.srcObject = jsPsych.pluginAPI.getCameraRecorder().stream;
+          camera.srcObject = window.jsPsych.pluginAPI.getCameraRecorder().stream;
         },
         on_finish: function () {
           // Begin video recording
-          jsPsych.pluginAPI.getCameraRecorder().start();
+          window.jsPsych.pluginAPI.getCameraRecorder().start();
         },
       },
     ],
@@ -93,7 +93,7 @@ export function buildCameraStartTrial(jsPsych) {
  * @param {Number} duration How long to show the trial for
  * @returns {Object} A jsPsych trial object
  */
-export function buildCameraEndTrial(jsPsych) {
+export function buildCameraEndTrial() {
   const recordingEndMarkup = h1(LANGUAGE.trials.camera.end);
 
   return {
@@ -107,7 +107,7 @@ export function buildCameraEndTrial(jsPsych) {
         throw new Error("video recording is only available when running inside Electron");
       }
 
-      const cameraRecorder = jsPsych.pluginAPI.getCameraRecorder();
+      const cameraRecorder = window.jsPsych.pluginAPI.getCameraRecorder();
       if (!cameraRecorder) {
         console.error("Camera is not initialized, no data will be recorded.");
         return;

@@ -10,7 +10,7 @@ import { div } from "../../lib/markup/tags";
  * @param {Object} jsPsych The global jsPsych object used to build the trial
  * @returns {Object} A jsPsych trial object
  */
-export function buildFixationTrial(jsPsych) {
+export function buildFixationTrial() {
   const fixationSettings = SETTINGS.fixation;
   const fixationCode = eventCodes.fixation;
 
@@ -27,7 +27,10 @@ export function buildFixationTrial(jsPsych) {
     trial_duration: function () {
       if (fixationSettings.randomize_duration) {
         // Select a random duration from the durations array to show the fixation dot for
-        return jsPsych.randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0];
+        return window.jsPsych.randomization.sampleWithoutReplacement(
+          fixationSettings.durations,
+          1
+        )[0];
       } else {
         // Show the fixation dot for default duration seconds
         return fixationSettings.default_duration;

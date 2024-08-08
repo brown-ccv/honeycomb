@@ -81,3 +81,7 @@ export function getProlificId() {
 export function interleave(arr, val, addBefore = true) {
   return [].concat(...arr.map((n) => (addBefore ? [val, n] : [n, val])));
 }
+
+export function getJsPscyh() {
+  return "hi";
+}

@@ -34,12 +34,14 @@ export const honeycombOptions = {
  * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych timeline object
  */
-export function buildHoneycombTimeline(jsPsych) {
+export function buildHoneycombTimeline() {
+  const jsPsych = window.jsPsych;
+  console.log(jsPsych);
   // Build the trials that make up the start procedure
-  const startProcedure = buildStartProcedure(jsPsych);
+  const startProcedure = buildStartProcedure();
 
   // Build the trials that make up the task procedure
-  const honeycombProcedure = buildHoneycombProcedure(jsPsych);
+  const honeycombProcedure = buildHoneycombProcedure();
 
   // Builds the trial needed to debrief the participant on their performance
   const debriefTrial = buildDebriefTrial(jsPsych);

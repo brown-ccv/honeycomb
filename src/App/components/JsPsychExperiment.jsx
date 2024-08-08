@@ -51,7 +51,7 @@ export default function JsPsychExperiment({
       tempJsPsych.data.addProperties({
         app_name: import.meta.env.PACKAGE_NAME,
         app_version: import.meta.env.PACKAGE_VERSION,
-        app_commit: await window.electronAPI.getCommit(),
+        // app_commit: await window.electronAPI.getCommit(),
         study_id: studyID,
         participant_id: participantID,
         start_date: startDate,
@@ -67,7 +67,8 @@ export default function JsPsychExperiment({
    */
   React.useEffect(() => {
     if (jsPsych) {
-      const timeline = buildTimeline(jsPsych, studyID, participantID);
+      window.jsPsych = jsPsych;
+      const timeline = buildTimeline(studyID, participantID);
       jsPsych.run(timeline);
     }
   }, [jsPsych]);
