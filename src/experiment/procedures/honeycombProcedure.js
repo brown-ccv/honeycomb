@@ -17,8 +17,10 @@ import { buildFixationTrial } from "../trials/fixation";
  */
 export function buildHoneycombProcedure() {
   const honeycombSettings = SETTINGS.honeycomb;
-  console.log("hi");
   const fixationTrial = buildFixationTrial();
+
+  console.log("use window.jspsych in procedure");
+  console.log(window.jsPsych);
 
   /**
    * Displays a colored circle and waits for participant to response with a keyboard press
@@ -71,3 +73,5 @@ export function buildHoneycombProcedure() {
   };
   return honeycombBlock;
 }
+
+// TODO have constant honeycomb procedure, all functions that don't need parameters can be objects

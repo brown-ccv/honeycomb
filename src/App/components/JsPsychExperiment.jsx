@@ -67,6 +67,7 @@ export default function JsPsychExperiment({
    */
   React.useEffect(() => {
     if (jsPsych) {
+      // set jsPsych object as global variable
       window.jsPsych = jsPsych;
       const timeline = buildTimeline(studyID, participantID);
       jsPsych.run(timeline);
