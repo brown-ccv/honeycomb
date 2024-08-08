@@ -72,7 +72,7 @@ async function main() {
     const studyCollection = await validateStudyFirebase(STUDY_ID);
     if (!studyCollection) {
       console.error("Please enter a valid study from your Firestore database");
-      return;
+      process.exit(1);
     }
   }
   // TODO @brown-ccv #291: Enable downloading all participant data at once
@@ -83,7 +83,7 @@ async function main() {
     const participantCollection = await validateParticipantFirebase(PARTICIPANT_ID);
     if (!participantCollection) {
       console.error(`Please enter a valid participant on the study "${STUDY_ID}"`);
-      return;
+      process.exit(1);
     }
   }
   EXPERIMENT_IDS = await experimentIDPrompt();
