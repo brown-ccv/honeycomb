@@ -62,11 +62,10 @@ commander
     PARTICIPANT_ID = participantID;
   });
 
-
 /** -------------------- MAIN -------------------- */
 
 async function main() {
-commander.parse();
+  commander.parse();
   // print message if download or delete provided, along with optional args provided
   if (ACTION != undefined) {
     console.log(
@@ -273,13 +272,13 @@ async function deploymentPrompt() {
       const app = initializeApp({ credential: cert("firebase-service-account.json") });
       FIRESTORE = getFirestore(app);
     } catch (error) {
-      throw new Error(
+      // Failed to connext to Firebase, exit
+      console.error(
         "Unable to connect to Firebase\n\n" +
-          'Your secret key must be called "firebase-service-account.json" ' +
-          "and stored in the root of your repository.\n" +
-          "More information: https://firebase.google.com/support/guides/service-accounts\n\n" +
-          error.stack
+          'Your secret key must be called "firebase-service-account.json" and stored in the root of your repository.\n' +
+          "More information: https://firebase.google.com/support/guides/service-accounts"
       );
+      process.exit(1);
     }
   }
 
@@ -306,7 +305,8 @@ async function studyIDPrompt() {
       }
       switch (DEPLOYMENT) {
         case "firebase":
-          return validateStudyFirebase(input);
+          const studyCollection = await validateStudyFirebase(input);
+          return !studyCollection ? invalidMessage : true;
         default:
           throw INVALID_DEPLOYMENT_ERROR;
       }
@@ -336,7 +336,8 @@ async function participantIDPrompt() {
       }
       switch (DEPLOYMENT) {
         case "firebase":
-          return validateParticipantFirebase(input);
+          const participantCollection = await validateParticipantFirebase(input);
+          return !participantCollection ? invalidMessage : true;
         default:
           throw INVALID_DEPLOYMENT_ERROR;
       }
@@ -440,6 +441,21 @@ async function confirmOverwritePrompt(file, overwriteAll) {
     ],
   });
   return answer;
+}
+
+/** -------------------- FIRESTORE VALIDATIONS -------------------- */
+/** helper to check if the given study (input) is in firestore */
+async function validateStudyFirebase(input) {
+  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid studyID
+  const studyIDCollections = await getStudyRef(input).listCollections();
+  return studyIDCollections.find((c) => c.id === PARTICIPANTS_COL);
+}
+
+/** helper to check if the given participant (input) is in firestore under study */
+async function validateParticipantFirebase(input) {
+  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid participantID
+  const studyIDCollections = await getParticipantRef(STUDY_ID, input).listCollections();
+  return studyIDCollections.find((c) => c.id === DATA_COL);
 }
 
 /** -------------------- FIRESTORE HELPERS -------------------- */

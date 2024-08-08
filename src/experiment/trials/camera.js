@@ -2,7 +2,7 @@ import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import initializeCamera from "@jspsych/plugin-initialize-camera";
 
-import { LANGUAGE, config } from "../../config/main";
+import { LANGUAGE, ENV } from "../../config/";
 import { div, h1, p, tag } from "../../lib/markup/tags";
 
 const WEBCAM_ID = "webcam";
@@ -44,7 +44,7 @@ export function buildCameraStartTrial(jsPsych) {
         response_ends_trial: true,
         on_start: function () {
           // Initialize and store the camera feed
-          if (!config.USE_ELECTRON) {
+          if (!ENV.USE_ELECTRON) {
             throw new Error("video recording is only available when running inside Electron");
           }
 
@@ -103,7 +103,7 @@ export function buildCameraEndTrial(jsPsych) {
     on_start: function () {
       // Complete the camera recording
 
-      if (!config.USE_ELECTRON) {
+      if (!ENV.USE_ELECTRON) {
         throw new Error("video recording is only available when running inside Electron");
       }
 

@@ -1,6 +1,6 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { LANGUAGE } from "../../config/main";
+import { LANGUAGE } from "../../config/";
 import { h1 } from "../../lib/markup/tags";
 
 /** Task that displays the name of the experiment */
