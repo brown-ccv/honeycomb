@@ -82,10 +82,10 @@ async function main() {
     STUDY_ID = await studyIDPrompt();
   } else {
     // when args directly passed in through CLI, check if study is valid
-    const hasStudy = await validateStudyFirebase(STUDY_ID);
-    if (hasStudy !== true && ACTION !== "register") {
-      console.error(hasStudy);
-      return;
+    const studyCollection = await validateStudyFirebase(STUDY_ID);
+    if (!studyCollection && ACTION !== "register") {
+      console.error("Please enter a valid study from your Firestore database");
+      process.exit(1);
     }
   }
   // TODO @brown-ccv #291: Enable downloading all participant data at once
@@ -93,10 +93,10 @@ async function main() {
     PARTICIPANT_ID = await participantIDPrompt();
   } else {
     // when args directly passed in through CLI, check if participant is valid
-    const hasParticipant = await validateParticipantFirebase(STUDY_ID);
-    if (hasParticipant !== true && ACTION !== "register") {
-      console.error(hasParticipant);
-      return;
+    const participantCollection = await validateParticipantFirebase(PARTICIPANT_ID);
+    if (!participantCollection && ACTION !== "register") {
+      console.error(`Please enter a valid participant on the study "${STUDY_ID}"`);
+      process.exit(1);
     }
   }
   EXPERIMENT_IDS = await experimentIDPrompt();
