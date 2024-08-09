@@ -69,5 +69,3 @@ export function buildHoneycombProcedure() {
   };
   return honeycombBlock;
 }
-
-// TODO have constant honeycomb procedure, all functions that don't need parameters can be objects

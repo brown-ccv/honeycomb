@@ -70,7 +70,7 @@ export default function JsPsychExperiment({
       // set up jsPsych object as global variable
       window.jsPsych = jsPsych;
       const timeline = buildTimeline(studyID, participantID);
-      jsPsych.run(timeline);
+      window.jsPsych.run(timeline);
     }
   }, [jsPsych]);
 
