@@ -12,12 +12,11 @@ import { buildFixationTrial } from "../trials/fixation";
  *
  * Note that the block is conditionally rendered and repeated based on the task settings
  *
- * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych (nested) timeline object
  */
-export function buildHoneycombProcedure() {
+export const buildHoneycombProcedure = () => {
   const honeycombSettings = SETTINGS.honeycomb;
-  const fixationTrial = buildFixationTrial();
+  const fixationTrial = buildFixationTrial;
   /**
    * Displays a colored circle and waits for participant to response with a keyboard press
    *
@@ -68,4 +67,4 @@ export function buildHoneycombProcedure() {
     timeline: [fixationTrial, taskTrial],
   };
   return honeycombBlock;
-}
+};

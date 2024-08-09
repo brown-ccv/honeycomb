@@ -8,15 +8,14 @@ import { exitFullscreenTrial } from "../trials/fullscreen";
  * 1) Trial used to complete the user's camera recording is displayed
  * 2) The experiment exits fullscreen
  *
- * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych (nested) timeline object
  */
-export function buildEndProcedure() {
+export const buildEndProcedure = () => {
   const procedure = [];
 
   // Conditionally add the camera breakdown trials
   if (ENV.USE_CAMERA) {
-    procedure.push(buildCameraEndTrial());
+    procedure.push(buildCameraEndTrial);
   }
 
   // Add the other trials needed to end the experiment
@@ -24,4 +23,4 @@ export function buildEndProcedure() {
 
   // Return the block as a nested timeline
   return { timeline: procedure };
-}
+};

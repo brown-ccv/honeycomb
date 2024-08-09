@@ -15,10 +15,9 @@ import { introductionTrial } from "../trials/introduction";
  * 4) Trials used to set up a photodiode and trigger box are displayed (if applicable)
  * 5) Trials used to set up the user's camera are displayed (if applicable)
  *
- * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych (nested) timeline object
  */
-export function buildStartProcedure() {
+export const buildStartProcedure = () => {
   const procedure = [nameTrial, enterFullscreenTrial, introductionTrial];
 
   // Conditionally add the photodiode setup trials
@@ -29,9 +28,9 @@ export function buildStartProcedure() {
 
   // Conditionally add the camera setup trials
   if (ENV.USE_CAMERA) {
-    procedure.push(buildCameraStartTrial());
+    procedure.push(buildCameraStartTrial);
   }
 
   // Return the block as a nested timeline
   return { timeline: procedure };
-}
+};
