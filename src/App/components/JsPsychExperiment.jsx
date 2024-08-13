@@ -51,7 +51,7 @@ export default function JsPsychExperiment({
       tempJsPsych.data.addProperties({
         app_name: import.meta.env.PACKAGE_NAME,
         app_version: import.meta.env.PACKAGE_VERSION,
-        // app_commit: await window.electronAPI.getCommit(),
+        app_commit: await window.electronAPI.getCommit(),
         study_id: studyID,
         participant_id: participantID,
         start_date: startDate,
