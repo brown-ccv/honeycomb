@@ -85,12 +85,13 @@ export const buildCameraStartTrial = {
   ],
 };
 
+const recordingEndMarkup = h1(LANGUAGE.trials.camera.end);
+
 /**
  * A trial that finishes recording the participant using their computer's default camera
  *
  * @returns {Object} A jsPsych trial object
  */
-const recordingEndMarkup = h1(LANGUAGE.trials.camera.end);
 export const buildCameraEndTrial = {
   type: htmlKeyboardResponse,
   stimulus: div(recordingEndMarkup),
