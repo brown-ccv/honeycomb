@@ -10,9 +10,9 @@ const WEBCAM_ID = "webcam";
 /**
  * A trial that begins recording the participant using their computer's default camera
  *
- * @returns {Object} A jsPsych trial object
+ * @type {Object} A jsPsych trial object
  */
-// TODO @brown-ccv #301: Use jsPsych extension, deprecate this function
+// TODO @brown-ccv #301: Use jsPsych extension, deprecate this variable
 // TODO @brown-ccv #343: We should be able to make this work on both electron and browser?
 // TODO @brown-ccv #301: Rolling save to the deployment (webm is a subset of mkv)
 export const buildCameraStartTrial = {
