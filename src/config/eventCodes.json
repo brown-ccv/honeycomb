@@ -13,6 +13,6 @@
   },
   "test_connect": {
     "code": 32,
-    "numbBlinks": 32
+    "numBlinks": 32
   }
 }
