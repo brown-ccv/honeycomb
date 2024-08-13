@@ -11,7 +11,7 @@ const fixationCode = eventCodes.fixation;
 /**
  * Builds a trial with a fixation dot and optional photodiode box.
  *
- * @returns {Object} A jsPsych trial object
+ * @type {Object} A jsPsych trial object
  */
 export const buildFixationTrial = {
   type: htmlKeyboardResponse,
