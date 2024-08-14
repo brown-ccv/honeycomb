@@ -251,7 +251,7 @@ async function studyIDPrompt() {
       switch (DEPLOYMENT) {
         case "firebase":
           const studyCollection = await validateStudyFirebase(input);
-          return !studyCollection ? invalidMessage : true;
+          return studyCollection || invalidMessage;
         default:
           throw INVALID_DEPLOYMENT_ERROR;
       }
