@@ -285,15 +285,6 @@ async function deploymentPrompt() {
   return response;
 }
 
-/** Prompt the user to enter the ID of a study */
-// helper to check if the given study (input) is in firestore
-const validateStudyFirebase = async (input) => {
-  const invalidMessage = "Please enter a valid study from your Firestore database";
-  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid studyID
-  const studyIDCollections = await getStudyRef(input).listCollections();
-  return studyIDCollections.find((c) => c.id === PARTICIPANTS_COL) ? true : invalidMessage;
-};
-
 async function studyIDPrompt() {
   return await input({
     message: "Select a study:",
@@ -313,15 +304,6 @@ async function studyIDPrompt() {
     },
   });
 }
-
-/** Prompt the user to enter the ID of a participant on the STUDY_ID study */
-// helper to check if the given participant (input) is in firestore under study
-const validateParticipantFirebase = async (input) => {
-  const invalidMessage = `Please enter a valid participant on the study "${STUDY_ID}"`;
-  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid participantID
-  const studyIDCollections = await getParticipantRef(STUDY_ID, input).listCollections();
-  return studyIDCollections.find((c) => c.id === DATA_COL) ? true : invalidMessage;
-};
 
 async function participantIDPrompt() {
   return await input({
@@ -485,20 +467,17 @@ const getExperimentRef = (studyID, participantID, experimentID) =>
 const getRegisteredfStudyRef = (studyID) => FIRESTORE.collection(REG_STUDY_COL).doc(studyID);
 
 // Get current registered participant array under the StudyID
-const getRegisteredParticipantArr = (studyID) => {
-  const res = getRegisteredfStudyRef(studyID)
-    .get()
-    .then((data) => {
-      if (data["_fieldsProto"] != undefined) {
-        return data["_fieldsProto"]["registered_participants"]["arrayValue"]["values"]
-          .filter((item) => item.valueType === "stringValue")
-          .map((item) => item.stringValue);
-      } else {
-        return [];
-      }
-    });
-
-  return res;
+const getRegisteredParticipantArr = async (studyID) => {
+  const data = await getRegisteredfStudyRef(studyID).get();
+  if (data["_fieldsProto"] !== undefined) {
+    // get array of registered participant under study
+    return data["_fieldsProto"]["registered_participants"]["arrayValue"]["values"]
+      .filter((item) => item.valueType === "stringValue")
+      .map((item) => item.stringValue);
+  } else {
+    // return empty array when no participant found
+    return [];
+  }
 };
 
 // Register new participantID under the provided studyID
@@ -515,19 +494,10 @@ const registerNewParticipant = async (studyID, participantID) => {
 // Add new participantID under studyID to Firestore under registered_studies,
 //  creates new study if studyID doesn't exist
 const addStudyAndParticipant = async (studyID, participantID) => {
-  getRegisteredfStudyRef(studyID)
-    .get()
-    .then((data) => {
-      // study not initated yet
-      if (data["_fieldsProto"] === undefined) {
-        getRegisteredfStudyRef(studyID)
-          .set({ registered_participants: [] })
-          .then(() => {
-            registerNewParticipant(studyID, participantID);
-          });
-      } else {
-        // study initiated, add to array holding registered participants
-        registerNewParticipant(studyID, participantID);
-      }
-    });
+  const data = await getRegisteredfStudyRef(studyID).get();
+  if (data["_fieldsProto"] === undefined) {
+    // study not initiated yet
+    await getRegisteredfStudyRef(studyID).set({ registered_participants: [] });
+  }
+  await registerNewParticipant(studyID, participantID);
 };
