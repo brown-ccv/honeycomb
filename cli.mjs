@@ -272,7 +272,7 @@ async function participantIDPrompt() {
       switch (DEPLOYMENT) {
         case "firebase":
           const participantCollection = await validateParticipantFirebase(input);
-          return !participantCollection ? invalidMessage : true;
+          return participantCollection || invalidMessage;
         default:
           throw INVALID_DEPLOYMENT_ERROR;
       }
