@@ -17,7 +17,7 @@ import { introductionTrial } from "../trials/introduction";
  *
  * @returns {Object} A jsPsych (nested) timeline object
  */
-export function buildStartProcedure() {
+export const buildStartProcedure = () => {
   const procedure = [nameTrial, enterFullscreenTrial, introductionTrial];
 
   // Conditionally add the photodiode setup trials
@@ -28,9 +28,9 @@ export function buildStartProcedure() {
 
   // Conditionally add the camera setup trials
   if (ENV.USE_CAMERA) {
-    procedure.push(buildCameraStartTrial());
+    procedure.push(buildCameraStartTrial);
   }
 
   // Return the block as a nested timeline
   return { timeline: procedure };
-}
+};
