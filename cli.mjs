@@ -285,18 +285,17 @@ async function deploymentPrompt() {
   return response;
 }
 
+/** Prompt the user to enter the ID of a study */
 async function studyIDPrompt() {
+  const invalidMessage = "Please enter a valid study from your Firestore database";
   return await input({
     message: "Select a study:",
     validate: async (input) => {
       if (!input) return invalidMessage;
-      if (ACTION === "register") {
-        STUDY_ID = input;
-        return true;
-      }
       switch (DEPLOYMENT) {
         case "firebase":
-          return validateStudyFirebase(input);
+          const studyCollection = await validateStudyFirebase(input);
+          return !studyCollection ? invalidMessage : true;
         default:
           throw INVALID_DEPLOYMENT_ERROR;
       }
@@ -304,20 +303,20 @@ async function studyIDPrompt() {
   });
 }
 
+/** Prompt the user to enter the ID of a participant on the STUDY_ID study */
 async function participantIDPrompt() {
+  const invalidMessage = `Please enter a valid participant on the study "${STUDY_ID}"`;
   return await input({
-    message: ACTION === "register" ? "Enter a new participant:" : "Select a participant:",
+    message: "Select a participant:",
     validate: async (input) => {
       const invalid = "Please enter a valid participant from your Firestore database";
       if (!input) return invalid;
       else if (input === "*") return true;
-      if (ACTION === "register") {
-        PARTICIPANT_ID = input;
-        return true;
-      }
+
       switch (DEPLOYMENT) {
         case "firebase":
-          return validateParticipantFirebase(input);
+          const participantCollection = await validateParticipantFirebase(input);
+          return !participantCollection ? invalidMessage : true;
         default:
           throw INVALID_DEPLOYMENT_ERROR;
       }
