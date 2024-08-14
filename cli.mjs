@@ -3,6 +3,7 @@ import fsExtra from "fs-extra";
 
 import { cert, initializeApp } from "firebase-admin/app"; // eslint-disable-line import/no-unresolved
 import { getFirestore } from "firebase-admin/firestore"; // eslint-disable-line import/no-unresolved
+import { Command } from "commander";
 
 /** -------------------- GLOBALS -------------------- */
 
@@ -420,6 +421,21 @@ async function confirmOverwritePrompt(file, overwriteAll) {
     ],
   });
   return answer;
+}
+
+/** -------------------- FIRESTORE VALIDATIONS -------------------- */
+/** helper to check if the given study (input) is in firestore */
+async function validateStudyFirebase(input) {
+  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid studyID
+  const studyIDCollections = await getStudyRef(input).listCollections();
+  return studyIDCollections.find((c) => c.id === PARTICIPANTS_COL);
+}
+
+/** helper to check if the given participant (input) is in firestore under study */
+async function validateParticipantFirebase(input) {
+  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid participantID
+  const studyIDCollections = await getParticipantRef(STUDY_ID, input).listCollections();
+  return studyIDCollections.find((c) => c.id === DATA_COL);
 }
 
 /** -------------------- FIRESTORE HELPERS -------------------- */
