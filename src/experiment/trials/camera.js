@@ -4,6 +4,7 @@ import initializeCamera from "@jspsych/plugin-initialize-camera";
 
 import { LANGUAGE, ENV } from "../../config/";
 import { div, h1, p, tag } from "../../lib/markup/tags";
+import { getJsPsych } from "../../lib/utils";
 
 const WEBCAM_ID = "webcam";
 
@@ -47,7 +48,7 @@ export const buildCameraStartTrial = {
           throw new Error("video recording is only available when running inside Electron");
         }
 
-        const cameraRecorder = window.jsPsych.pluginAPI.getCameraRecorder();
+        const cameraRecorder = getJsPsych().pluginAPI.getCameraRecorder();
         if (!cameraRecorder) {
           console.error("Camera is not initialized, no data will be recorded.");
           return;
@@ -75,11 +76,11 @@ export const buildCameraStartTrial = {
         // Assign camera feed to the <video> element
         const camera = document.getElementById(WEBCAM_ID);
 
-        camera.srcObject = window.jsPsych.pluginAPI.getCameraRecorder().stream;
+        camera.srcObject = getJsPsych().pluginAPI.getCameraRecorder().stream;
       },
       on_finish: function () {
         // Begin video recording
-        window.jsPsych.pluginAPI.getCameraRecorder().start();
+        getJsPsych().pluginAPI.getCameraRecorder().start();
       },
     },
   ],
@@ -103,7 +104,7 @@ export const buildCameraEndTrial = {
       throw new Error("video recording is only available when running inside Electron");
     }
 
-    const cameraRecorder = window.jsPsych.pluginAPI.getCameraRecorder();
+    const cameraRecorder = getJsPsych().pluginAPI.getCameraRecorder();
     if (!cameraRecorder) {
       console.error("Camera is not initialized, no data will be recorded.");
       return;

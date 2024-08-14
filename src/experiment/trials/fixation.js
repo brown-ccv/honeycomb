@@ -4,6 +4,7 @@ import { SETTINGS, ENV } from "../../config/";
 import { eventCodes } from "../../config/trigger";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 import { div } from "../../lib/markup/tags";
+import { getJsPsych } from "../../lib/utils";
 
 const fixationSettings = SETTINGS.fixation;
 const fixationCode = eventCodes.fixation;
@@ -26,10 +27,7 @@ export const buildFixationTrial = {
   trial_duration: function () {
     if (fixationSettings.randomize_duration) {
       // Select a random duration from the durations array to show the fixation dot for
-      return window.jsPsych.randomization.sampleWithoutReplacement(
-        fixationSettings.durations,
-        1
-      )[0];
+      return getJsPsych().randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0];
     } else {
       // Show the fixation dot for default duration seconds
       return fixationSettings.default_duration;

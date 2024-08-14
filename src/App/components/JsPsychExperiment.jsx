@@ -5,6 +5,7 @@ import React from "react";
 import { ENV } from "../../config/";
 import { buildTimeline, jsPsychOptions } from "../../experiment";
 import { initParticipant } from "../deployments/firebase";
+import { getJsPsych } from "../../lib/utils";
 
 // ID used to identify the DOM element that holds the experiment.
 const EXPERIMENT_ID = "experiment-window";
@@ -51,7 +52,7 @@ export default function JsPsychExperiment({
       tempJsPsych.data.addProperties({
         app_name: import.meta.env.PACKAGE_NAME,
         app_version: import.meta.env.PACKAGE_VERSION,
-        // app_commit: await window.electronAPI.getCommit(),
+        app_commit: await window.electronAPI.getCommit(),
         study_id: studyID,
         participant_id: participantID,
         start_date: startDate,
@@ -70,7 +71,7 @@ export default function JsPsychExperiment({
       // set up jsPsych object as global variable
       window.jsPsych = jsPsych;
       const timeline = buildTimeline(studyID, participantID);
-      window.jsPsych.run(timeline);
+      getJsPsych().run(timeline);
     }
   }, [jsPsych]);
 

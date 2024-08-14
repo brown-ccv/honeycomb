@@ -5,6 +5,7 @@ import preloadResponse from "@jspsych/plugin-preload";
 import { LANGUAGE, SETTINGS } from "../../config/";
 import { eventCodes } from "../../config/trigger";
 import { b, div, image, p } from "../../lib/markup/tags";
+import { getJsPsych } from "../../lib/utils";
 
 const honeycombLanguage = LANGUAGE.trials.honeycomb;
 
@@ -60,7 +61,7 @@ export const buildDebriefTrial = {
      * By accessing jsPsych inside the "stimulus" callback we have access to all of the data when this trial is run
      * Calling jsPsych outside of the trial object would be executed to soon (when the experiment first starts) and would therefore have no data
      */
-    const responseTrials = window.jsPsych.data.get().filter({ code: eventCodes.honeycomb });
+    const responseTrials = getJsPsych().data.get().filter({ code: eventCodes.honeycomb });
     const correct_trials = responseTrials.filter({ correct: true });
     const accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
     const reactionTime = Math.round(correct_trials.select("rt").mean());
