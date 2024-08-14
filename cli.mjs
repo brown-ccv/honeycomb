@@ -1,8 +1,10 @@
 import { checkbox, confirm, expand, input, select } from "@inquirer/prompts";
 import fsExtra from "fs-extra";
 
-import { cert, initializeApp } from "firebase-admin/app"; // eslint-disable-line import/no-unresolved
-import { getFirestore } from "firebase-admin/firestore"; // eslint-disable-line import/no-unresolved
+// TODO @brown-ccv #183: Upgrade to modular SDK instead of compat
+import { cert, initializeApp } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
+import { Command } from "commander";
 
 /** -------------------- GLOBALS -------------------- */
 
@@ -17,16 +19,73 @@ let OUTPUT_ROOT; // The root in which data is saved
 const INVALID_ACTION_ERROR = new Error("Invalid action: " + ACTION);
 const INVALID_DEPLOYMENT_ERROR = new Error("Invalid deployment: " + DEPLOYMENT);
 
+/** -------------------- COMMANDER -------------------- */
+const commander = new Command();
+// default: [download | delete ] not provided, run main() as usual continuing with prompting
+commander.action(() => {});
+
+// download: optional argument studyID and participantID skips relative prompts
+commander
+  .command(`download`)
+  .argument(`[studyID]`)
+  .argument(`[participantID]`)
+  .description(`Download experiment data from Firebase provided study ID and participant ID`)
+  .action((studyID, participantID) => {
+    ACTION = "download";
+    STUDY_ID = studyID;
+    PARTICIPANT_ID = participantID;
+  });
+
+// delete: optional argument studyID and participantID skips relative prompts
+commander
+  .command(`delete`)
+  .argument(`[studyID]`)
+  .argument(`[participantID]`)
+  .description(`Delete experiment data from Firebase provided study ID and participant ID`)
+  .action((studyID, participantID) => {
+    ACTION = "delete";
+    STUDY_ID = studyID;
+    PARTICIPANT_ID = participantID;
+  });
+commander.parse();
+
+// print message if download or delete provided, along with optional args provided
+if (ACTION !== undefined) {
+  console.log(
+    `${ACTION} data from Firebase given ${STUDY_ID === undefined ? "" : `study ID: ${STUDY_ID}`} ${PARTICIPANT_ID === undefined ? "" : `and participant ID: ${PARTICIPANT_ID}`}`
+  );
+}
+
 /** -------------------- MAIN -------------------- */
 
 // TODO @brown-ccv #289: Pass CLI arguments with commander (especially for action)
 async function main() {
-  ACTION = await actionPrompt();
+  if (ACTION === undefined) {
+    ACTION = await actionPrompt();
+  }
   DEPLOYMENT = await deploymentPrompt();
   // TODO @brown-ccv #291: Enable downloading all study data at once
-  STUDY_ID = await studyIDPrompt();
+  if (STUDY_ID === undefined) {
+    STUDY_ID = await studyIDPrompt();
+  } else {
+    // when args directly passed in through CLI, check if study is valid
+    const studyCollection = await validateStudyFirebase(STUDY_ID);
+    if (!studyCollection) {
+      console.error("Please enter a valid study from your Firestore database");
+      process.exit(1);
+    }
+  }
   // TODO @brown-ccv #291: Enable downloading all participant data at once
-  PARTICIPANT_ID = await participantIDPrompt();
+  if (PARTICIPANT_ID === undefined) {
+    PARTICIPANT_ID = await participantIDPrompt();
+  } else {
+    // when args directly passed in through CLI, check if participant is valid
+    const participantCollection = await validateParticipantFirebase(PARTICIPANT_ID);
+    if (!participantCollection) {
+      console.error(`Please enter a valid participant on the study "${STUDY_ID}"`);
+      process.exit(1);
+    }
+  }
   EXPERIMENT_IDS = await experimentIDPrompt();
 
   switch (ACTION) {
@@ -54,7 +113,6 @@ async function main() {
   }
 }
 main();
-
 /** -------------------- DOWNLOAD ACTION -------------------- */
 
 /** Download data that's stored in Firebase */
@@ -186,20 +244,14 @@ async function deploymentPrompt() {
 /** Prompt the user to enter the ID of a study */
 async function studyIDPrompt() {
   const invalidMessage = "Please enter a valid study from your Firestore database";
-  const validateStudyFirebase = async (input) => {
-    // subcollection is programmatically generated, if it doesn't exist then input must not be a valid studyID
-    const studyIDCollections = await getStudyRef(input).listCollections();
-    return studyIDCollections.find((c) => c.id === PARTICIPANTS_COL) ? true : invalidMessage;
-  };
-
   return await input({
     message: "Select a study:",
     validate: async (input) => {
       if (!input) return invalidMessage;
-
       switch (DEPLOYMENT) {
         case "firebase":
-          return validateStudyFirebase(input);
+          const studyCollection = await validateStudyFirebase(input);
+          return studyCollection || invalidMessage;
         default:
           throw INVALID_DEPLOYMENT_ERROR;
       }
@@ -210,12 +262,6 @@ async function studyIDPrompt() {
 /** Prompt the user to enter the ID of a participant on the STUDY_ID study */
 async function participantIDPrompt() {
   const invalidMessage = `Please enter a valid participant on the study "${STUDY_ID}"`;
-  const validateParticipantFirebase = async (input) => {
-    // subcollection is programmatically generated, if it doesn't exist then input must not be a valid participantID
-    const studyIDCollections = await getParticipantRef(STUDY_ID, input).listCollections();
-    return studyIDCollections.find((c) => c.id === DATA_COL) ? true : invalidMessage;
-  };
-
   return await input({
     message: "Select a participant:",
     validate: async (input) => {
@@ -225,7 +271,8 @@ async function participantIDPrompt() {
 
       switch (DEPLOYMENT) {
         case "firebase":
-          return validateParticipantFirebase(input);
+          const participantCollection = await validateParticipantFirebase(input);
+          return participantCollection || invalidMessage;
         default:
           throw INVALID_DEPLOYMENT_ERROR;
       }
@@ -310,6 +357,21 @@ async function confirmOverwritePrompt(file, overwriteAll) {
     ],
   });
   return answer;
+}
+
+/** -------------------- FIRESTORE VALIDATIONS -------------------- */
+/** helper to check if the given study (input) is in firestore */
+async function validateStudyFirebase(input) {
+  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid studyID
+  const studyIDCollections = await getStudyRef(input).listCollections();
+  return studyIDCollections.find((c) => c.id === PARTICIPANTS_COL);
+}
+
+/** helper to check if the given participant (input) is in firestore under study */
+async function validateParticipantFirebase(input) {
+  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid participantID
+  const studyIDCollections = await getParticipantRef(STUDY_ID, input).listCollections();
+  return studyIDCollections.find((c) => c.id === DATA_COL);
 }
 
 /** -------------------- FIRESTORE HELPERS -------------------- */
