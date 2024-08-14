@@ -4,6 +4,7 @@ import { ENV, SETTINGS } from "../../config/";
 import { eventCodes } from "../../config/trigger";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 import { buildFixationTrial } from "../trials/fixation";
+import { getJsPsych } from "../../lib/utils";
 
 /**
  * Builds the block of trials that form the core of the Honeycomb experiment
@@ -12,7 +13,6 @@ import { buildFixationTrial } from "../trials/fixation";
  *
  * Note that the block is conditionally rendered and repeated based on the task settings
  *
- * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych (nested) timeline object
  */
 export function buildHoneycombProcedure() {
@@ -29,7 +29,7 @@ export function buildHoneycombProcedure() {
   const taskTrial = {
     type: imageKeyboardResponse,
     // Display the image passed as a timeline variable
-    stimulus: window.jsPsych.timelineVariable("stimulus"),
+    stimulus: getJsPsych().timelineVariable("stimulus"),
     prompt: function () {
       // Conditionally displays the photodiodeGhostBox
       if (ENV.USE_PHOTODIODE) return photodiodeGhostBox;
@@ -40,7 +40,7 @@ export function buildHoneycombProcedure() {
     data: {
       // Record the correct_response passed as a timeline variable
       code: eventCodes.honeycomb,
-      correct_response: window.jsPsych.timelineVariable("correct_response"),
+      correct_response: getJsPsych().timelineVariable("correct_response"),
     },
     on_load: function () {
       // Conditionally flashes the photodiode when the trial first loads
@@ -48,7 +48,7 @@ export function buildHoneycombProcedure() {
     },
     // Add a boolean value ("correct") to the data - if the user responded with the correct key or not
     on_finish: function (data) {
-      data.correct = window.jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+      data.correct = getJsPsych().pluginAPI.compareKeys(data.response, data.correct_response);
     },
   };
 
