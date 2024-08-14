@@ -1,10 +1,8 @@
 import { checkbox, confirm, expand, input, select } from "@inquirer/prompts";
 import fsExtra from "fs-extra";
 
-// TODO @brown-ccv #183: Upgrade to modular SDK instead of compat
-import { cert, initializeApp } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
-import { Command } from "commander";
+import { cert, initializeApp } from "firebase-admin/app"; // eslint-disable-line import/no-unresolved
+import { getFirestore } from "firebase-admin/firestore"; // eslint-disable-line import/no-unresolved
 
 /** -------------------- GLOBALS -------------------- */
 
@@ -135,6 +133,7 @@ async function main() {
   }
 }
 main();
+
 /** -------------------- DOWNLOAD ACTION -------------------- */
 
 /** Download data that's stored in Firebase */
@@ -296,8 +295,7 @@ async function studyIDPrompt() {
       }
       switch (DEPLOYMENT) {
         case "firebase":
-          const studyCollection = await validateStudyFirebase(input);
-          return !studyCollection ? invalidMessage : true;
+          return validateStudyFirebase(input);
         default:
           throw INVALID_DEPLOYMENT_ERROR;
       }
@@ -318,8 +316,7 @@ async function participantIDPrompt() {
       }
       switch (DEPLOYMENT) {
         case "firebase":
-          const participantCollection = await validateParticipantFirebase(input);
-          return !participantCollection ? invalidMessage : true;
+          return validateParticipantFirebase(input);
         default:
           throw INVALID_DEPLOYMENT_ERROR;
       }
@@ -423,21 +420,6 @@ async function confirmOverwritePrompt(file, overwriteAll) {
     ],
   });
   return answer;
-}
-
-/** -------------------- FIRESTORE VALIDATIONS -------------------- */
-/** helper to check if the given study (input) is in firestore */
-async function validateStudyFirebase(input) {
-  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid studyID
-  const studyIDCollections = await getStudyRef(input).listCollections();
-  return studyIDCollections.find((c) => c.id === PARTICIPANTS_COL);
-}
-
-/** helper to check if the given participant (input) is in firestore under study */
-async function validateParticipantFirebase(input) {
-  // subcollection is programmatically generated, if it doesn't exist then input must not be a valid participantID
-  const studyIDCollections = await getParticipantRef(STUDY_ID, input).listCollections();
-  return studyIDCollections.find((c) => c.id === DATA_COL);
 }
 
 /** -------------------- FIRESTORE HELPERS -------------------- */
