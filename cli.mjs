@@ -251,7 +251,7 @@ async function studyIDPrompt() {
       switch (DEPLOYMENT) {
         case "firebase":
           const studyCollection = await validateStudyFirebase(input);
-          return studyCollection || invalidMessage;
+          return !studyCollection ? invalidMessage : true;
         default:
           throw INVALID_DEPLOYMENT_ERROR;
       }
@@ -272,7 +272,7 @@ async function participantIDPrompt() {
       switch (DEPLOYMENT) {
         case "firebase":
           const participantCollection = await validateParticipantFirebase(input);
-          return participantCollection || invalidMessage;
+          return !participantCollection ? invalidMessage : true;
         default:
           throw INVALID_DEPLOYMENT_ERROR;
       }
