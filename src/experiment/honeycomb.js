@@ -31,21 +31,20 @@ export const honeycombOptions = {
  * Take a look at how the code here compares to the jsPsych documentation!
  * See the jsPsych documentation for more: https://www.jspsych.org/7.3/tutorials/rt-task/
  *
- * @param {Object} jsPsych The jsPsych instance being used to run the task
  * @returns {Object} A jsPsych timeline object
  */
-export function buildHoneycombTimeline(jsPsych) {
+export const buildHoneycombTimeline = () => {
   // Build the trials that make up the start procedure
-  const startProcedure = buildStartProcedure(jsPsych);
+  const startProcedure = buildStartProcedure();
 
   // Build the trials that make up the task procedure
-  const honeycombProcedure = buildHoneycombProcedure(jsPsych);
+  const honeycombProcedure = buildHoneycombProcedure();
 
   // Builds the trial needed to debrief the participant on their performance
-  const debriefTrial = buildDebriefTrial(jsPsych);
+  const debriefTrial = buildDebriefTrial;
 
   // Builds the trials that make up the end procedure
-  const endProcedure = buildEndProcedure(jsPsych);
+  const endProcedure = buildEndProcedure();
 
   const timeline = [
     startProcedure,
@@ -56,4 +55,4 @@ export function buildHoneycombTimeline(jsPsych) {
     endProcedure,
   ];
   return timeline;
-}
+};

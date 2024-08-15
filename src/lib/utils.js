@@ -81,3 +81,12 @@ export function getProlificId() {
 export function interleave(arr, val, addBefore = true) {
   return [].concat(...arr.map((n) => (addBefore ? [val, n] : [n, val])));
 }
+
+/**
+ * Get global JsPsych instance
+ *
+ * @returns JsPsych instance
+ */
+export function getJsPsych() {
+  return window.jsPsych;
+}
