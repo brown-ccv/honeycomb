@@ -1,8 +1,8 @@
 import { checkbox, confirm, expand, input, select } from "@inquirer/prompts";
 import fsExtra from "fs-extra";
 
-import { cert, initializeApp } from "firebase-admin/app"; // eslint-disable-line import/no-unresolved
-import { getFirestore } from "firebase-admin/firestore"; // eslint-disable-line import/no-unresolved
+import { cert, initializeApp } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
 import { Command } from "commander";
 
 /** -------------------- GLOBALS -------------------- */
@@ -285,13 +285,16 @@ async function deploymentPrompt() {
   return response;
 }
 
-/** Prompt the user to enter the ID of a study */
 async function studyIDPrompt() {
   const invalidMessage = "Please enter a valid study from your Firestore database";
   return await input({
     message: "Select a study:",
     validate: async (input) => {
       if (!input) return invalidMessage;
+      if (ACTION === "register") {
+        STUDY_ID = input;
+        return true;
+      }
       switch (DEPLOYMENT) {
         case "firebase":
           const studyCollection = await validateStudyFirebase(input);
@@ -303,16 +306,18 @@ async function studyIDPrompt() {
   });
 }
 
-/** Prompt the user to enter the ID of a participant on the STUDY_ID study */
 async function participantIDPrompt() {
   const invalidMessage = `Please enter a valid participant on the study "${STUDY_ID}"`;
   return await input({
-    message: "Select a participant:",
+    message: ACTION === "register" ? "Enter a new participant:" : "Select a participant:",
     validate: async (input) => {
       const invalid = "Please enter a valid participant from your Firestore database";
       if (!input) return invalid;
       else if (input === "*") return true;
-
+      if (ACTION === "register") {
+        PARTICIPANT_ID = input;
+        return true;
+      }
       switch (DEPLOYMENT) {
         case "firebase":
           const participantCollection = await validateParticipantFirebase(input);
