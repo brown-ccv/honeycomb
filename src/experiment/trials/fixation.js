@@ -1,13 +1,12 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
 import { SETTINGS, ENV } from "../../config/";
-import { eventCodes } from "../../config/trigger";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 import { div } from "../../lib/markup/tags";
 import { getJsPsych } from "../../lib/utils";
 
 const fixationSettings = SETTINGS.fixation;
-const fixationCode = eventCodes.fixation;
+const fixationCode = fixationSettings.code;
 
 /**
  * Builds a trial with a fixation dot and optional photodiode box.

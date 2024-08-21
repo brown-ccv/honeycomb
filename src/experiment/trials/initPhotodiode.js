@@ -1,7 +1,6 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { ENV } from "../../config/";
-import { eventCodes } from "../../config/trigger";
+import { ENV, SETTINGS } from "../../config/";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 
 export const initPhotodiodeTrial = {
@@ -18,6 +17,6 @@ export const initPhotodiodeTrial = {
     }
 
     // Flashes the photodiode when the trial first loads
-    pdSpotEncode(eventCodes.open_task.code);
+    pdSpotEncode(SETTINGS.open_task.code);
   },
 };

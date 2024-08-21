@@ -126,9 +126,9 @@ function handleSetConfig(event, config) {
  * @param {Event} event The Electron renderer event
  * @param {Object} trigger The metadata for the event code trigger
  * @param {string} trigger.comName The COM name of the serial port
- * @param {Object} trigger.eventCodes The list of possible event codes to be triggered
  * @param {string} trigger.productID The name of the product connected to the serial port
  * @param {string} trigger.vendorID The name of the vendor connected to the serial prot
+ * @param {Object} trigger.settings The list of possible event with relative event codes to be triggered
  */
 function handleSetTrigger(event, trigger) {
   TRIGGER_CODES = trigger;
@@ -175,7 +175,7 @@ async function handleGetCommit() {
  * @returns {Boolean} Whether or not the EEG machine is connected to the computer
  */
 function handleCheckSerialPort() {
-  setUpPort().then(() => handleEventSend(TRIGGER_CODES.eventCodes.test_connect.code));
+  setUpPort().then(() => handleEventSend(TRIGGER_CODES.settings.test_connect.code));
 }
 
 /**
@@ -185,8 +185,8 @@ function handleCheckSerialPort() {
  */
 function handlePhotodiodeTrigger(event, code) {
   if (code !== undefined) {
-    const eventName = Object.keys(TRIGGER_CODES.eventCodes).find(
-      (key) => TRIGGER_CODES.eventCodes[key].code === code
+    const eventName = Object.keys(TRIGGER_CODES.settings).find(
+      (key) => TRIGGER_CODES.settings[key].code === code
     );
     log.info(`Event: ${eventName}, code: ${code}`);
     handleEventSend(code);

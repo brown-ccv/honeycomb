@@ -1,7 +1,6 @@
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 
 import { ENV, SETTINGS } from "../../config/";
-import { eventCodes } from "../../config/trigger";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 import { buildFixationTrial } from "../trials/fixation";
 import { getJsPsych } from "../../lib/utils";
@@ -39,12 +38,13 @@ export const buildHoneycombProcedure = () => {
     choices: honeycombSettings.timeline_variables.map((variable) => variable.correct_response),
     data: {
       // Record the correct_response passed as a timeline variable
-      code: eventCodes.honeycomb,
+      code: honeycombSettings.code,
       correct_response: getJsPsych().timelineVariable("correct_response"),
     },
     on_load: function () {
       // Conditionally flashes the photodiode when the trial first loads
-      if (ENV.USE_PHOTODIODE) pdSpotEncode(eventCodes.honeycomb.code);
+      if (ENV.USE_PHOTODIODE) pdSpotEncode(honeycombSettings.code);
+      console.log("honeycomb procedure code: " + honeycombSettings.code);
     },
     // Add a boolean value ("correct") to the data - if the user responded with the correct key or not
     on_finish: function (data) {
