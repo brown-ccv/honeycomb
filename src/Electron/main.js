@@ -5,7 +5,6 @@ import { execSync } from "node:child_process";
 
 import { BrowserWindow, app, dialog, ipcMain } from "electron";
 import log from "electron-log";
-import _ from "lodash";
 
 import { getPort, sendToPort } from "./lib/serialport";
 
