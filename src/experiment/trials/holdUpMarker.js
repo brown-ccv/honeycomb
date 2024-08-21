@@ -1,6 +1,6 @@
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 
-import { ENV, LANGUAGE } from "../../config/index";
+import { ENV, LANGUAGE } from "../../config/";
 import { eventCodes } from "../../config/trigger";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 import { div, h1, p } from "../../lib/markup/tags";

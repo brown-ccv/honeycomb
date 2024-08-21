@@ -1,6 +1,7 @@
 /** ELECTRON MAIN PROCESS */
 import fs from "node:fs";
 import path from "node:path";
+import { execSync } from "node:child_process";
 
 import { BrowserWindow, app, dialog, ipcMain } from "electron";
 import log from "electron-log";
@@ -8,19 +9,13 @@ import _ from "lodash";
 
 import { getPort, sendToPort } from "./lib/serialport";
 
-// TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
+/* global MAIN_WINDOW_VITE_DEV_SERVER_URL MAIN_WINDOW_VITE_NAME */
 
+// TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process
 // TODO @brown-ccv #192: Handle video data writing to desktop in a utility process
 
 /************ GLOBALS ***********/
-
-/* global MAIN_WINDOW_VITE_DEV_SERVER_URL */
-/* global MAIN_WINDOW_VITE_NAME */
-
-// TODO: Preload function for passing this data into renderer - pass into jspsych?
-// TODO: Handle at runtime in a separate file not postinstall
-const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
 
 const IS_DEV = import.meta.env.DEV && !app.isPackaged;
 let CONTINUE_ANYWAY; // Whether to continue the experiment with no hardware connected
@@ -60,6 +55,7 @@ app.whenReady().then(() => {
   ipcMain.on("setConfig", handleSetConfig);
   ipcMain.on("setTrigger", handleSetTrigger);
   ipcMain.handle("getCredentials", handleGetCredentials);
+  ipcMain.handle("getCommit", handleGetCommit);
   ipcMain.on("onDataUpdate", handleOnDataUpdate);
   ipcMain.handle("onFinish", handleOnFinish);
   ipcMain.on("photodiodeTrigger", handlePhotodiodeTrigger);
@@ -154,6 +150,29 @@ function handleGetCredentials() {
 }
 
 /**
+ * Retrieves the Git Commit SHA and Branch of the repository
+ * A version.json file is created during build-time that can be read from
+ * @returns An object containing the git commit sha and branch of the codebase
+ */
+async function handleGetCommit() {
+  try {
+    if (!IS_DEV) {
+      // Get the Git Commit SHA and Branch of the repository
+      return {
+        sha: execSync("git rev-parse HEAD").toString().trim(),
+        ref: execSync("git branch --show-current").toString().trim(),
+      };
+    } else {
+      // Load the Git Commit SHA and Branch that was created at build-time
+      return JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
+    }
+  } catch (e) {
+    log.error("Unable to determine git version");
+    log.error(e);
+  }
+}
+
+/**
  * @returns {Boolean} Whether or not the EEG machine is connected to the computer
  */
 function handleCheckSerialPort() {
@@ -203,15 +222,8 @@ function handleOnDataUpdate(event, data) {
     // Create the data file in userData
     const dataPath = getDataPath();
     fs.mkdirSync(path.dirname(dataPath), { recursive: true });
-    fs.writeFileSync(dataPath, "");
+    fs.writeFileSync(dataPath, "[");
     log.info("Data file created at ", dataPath);
-
-    // Write basic data and initialize the trials array
-    // TODO @RobertGemmaJr: Handle this entirely in jsPsych, needs to match Firebase
-    fs.appendFileSync(dataPath, "{");
-    fs.appendFileSync(dataPath, `"start_time": "${start_date}",`);
-    fs.appendFileSync(dataPath, `"git_version": ${JSON.stringify(GIT_VERSION)},`);
-    fs.appendFileSync(dataPath, `"trials": [`);
   }
 
   const dataPath = getDataPath();
@@ -235,7 +247,7 @@ function handleOnFinish() {
   const outPath = getOutPath();
 
   // Finish writing JSON
-  fs.appendFileSync(dataPath, "]}");
+  fs.appendFileSync(dataPath, "]");
   log.info(`Finished writing experiment data to ${dataPath}`);
 
   try {

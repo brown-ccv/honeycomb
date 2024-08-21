@@ -25,13 +25,13 @@ export const jsPsychOptions = honeycombOptions;
  * @param {string} participantID The ID of the participant that was just logged in
  * @returns The timeline for JsPsych to run
  */
-export function buildTimeline(jsPsych, studyID, participantID) {
+export function buildTimeline(studyID, participantID) {
   console.log(`Building timeline for participant ${participantID} on study ${studyID}`);
 
   /**
    * ! Your timeline should be built in a newly created function, not this one
    * https://brown-ccv.github.io/honeycomb-docs/docs/quick_start#2-add-a-file-for-the-task
    */
-  const timeline = buildHoneycombTimeline(jsPsych);
+  const timeline = buildHoneycombTimeline();
   return timeline;
 }

@@ -1,4 +1,4 @@
-import { ENV } from "../../config/index";
+import { ENV } from "../../config/";
 import { div, span } from "./tags";
 
 // TODO @brown-ccv #329: Refactor photodiode logic to be a custom jsPsych extension
