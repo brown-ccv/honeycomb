@@ -44,7 +44,6 @@ export const buildHoneycombProcedure = () => {
     on_load: function () {
       // Conditionally flashes the photodiode when the trial first loads
       if (ENV.USE_PHOTODIODE) pdSpotEncode(honeycombSettings.code);
-      console.log("honeycomb procedure code: " + honeycombSettings.code);
     },
     // Add a boolean value ("correct") to the data - if the user responded with the correct key or not
     on_finish: function (data) {
