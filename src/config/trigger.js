@@ -1,4 +1,4 @@
-import event_codes from "./eventCodes.json";
+import settings from "./settings.json"; // includes event codes for each event
 
 // TODO @brown-ccv #333: Nest this data under "trigger_box" equipment in config.json
 
@@ -13,14 +13,10 @@ export const productID = import.meta.env.EVENT_MARKER_PRODUCT_ID || "";
 // export const comName = process.env.EVENT_MARKER_COM_NAME || "COM3";
 export const comName = import.meta.env.EVENT_MARKER_COM_NAME || "COM3";
 
-/** Custom codes for specific task events - used to identify the trials */
-// TODO @brown-ccv #354: Each event should have a code, name, and numBlinks
-export const eventCodes = event_codes;
-
 // TODO: We should think of a cleaner way of exporting all this
 export const trigger = {
   vendorID,
   productID,
   comName,
-  eventCodes,
+  settings,
 };

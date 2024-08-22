@@ -2,7 +2,9 @@
   "fixation": {
     "default_duration": 1000,
     "randomize_duration": true,
-    "durations": [250, 500, 750, 1000, 1250, 1500, 1750, 2000]
+    "durations": [250, 500, 750, 1000, 1250, 1500, 1750, 2000],
+    "code": 1,
+    "numBlinks": 1
   },
   "honeycomb": {
     "randomize_order": true,
@@ -16,6 +18,16 @@
         "stimulus": "assets/images/orange.png",
         "correct_response": "j"
       }
-    ]
+    ],
+    "code": 2,
+    "numBlinks": 2
+  },
+  "open_task": {
+    "code": 18,
+    "numBlinks": 18
+  },
+  "test_connect": {
+    "code": 32,
+    "numBlinks": 32
   }
 }

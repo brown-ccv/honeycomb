@@ -1,7 +1,6 @@
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 
-import { ENV, LANGUAGE } from "../../config/";
-import { eventCodes } from "../../config/trigger";
+import { ENV, LANGUAGE, SETTINGS } from "../../config/";
 import { pdSpotEncode, photodiodeGhostBox } from "../../lib/markup/photodiode";
 import { div, h1, p } from "../../lib/markup/tags";
 
@@ -27,6 +26,6 @@ export const holdUpMarkerTrial = {
   choices: [LANGUAGE.prompts.continue.button],
   on_load: function () {
     // Conditionally flash the photodiode when the trial first loads
-    if (ENV.USE_PHOTODIODE) pdSpotEncode(eventCodes.test_connect);
+    if (ENV.USE_PHOTODIODE) pdSpotEncode(SETTINGS.test_connect.code);
   },
 };
