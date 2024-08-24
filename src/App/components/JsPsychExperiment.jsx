@@ -52,7 +52,9 @@ export default function JsPsychExperiment({
       tempJsPsych.data.addProperties({
         app_name: import.meta.env.PACKAGE_NAME,
         app_version: import.meta.env.PACKAGE_VERSION,
-        app_commit: await window.electronAPI.getCommit(),
+        // TODO: This does NOT work when using Firebase as electronAPI isn't set up
+        // TODO: Can I just get the file from here anyways?
+        // app_commit: await window.electronAPI.getCommit(),
         study_id: studyID,
         participant_id: participantID,
         start_date: startDate,

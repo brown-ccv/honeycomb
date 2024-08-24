@@ -52,6 +52,14 @@ export default function App() {
         "Task Settings": SETTINGS,
       });
 
+      // TEMP: Testing to ensure the config is setup correctly
+      console.log(
+        "ENVIRONMENT",
+        import.meta.env.PACKAGE_NAME,
+        import.meta.env.PACKAGE_VERSION,
+        import.meta.env
+      );
+
       // If on desktop
       if (ENV.USE_ELECTRON) {
         // TODO @brown-ccv #443 : Pass NODE_ENV here as well

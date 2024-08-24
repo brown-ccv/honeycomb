@@ -9,6 +9,7 @@ import log from "electron-log";
 import { getPort, sendToPort } from "./lib/serialport";
 
 /* global MAIN_WINDOW_VITE_DEV_SERVER_URL MAIN_WINDOW_VITE_NAME */
+// TODO: If we can get eslint to play nice we can remove this
 
 // TODO @RobertGemmaJr: Do more testing with the environment variables - are home/clinic being built correctly?
 // TODO @brown-ccv #192: Handle data writing to desktop in a utility process
@@ -298,7 +299,7 @@ function createWindow() {
   // Create the browser window
   const mainWindow = new BrowserWindow({
     icon: "./favicon.ico",
-    webPreferences: { preload: path.join(__dirname, "preload.cjs") },
+    webPreferences: { preload: path.join(__dirname, "preload.js") },
     width: 1500,
     height: 900,
     // TODO @brown-ccv: Settings for preventing the menu bar from ever showing up
