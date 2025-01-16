@@ -87,7 +87,7 @@ jobs:
 
       # Upload installers to github action
       - name: ⬆ Upload installer - Windows
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: startsWith(matrix.os, 'windows')
         with:
           name: ${{ format('win-installer-{0}', github.event.inputs.setting) }}
@@ -95,14 +95,14 @@ jobs:
           if-no-files-found: error
 
       - name: ⬆ Upload installer - Mac
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: startsWith(matrix.os, 'mac')
         with:
           name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
           path: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-universal.dmg
           if-no-files-found: error
       - name: ⬆ Upload installer - Linux
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: startsWith(matrix.os, 'ubuntu')
         with:
           name: ${{ format('linux-installer-{0}', github.event.inputs.setting) }}
