@@ -28,7 +28,7 @@
     "bootstrap": "^5.2.0-beta1",
     "electron-log": "^5.0.0",
     "electron-squirrel-startup": "^1.0.0",
-    "execa": "^8.0.1",
+    "execa": "^9.6.0",
     "firebase": "^11.9.1",
     "fs-extra": "^11.1.1",
     "jspsych": "^7.2.3",
