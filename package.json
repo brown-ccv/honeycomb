@@ -34,8 +34,8 @@
     "jspsych": "^7.3.4",
     "lodash": "^4.17.19",
     "prop-types": "^15.8.1",
+    "react-bootstrap": "^2.10.10",
     "react": "^16.14.0",
-    "react-bootstrap": "^1.6.8",
     "react-dom": "^16.14.0",
     "react-scripts": "5.0.1",
     "serialport": "^13.0.0"
@@ -54,7 +54,7 @@
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.2.0",
     "dotenv-cli": "^8.0.0",
-    "electron": "^31.7.7",
+    "electron": "^36.4.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
