@@ -18,8 +18,7 @@
   "repository": "https://github.com/brown-ccv/honeycomb",
   "license": "MIT",
   "private": true,
-  "type": "module",
-  "main": ".vite/build/main.cjs",
+  "main": ".vite/build/main.js",
   "homepage": ".",
   "dependencies": {
     "@electron-forge/plugin-fuses": "^7.4.0",
@@ -51,7 +50,6 @@
     "@electron-forge/maker-deb": "^7.4.0",
     "@electron-forge/maker-dmg": "^7.4.0",
     "@electron-forge/maker-squirrel": "^7.4.0",
-    "@electron-forge/maker-zip": "^7.4.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
     "@electron-forge/plugin-vite": "^7.4.0",
     "@inquirer/prompts": "^5.3.6",
@@ -71,7 +69,7 @@
     "vite": "^5.2.11"
   },
   "scripts": {
-    "start:browser": "vite --port 3000",
+    "start:browser": "vite -c vite.browser.config.js",
     "start:electron": "electron-forge start",
     "dev:home": "dotenv -e env/.env.home npm run start:electron",
     "dev:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run start:electron",
@@ -91,13 +89,14 @@
     "make": "electron-forge make",
     "make:windows": "electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
     "make:linux": "electron-forge make --arch x64 --targets @electron-forge/maker-deb",
-    "make:mac": "electron-forge make  --arch universal --targets @electron-forge/maker-dmg",
+    "make:mac": "electron-forge make --arch universal --targets @electron-forge/maker-dmg",
+    "make:mac:OLD": "electron-forge make --arch universal --targets @electron-forge/maker-dmg",
     "cli": "node cli.mjs",
     "commit": "git-cz",
     "format": "prettier --write .",
     "lint": "eslint .",
     "prepare": "husky",
-    "postinstall": "node version.js"
+    "postinstall": "node version.mjs"
   },
   "browserslist": {
     "production": [
