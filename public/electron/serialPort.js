@@ -15,7 +15,7 @@ function getDevice(portList, comVendorName, productId) {
     const comName = comVendorName;
     return portList.filter(
       // Find the device with the matching comName
-      (device) => device.comName === comName.toUpperCase() || device.comName === comName
+      (device) => device.path === comName.toUpperCase() || device.path === comName
     );
   } else {
     const vendorId = comVendorName;
@@ -47,7 +47,7 @@ async function getPort(comVendorName, productId) {
   const device = getDevice(portList, comVendorName, productId);
   try {
     const path = device[0].path;
-    const port = new SerialPort(path);
+    const port = new SerialPort({path: path});
     return port;
   } catch {
     return false;
