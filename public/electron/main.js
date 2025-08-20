@@ -149,8 +149,9 @@ function handleGetCredentials() {
 /**
  * @returns {Boolean} Whether or not the EEG machine is connected to the computer
  */
-function handleCheckSerialPort() {
-  setUpPort().then(() => handleEventSend(TRIGGER_CODES.eventCodes.test_connect));
+async function handleCheckSerialPort() {
+  await setUpPort();
+  handleEventSend(TRIGGER_CODES.eventCodes.test_connect);
 }
 
 /**
@@ -382,7 +383,6 @@ async function setUpPort() {
  */
 function handleEventSend(code) {
   log.info(`Sending USB event: ${code}`);
-
   if (TRIGGER_PORT !== undefined) {
     sendToPort(TRIGGER_PORT, code);
   } else {

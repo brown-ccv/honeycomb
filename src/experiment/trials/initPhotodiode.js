@@ -9,7 +9,7 @@ export const initPhotodiodeTrial = {
   choices: "NO_KEYS",
   trial_duration: 1600,
   stimulus: photodiodeGhostBox,
-  on_load: function () {
+  on_load: async function () {
     if (!config.USE_ELECTRON) {
       throw new Error("photodiode recording is only available when running inside Electron");
     }
@@ -18,6 +18,7 @@ export const initPhotodiodeTrial = {
     }
 
     // Flashes the photodiode when the trial first loads
+    await window.electronAPI.checkSerialPort();
     pdSpotEncode(eventCodes.open_task);
   },
 };
