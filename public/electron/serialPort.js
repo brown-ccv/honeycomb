@@ -47,7 +47,7 @@ async function getPort(comVendorName, productId) {
   const device = getDevice(portList, comVendorName, productId);
   try {
     const path = device[0].path;
-    const port = new SerialPort({path: path});
+    const port = new SerialPort({ path: path });
     return port;
   } catch {
     return false;

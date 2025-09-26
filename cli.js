@@ -2,8 +2,6 @@ import { checkbox, confirm, expand, input, select } from "@inquirer/prompts";
 import fsExtra from "fs-extra";
 
 // TODO @brown-ccv #183: Upgrade to modular SDK instead of compat
-// import { cert, initializeApp } from "firebase-admin/app";
-// import { getFirestore } from "firebase-admin/firestore";
 import admin from "firebase-admin";
 
 /** -------------------- GLOBALS -------------------- */
@@ -171,8 +169,10 @@ async function deploymentPrompt() {
   // Initialize Firestore
   if (response === "firebase") {
     try {
-      const app = admin.initializeApp({ credential: admin.cert("firebase-service-account.json") });
-      FIRESTORE = admin.getFirestore(app);
+      const app = admin.initializeApp({
+        credential: admin.credential.cert("firebase-service-account.json"),
+      });
+      FIRESTORE = admin.firestore(app);
     } catch (error) {
       throw new Error(
         "Unable to connect to Firebase\n\n" +
