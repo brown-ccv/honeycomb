@@ -7,8 +7,6 @@ import { photodiodeGhostBox } from "../../lib/markup/photodiode";
 // TODO @brown-ccv #330: Need to ping the serial part - this isn't doing anything yet
 export const holdUpMarkerTrial = {
   type: htmlButtonResponse,
-  stimulus:
-    h1(LANGUAGE.trials.holdUpMarker) +
-    photodiodeGhostBox,
+  stimulus: h1(LANGUAGE.trials.holdUpMarker) + photodiodeGhostBox,
   choices: [LANGUAGE.prompts.continue.button],
 };
