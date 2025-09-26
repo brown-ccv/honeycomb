@@ -2,8 +2,9 @@ import { checkbox, confirm, expand, input, select } from "@inquirer/prompts";
 import fsExtra from "fs-extra";
 
 // TODO @brown-ccv #183: Upgrade to modular SDK instead of compat
-import { cert, initializeApp } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
+// import { cert, initializeApp } from "firebase-admin/app";
+// import { getFirestore } from "firebase-admin/firestore";
+import admin from "firebase-admin";
 
 /** -------------------- GLOBALS -------------------- */
 
@@ -116,6 +117,7 @@ async function downloadDataFirebase() {
         console.log(`Data saved successfully: ${outputFile}`);
       } catch (error) {
         console.error(`There was an error saving ${outputFile}`);
+        console.error(error);
       }
     } else console.log("Skipping download");
   }
@@ -135,6 +137,7 @@ async function deleteDataFirebase() {
           console.log("Successfully deleted:", experimentRef.id);
         } catch (error) {
           console.error("There was an error deleting", experimentRef.id);
+          console.error(error);
         }
       })
     );
@@ -168,8 +171,8 @@ async function deploymentPrompt() {
   // Initialize Firestore
   if (response === "firebase") {
     try {
-      const app = initializeApp({ credential: cert("firebase-service-account.json") });
-      FIRESTORE = getFirestore(app);
+      const app = admin.initializeApp({ credential: admin.cert("firebase-service-account.json") });
+      FIRESTORE = admin.getFirestore(app);
     } catch (error) {
       throw new Error(
         "Unable to connect to Firebase\n\n" +
@@ -260,7 +263,8 @@ async function savePathPrompt() {
       try {
         const maybePath = fsExtra.statSync(input);
         if (!maybePath.isDirectory()) return invalidMessage;
-      } catch (e) {
+      } catch (error) {
+        console.error(error);
         return invalidMessage;
       }
       return true;
