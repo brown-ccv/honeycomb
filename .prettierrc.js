@@ -1,6 +1,8 @@
 /**
  * This file defines specific rules for Prettier. It adjusts their default settings.
  * We recommend these settings if your lab does not have specific style standards.
+ *
+ * @type {import('prettier').Config}
  */
 module.exports = {
   printWidth: 100, // Sets the maximum line size to 100 (default is 80)
