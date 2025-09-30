@@ -1,4 +1,4 @@
-const SerialPort = require("serialport");
+const { SerialPort } = require("serialport");
 
 // TODO @brown-ccv #460: Test connections with MockBindings (e.g. CONTINUE_ANYWAY)  https://serialport.io/docs/api-binding-mock
 
@@ -40,7 +40,8 @@ async function getPort(comVendorName, productId) {
   let portList;
   try {
     portList = await SerialPort.list();
-  } catch {
+  } catch (e) {
+    console.error("Error listing serial ports:", e);
     return false;
   }
 

@@ -10,6 +10,6 @@ process.once("loaded", () => {
     on_finish: () => ipcRenderer.invoke("onFinish"),
     photodiodeTrigger: (data) => ipcRenderer.send("photodiodeTrigger", data),
     saveVideo: (data) => ipcRenderer.send("saveVideo", data),
-    checkSerialPort: () => ipcRenderer.invoke("checkSerialPort"),
+    checkSerialPort: async () => ipcRenderer.invoke("checkSerialPort"),
   });
 });
