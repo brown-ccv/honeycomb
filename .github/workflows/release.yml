@@ -39,12 +39,9 @@ jobs:
       - name: 📥 Install Dependencies
         run: npm ci
 
-      # Set up the environment
-      - name: 🔃 Load .env file (.env.${{matrix.setting}})
-        uses: xom9ikk/dotenv@v2
-        with:
-          path: ./env
-          mode: ${{matrix.setting}}
+      # Build the app with the settings in env/.env.${{matrix.setting}}
+      - name: ⚒ Build (${{matrix.setting}})
+        run: npm run build -- --mode ${{matrix.setting}}
 
       # Package the app installers
       - name: 📦 Package app installer - Windows
@@ -117,4 +114,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          publish_dir: ./dist

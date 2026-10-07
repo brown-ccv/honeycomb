@@ -57,7 +57,7 @@ export default function App() {
       if (config.USE_ELECTRON) {
         // TODO @brown-ccv #443 : Pass NODE_ENV here as well
         await window.electronAPI.setConfig(config); // Pass config to Electron ipcMain
-        await window.electronAPI.setTrigger(trigger); // Pass trigger to Electron ipcMain
+        await window.electronAPI.setTrigger({ ...trigger }); // Pass trigger to Electron ipcMain (as a plain object: an ES module namespace cannot be sent over IPC)
 
         // Fill in login fields based on environment variables (may still be blank)
         const credentials = await window.electronAPI.getCredentials();
@@ -107,7 +107,7 @@ export default function App() {
   const firebaseUpdateFunction = (data) => {
     addToFirebase(data);
   };
-  // Execute the 'on_data_update' callback function (see public/electron/main.js)
+  // Execute the 'on_data_update' callback function (see electron/main.js)
   const desktopUpdateFunction = async (data) => {
     await window.electronAPI.on_data_update(data);
   };
@@ -120,7 +120,7 @@ export default function App() {
   };
   // Do nothing
   const firebaseFinishFunction = () => {};
-  // Execute the 'on_finish' callback function (see public/electron/main.js)
+  // Execute the 'on_finish' callback function (see electron/main.js)
   const desktopFinishFunction = async () => {
     await window.electronAPI.on_finish();
   };

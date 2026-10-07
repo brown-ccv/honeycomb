@@ -27,7 +27,7 @@ log.initialize({ preload: true });
 
 /************ GLOBALS ***********/
 
-const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../version.json")));
+const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
 // TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
 const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
 
@@ -134,13 +134,13 @@ function handleSetTrigger(event, trigger) {
 }
 
 /**
- * Checks for REACT_APP_STUDY_ID and REACT_APP_PARTICIPANT_ID environment variables
+ * Checks for STUDY_ID and PARTICIPANT_ID environment variables
  * Note that studyID and participantID are undefined when the environment variables are not given
  * @returns An object containing a studyID and participantID
  */
 function handleGetCredentials() {
-  const studyID = process.env.REACT_APP_STUDY_ID;
-  const participantID = process.env.REACT_APP_PARTICIPANT_ID;
+  const studyID = process.env.STUDY_ID;
+  const participantID = process.env.PARTICIPANT_ID;
   if (studyID) log.info("Received study from ENV: ", studyID);
   if (participantID) log.info("Received participant from ENV: ", participantID);
   return { studyID, participantID };
@@ -280,7 +280,7 @@ function createWindow() {
 
     // Create a 1500x900 window with the dev tools open
     mainWindow = new BrowserWindow({
-      icon: "./favicon.ico",
+      icon: path.join(__dirname, "../assets/icons/icon.png"),
       webPreferences: { preload: path.join(__dirname, "preload.js") },
       width: 1500,
       height: 900,
@@ -293,16 +293,16 @@ function createWindow() {
 
     // Load app from the local bundle created by the build process
     appURL = url.format({
-      // Moves from path of the electron file (/public/electron/main.js) to build folder (build/index.html)
-      // TODO @brown-ccv #424: electron-forge should only be packaging the build folder (package.json needs to point to that file?)
-      pathname: path.join(__dirname, "../../build/index.html"),
+      // Moves from path of the electron file (/electron/main.js) to the Vite build folder (dist/index.html)
+      // Electron Forge only packages the dist folder, the electron folder, and the app icons (see forge.config.js)
+      pathname: path.join(__dirname, "../dist/index.html"),
       protocol: "file:",
       slashes: true,
     });
 
     // Create a fullscreen window with the menu bar hidden
     mainWindow = new BrowserWindow({
-      icon: "./favicon.ico",
+      icon: path.join(__dirname, "../assets/icons/icon.png"),
       webPreferences: { preload: path.join(__dirname, "preload.js") },
       fullscreen: true,
       menuBarVisible: false,

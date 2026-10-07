@@ -1,6 +1,6 @@
 /**
  * Get Git Commit SHA and Branch
- * The version file is written into public/config/version.json
+ * The version file is written into electron/version.json
  */
 
 import fsExtra from "fs-extra";
@@ -19,6 +19,6 @@ if (process.env.CI) {
 }
 
 fsExtra
-  .writeFile("public/version.json", JSON.stringify(git))
+  .writeFile("electron/version.json", JSON.stringify(git))
   .then(() => console.log(`Saved version file with rev: ${git.sha}, branch: ${git.ref}`))
   .catch((error) => console.log(error));

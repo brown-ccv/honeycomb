@@ -1,10 +1,10 @@
+import path from "node:path";
 import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import eslintReact from "@eslint-react/eslint-plugin";
 import { importX } from "eslint-plugin-import-x";
 import globals from "globals";
 import { defineConfig, includeIgnoreFile } from "eslint/config";
-import path from "node:path";
 
 /**
  * This file defines specific rules for Prettier. It adjusts their default settings.
@@ -24,18 +24,12 @@ export default defineConfig(
   eslintReact.configs.recommended,
   importX.flatConfigs.recommended,
 
-  // Custom configuration
+  // Custom configuration (shared by every file)
   {
-    files: ["**/*.{js,jsx}"],
+    files: ["**/*.{js,jsx,mjs}"],
     languageOptions: {
       ecmaVersion: 2023,
-      sourceType: "module",
       parserOptions: { ecmaFeatures: { jsx: true } },
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-        ...globals.jest,
-      },
     },
     rules: {
       "no-unused-vars": "warn",
@@ -46,6 +40,24 @@ export default defineConfig(
       jsdoc: { tagNamePreference: { typedef: { definedInFiles: ["src/lib/typedef.js"] } } },
       "import-x/resolver": { node: { extensions: [".js", ".jsx"] } },
     },
+  },
+
+  // The app (Vite bundles this for the browser)
+  {
+    files: ["src/**/*.{js,jsx}"],
+    languageOptions: { sourceType: "module", globals: globals.browser },
+  },
+
+  // Node scripts and configuration written as ES modules
+  {
+    files: ["vite.config.mjs", "eslint.config.mjs", "version.js", "cli.js"],
+    languageOptions: { sourceType: "module", globals: globals.node },
+  },
+
+  // Electron's main and preload processes and other configuration written as CommonJS
+  {
+    files: ["electron/**/*.js", "forge.config.js", ".prettierrc.js"],
+    languageOptions: { sourceType: "commonjs", globals: globals.node },
   },
 
   // Prettier config
