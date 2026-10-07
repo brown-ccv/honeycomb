@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./index.css";
 
 // Import configurations and utilities
-import { config, SETTINGS, turkUniqueId } from "../config/main";
+import { config, SETTINGS } from "../config/main";
 import * as trigger from "../config/trigger";
 import { getProlificId, getSearchParam } from "../lib/utils";
 
@@ -21,7 +21,7 @@ import Login from "./components/Login";
 /**
  * The top-level React component for Honeycomb. App handles initiating the jsPsych component when the participant
  * successfully logs in, and stores the overall state of the experiment. Importantly, App keeps track of what the
- * experiment is running on (Electron, Firebase, PsiTurk, or MTurk).
+ * experiment is running on (Electron or Firebase).
  *
  * Note that App is a functional component, which means it uses React callbacks rather than class methods. Learn more
  * about functional vs. class components here: https://reactjs.org/docs/components-and-props.html. It is recommended
@@ -33,14 +33,11 @@ export default function App() {
   // Manage error state of the app
   const [isError, setIsError] = React.useState(false);
 
-  // Manage the psiturk object
-  const [psiturk, setPsiturk] = React.useState(false);
-
   // Manage the data used in the experiment
   const [participantID, setParticipantID] = React.useState("");
   const [studyID, setStudyID] = React.useState("");
 
-  // Manage the method type being used ("desktop", "firebase", "mturk", or "default")
+  // Manage the method type being used ("desktop", "firebase", or "default")
   const [currentMethod, setMethod] = React.useState("default");
 
   /**
@@ -68,15 +65,7 @@ export default function App() {
         if (credentials.studyID) setStudyID(credentials.studyID);
         setMethod("desktop");
       } else {
-        // If MTURK
-        if (config.USE_MTURK) {
-          /* eslint-disable */
-          window.lodash = _.noConflict();
-          setPsiturk(new PsiTurk(turkUniqueId, "/complete"));
-          setMethod("mturk");
-          handleLogin("mturk", turkUniqueId);
-          /* eslint-enable */
-        } else if (config.USE_PROLIFIC) {
+        if (config.USE_PROLIFIC) {
           const pID = getProlificId();
           if (config.USE_FIREBASE && pID) {
             setMethod("firebase");
@@ -122,10 +111,6 @@ export default function App() {
   const desktopUpdateFunction = async (data) => {
     await window.electronAPI.on_data_update(data);
   };
-  // Save the trial data to PsiTurk
-  const psiturkUpdateFunction = (data) => {
-    psiturk.recordTrialData(data);
-  };
 
   /** EXPERIMENT FINISH FUNCTIONS */
 
@@ -138,16 +123,6 @@ export default function App() {
   // Execute the 'on_finish' callback function (see public/electron/main.js)
   const desktopFinishFunction = async () => {
     await window.electronAPI.on_finish();
-  };
-  // Complete the PsiTurk experiment
-  const psiturkFinishFunction = () => {
-    const completePsiturk = async () => {
-      psiturk.saveData({
-        success: () => psiturk.completeHIT(),
-        error: () => setIsError(true),
-      });
-    };
-    completePsiturk();
   };
 
   /**
@@ -173,14 +148,12 @@ export default function App() {
             {
               desktop: desktopUpdateFunction,
               firebase: firebaseUpdateFunction,
-              mturk: psiturkUpdateFunction,
               default: defaultFunction,
             }[currentMethod]
           }
           dataFinishFunction={
             {
               desktop: desktopFinishFunction,
-              mturk: psiturkFinishFunction,
               firebase: firebaseFinishFunction,
               default: defaultFinishFunction,
             }[currentMethod]

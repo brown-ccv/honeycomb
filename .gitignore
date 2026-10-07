@@ -36,4 +36,3 @@ Brewfile.lock.json
 # Misc
 .env
 .DS_Store
-psiturkit/*_turk
