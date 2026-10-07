@@ -1,0 +1,4 @@
+# Prettier already skips everything in .gitignore. These are tracked files that shouldn't be formatted or linted
+
+package-lock.json
+emulator_data/
