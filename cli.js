@@ -2,7 +2,6 @@ import { checkbox, confirm, expand, input, select } from "@inquirer/prompts";
 import fsExtra from "fs-extra";
 
 import { cert, initializeApp } from "firebase-admin";
-//eslint-disable-next-line import/no-unresolved
 import { getFirestore } from "firebase-admin/firestore";
 
 /** -------------------- GLOBALS -------------------- */
@@ -180,7 +179,8 @@ async function deploymentPrompt() {
           'Your secret key must be called "firebase-service-account.json" ' +
           "and stored in the root of your repository.\n" +
           "More information: https://firebase.google.com/support/guides/service-accounts\n\n" +
-          error.stack
+          error.stack,
+        { cause: error }
       );
     }
   }
