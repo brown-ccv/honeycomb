@@ -26,14 +26,8 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
-      - name: 🐍 Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.12
 
       # Install dependencies
-      - name: 🅿️ Install Python tools
-        run: pip install setuptools
       - name: 📥 Install Dependencies
         run: npm ci
 
