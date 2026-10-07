@@ -1,7 +1,8 @@
 import { checkbox, confirm, expand, input, select } from "@inquirer/prompts";
 import fsExtra from "fs-extra";
 
-import { cert, initializeApp } from "firebase-admin/app";
+import { cert, initializeApp } from "firebase-admin";
+//eslint-disable-next-line import/no-unresolved
 import { getFirestore } from "firebase-admin/firestore";
 
 /** -------------------- GLOBALS -------------------- */
