@@ -92,7 +92,7 @@
     "cli": "node cli.js",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "postinstall": "node version.js",
+    "postinstall": "node version.js && install-electron",
     "prepare": "husky"
   },
   "browserslist": {
