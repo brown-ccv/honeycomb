@@ -1,8 +1,8 @@
 import { checkbox, confirm, expand, input, select } from "@inquirer/prompts";
 import fsExtra from "fs-extra";
 
-// TODO @brown-ccv #183: Upgrade to modular SDK instead of compat
-import admin from "firebase-admin";
+import { cert, initializeApp } from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
 
 /** -------------------- GLOBALS -------------------- */
 
@@ -169,17 +169,18 @@ async function deploymentPrompt() {
   // Initialize Firestore
   if (response === "firebase") {
     try {
-      const app = admin.initializeApp({
-        credential: admin.credential.cert("firebase-service-account.json"),
+      const app = initializeApp({
+        credential: cert("firebase-service-account.json"),
       });
-      FIRESTORE = admin.firestore(app);
+      FIRESTORE = getFirestore(app);
     } catch (error) {
       throw new Error(
         "Unable to connect to Firebase\n\n" +
           'Your secret key must be called "firebase-service-account.json" ' +
           "and stored in the root of your repository.\n" +
           "More information: https://firebase.google.com/support/guides/service-accounts\n\n" +
-          error.stack
+          error.stack,
+        { cause: error }
       );
     }
   }

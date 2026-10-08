@@ -41,7 +41,18 @@ export default function App() {
   const [studyID, setStudyID] = React.useState("");
 
   // Manage the method type being used ("desktop", "firebase", "mturk", or "default")
-  const [currentMethod, setMethod] = React.useState("default");
+  const [method, setMethod] = React.useState("default");
+
+  /**
+   * Callback function executed when the user logs in.
+   *
+   * The study and participant IDs are updated and loggedIn is set to true.
+   */
+  const handleLogin = React.useCallback((studyId, participantId) => {
+    setStudyID(studyId);
+    setParticipantID(participantId);
+    setLoggedIn(true);
+  }, []);
 
   /**
    * This effect is called once, on the first render of the application
@@ -99,67 +110,56 @@ export default function App() {
       }
     }
     setUpHoneycomb();
-  }, []);
+  }, [handleLogin]);
 
   /** VALIDATION FUNCTIONS */
 
   // Default to valid
-  const defaultValidation = async () => true;
+  const defaultValidation = React.useCallback(async () => true, []);
   // Validate participant/study against Firestore rules
-  const firebaseValidation = (studyId, participantId) => {
+  const firebaseValidation = React.useCallback((studyId, participantId) => {
     return validateParticipant(studyId, participantId);
-  };
+  }, []);
 
   /** DATA WRITE FUNCTIONS */
 
   // Default to no operation
-  const defaultFunction = () => {};
+  const defaultFunction = React.useCallback(() => {}, []);
   // Add trial data to Firestore (see src/App/deployments/firebase.js)
-  const firebaseUpdateFunction = (data) => {
+  const firebaseUpdateFunction = React.useCallback((data) => {
     addToFirebase(data);
-  };
+  }, []);
   // Execute the 'on_data_update' callback function (see public/electron/main.js)
-  const desktopUpdateFunction = async (data) => {
+  const desktopUpdateFunction = React.useCallback(async (data) => {
     await window.electronAPI.on_data_update(data);
-  };
+  }, []);
   // Save the trial data to PsiTurk
-  const psiturkUpdateFunction = (data) => {
-    psiturk.recordTrialData(data);
-  };
+  const psiturkUpdateFunction = React.useCallback(
+    (data) => {
+      psiturk.recordTrialData(data);
+    },
+    [psiturk]
+  );
 
   /** EXPERIMENT FINISH FUNCTIONS */
 
   // Save the experiment data on the desktop
-  const defaultFinishFunction = (data) => {
+  const defaultFinishFunction = React.useCallback((data) => {
     data.localSave("csv", "task.csv");
-  };
-  // Do nothing
-  const firebaseFinishFunction = () => {};
-  // Execute the 'on_finish' callback function (see public/electron/main.js)
-  const desktopFinishFunction = async () => {
-    await window.electronAPI.on_finish();
-  };
-  // Complete the PsiTurk experiment
-  const psiturkFinishFunction = () => {
-    const completePsiturk = async () => {
-      psiturk.saveData({
-        success: () => psiturk.completeHIT(),
-        error: () => setIsError(true),
-      });
-    };
-    completePsiturk();
-  };
-
-  /**
-   * Callback function executed when the user logs in.
-   *
-   * The study and participant IDs are updated and loggedIn is set to true.
-   */
-  const handleLogin = React.useCallback((studyId, participantId) => {
-    setStudyID(studyId);
-    setParticipantID(participantId);
-    setLoggedIn(true);
   }, []);
+  // Do nothing
+  const firebaseFinishFunction = React.useCallback(() => {}, []);
+  // Execute the 'on_finish' callback function (see public/electron/main.js)
+  const desktopFinishFunction = React.useCallback(async () => {
+    await window.electronAPI.on_finish();
+  }, []);
+  // Complete the PsiTurk experiment
+  const psiturkFinishFunction = React.useCallback(() => {
+    psiturk.saveData({
+      success: () => psiturk.completeHIT(),
+      error: () => setIsError(true),
+    });
+  }, [psiturk]);
 
   if (isError) {
     return <Error />;
@@ -175,7 +175,7 @@ export default function App() {
               firebase: firebaseUpdateFunction,
               mturk: psiturkUpdateFunction,
               default: defaultFunction,
-            }[currentMethod]
+            }[method]
           }
           dataFinishFunction={
             {
@@ -183,13 +183,14 @@ export default function App() {
               mturk: psiturkFinishFunction,
               firebase: firebaseFinishFunction,
               default: defaultFinishFunction,
-            }[currentMethod]
+            }[method]
           }
         />
       );
     } else {
       return (
         <Login
+          key={`${studyID}:${participantID}`}
           initialStudyID={studyID}
           initialParticipantID={participantID}
           validationFunction={
@@ -197,7 +198,7 @@ export default function App() {
               desktop: defaultValidation,
               default: defaultValidation,
               firebase: firebaseValidation,
-            }[currentMethod]
+            }[method]
           }
           handleLogin={handleLogin}
         />

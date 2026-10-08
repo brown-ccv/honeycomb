@@ -1,6 +1,6 @@
 {
   "name": "honeycomb",
-  "description": "All-in-one task starter app with jsPsych + React + Electron + psiturk ",
+  "description": "All-in-one task starter app with jsPsych + React + Electron + psiturk",
   "author": {
     "name": "Brown CCV",
     "email": "ccv-bot@brown.edu",
@@ -14,7 +14,7 @@
   "main": "public/electron/main.js",
   "homepage": ".",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^7.0.1",
+    "@fortawesome/fontawesome-free": "^7.3.1",
     "@jspsych/plugin-audio-keyboard-response": "^1.1.3",
     "@jspsych/plugin-call-function": "^1.1.3",
     "@jspsych/plugin-fullscreen": "^1.2.1",
@@ -26,52 +26,52 @@
     "@jspsych/plugin-preload": "^1.1.3",
     "@jspsych/plugin-survey": "^1.0.1",
     "bootstrap": "^5.3.8",
-    "electron-log": "^5.4.3",
+    "electron-log": "^5.4.4",
     "electron-squirrel-startup": "^1.0.1",
-    "execa": "^9.6.0",
-    "firebase": "^12.3.0",
-    "fs-extra": "^11.3.2",
+    "execa": "^10.1.0",
+    "firebase": "^13.0.0",
+    "fs-extra": "^11.4.1",
     "jspsych": "^7.3.4",
     "lodash": "^4.17.19",
     "prop-types": "^15.8.1",
-    "react": "^19.1.1",
+    "react": "^19.3.0",
     "react-bootstrap": "^2.10.10",
-    "react-dom": "^19.1.1",
+    "react-dom": "^19.3.0",
     "react-scripts": "^5.0.1",
     "serialport": "^13.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.4",
+    "@babel/core": "^7.29.7",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@electron-forge/cli": "^7.9.0",
-    "@electron-forge/maker-deb": "^7.9.0",
-    "@electron-forge/maker-dmg": "^7.9.0",
-    "@electron-forge/maker-squirrel": "^7.9.0",
-    "@electron-forge/maker-zip": "^7.9.0",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.9.0",
-    "@inquirer/prompts": "^7.8.6",
-    "concurrently": "^9.2.1",
-    "cross-env": "^10.0.0",
-    "cz-conventional-changelog": "^3.2.0",
-    "dotenv-cli": "^10.0.0",
-    "electron": "^38.1.2",
-    "eslint": "^9.36.0",
+    "@electron-forge/cli": "^7.11.2",
+    "@electron-forge/maker-deb": "^7.11.2",
+    "@electron-forge/maker-dmg": "^7.11.2",
+    "@electron-forge/maker-squirrel": "^7.11.2",
+    "@electron-forge/maker-zip": "^7.11.2",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.11.2",
+    "@eslint-react/eslint-plugin": "^5.24.8",
+    "@eslint/js": "^10.0.1",
+    "@inquirer/prompts": "^8.7.3",
+    "cross-env": "^10.1.0",
+    "dotenv-cli": "^11.0.0",
+    "electron": "^38.8.6",
+    "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-react": "^7.37.5",
-    "firebase-admin": "^13.5.0",
-    "firebase-tools": "^14.17.0",
-    "globals": "^16.4.0",
+    "eslint-plugin-import-x": "^4.17.1",
+    "firebase-admin": "^14.5.0",
+    "firebase-tools": "^15.32.1",
+    "globals": "^17.13.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.2.1",
-    "prettier": "^3.6.2",
-    "wait-on": "^9.0.1"
+    "lint-staged": "^17.6.0",
+    "npm-run-all2": "^9.0.3",
+    "prettier": "^3.9.9",
+    "wait-on": "^9.5.1"
   },
   "scripts": {
     "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" react-scripts start",
     "start:browser": "react-scripts start",
     "start:electron": "wait-on http://127.0.0.1:3000 && cross-env ELECTRON_START_URL=\"http://127.0.0.1:3000\" electron .",
-    "dev": "concurrently -k npm:start npm:start:electron",
+    "dev": "run-p --race start start:electron",
     "dev:home": "dotenv -e env/.env.home npm run dev",
     "dev:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run dev",
     "dev:clinic": "dotenv -e env/.env.clinic npm run dev",
@@ -113,11 +113,6 @@
       "last 1 safari version"
     ]
   },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
   "lint-staged": {
     "*": [
       "prettier --ignore-unknown --write"
@@ -125,5 +120,15 @@
     "**/*.{js,jsx}": [
       "eslint --fix"
     ]
+  },
+  "allowScripts": {
+    "core-js-pure@3.50.0": true,
+    "core-js@3.50.0": true,
+    "electron@38.8.6": true,
+    "electron-winstaller@5.4.4": true,
+    "protobufjs@7.6.6": true,
+    "re2@1.24.1": true,
+    "@firebase/util@1.15.3": true,
+    "@serialport/bindings-cpp@13.0.0": true
   }
 }

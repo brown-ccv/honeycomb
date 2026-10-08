@@ -4,7 +4,7 @@
  */
 
 import fsExtra from "fs-extra";
-import { execaCommandSync } from "execa";
+import { execaSync } from "execa";
 
 let git;
 
@@ -13,8 +13,8 @@ if (process.env.CI) {
   const ref = process.env.GITHUB_REF;
   git = { sha, ref };
 } else {
-  const sha = execaCommandSync("git rev-parse HEAD").stdout;
-  const ref = execaCommandSync("git branch --show-current").stdout;
+  const sha = execaSync`git rev-parse HEAD`.stdout;
+  const ref = execaSync`git branch --show-current`.stdout;
   git = { sha, ref };
 }
 
