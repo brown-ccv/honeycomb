@@ -10,7 +10,6 @@ import squirrelStartup from "electron-squirrel-startup";
 import _ from "lodash";
 import { MockBinding } from "@serialport/binding-mock";
 import { SerialPortStream } from "@serialport/stream";
-import SerialPort from "serialport";
 
 import { getPort, sendToPort } from "./serialPort.js";
 
