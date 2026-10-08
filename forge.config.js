@@ -6,6 +6,11 @@ module.exports = {
     asar: true,
     icon: "assets/icons/icon",
   },
+  rebuildConfig: {
+    // serialport is a Node-API module that ships prebuilt binaries for every OS/arch we target.
+    // Node-API binaries work in Electron without recompiling, so skip the node-gyp rebuild (no Python/C++ toolchain needed)
+    ignoreModules: ["@serialport/bindings-cpp"],
+  },
   makers: [
     {
       // zip files
