@@ -1,2 +1,4 @@
-# Files inside public/lib are minimized files that shouldn't be touched
-public/lib
+# Prettier already skips everything in .gitignore. These are tracked files that shouldn't be formatted or linted
+
+package-lock.json
+emulator_data/

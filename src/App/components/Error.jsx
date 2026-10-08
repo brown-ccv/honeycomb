@@ -1,5 +1,3 @@
-import React from "react";
-
 /**
  * Displays an error message.
  *

@@ -11,7 +11,6 @@ Brewfile.lock.json
 /coverage
 
 # Production
-/build
 /dist
 /out
 
@@ -23,9 +22,7 @@ Brewfile.lock.json
 *.log*
 
 # Versioning
-public/config/version.json
-public/version.json
-Brewfile.lock.json
+electron/version.json
 
 # Firebase private key
 **/firebase-service-account.json
@@ -35,5 +32,5 @@ Brewfile.lock.json
 
 # Misc
 .env
+*.local
 .DS_Store
-psiturkit/*_turk

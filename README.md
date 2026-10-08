@@ -16,6 +16,23 @@ It is maintained by members of the [Center for Computation and Visualization](ht
 - [Honeycomb Discussions Board](https://github.com/brown-ccv/honeycomb/discussions)
 - [Behavioral Task Hub (Beehive)](https://beehive.ccv.brown.edu)
 
+## Development
+
+Honeycomb is built with [Vite](https://vite.dev) (the app) and [Electron Forge](https://www.electronforge.io) (the desktop installers). Each _setting_ (`home`, `clinic`, `firebase`) has a Vite mode with environment variables in `env/.env.<setting>`.
+
+| Command                   | Description                                                                  |
+| ------------------------- | ---------------------------------------------------------------------------- |
+| `npm run dev:<home        | clinic>`                                                                     | Run the app in Electron with hot reloading (add `:video` to record video) |
+| `npm run dev:firebase`    | Run the web app in the browser (use with `npm run firebase:emulators:start`) |
+| `npm run build:<setting>` | Build the app into `dist/`                                                   |
+| `npm run package:<windows | mac                                                                          | linux>`                                                                   | Create the installer in `out/` (run `npm run build:<setting>` first) |
+
+Environment variables read by the app (set in `env/.env.<setting>`, they must start with `VITE_` and are public in the built app):
+`VITE_FIREBASE`, `VITE_VOLUME`, `VITE_VIDEO`, `VITE_USE_EEG`, `VITE_USE_PHOTODIODE`, `VITE_EVENT_MARKER_PRODUCT_ID`, `VITE_EVENT_MARKER_COM_NAME`, and the Firebase config (`VITE_API_KEY`, `VITE_AUTH_DOMAIN`, `VITE_PROJECT_ID`, `VITE_STORAGE_BUCKET`, `VITE_MESSAGING_SENDER_ID`, `VITE_APP_ID`).
+Private values can go in `env/.env.<setting>.local` (ignored by git).
+
+The Electron app also reads `STUDY_ID` and `PARTICIPANT_ID` from the shell it is launched from to pre-fill the login.
+
 ## Cite This Work
 
 If you use Honeycomb in your work, please cite:

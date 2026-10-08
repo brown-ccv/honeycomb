@@ -1,8 +1,7 @@
 import { checkbox, confirm, expand, input, select } from "@inquirer/prompts";
 import fsExtra from "fs-extra";
 
-// TODO @brown-ccv #183: Upgrade to modular SDK instead of compat
-import { cert, initializeApp } from "firebase-admin/app";
+import { cert, initializeApp } from "firebase-admin";
 import { getFirestore } from "firebase-admin/firestore";
 
 /** -------------------- GLOBALS -------------------- */
@@ -116,6 +115,7 @@ async function downloadDataFirebase() {
         console.log(`Data saved successfully: ${outputFile}`);
       } catch (error) {
         console.error(`There was an error saving ${outputFile}`);
+        console.error(error);
       }
     } else console.log("Skipping download");
   }
@@ -135,6 +135,7 @@ async function deleteDataFirebase() {
           console.log("Successfully deleted:", experimentRef.id);
         } catch (error) {
           console.error("There was an error deleting", experimentRef.id);
+          console.error(error);
         }
       })
     );
@@ -168,7 +169,9 @@ async function deploymentPrompt() {
   // Initialize Firestore
   if (response === "firebase") {
     try {
-      const app = initializeApp({ credential: cert("firebase-service-account.json") });
+      const app = initializeApp({
+        credential: cert("firebase-service-account.json"),
+      });
       FIRESTORE = getFirestore(app);
     } catch (error) {
       throw new Error(
@@ -176,7 +179,8 @@ async function deploymentPrompt() {
           'Your secret key must be called "firebase-service-account.json" ' +
           "and stored in the root of your repository.\n" +
           "More information: https://firebase.google.com/support/guides/service-accounts\n\n" +
-          error.stack
+          error.stack,
+        { cause: error }
       );
     }
   }
@@ -260,7 +264,8 @@ async function savePathPrompt() {
       try {
         const maybePath = fsExtra.statSync(input);
         if (!maybePath.isDirectory()) return invalidMessage;
-      } catch (e) {
+      } catch (error) {
+        console.error(error);
         return invalidMessage;
       }
       return true;
