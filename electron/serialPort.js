@@ -1,4 +1,4 @@
-const SerialPort = require("serialport");
+import SerialPort from "serialport";
 
 // TODO @brown-ccv #460: Test connections with MockBindings (e.g. CONTINUE_ANYWAY)  https://serialport.io/docs/api-binding-mock
 
@@ -63,7 +63,4 @@ async function sendToPort(port, event_code) {
   port.write(Buffer.from([event_code]));
 }
 
-module.exports = {
-  getPort,
-  sendToPort,
-};
+export { getPort, sendToPort };

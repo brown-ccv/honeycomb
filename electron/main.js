@@ -1,21 +1,23 @@
 /** ELECTRON MAIN PROCESS */
 
-const url = require("url");
-const path = require("node:path");
-const fs = require("node:fs");
+import fs from "node:fs";
+import path from "node:path";
+import url from "node:url";
 
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
-const log = require("electron-log");
-const _ = require("lodash");
+import { app, BrowserWindow, ipcMain, dialog } from "electron";
+import log from "electron-log";
+import squirrelStartup from "electron-squirrel-startup";
+import _ from "lodash";
+import { MockBinding } from "@serialport/binding-mock";
+import { SerialPortStream } from "@serialport/stream";
+import SerialPort from "serialport";
 
-const { MockBinding } = require("@serialport/binding-mock");
-const { SerialPortStream } = require("@serialport/stream");
-const { getPort, sendToPort } = require("./serialPort");
+import { getPort, sendToPort } from "./serialPort.js";
 
 // TODO @brown-ccv #460: Add serialport's MockBinding for the "Continue Anyway": https://serialport.io/docs/guide-testing
 
 // Early exit when installing on Windows: https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
-if (require("electron-squirrel-startup")) app.quit();
+if (squirrelStartup) app.quit();
 
 // Initialize the logger for any renderer process
 log.initialize({ preload: true });
@@ -27,7 +29,7 @@ log.initialize({ preload: true });
 
 /************ GLOBALS ***********/
 
-const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(__dirname, "version.json")));
+const GIT_VERSION = JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname, "version.json")));
 // TODO @brown-ccv #436 : Use app.isPackaged() to determine if running in dev or prod
 const ELECTRON_START_URL = process.env.ELECTRON_START_URL;
 
@@ -280,8 +282,8 @@ function createWindow() {
 
     // Create a 1500x900 window with the dev tools open
     mainWindow = new BrowserWindow({
-      icon: path.join(__dirname, "../assets/icons/icon.png"),
-      webPreferences: { preload: path.join(__dirname, "preload.js") },
+      icon: path.join(import.meta.dirname, "../assets/icons/icon.png"),
+      webPreferences: { preload: path.join(import.meta.dirname, "preload.cjs") },
       width: 1500,
       height: 900,
     });
@@ -295,15 +297,15 @@ function createWindow() {
     appURL = url.format({
       // Moves from path of the electron file (/electron/main.js) to the Vite build folder (dist/index.html)
       // Electron Forge only packages the dist folder, the electron folder, and the app icons (see forge.config.js)
-      pathname: path.join(__dirname, "../dist/index.html"),
+      pathname: path.join(import.meta.dirname, "../dist/index.html"),
       protocol: "file:",
       slashes: true,
     });
 
     // Create a fullscreen window with the menu bar hidden
     mainWindow = new BrowserWindow({
-      icon: path.join(__dirname, "../assets/icons/icon.png"),
-      webPreferences: { preload: path.join(__dirname, "preload.js") },
+      icon: path.join(import.meta.dirname, "../assets/icons/icon.png"),
+      webPreferences: { preload: path.join(import.meta.dirname, "preload.cjs") },
       fullscreen: true,
       menuBarVisible: false,
     });

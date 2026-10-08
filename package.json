@@ -11,6 +11,7 @@
   "repository": "https://github.com/brown-ccv/honeycomb",
   "license": "MIT",
   "private": true,
+  "type": "module",
   "main": "electron/main.js",
   "dependencies": {
     "@serialport/binding-mock": "^10.2.2",

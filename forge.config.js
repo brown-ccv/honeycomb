@@ -7,7 +7,7 @@
 const PACKAGED_PATHS =
   /^\/(dist|electron|node_modules)(\/|$)|^\/assets(\/icons(\/|$)|$)|^\/package\.json$/;
 
-module.exports = {
+export default {
   packagerConfig: {
     asar: true,
     icon: "assets/icons/icon",

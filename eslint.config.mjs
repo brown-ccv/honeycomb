@@ -48,15 +48,23 @@ export default defineConfig(
     languageOptions: { sourceType: "module", globals: globals.browser },
   },
 
-  // Node scripts and configuration written as ES modules
+  // Node scripts, Electron's main process and configuration written as ES modules
   {
-    files: ["vite.config.mjs", "eslint.config.mjs", "version.js", "cli.js"],
+    files: [
+      "vite.config.mjs",
+      "eslint.config.mjs",
+      "version.js",
+      "cli.js",
+      "electron/**/*.js",
+      "forge.config.js",
+      ".prettierrc.js",
+    ],
     languageOptions: { sourceType: "module", globals: globals.node },
   },
 
-  // Electron's main and preload processes and other configuration written as CommonJS
+  // Electron's preload process must be CommonJS (sandboxed preload scripts can't be ES modules)
   {
-    files: ["electron/**/*.js", "forge.config.js", ".prettierrc.js"],
+    files: ["electron/**/*.cjs"],
     languageOptions: { sourceType: "commonjs", globals: globals.node },
   },
 
