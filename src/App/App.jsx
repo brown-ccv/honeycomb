@@ -37,8 +37,8 @@ export default function App() {
   const [participantID, setParticipantID] = React.useState("");
   const [studyID, setStudyID] = React.useState("");
 
-  // Manage the method type being used ("desktop", "firebase", or "default")
-  const [currentMethod, setMethod] = React.useState("default");
+  // Manage the method type being used ("desktop", "firebase", "mturk", or "default")
+  const [method, setMethod] = React.useState("default");
 
   /**
    * This effect is called once, on the first render of the application
@@ -88,25 +88,25 @@ export default function App() {
       }
     }
     setUpHoneycomb();
-  }, []);
+  }, [handleLogin]);
 
   /** VALIDATION FUNCTIONS */
 
   // Default to valid
-  const defaultValidation = async () => true;
+  const defaultValidation = React.useCallback(async () => true, []);
   // Validate participant/study against Firestore rules
-  const firebaseValidation = (studyId, participantId) => {
+  const firebaseValidation = React.useCallback((studyId, participantId) => {
     return validateParticipant(studyId, participantId);
-  };
+  }, []);
 
   /** DATA WRITE FUNCTIONS */
 
   // Default to no operation
-  const defaultFunction = () => {};
+  const defaultFunction = React.useCallback(() => {}, []);
   // Add trial data to Firestore (see src/App/deployments/firebase.js)
-  const firebaseUpdateFunction = (data) => {
+  const firebaseUpdateFunction = React.useCallback((data) => {
     addToFirebase(data);
-  };
+  }, []);
   // Execute the 'on_data_update' callback function (see electron/main.js)
   const desktopUpdateFunction = async (data) => {
     await window.electronAPI.on_data_update(data);
@@ -115,15 +115,9 @@ export default function App() {
   /** EXPERIMENT FINISH FUNCTIONS */
 
   // Save the experiment data on the desktop
-  const defaultFinishFunction = (data) => {
+  const defaultFinishFunction = React.useCallback((data) => {
     data.localSave("csv", "task.csv");
-  };
-  // Do nothing
-  const firebaseFinishFunction = () => {};
-  // Execute the 'on_finish' callback function (see electron/main.js)
-  const desktopFinishFunction = async () => {
-    await window.electronAPI.on_finish();
-  };
+  }, []);
 
   /**
    * Callback function executed when the user logs in.
@@ -134,6 +128,13 @@ export default function App() {
     setStudyID(studyId);
     setParticipantID(participantId);
     setLoggedIn(true);
+  }, []);
+
+  // Do nothing
+  const firebaseFinishFunction = React.useCallback(() => {}, []);
+  // Execute the 'on_finish' callback function (see public/electron/main.js)
+  const desktopFinishFunction = React.useCallback(async () => {
+    await window.electronAPI.on_finish();
   }, []);
 
   if (isError) {
@@ -149,20 +150,21 @@ export default function App() {
               desktop: desktopUpdateFunction,
               firebase: firebaseUpdateFunction,
               default: defaultFunction,
-            }[currentMethod]
+            }[method]
           }
           dataFinishFunction={
             {
               desktop: desktopFinishFunction,
               firebase: firebaseFinishFunction,
               default: defaultFinishFunction,
-            }[currentMethod]
+            }[method]
           }
         />
       );
     } else {
       return (
         <Login
+          key={`${studyID}:${participantID}`}
           initialStudyID={studyID}
           initialParticipantID={participantID}
           validationFunction={
@@ -170,7 +172,7 @@ export default function App() {
               desktop: defaultValidation,
               default: defaultValidation,
               firebase: firebaseValidation,
-            }[currentMethod]
+            }[method]
           }
           handleLogin={handleLogin}
         />
