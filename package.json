@@ -50,7 +50,7 @@
     "@electron-forge/maker-zip": "^7.9.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.9.0",
     "@inquirer/prompts": "^7.8.6",
-    "concurrently": "^9.2.1",
+    "concurrently": "^10.0.6",
     "cross-env": "^10.0.0",
     "cz-conventional-changelog": "^3.2.0",
     "dotenv-cli": "^10.0.0",
