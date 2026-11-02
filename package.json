@@ -43,7 +43,7 @@
   "devDependencies": {
     "@babel/core": "^7.28.4",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@electron-forge/cli": "^7.9.0",
+    "@electron-forge/cli": "^8.0.1",
     "@electron-forge/maker-deb": "^7.9.0",
     "@electron-forge/maker-dmg": "^7.9.0",
     "@electron-forge/maker-squirrel": "^7.9.0",
@@ -54,7 +54,7 @@
     "cross-env": "^10.0.0",
     "cz-conventional-changelog": "^3.2.0",
     "dotenv-cli": "^10.0.0",
-    "electron": "^38.1.2",
+    "electron": "^42.11.16",
     "eslint": "^9.36.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
