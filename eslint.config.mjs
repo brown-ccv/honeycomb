@@ -1,8 +1,9 @@
 import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
-import importPlugin from "eslint-plugin-import";
-import reactPlugin from "eslint-plugin-react";
+import eslintReact from "@eslint-react/eslint-plugin";
+import { importX } from "eslint-plugin-import-x";
 import globals from "globals";
+import { defineConfig } from "eslint/config";
 
 /**
  * This file defines specific rules for Prettier. It adjusts their default settings.
@@ -10,7 +11,7 @@ import globals from "globals";
  *
  * @type {import('eslint').FlatConfig}
  */
-export default [
+export default defineConfig(
   // Global ignores
   {
     ignores: [
@@ -45,8 +46,8 @@ export default [
 
   // Add the base configurations
   js.configs.recommended,
-  reactPlugin.configs.flat.recommended,
-  importPlugin.flatConfigs.recommended,
+  eslintReact.configs.recommended,
+  importX.flatConfigs.recommended,
 
   // Custom configuration
   {
@@ -54,6 +55,7 @@ export default [
     languageOptions: {
       ecmaVersion: 2023,
       sourceType: "module",
+      parserOptions: { ecmaFeatures: { jsx: true } },
       globals: {
         ...globals.browser,
         ...globals.node,
@@ -62,16 +64,16 @@ export default [
     },
     rules: {
       "no-unused-vars": "warn",
-      "import/order": "warn",
+      "import-x/order": "warn",
     },
     settings: {
       react: { version: "detect" },
       jsdoc: { tagNamePreference: { typedef: { definedInFiles: ["src/lib/typedef.js"] } } },
-      "import/resolver": { node: { extensions: [".js", ".jsx"] } },
+      "import-x/resolver": { node: { extensions: [".js", ".jsx"] } },
     },
   },
 
   // Prettier config
   // NOTE @RobertGemmaJr: Must be last, prettier should override other configs
-  eslintConfigPrettier,
-];
+  eslintConfigPrettier
+);

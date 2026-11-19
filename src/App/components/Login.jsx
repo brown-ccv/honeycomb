@@ -18,16 +18,6 @@ export default function Login({
   // State variable for handling loading states
   const [isLoading, setIsLoading] = React.useState(false);
 
-  // Update local participantID if it changes upstream
-  React.useEffect(() => {
-    setParticipantID(initialParticipantID);
-  }, [initialParticipantID]);
-
-  // Update local studyID if it changes upstream
-  React.useEffect(() => {
-    setStudyID(initialStudyID);
-  }, [initialStudyID]);
-
   // Function used to validate and log in participant
   function handleSubmit(e) {
     e.preventDefault();

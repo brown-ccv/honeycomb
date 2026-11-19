@@ -50,13 +50,13 @@ export default function JsPsychExperiment({
     });
 
     return jsPsych;
-  }, [studyID, participantID]);
+  }, [studyID, participantID, dataUpdateFunction, dataFinishFunction]);
 
   /** Build and run the experiment timeline */
   React.useEffect(() => {
     const timeline = buildTimeline(jsPsych, studyID, participantID);
     jsPsych.run(timeline);
-  }, [jsPsych]);
+  }, [jsPsych, studyID, participantID]);
 
   return <div id={EXPERIMENT_ID} />;
 }
