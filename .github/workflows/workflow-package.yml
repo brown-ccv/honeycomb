@@ -48,14 +48,8 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
-      - name: 🐍 Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.12
 
       # Install dependencies and set up environment
-      - name: 🅿️ Install Python tools
-        run: pip install setuptools
       - name: 📥 Install Dependencies
         run: npm ci
 
@@ -99,7 +93,7 @@ jobs:
         if: startsWith(matrix.os, 'mac')
         with:
           name: ${{ format('mac-installer-{0}', github.event.inputs.setting) }}
-          path: out/make/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-universal.dmg
+          path: out/make/dmg/universal/${{ steps.package_info.outputs.name }}-${{ steps.package_info.outputs.version }}-universal.dmg
           if-no-files-found: error
       - name: ⬆ Upload installer - Linux
         uses: actions/upload-artifact@v4
