@@ -1,7 +1,7 @@
 import { checkbox, confirm, expand, input, select } from "@inquirer/prompts";
 import fsExtra from "fs-extra";
 
-import { cert, initializeApp } from "firebase-admin";
+import { cert, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 
 /** -------------------- GLOBALS -------------------- */

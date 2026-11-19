@@ -51,13 +51,15 @@
     "@eslint/js": "^10.0.1",
     "@inquirer/prompts": "^8.7.3",
     "cross-env": "^10.1.0",
+    "cz-conventional-changelog": "^3.2.0",
     "dotenv-cli": "^11.0.0",
     "electron": "^44.7.0",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import-x": "^4.17.1",
+    "eslint-plugin-react": "^7.37.5",
     "firebase-admin": "^14.5.0",
-    "firebase-tools": "^15.32.1",
+    "firebase-tools": "^15.36.0",
     "globals": "^17.13.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
@@ -69,15 +71,15 @@
     "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" react-scripts start",
     "start:browser": "react-scripts start",
     "start:electron": "wait-on http://127.0.0.1:3000 && cross-env ELECTRON_START_URL=\"http://127.0.0.1:3000\" electron .",
-    "dev": "run-p --race start start:electron",
+    "dev": "concurrently -k npm:start npm:start:electron",
     "dev:home": "dotenv -e env/.env.home npm run dev",
     "dev:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run dev",
     "dev:clinic": "dotenv -e env/.env.clinic npm run dev",
     "dev:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run dev",
     "dev:turk-prolific": "dotenv -e env/.env.turk-prolific npm run dev",
     "dev:firebase": "dotenv -e env/.env.firebase npm run start:browser",
-    "firebase:emulators:start": "firebase emulators:start --import emulator_data",
     "firebase:emulators:save": "firebase emulators:export emulator_data",
+    "firebase:emulators:start": "firebase emulators:start --import emulator_data",
     "build": "react-scripts build",
     "build:home": "dotenv -e env/.env.home npm run build",
     "build:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run build",
@@ -96,17 +98,22 @@
     "prepare": "husky"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
     "development": [
       "last 1 electron version",
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   },
   "lint-staged": {
     "*": [
@@ -119,6 +126,7 @@
   "allowScripts": {
     "core-js-pure": true,
     "core-js": true,
+    "electron": true,
     "electron-winstaller": true,
     "protobufjs": true,
     "re2": true,
